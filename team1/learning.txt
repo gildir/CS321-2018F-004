@@ -1,2 +1,3 @@
 Michael Brown -GitHub Learning Path
-Stephen Hull - Think like (a) Git
+Stephen Hull - Think like (a) Git x2
+Jae-Moon Hwang - git - the simple guide
