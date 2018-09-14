@@ -1,3 +1,6 @@
+I Michael Brown, leader of Team-1, do affirm that my team has been actively learning Git
+We have meet on 7 Sept @ 3:30pm to 4:30 pm and also 14 Sept 1:30 pm to 2:30pm.
+
 Michael Brown -GitHub Learning Path
 Stephen Hull - Think like (a) Git x2
 Jae-Moon Hwang - git - the simple guide
