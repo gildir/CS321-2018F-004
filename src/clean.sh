@@ -1,2 +1,3 @@
 #! /bin/sh
-pkill rmiregistry;rm *.class
+pkill rmiregistry
+rm *.class

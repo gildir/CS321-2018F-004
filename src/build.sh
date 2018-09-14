@@ -1,2 +1,3 @@
 #! /bin/sh
-pkill rmiregistry;javac *.java
+pkill rmiregistry
+javac *.java
