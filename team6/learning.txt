@@ -3,3 +3,7 @@ Git Immersion (Labs 1-49)
 GIThub Learning path
 Java Code Geeeks GIT Tutorial
 https://www.youtube.com/watch?v=HVsySz-h9r4	30 min youtube intro video
+git - the simple guide
+A Visual Git Reference
+try.github.io (no longer available)
+https://github.com/joshnh/Git-Commands
