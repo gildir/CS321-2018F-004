@@ -7,3 +7,4 @@ git - the simple guide
 A Visual Git Reference
 try.github.io (no longer available)
 https://github.com/joshnh/Git-Commands
+rogerdudler.github.io/git-guide/
