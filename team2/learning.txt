@@ -1,5 +1,9 @@
-http://guides.github.com x2
-http://www.google.com x2
-http://gitimmersion.com x2
-https://services.github.com/on-demand/resources/learning-path/
-http://rogerdudler.github.io/git-guide/
+http://guides.github.com X2
+http://www.google.com X3
+http://gitimmersion.com X2
+https://services.github.com/on-demand/resources/learning-path/ X2
+https://www.atlassian.com/git/tutorials/using-branches/git-checkout
+http://ndpsoftware.com/git-cheatsheet.html#loc=workspace;
+http://rogerdudler.github.io/git-guide/ X2
+https://opensource.com/article/18/1/step-step-guide-git
+https://www.codecademy.com/learn/learn-git
