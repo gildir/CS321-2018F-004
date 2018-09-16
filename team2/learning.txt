@@ -1,3 +1,5 @@
+Team 2 has been actively learning git version control. We have met Monday from 11AM-12PM and Sunday from 1PM-3PM.
+Below is a list of resources we have used beyond the class activities:
 http://guides.github.com X2
 http://www.google.com X3
 http://gitimmersion.com X2
