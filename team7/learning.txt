@@ -1,3 +1,3 @@
-git - the simple guide x2
-A Visual Git Reference x3
+git - the simple guide x3
+A Visual Git Reference x4
 
