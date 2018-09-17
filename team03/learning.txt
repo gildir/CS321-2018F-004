@@ -1,3 +1,3 @@
-http://think-like-a-git.net/x2
-http://rogerdudler.github.io/git-guide/
-William Hunt 
+http://think-like-a-git.net/ [2x]
+http://rogerdudler.github.io/git-guide/ [2x]
+William Hunt [2x]
