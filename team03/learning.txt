@@ -1,3 +1,5 @@
+I, Quinten Holmes, confirm that we have meet as a group to continue learning git. We meet today, Monday Sept 17, 2018 at 8am to produce this deliverable. 
+
 http://think-like-a-git.net/ [3x]
 http://rogerdudler.github.io/git-guide/ [2x]
 William Hunt [2x]
