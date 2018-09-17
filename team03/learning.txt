@@ -1,0 +1,3 @@
+http://think-like-a-git.net/
+http://rogerdudler.github.io/git-guide/
+William Hunt 
