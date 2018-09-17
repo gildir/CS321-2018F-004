@@ -8,3 +8,4 @@ A Visual Git Reference
 try.github.io (no longer available)
 https://github.com/joshnh/Git-Commands
 rogerdudler.github.io/git-guide/
+Progit 2nd edition free text book. ----->> https://git-scm.com/book/en/v2
