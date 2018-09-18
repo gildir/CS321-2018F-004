@@ -1,0 +1,11 @@
+Sitepoint Jumpstart GIT by Shaumik Daityari //Book that was helpfull is seeing examples 
+Git Immersion (Labs 1-49)
+GIThub Learning path
+Java Code Geeks GIT Tutorial //Not very helpful, but more examples	
+https://www.youtube.com/watch?v=HVsySz-h9r4	30 min youtube intro video
+git - the simple guide
+A Visual Git Reference
+try.github.io (no longer available)
+https://github.com/joshnh/Git-Commands
+rogerdudler.github.io/git-guide/
+Progit 2nd edition free text book. ----->> https://git-scm.com/book/en/v2
