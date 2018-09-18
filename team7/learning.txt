@@ -1,3 +1,0 @@
-git - the simple guide x3
-A Visual Git Reference x4
-
