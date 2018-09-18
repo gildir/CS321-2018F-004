@@ -1,0 +1,2 @@
+http://think-like-a-git.net/
+https://stackoverflow.com/
