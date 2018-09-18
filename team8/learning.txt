@@ -1,4 +1,4 @@
 http://think-like-a-git.net/ x2
 https://stackoverflow.com/
-https://dont-be-afraid-to-commit.readthedocs.io/en/latest/git/index.html
+https://dont-be-afraid-to-commit.readthedocs.io/en/latest/git/index.html x2
 https://www.codecademy.com/learn/learn-git
