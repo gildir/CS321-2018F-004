@@ -1,3 +1,4 @@
+I, Ahmed Ibrahim, confirm that my team has been actively learning git and have chosen Monday and Wednesday from 10:30 AM to 12:00 PM to meet up in a group.
 git - the simple guide x3
 A Visual Git Reference x4
 
