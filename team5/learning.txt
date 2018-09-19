@@ -1,4 +1,0 @@
-git - the simple guide x2
-think like (a) git x2
-git immersion x2
-
