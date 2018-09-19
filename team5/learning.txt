@@ -1,4 +1,4 @@
-git - the simple guide
-think like (a) git
-git immersion
+git - the simple guide x2
+think like (a) git x2
+git immersion x2
 
