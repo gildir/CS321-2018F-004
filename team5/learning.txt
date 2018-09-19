@@ -1,4 +1,5 @@
-git - the simple guide x2
-think like (a) git x2
+git - the simple guide x3
+think like (a) git x3
 git immersion x2
+learn git branching
 
