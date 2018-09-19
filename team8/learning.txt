@@ -1,3 +1,5 @@
+I Kamran the team leader confirm that my team has been actively learning git. We had 2 meetings one on sunday 7 to 8
+and one on Monday 11 to 11:56
 http://think-like-a-git.net/ x3
 https://stackoverflow.com/
 https://dont-be-afraid-to-commit.readthedocs.io/en/latest/git/index.html x2
