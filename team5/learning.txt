@@ -1,3 +1,5 @@
+I, Tyler, confirmm that my team has been actively learning git.
+We have met Monday 10:30-12:00 and Wednesday 9:30-12:00.
 git - the simple guide x4
 think like (a) git x3
 git immersion x3
