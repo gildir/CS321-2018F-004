@@ -277,7 +277,7 @@ public class GameCore implements GameCoreInterface {
         if(player != null) {
             Room room = map.findRoom(player.getCurrentRoom());
             LinkedList<String> objects = room.removeAllObjects();
-            if(objects != null && !objects.empty()) {
+            if(objects != null && objects.size() > 0) {
                 for (String object : objects)
                 {
                     player.addObjectToInventory(object);
