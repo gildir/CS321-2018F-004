@@ -72,14 +72,18 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
 	 * 
 	 * @param name
 	 * @return true is player is added, false if player name is already registered
-	 *         to someone else
+	 *         to someone else or if there was an error in encrypting the password.
 	 * @throws RemoteException
 	 */
 	@Override
 	public boolean joinGame(String name, String password) throws RemoteException {
 		// Request join to the core and return the results back to the remotely calling
 		// method.
+		password = hash(password);
+		if(password != "ERROR")
 		return (core.joinGame(name, password) != null);
+		
+		return false; //Password is invalid due to failure of hash function
 	}
 
 	/**
@@ -90,12 +94,16 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
 	 * 
 	 * @param name
 	 * @param password
-	 * @return an enumeration representing the creation status.
+	 * @return an enumeration representing the creation status, or null if password failed to be encrypted in hash function.
 	 * @throws RemoteException
 	 */
 	@Override
 	public GameObjectResponse createAccountAndJoinGame(String name, String password) throws RemoteException {
+		password = hash(password);
+		if(password != "ERROR")
 		return core.createAccountAndJoinGame(name, password);
+		
+		return null; //Password is invalid due to failure of hash function
 	}
 
 	/**
