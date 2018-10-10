@@ -1,7 +1,10 @@
 
 import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 /**
  *
@@ -36,6 +39,28 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
 			return true;
 		}
 		return false;
+	}
+	
+	/**
+	 * Used to create a hash encrypted in SHA256 for use in encrypting passwords
+	 * 
+	 * @param toHash
+	 * @return SHA256 encrypted hash value, or "ERROR" If encryption method fails.
+	 */
+	public String hash(String toHash)
+	{
+		try
+		{
+			byte[] encodedhash = MessageDigest.getInstance("SHA-256").digest(toHash.getBytes(StandardCharsets.UTF_8));
+			StringBuilder sb = new StringBuilder();
+			for (byte b: encodedhash)
+				sb.append(String.format("%02X", b));
+			return sb.toString();
+		} 
+		catch (NoSuchAlgorithmException e)
+		{
+		}
+		return "ERROR";
 	}
 
 	/**
