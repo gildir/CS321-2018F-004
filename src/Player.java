@@ -14,12 +14,14 @@ public class Player {
     private Direction currentDirection;
     private PrintWriter replyWriter = null;
     private DataOutputStream outputWriter = null;
+    private float money;
 
     public Player(String name) {
         this.currentRoom = 1;
         this.currentDirection = Direction.NORTH;
         this.name = name;
         this.currentInventory = new LinkedList<>();
+        this.money = 0;
     }
     
     public void turnLeft() {
@@ -106,6 +108,14 @@ public class Player {
     
     public Direction getDirection() {
         return this.currentDirection;
+    }
+    
+    public float getMoney() {
+    	return this.money;
+    }
+    
+    public void setMoney(float m) {
+    	this.money = m;
     }
     
     public String viewInventory() {
