@@ -57,6 +57,7 @@ public class GameClient {
         System.out.println("  MOVE distance - Tries to walk forward <distance> times.");
         System.out.println("  PICKUP obect  - Tries to pick up an object in the same area.");
         System.out.println("  INVENTORY     - Shows you what objects you have collected.");
+        System.out.println("  CHALLENGE     - Challenge a player to a R-P-S in the same area.");
         System.out.println("  QUIT          - Quits the game.");
         System.out.println();
         
@@ -190,6 +191,14 @@ public class GameClient {
                 case "INVENTORY":
                     System.out.println(remoteGameInterface.inventory(this.playerName));
                     break;                                                            
+                case "CHALLENGE":
+                    if(tokens.isEmpty()){
+                        System.err.println("You need to provide a name.");
+                    }
+                    else{
+                        System.out.println(remoteGameInterface.challenge(this.playerName, tokens.remove(0)));
+                    }
+                    break;
                 case "QUIT":
                     remoteGameInterface.leave(this.playerName);
                     runListener = false;

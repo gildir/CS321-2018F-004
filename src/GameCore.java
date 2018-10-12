@@ -283,6 +283,19 @@ public class GameCore implements GameCoreInterface {
         }
     }    
 
+    @Override
+    public String challenge(String challenger, String challengee){
+        Player playerChallenger = this.playerList.findPlayer(challenger);
+        Player playerChallengee = this.playerList.findPlayer(challengee);
+        if(playerChallenger != null && playerChallengee != null) {
+             this.broadcast(playerChallenger, playerChallenger.getName() + " challenges you to a R-S-P\"");
+             return "You challenge, \"" + playerChallengee + " to a R-S-P \"";
+         }
+         else {
+             return null;
+         }
+    }
+
      /**
      * Leaves the game.
      * @param name Name of the player to leave

@@ -80,6 +80,14 @@ public interface GameObjectInterface extends Remote {
      */    
     public String inventory(String name) throws RemoteException;   
     
+    /**
+    * Prompts a message that someone is challenging them to a R-P-S
+    * @param challenger is the name of the player challenging someone in the area
+    * @param challenge is the name of the player being challenge
+    * @return Message showing success
+    * @throws RemoteException
+    */
+    public String challenge(String challenger, String challengee) throws RemoteException;
      /**
      * Leaves the game.
      * @param name Name of the player to leave
