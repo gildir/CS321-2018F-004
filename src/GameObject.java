@@ -99,6 +99,7 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
         return core.say(name, message);
     }
 
+    // Feature 401. Whisper
     /**
      * Whispers "message" to a specific player.
      * @param srcName Name of the player to speak
@@ -111,6 +112,7 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
     public String whisper(String srcName, String dstName, String message) throws RemoteException {
         return core.whisper(srcName, dstName, message);
     }
+    // End 401.
 
       
     /**
