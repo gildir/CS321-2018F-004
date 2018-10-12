@@ -11,6 +11,7 @@ public class Shop
 	// List of players in this shop
 	private PlayerList playerlist;
 	
+	
 	public Shop()
 	{
 		this.inventory = new LinkedList<Object>();
@@ -23,6 +24,9 @@ public class Shop
 	
 	//In terms of the player selling items
 	public void sell(Object k) {}
+	
+	//used to add methods to the linked list
+	public void add(Object k) {}
 	
 	//prints the inventory of the shop class
 	public void printInv() {}
