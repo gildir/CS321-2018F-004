@@ -136,6 +136,7 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
     }    
     
     /**
+     * @author Group 4: King
      * Lets player shop if in a shoppable location
      * @param name Name of the player trying to shop
      * @return Message showing success

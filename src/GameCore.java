@@ -267,6 +267,7 @@ public class GameCore implements GameCoreInterface {
     }  
     
     /**
+     * @author Group 4: King
      * Sets player to shopping mode if possible, adds them to list of players in store
      * @param name Name of the player to add to shop
      * @return Message showing success

@@ -85,5 +85,14 @@ public interface GameObjectInterface extends Remote {
      * @param name Name of the player to leave
      * @throws RemoteException 
      */    
-    public void leave(String name) throws RemoteException;       
+    public void leave(String name) throws RemoteException;    
+    
+    /**
+     * @author Team 4: King
+     * Lets player shop if in a shoppable area
+     * @param name Name of the player
+     * @return Message showing success
+     * @throws RemoteException
+     */
+    public String shop(String name) throws RemoteException;
 }
