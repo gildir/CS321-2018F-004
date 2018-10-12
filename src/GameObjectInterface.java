@@ -85,8 +85,15 @@ public interface GameObjectInterface extends Remote {
      * @param name Name of the player to leave
      * @throws RemoteException 
      */    
-    public void leave(String name) throws RemoteException;    
+    public void leave(String name) throws RemoteException;
     
+    /**
+     * Takes the player into venmo. The new and improved way to exchange money with other players.
+     * @param name Name of the player enter the bank
+     * @throws RemoteException 
+     */    
+    public String venmo(String name) throws RemoteException;
+
     /**
      * @author Team 4: King
      * Lets player shop if in a shoppable area

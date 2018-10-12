@@ -315,5 +315,11 @@ public class GameCore implements GameCoreInterface {
             return player;
         }
         return null;
-    }       
+    }
+
+	@Override
+	public String venmo(String name) {
+		// TODO Auto-generated method stub
+		return null;
+	}       
 }

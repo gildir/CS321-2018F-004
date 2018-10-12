@@ -157,5 +157,12 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
         if(player != null) {
             player.getReplyWriter().close();
         }
-    }    
+    }
+
+	@Override
+	public String venmo(String name) throws RemoteException {
+		// TODO Auto-generated method stub
+		return core.venmo(name);
+		
+	}    
 }
