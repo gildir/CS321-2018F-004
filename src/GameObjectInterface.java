@@ -93,4 +93,13 @@ public interface GameObjectInterface extends Remote {
      * @throws RemoteException 
      */    
     public String venmo(String name) throws RemoteException;
+
+    /**
+     * @author Team 4: King
+     * Lets player shop if in a shoppable area
+     * @param name Name of the player
+     * @return Message showing success
+     * @throws RemoteException
+     */
+    public String shop(String name) throws RemoteException;
 }
