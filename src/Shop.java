@@ -4,13 +4,18 @@ public class Shop
 {
 	//Max of 10 items in this list
 	private LinkedList<Object> inventory;
+	
 	//List of objects that want to be indemand for the shop
 	private LinkedList<Object> inDemand;
+	
+	// List of players in this shop
+	private PlayerList playerlist;
 	
 	public Shop()
 	{
 		this.inventory = new LinkedList<Object>();
 		this.inDemand = new LinkedList<Object>();
+		this.playerlist = new PlayerList();
 	}
 	
 	//In terms of the player buying items
