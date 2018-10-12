@@ -75,6 +75,13 @@ public interface GameCoreInterface {
      * @return Message showing success
      */
     public String whisper(String srcName, String dstName, String message);
+    
+    /**
+     * Generates list of all online players.
+     * @param players The player list of online users.
+     * @return String of linked list PlayerList
+     */
+    public String showPlayers();
 
     /**
      * Returns a string representation of all objects you are carrying.

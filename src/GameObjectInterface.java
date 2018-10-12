@@ -64,6 +64,13 @@ public interface GameObjectInterface extends Remote {
     public String whisper(String srcName, String dstName, String message) throws RemoteException;
     
     /**
+     * Generates list of all online players.
+     * @param players The player list of online users.
+     * @return String of linked list PlayerList
+     */
+    public String showPlayers() throws RemoteException;
+    
+    /**
      * Attempts to walk forward < distance > times.  If unable to make it all the way,
      *  a message will be returned.  Will display LOOK on any partial success.
      * @param name Name of the player to move
