@@ -4,6 +4,7 @@
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.lang.StringBuilder;
 
 /**
  *
@@ -230,6 +231,15 @@ public class GameCore implements GameCoreInterface {
             returnMessage = "You whisper to " + dstPlayer.getName() + ", " + message;
         }
         return returnMessage;
+    }
+    
+    public String showPlayers(){
+      StringBuilder users = new StringBuilder();
+      users.append("Players online:\n");
+      for(Player a : playerList){
+        users.append(a.getName() + "\n");
+      }
+      return users.toString();
     }
 
     /**
