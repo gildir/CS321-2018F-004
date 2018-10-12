@@ -1,29 +1,36 @@
 
 import java.util.LinkedList;
-public abstract class Shop
+public class Shop
 {
 	//Max of 10 items in this list
 	private LinkedList<Object> inventory;
+	
 	//List of objects that want to be indemand for the shop
 	private LinkedList<Object> inDemand;
+	
+	// List of players in this shop
+	private PlayerList playerlist;
+	
 	public Shop()
 	{
-		inventory = new LinkedList<Object>();
-		inDemand = new LinkedList<Object>();
+		this.inventory = new LinkedList<Object>();
+		this.inDemand = new LinkedList<Object>();
+		this.playerlist = new PlayerList();
 	}
+	
 	//In terms of the player buying items
-	public abstract void buy(Object k);
+	public void buy(Object k) {}
 	
 	//In terms of the player selling items
-	public abstract void sell(Object k);
+	public void sell(Object k) {}
 	
 	//prints the inventory of the shop class
-	public abstract void printInv();
+	public void printInv() {}
 	
 	//Prints the list of object in demand
-	public abstract void printDem();
+	public void printDem() {}
 	
 	//Menu for the player to be interacting with the shop 
 	//use something like a switch statement
-	public abstract void printMenu();
+	public void printMenu() {}
 }
