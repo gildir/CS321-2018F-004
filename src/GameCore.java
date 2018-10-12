@@ -38,9 +38,15 @@ public class GameCore implements GameCoreInterface {
                         Thread.sleep(rand.nextInt(60000));
                         object = objects[rand.nextInt(objects.length)];
                         room = map.randomRoom();
-                        room.addObject(object);
-                        
-                        GameCore.this.broadcast(room, "You see a student rush past and drop a " + object + " on the ground.");
+
+                        if(room.getObjects().length() < 5) {
+                            room.addObject(object);
+
+                            GameCore.this.broadcast(room, "You see a student rush past and drop a " + object + " on the ground.");
+                        }
+                        else {
+                            GameCore.this.broadcast(room, "You see a student rush past.");
+                        }
 
                     } catch (InterruptedException ex) {
                         Logger.getLogger(GameObject.class.getName()).log(Level.SEVERE, null, ex);
