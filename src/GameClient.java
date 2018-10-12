@@ -171,6 +171,7 @@ public class GameClient {
                         System.out.println(remoteGameInterface.say(this.playerName, message));
                     }
                     break;
+                // Feature 401. Whisper
                 case "W":
                 case "WHISPER":
                     if (tokens.isEmpty()) {
@@ -193,6 +194,7 @@ public class GameClient {
                         System.out.println(remoteGameInterface.whisper(this.playerName, dstPlayerName, message));
                     }
                     break;
+                // End 401.
                 case "MOVE":
                     if(tokens.isEmpty()) {
                         System.err.println("You need to provide a distance in order to move.");

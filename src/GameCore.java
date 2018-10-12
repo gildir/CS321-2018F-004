@@ -210,6 +210,7 @@ public class GameCore implements GameCoreInterface {
         }
     }  
 
+    // Feature 401. Whisper
     /**
      * Whispers "message" to a specific player.
      * @param srcName Name of the player to speak
@@ -231,6 +232,7 @@ public class GameCore implements GameCoreInterface {
         }
         return returnMessage;
     }
+    // End 401.
 
     /**
      * Attempts to walk forward < distance > times.  If unable to make it all the way,
