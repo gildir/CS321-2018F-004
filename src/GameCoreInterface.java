@@ -1,4 +1,4 @@
-
+import java.rmi.RemoteException;
 
 /**
  *
@@ -79,5 +79,12 @@ public interface GameCoreInterface {
      * @param name Name of the player to leave
      * @return Player that was just removed.
      */    
-    public Player leave(String name);    
+    public Player leave(String name);
+    
+    /**
+     * Takes the player into venmo. The new and improved way to exchange money with other players.
+     * @param name Name of the player enter the bank
+     * @throws RemoteException 
+     */    
+    public String venmo(String name);
 }
