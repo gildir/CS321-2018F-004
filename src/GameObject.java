@@ -98,6 +98,22 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
     public String say(String name, String message) throws RemoteException {
         return core.say(name, message);
     }
+
+    // Feature 401. Whisper
+    /**
+     * Whispers "message" to a specific player.
+     * @param srcName Name of the player to speak
+     * @param dstName Name of the player to receive
+     * @param message Message to speak
+     * @return Message showing success
+     * @throws RemoteException
+     */
+    @Override
+    public String whisper(String srcName, String dstName, String message) throws RemoteException {
+        return core.whisper(srcName, dstName, message);
+    }
+    // End 401.
+
       
     /**
      * Attempts to walk forward < distance > times.  If unable to make it all the way,
