@@ -189,7 +189,9 @@ public class GameClient {
                     break;
                 case "INVENTORY":
                     System.out.println(remoteGameInterface.inventory(this.playerName));
-                    break;                                                            
+                    break;   
+                case "SHOP":
+                	System.out.println(remoteGameInterface.shop(this.playerName));
                 case "QUIT":
                     remoteGameInterface.leave(this.playerName);
                     runListener = false;

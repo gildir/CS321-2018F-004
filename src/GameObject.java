@@ -135,6 +135,17 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
         return core.inventory(name);
     }    
     
+    /**
+     * @author Group 4: King
+     * Lets player shop if in a shoppable location
+     * @param name Name of the player trying to shop
+     * @return Message showing success
+     * @throws RemoteException
+     */
+    public String shop(String name) throws RemoteException{
+    	return core.shop(name);
+    }
+    
      /**
      * Leaves the game.
      * @param name Name of the player to leave
