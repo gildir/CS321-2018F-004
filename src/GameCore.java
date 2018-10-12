@@ -264,7 +264,25 @@ public class GameCore implements GameCoreInterface {
         else {
             return null;
         }
-    }       
+    }  
+    
+    /**
+     * Sets player to shopping mode if possible, adds them to list of players in store
+     * @param name Name of the player to add to shop
+     * @return Message showing success
+     */
+    public String shop(String name) {
+    	Player player = this.playerList.findPlayer(name);
+    	Room room = map.findRoom(player.getCurrentRoom());
+    	
+    	if (map.isShoppable(room)) {
+    		// Shop shop = (Shop) room;
+    		// shop.addPlayer(player);
+    		// player.setShopping(True);
+    		return "You enter the shop";
+    	}
+    	return "There is no shop here";
+    }
     
     /**
      * Returns a string representation of all objects you are carrying.

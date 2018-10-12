@@ -84,4 +84,11 @@ public class Map {
         Random rand = new Random();
         return map.get(rand.nextInt(map.size()));
     }
+    
+    public boolean isShoppable(Room r) {
+    	if (r.getId() == 1) {	// Need to improve this if more shops are added
+    		return true;
+    	}
+    	return false;
+    }
 }
