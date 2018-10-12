@@ -23,7 +23,6 @@ public class GameCore implements GameCoreInterface {
         
         // Generate the game map.
         map = new Map();
-        
         playerList = new PlayerList();
         
         Thread objectThread = new Thread(new Runnable() {
