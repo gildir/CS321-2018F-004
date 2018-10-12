@@ -58,6 +58,7 @@ public class GameClient {
         System.out.println("  PICKUP obect  - Tries to pick up an object in the same area.");
         System.out.println("  INVENTORY     - Shows you what objects you have collected.");
         System.out.println("  QUIT          - Quits the game.");
+        System.out.println("  WHISPER player message   - Whispers 'message' to 'player'");
         System.out.println();
         
 
@@ -171,6 +172,30 @@ public class GameClient {
                         System.out.println(remoteGameInterface.say(this.playerName, message));
                     }
                     break;
+                // Feature 401. Whisper
+                case "W":
+                case "WHISPER":
+                    if (tokens.isEmpty()) {
+                        System.err.println("You need to provide a player to whisper.");
+                    }
+                    else if (tokens.size() < 2) {
+                        System.err.println("You need to provide a message to whisper.");
+                    }
+                    else {
+                        String dstPlayerName = tokens.remove(0).toLowerCase();
+                        StringBuilder msgBuilder = new StringBuilder();
+                        msgBuilder.append("\"");
+                        while (!tokens.isEmpty()) {
+                            msgBuilder.append(tokens.remove(0));
+                            if (!tokens.isEmpty())
+                                msgBuilder.append(" ");
+                        }
+                        msgBuilder.append("\"");
+                        message = msgBuilder.toString();
+                        System.out.println(remoteGameInterface.whisper(this.playerName, dstPlayerName, message));
+                    }
+                    break;
+                // End 401.
                 case "MOVE":
                     if(tokens.isEmpty()) {
                         System.err.println("You need to provide a distance in order to move.");
