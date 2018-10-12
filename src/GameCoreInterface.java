@@ -66,7 +66,16 @@ public interface GameCoreInterface {
      * @return Message showing success.
      */
     public String say(String name, String message);
-    
+
+    /**
+     * Whispers "message" to a specific player.
+     * @param srcName Name of the player to speak
+     * @param dstName Name of the player to receive
+     * @param message Message to speak
+     * @return Message showing success
+     */
+    public String whisper(String srcName, String dstName, String message);
+
     /**
      * Returns a string representation of all objects you are carrying.
      * @param name Name of the player to move
