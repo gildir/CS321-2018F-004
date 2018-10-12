@@ -1,4 +1,6 @@
-
+/**
+ * Keeps track of items in the shop on the 
+ */
 import java.util.LinkedList;
 public class Shop
 {
@@ -33,4 +35,8 @@ public class Shop
 	//Menu for the player to be interacting with the shop 
 	//use something like a switch statement
 	public void printMenu() {}
+	
+	public void addPlayer(Player p) {
+		playerlist.addPlayer(p);
+	}	
 }
