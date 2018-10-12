@@ -102,4 +102,5 @@ public interface GameObjectInterface extends Remote {
      * @throws RemoteException
      */
     public String shop(String name) throws RemoteException;
+   
 }
