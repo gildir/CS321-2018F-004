@@ -55,7 +55,7 @@ public class Player {
     }
 
     /**
-     *
+     * Checks a given other player to see if they're on the THIS player's ignore list.
      * @param otherPlayer - other player this player may or may not be ignoring.
      * @return - whether the other player is being ignored by this player.
      */
