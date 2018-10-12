@@ -50,10 +50,19 @@ public class Player {
      * @return - whether the player reference was successfully removed
      *
      */
-
     public boolean unIgnorePlayer(Player playerToUnIgnore) {
         return ignoredPlayers.remove(playerToUnIgnore);
     }
+
+    /**
+     *
+     * @param otherPlayer - other player this player may or may not be ignoring.
+     * @return - whether the other player is being ignored by this player.
+     */
+    public boolean isIgnoring(Player otherPlayer) {
+        return ignoredPlayers.contains(otherPlayer);
+    }
+
 
     /**
      *
