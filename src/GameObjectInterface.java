@@ -19,7 +19,7 @@ public interface GameObjectInterface extends Remote {
 	 */
 	public boolean joinGame(String name, String password) throws RemoteException;
 
-	public GameObjectResponse createAccountAndJoinGame(String name, String password) throws RemoteException;
+	public Responses createAccountAndJoinGame(String name, String password) throws RemoteException;
 
 	/**
 	 * Returns a look at the area of the specified player.
