@@ -27,22 +27,6 @@ public interface GameObjectInterface extends Remote {
      * @throws RemoteException 
      */
     public String look(String name) throws RemoteException;
-    
-    /**
-     * Turns the player left.
-     * @param name Player Name
-     * @return String message of the player turning left.
-     * @throws RemoteException 
-     */
-    public String left(String name) throws RemoteException;
-    
-     /**
-     * Turns the player right.
-     * @param name Player Name
-     * @return String message of the player turning right.
-     * @throws RemoteException 
-     */
-    public String right(String name) throws RemoteException;
    
     /**
      * Says "message" to everyone in the current area.
@@ -61,7 +45,7 @@ public interface GameObjectInterface extends Remote {
      * @return Message showing success.
      * @throws RemoteException 
      */
-    public String move(String name, int distance) throws RemoteException;
+    public String move(String name, Direction direction) throws RemoteException;
 
     /**
      * Attempts to pick up an object < object >. Will return a message on any success or failure.
