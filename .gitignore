@@ -11,7 +11,6 @@
 .mtj.tmp/
 
 # Package Files #
-*.jar
 *.war
 *.nar
 *.ear
@@ -31,3 +30,5 @@ bin/
 # NetBeans files
 build.xml
 nbproject/
+
+src/players

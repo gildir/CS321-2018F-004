@@ -92,13 +92,16 @@ public class GameClient {
                                                     System.out.println("Username and password combination invalid\n");
 						break;
 					case "C":
-						GameObjectResponse resp = remoteGameInterface.createAccountAndJoinGame(playerName, pass);
+						Responses resp = remoteGameInterface.createAccountAndJoinGame(playerName, pass);
 						switch (resp) {
 						case BAD_USERNAME_FORMAT:
 							System.out.println("This is a bad user name. Please use only spaces, numbers, and letters.");
 							break;
 						case USERNAME_TAKEN:
 							System.out.println("Sorry but this username was already taken.");
+							break;
+						case UNKNOWN_FAILURE:
+							System.out.println("The server experienced an unknown failure.");
 							break;
 						case SUCCESS:
 							nameSat = true;
