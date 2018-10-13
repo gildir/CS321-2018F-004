@@ -288,8 +288,8 @@ public class GameCore implements GameCoreInterface {
         Player playerChallenger = this.playerList.findPlayer(challenger);
         Player playerChallengee = this.playerList.findPlayer(challengee);
         if(playerChallenger != null && playerChallengee != null && playerChallenger != playerChallengee) {
-             this.broadcast(playerChallenger, playerChallenger.getName() + " challenges you to a R-P-S.");
-             return "You challenge " + playerChallengee.getName() + " to a R-P-S.";
+             playerChallengee.getReplyWriter().println(playerChallenger.getName() + " challenges you to a R-P-S");
+             return "You challenged " + playerChallengee.getName() + " to a R-P-S.";
          }
         else if(playerChallenger == playerChallengee)
             return "You can't challenge yourself to a R-P-S.";
