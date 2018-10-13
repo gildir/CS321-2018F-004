@@ -11,6 +11,10 @@ import java.util.logging.Logger;
 public class GameCore implements GameCoreInterface {
 	private final PlayerList playerList;
 	private final Map map;
+        
+        //Acounts and Login
+        private final Object loginLock = new Object();
+        private final Object createAccountLock = new Object();
 
 	/**
 	 * Creates a new GameCoreObject. Namely, creates the map for the rooms in the
@@ -106,12 +110,14 @@ public class GameCore implements GameCoreInterface {
 	 * non-coordinated, waiting for the player to open a socket for message events
 	 * not initiated by the player (ie. other player actions)
 	 * 
-	 * @param name
+	 * @param name username of account trying to log in.
+         * @param password password hash for corresponding account.
 	 * @return Player is player is added, null if player name is already registered
 	 *         to someone else
 	 */
 	@Override
 	public Player joinGame(String name, String password) {
+            synchronized(loginLock){
 		// Check to see if the player of that name is already in game.
 		Player player = this.playerList.findPlayer(name);
 		if (player == null)
@@ -119,9 +125,11 @@ public class GameCore implements GameCoreInterface {
 		if (!player.validPassword(password))
 			return null;
 
-//TODO set player online
+                //TODO set player online
 		this.broadcast(player, player.getName() + " has arrived.");
-		return player;
+                return player;
+            }
+		
 	}
 
 	/**
@@ -136,6 +144,7 @@ public class GameCore implements GameCoreInterface {
 	 */
 	@Override
 	public synchronized GameObjectResponse createAccountAndJoinGame(String name, String password) {
+            synchronized(createAccountLock){
 		if (!name.matches("^[a-zA-Z 0-9]+$"))
 			return GameObjectResponse.BAD_USERNAME_FORMAT;
 		if (findPlayer(name) != null)
@@ -144,6 +153,7 @@ public class GameCore implements GameCoreInterface {
 		if (joinGame(name, password) != null)
 			return GameObjectResponse.SUCCESS;
 		return GameObjectResponse.USERNAME_TAKEN;
+            }
 	}
 
 	/**
