@@ -287,12 +287,14 @@ public class GameCore implements GameCoreInterface {
     public String challenge(String challenger, String challengee){
         Player playerChallenger = this.playerList.findPlayer(challenger);
         Player playerChallengee = this.playerList.findPlayer(challengee);
-        if(playerChallenger != null && playerChallengee != null) {
-             this.broadcast(playerChallenger, playerChallenger.getName() + " challenges you to a R-S-P\"");
-             return "You challenge, \"" + playerChallengee + " to a R-S-P \"";
+        if(playerChallenger != null && playerChallengee != null && playerChallenger != playerChallengee) {
+             this.broadcast(playerChallenger, playerChallenger.getName() + " challenges you to a R-P-S.");
+             return "You challenge " + playerChallengee.getName() + " to a R-P-S.";
          }
+        else if(playerChallenger == playerChallengee)
+            return "You can't challenge yourself to a R-P-S.";
          else {
-             return null;
+             return "This person is not in the same room as you or doesn't exist in the game.";
          }
     }
 
