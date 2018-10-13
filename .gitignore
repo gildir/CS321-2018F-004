@@ -27,4 +27,8 @@ hs_err_pid*
 .settings/
 bin/
 
+# NetBeans files
+build.xml
+nbproject/
+
 src/players
