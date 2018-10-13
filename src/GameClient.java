@@ -87,7 +87,9 @@ public class GameClient {
 					String pass = keyboardInput.readLine();
 					switch (mode) {
 					case "L":
-                                                remoteGameInterface.joinGame(this.playerName, pass);
+                                                nameSat = remoteGameInterface.joinGame(this.playerName, pass);
+                                                if(!nameSat)
+                                                    System.out.println("Username and password combination invalid\n");
 						break;
 					case "C":
 						GameObjectResponse resp = remoteGameInterface.createAccountAndJoinGame(playerName, pass);
@@ -105,9 +107,12 @@ public class GameClient {
 							System.out.println("Unknown server behavior");
 							break;
 						}
-						if (!nameSat)
-							System.out.println();
+                                                if (!nameSat)
+                                                    System.out.println();
+                                                
 					}
+                                        
+                                        
 				} catch (IOException ex) {
 					System.err.println(
 							"[CRITICAL ERROR] Error at reading any input properly.  Terminating the client now.");
