@@ -87,14 +87,13 @@ public class GameClient {
 					String pass = keyboardInput.readLine();
 					switch (mode) {
 					case "L":
-						// TODO in the login ticket
+                                                remoteGameInterface.joinGame(this.playerName, pass);
 						break;
 					case "C":
 						GameObjectResponse resp = remoteGameInterface.createAccountAndJoinGame(playerName, pass);
 						switch (resp) {
 						case BAD_USERNAME_FORMAT:
-							System.out
-									.println("This is a bad user name. Please use only spaces, numbers, and letters.");
+							System.out.println("This is a bad user name. Please use only spaces, numbers, and letters.");
 							break;
 						case USERNAME_TAKEN:
 							System.out.println("Sorry but this username was already taken.");
