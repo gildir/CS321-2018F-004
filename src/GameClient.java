@@ -151,12 +151,6 @@ public class GameClient {
                 case "LOOK":
                     System.out.println(remoteGameInterface.look(this.playerName));
                     break;
-                case "LEFT":
-                    System.out.println(remoteGameInterface.left(this.playerName));
-                    break;
-                case "RIGHT":
-                    System.out.println(remoteGameInterface.right(this.playerName));
-                    break;
                 case "SAY":
                     if(tokens.isEmpty()) {
                         System.err.println("You need to say something in order to SAY.");
@@ -173,10 +167,12 @@ public class GameClient {
                     break;
                 case "MOVE":
                     if(tokens.isEmpty()) {
-                        System.err.println("You need to provide a distance in order to move.");
-                    }
-                    else {
-                        System.out.println(remoteGameInterface.move(this.playerName, Integer.parseInt(tokens.remove(0))));
+                        System.err.println("You need to provide a direction to move.");
+                    } else {
+                        Direction dir = Direction.toValue(tokens.remove(0));
+                        if(dir!=null) {
+                            System.out.println(remoteGameInterface.move(this.playerName, dir));
+                        }                    
                     }
                     break;
                 case "PICKUP":
