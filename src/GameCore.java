@@ -4,6 +4,7 @@
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.LinkedList;
 
 /**
  *
@@ -209,6 +210,34 @@ public class GameCore implements GameCoreInterface {
             else {
                 this.broadcast(player, player.getName() + " bends over to pick up something, but doesn't seem to find what they were looking for.");
                 return "You look around for a " + target + ", but can't find one.";
+            }
+        }
+        else {
+            return null;
+        }
+    }       
+
+    /**
+     * Attempts to pick up all objects in the room. Will return a message on any success or failure.
+     * @param name Name of the player to move
+     * @return Message showing success. 
+     */    
+    public String pickupAll(String name) {
+        Player player = this.playerList.findPlayer(name);
+        if(player != null) {
+            Room room = map.findRoom(player.getCurrentRoom());
+            LinkedList<String> objects = room.removeAllObjects();
+            if(objects != null && objects.size() > 0) {
+                for (String object : objects)
+                {
+                    player.addObjectToInventory(object);
+                }
+                this.broadcast(player, player.getName() + " bends over to pick up all objects that were on the ground.");
+                return "You bend over and pick up all objects on the ground.";
+            }
+            else {
+                this.broadcast(player, player.getName() + " bends over to pick up something, but doesn't find anything.");
+                return "You look around for objects but can't find any.";
             }
         }
         else {

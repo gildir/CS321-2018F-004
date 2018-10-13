@@ -110,6 +110,19 @@ public class Room {
         }
         return null;
     }
+
+    /**
+     *  This method removes all objects from the room and returns a linked list of all objects removed from the room.
+     *   
+     *  @return LinkedList containing all objects removed from the room
+     * 
+     */
+    public LinkedList<String> removeAllObjects()
+    {
+        LinkedList<String> removedObjects = new LinkedList<>(this.objects);
+        this.objects.clear();
+        return removedObjects;
+    }
     
     public String getPlayers(PlayerList players) {
         String localPlayers = "";

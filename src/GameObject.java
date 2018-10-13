@@ -103,6 +103,15 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
     }    
     
     /**
+     * Attempts to pick up all objects in the room. Will return a message on any success or failure.
+     * @param name Name of the player to move
+     * @return Message showing success. 
+     */    
+    public String pickupAll(String name) throws RemoteException {
+        return core.pickupAll(name);
+    }
+
+    /**
      * Returns a string representation of all objects you are carrying.
      * @param name Name of the player to move
      * @return Message showing success.

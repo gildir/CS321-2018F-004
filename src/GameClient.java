@@ -56,6 +56,7 @@ public class GameClient {
         System.out.println("  RIGHT         - Turns your player right 90 degrees.");
         System.out.println("  MOVE distance - Tries to walk forward <distance> times.");
         System.out.println("  PICKUP obect  - Tries to pick up an object in the same area.");
+        System.out.println("  PICKUPALL     - Tries to pick up all objects in the same area.");
         System.out.println("  INVENTORY     - Shows you what objects you have collected.");
         System.out.println("  QUIT          - Quits the game.");
         System.out.println();
@@ -182,6 +183,9 @@ public class GameClient {
                     else {
                         System.out.println(remoteGameInterface.pickup(this.playerName, tokens.remove(0)));
                     }
+                    break;
+                case "PICKUPALL":
+                    System.out.println(remoteGameInterface.pickupAll(this.playerName));
                     break;
                 case "INVENTORY":
                     System.out.println(remoteGameInterface.inventory(this.playerName));
