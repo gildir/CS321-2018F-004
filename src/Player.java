@@ -75,7 +75,20 @@ public class Player {
     public void addObjectToInventory(Item object) {
         this.currentInventory.add(object);
     }
-    
+   
+    //removes the first instance 
+    public Item removeObjectFromInventory(String target) {
+        for(Item o : this.currentInventory) {
+                String nameToRemove = o.getName();
+            if(nameToRemove.equalsIgnoreCase(target)) {
+		Item temp = o;
+                this.currentInventory.remove(o);
+                return temp;
+            }
+        }
+        return null;
+    }
+
     public void setReplyWriter(PrintWriter writer) {
         this.replyWriter = writer;
     }
