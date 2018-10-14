@@ -1,5 +1,4 @@
 
-import java.rmi.RemoteException;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -10,7 +9,12 @@ import java.util.logging.Logger;
  */
 public class GameCore implements GameCoreInterface {
 	private final PlayerList playerList;
+	private final PlayerAccountManager accountManager;
 	private final Map map;
+
+	// Acounts and Login
+	private final Object loginLock = new Object();
+	private final Object createAccountLock = new Object();
 
 	/**
 	 * Creates a new GameCoreObject. Namely, creates the map for the rooms in the
@@ -18,13 +22,18 @@ public class GameCore implements GameCoreInterface {
 	 * 
 	 * This is the main core that both the RMI and non-RMI based servers will
 	 * interface with.
+	 * 
+	 * @throws Exception
+	 * 
 	 */
-	public GameCore() {
+	public GameCore(String playerAccountsLocation) throws Exception {
 
 		// Generate the game map.
 		map = new Map();
 
 		playerList = new PlayerList();
+
+		accountManager = new PlayerAccountManager(playerAccountsLocation);
 
 		Thread objectThread = new Thread(new Runnable() {
 			@Override
@@ -106,22 +115,30 @@ public class GameCore implements GameCoreInterface {
 	 * non-coordinated, waiting for the player to open a socket for message events
 	 * not initiated by the player (ie. other player actions)
 	 * 
-	 * @param name
+	 * @param name     username of account trying to log in.
+	 * @param password password hash for corresponding account.
 	 * @return Player is player is added, null if player name is already registered
 	 *         to someone else
 	 */
 	@Override
 	public Player joinGame(String name, String password) {
-		// Check to see if the player of that name is already in game.
-		Player player = this.playerList.findPlayer(name);
-		if (player == null)
-			return null;
-		if (!player.validPassword(password))
-			return null;
+		synchronized (loginLock) {
+			// Check to see if the player of that name is already in game.
+			Player player = this.playerList.findPlayer(name);
+			System.out.println(player);
+			if (player != null)
+				return null;
+			PlayerAccountManager.AccountResponse resp = accountManager.getAccount(name, password);
+			System.out.println(resp.success() + " " + resp.player);
+			if (!resp.success())
+				return null;
+			player = resp.player;
+			this.playerList.addPlayer(player);
 
-//TODO set player online
-		this.broadcast(player, player.getName() + " has arrived.");
-		return player;
+			this.broadcast(player, player.getName() + " has arrived.");
+			return player;
+		}
+
 	}
 
 	/**
@@ -135,15 +152,16 @@ public class GameCore implements GameCoreInterface {
 	 * @return an enumeration representing the creation status.
 	 */
 	@Override
-	public synchronized GameObjectResponse createAccountAndJoinGame(String name, String password) {
-		if (!name.matches("^[a-zA-Z 0-9]+$"))
-			return GameObjectResponse.BAD_USERNAME_FORMAT;
-		if (findPlayer(name) != null)
-			return GameObjectResponse.USERNAME_TAKEN;
-		this.playerList.addPlayer(new Player(name, password));
-		if (joinGame(name, password) != null)
-			return GameObjectResponse.SUCCESS;
-		return GameObjectResponse.USERNAME_TAKEN;
+
+	public synchronized Responses createAccountAndJoinGame(String name, String password) {
+		synchronized (createAccountLock) {
+			PlayerAccountManager.AccountResponse resp = accountManager.createNewAccount(name, password);
+			if (!resp.success())
+				return resp.error;
+			if (joinGame(name, password) != null)
+				return Responses.SUCCESS;
+			return Responses.UNKNOWN_FAILURE;
+		}
 	}
 
 	/**
@@ -327,6 +345,7 @@ public class GameCore implements GameCoreInterface {
 		if (player != null) {
 			this.broadcast(player, "You see " + player.getName() + " heading off to class.");
 			this.playerList.removePlayer(name);
+			this.accountManager.forceUpdateData(player);
 			return player;
 		}
 		return null;

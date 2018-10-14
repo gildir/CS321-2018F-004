@@ -17,12 +17,12 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
 	 * Creates a new GameObject. Namely, creates the map for the rooms in the game,
 	 * and establishes a new, empty, player list.
 	 * 
-	 * @throws RemoteException
+	 * @throws Exception
 	 */
-	public GameObject() throws RemoteException {
+	public GameObject(String playerAccountsLocation) throws Exception {
 		super();
 
-		core = new GameCore();
+		core = new GameCore(playerAccountsLocation);
 	}
 
 	/**
@@ -98,12 +98,11 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
 	 * @throws RemoteException
 	 */
 	@Override
-	public GameObjectResponse createAccountAndJoinGame(String name, String password) throws RemoteException {
+	public Responses createAccountAndJoinGame(String name, String password) throws RemoteException {
 		password = hash(password);
-		if(password != "ERROR")
-		return core.createAccountAndJoinGame(name, password);
-		
-		return null; //Password is invalid due to failure of hash function
+		if(!password.equals("ERROR"))
+		  return core.createAccountAndJoinGame(name, password);		
+		return Responses.INTERNAL_SERVICE_ERROR;
 	}
 
 	/**
