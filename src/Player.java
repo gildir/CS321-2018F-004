@@ -8,7 +8,7 @@ import java.util.LinkedList;
  * @author Kevin
  */
 public class Player {
-    private LinkedList<Item> currentInventory;
+    public LinkedList<Item> currentInventory;
     private String name;
     private int currentRoom;
     private Direction currentDirection;

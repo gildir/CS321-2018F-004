@@ -252,19 +252,25 @@ public class GameCore implements GameCoreInterface {
      */    
     public String pickup(String name, String target) {
         Player player = this.playerList.findPlayer(name);
-        if(player != null) {
-            Room room = map.findRoom(player.getCurrentRoom());
-            Item object = room.removeObject(target);
-            if(object != null) {
-                player.addObjectToInventory(object);
-                this.broadcast(player, player.getName() + " bends over to pick up a " + target + " that was on the ground.");
-                return "You bend over and pick up a " + target + ".";
-            }
+        if(player != null)  {
+	    if (player.currentInventory.size() <10){
+                Room room = map.findRoom(player.getCurrentRoom());
+                Item object = room.removeObject(target);
+                if(object != null) {
+                    player.addObjectToInventory(object);
+                    this.broadcast(player, player.getName() + " bends over to pick up a " + target + " that was on the ground.");
+                    return "You bend over and pick up a " + target + ".";
+                }
+                else {
+                    this.broadcast(player, player.getName() + " bends over to pick up something, but doesn't seem to find what they were looking for.");
+                    return "You look around for a " + target + ", but can't find one.";
+                }
+	    }
             else {
-                this.broadcast(player, player.getName() + " bends over to pick up something, but doesn't seem to find what they were looking for.");
-                return "You look around for a " + target + ", but can't find one.";
-            }
-        }
+	        return " your inventory is full.";
+	    }
+	}
+        
         else {
             return null;
         }
