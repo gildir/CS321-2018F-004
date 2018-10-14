@@ -69,7 +69,6 @@ public interface GameObjectInterface extends Remote {
     /**
      * Reply "message" to last whisper.
      * @param srcName Name of the player to speak
-     * @param dstName Name of the player to receive
      * @param message Message to speak
      * @return Message showing success
      * @throws RemoteException

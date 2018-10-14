@@ -221,13 +221,13 @@ public class GameCore implements GameCoreInterface {
     public String whisper(String srcName, String dstName, String message){
         Player srcPlayer = this.playerList.findPlayer(srcName);
         Player dstPlayer = this.playerList.findPlayer(dstName);
-        dstPlayer.setLastPlayer(srcName);
         String returnMessage;
         if (dstPlayer == null)
             returnMessage = "Player " + dstName + " not found.";
         else if (srcPlayer == null)
             returnMessage = "Message failed, check connection to server.";
         else {
+            dstPlayer.setLastPlayer(srcName);
             dstPlayer.getReplyWriter().println(srcPlayer.getName() + " whispers you, " + message);
             returnMessage = "You whisper to " + dstPlayer.getName() + ", " + message;
         }
@@ -239,10 +239,8 @@ public class GameCore implements GameCoreInterface {
     /**
      * Reply "message" to last whisper.
      * @param srcName Name of the player to speak
-     * @param dstName Name of the player to receive
      * @param message Message to speak
      * @return Message showing success
-     * @throws RemoteException
      */
     public String quickReply(String srcName, String message) {
         Player srcPlayer = this.playerList.findPlayer(srcName);

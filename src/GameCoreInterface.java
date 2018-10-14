@@ -82,10 +82,8 @@ public interface GameCoreInterface {
     /**
      * Reply "message" to last whisper.
      * @param srcName Name of the player to speak
-     * @param dstName Name of the player to receive
      * @param message Message to speak
      * @return Message showing success
-     * @throws RemoteException
      */
     public String quickReply(String srcName, String message);
     // End 404.
