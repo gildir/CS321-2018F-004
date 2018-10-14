@@ -292,7 +292,7 @@ public class GameCore implements GameCoreInterface {
              return "You challenged " + playerChallengee.getName() + " to a R-P-S.";
          }
         else if(playerChallenger == playerChallengee)
-            return "You can't challenge yourself to a R-P-S.";
+            return "You can't challenge yourself to R-P-S.";
          else {
              return "This person is not in the same room as you or doesn't exist in the game.";
          }
