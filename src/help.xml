@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<helps>
+    <help command = "LOOK">
+        <description>  LOOK          - Shows you the area around you</description>
+    </help>
+    <help command = "SAY">
+        <description>  SAY message   - Says 'message' to any other players in the same area.</description>
+    </help>
+    <help command = "MOVE">
+        <description>  MOVE direction- Tries to walk forward once toward &lt;direction&gt; times.</description>
+    </help>
+    <help command = "PICKUP">
+        <description>  PICKUP obect  - Tries to pick up an object in the same area.</description>
+    </help>
+    <help command = "PICKUPALL">
+        <description>  PICKUPALL     - Tries to pick up all objects in the same area.</description>
+    </help>
+    <help command = "INVENTORY">
+        <description>  INVENTORY     - Shows you what objects you have collected.</description>
+    </help>
+    <help command = "QUIT">
+        <description>  QUIT          - Quits the game.</description>
+    </help>
+</helps>
