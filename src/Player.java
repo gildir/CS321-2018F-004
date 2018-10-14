@@ -14,6 +14,7 @@ public class Player {
     private Direction currentDirection;
     private PrintWriter replyWriter = null;
     private DataOutputStream outputWriter = null;
+    private String lastPlayer = "";
 
     public Player(String name) {
         this.currentRoom = 1;
@@ -55,6 +56,14 @@ public class Player {
                 break;                
         }
     }
+    
+    public String getLastPlayer() {
+        return lastPlayer;
+    }
+
+    public void setLastPlayer(String lastPlayer) {
+        this.lastPlayer = lastPlayer;
+    } 
     
     public String getName() {
         return name;

@@ -78,6 +78,17 @@ public interface GameCoreInterface {
     public String whisper(String srcName, String dstName, String message);
     // End 401.
 
+    // Feature 404. Quick Reply
+    /**
+     * Reply "message" to last whisper.
+     * @param srcName Name of the player to speak
+     * @param dstName Name of the player to receive
+     * @param message Message to speak
+     * @return Message showing success
+     * @throws RemoteException
+     */
+    public String quickReply(String srcName, String message);
+    // End 404.
     /**
      * Returns a string representation of all objects you are carrying.
      * @param name Name of the player to move

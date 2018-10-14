@@ -65,6 +65,19 @@ public interface GameObjectInterface extends Remote {
     public String whisper(String srcName, String dstName, String message) throws RemoteException;
     // End 401.
     
+    // Feature 404. Quick Reply
+    /**
+     * Reply "message" to last whisper.
+     * @param srcName Name of the player to speak
+     * @param dstName Name of the player to receive
+     * @param message Message to speak
+     * @return Message showing success
+     * @throws RemoteException
+     */
+    public String quickReply(String srcName, String message) throws RemoteException;
+    // End 404.
+
+    
     /**
      * Attempts to walk forward < distance > times.  If unable to make it all the way,
      *  a message will be returned.  Will display LOOK on any partial success.

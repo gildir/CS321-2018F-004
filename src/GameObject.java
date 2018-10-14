@@ -113,6 +113,21 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
         return core.whisper(srcName, dstName, message);
     }
     // End 401.
+    
+    // Feature 404. Quick Reply
+    /**
+     * Reply "message" to last whisper.
+     * @param srcName Name of the player to speak
+     * @param dstName Name of the player to receive
+     * @param message Message to speak
+     * @return Message showing success
+     * @throws RemoteException
+     */
+    @Override
+    public String quickReply(String srcName, String message) throws RemoteException {
+        return core.quickReply(srcName, message);
+    }
+    // End 404.
 
       
     /**
