@@ -123,7 +123,19 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
     public String pickup(String name, String target) throws RemoteException {
         return core.pickup(name, target);
     }    
-    
+ 
+    /**
+     * Attempts to pick up an object < target >. Will return a message on any success or failure.
+     * @param name Name of the player to move
+     * @param target The case-insensitive name of the object to pickup.
+     * @return Message showing success.
+     * @throws RemoteException 
+     */    
+    @Override
+    public String drop(String name, String target) throws RemoteException {
+        return core.drop(name, target);
+    }    
+
     /**
      * Returns a string representation of all objects you are carrying.
      * @param name Name of the player to move

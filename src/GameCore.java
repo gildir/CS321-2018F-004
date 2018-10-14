@@ -269,7 +269,33 @@ public class GameCore implements GameCoreInterface {
             return null;
         }
     }       
-    
+
+    /**
+     * Attempts to drops an object < target >. Will return a message on any success or failure.
+     * @param name Name of the player to move
+     * @param target The case-insensitive name of the object to drop.
+     * @return Message showing success. 
+     */    
+    public String drop(String name, String target) {
+        Player player = this.playerList.findPlayer(name);
+        if(player != null) {
+            Room room = map.findRoom(player.getCurrentRoom());
+            Item object = player.removeObjectFromInventory(target);
+            if(object != null) {
+                room.addObject(object);
+                this.broadcast(player, player.getName() + " rummages their inventory to find a " + target);
+                return "You drop a " + target + " into the room.";
+            }
+            else {
+                this.broadcast(player, player.getName() + " tries to drop something, but doesn't seem to find what they were looking for.");
+                return "You look around for a " + target + " in your pockets, but can't find one.";
+            }
+        }
+        else {
+            return null;
+        }
+    } 
+
     /**
      * Returns a string representation of all objects you are carrying.
      * @param name Name of the player to move
