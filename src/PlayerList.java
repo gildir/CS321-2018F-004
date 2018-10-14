@@ -4,13 +4,10 @@ import java.util.LinkedList;
 
 /**
  *
-<<<<<<< HEAD
- * @author Kevin */
-=======
+ * @author Kevin
  * @author Kevin
  */
 
->>>>>>> 5390d86d99ce69906225e4b599a4654552e82d8a
 public class PlayerList implements Iterable<Player> {
     private final LinkedList<Player> playerList;
     
