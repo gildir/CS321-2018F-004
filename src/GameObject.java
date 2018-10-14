@@ -40,25 +40,21 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Used to create a hash encrypted in SHA256 for use in encrypting passwords
 	 * 
 	 * @param toHash
 	 * @return SHA256 encrypted hash value, or "ERROR" If encryption method fails.
 	 */
-	public String hash(String toHash)
-	{
-		try
-		{
+	public String hash(String toHash) {
+		try {
 			byte[] encodedhash = MessageDigest.getInstance("SHA-256").digest(toHash.getBytes(StandardCharsets.UTF_8));
 			StringBuilder sb = new StringBuilder();
-			for (byte b: encodedhash)
+			for (byte b : encodedhash)
 				sb.append(String.format("%02X", b));
 			return sb.toString();
-		} 
-		catch (NoSuchAlgorithmException e)
-		{
+		} catch (NoSuchAlgorithmException e) {
 		}
 		return "ERROR";
 	}
@@ -80,10 +76,9 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
 		// Request join to the core and return the results back to the remotely calling
 		// method.
 		password = hash(password);
-		if(password != "ERROR")
-		return (core.joinGame(name, password) != null);
-		
-		return false; //Password is invalid due to failure of hash function
+		if (!password.equals("ERROR"))
+			return (core.joinGame(name, password) != null);
+		return false; // Password is invalid due to failure of hash function
 	}
 
 	/**
@@ -94,15 +89,16 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
 	 * 
 	 * @param name
 	 * @param password
-	 * @return an enumeration representing the creation status, or null if password failed to be encrypted in hash function.
+	 * @return an enumeration representing the creation status, or null if password
+	 *         failed to be encrypted in hash function.
 	 * @throws RemoteException
 	 */
 	@Override
 	public Responses createAccountAndJoinGame(String name, String password) throws RemoteException {
 		password = hash(password);
-		if(!password.equals("ERROR"))
-		  return core.createAccountAndJoinGame(name, password);		
-		return Responses.INTERNAL_SERVICE_ERROR;
+		if (password.equals("ERROR"))
+			return Responses.UNKNOWN_FAILURE;
+		return core.createAccountAndJoinGame(name, password);
 	}
 
 	/**
