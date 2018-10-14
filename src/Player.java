@@ -8,7 +8,7 @@ import java.util.LinkedList;
  * @author Kevin
  */
 public class Player {
-    private LinkedList<String> currentInventory;
+    private LinkedList<Item> currentInventory;
     private String name;
     private int currentRoom;
     private Direction currentDirection;
@@ -64,15 +64,15 @@ public class Player {
         this.name = name;
     }
 
-    public LinkedList<String> getCurrentInventory() {
+    public LinkedList<Item> getCurrentInventory() {
         return currentInventory;
     }
 
-    public void setCurrentInventory(LinkedList<String> currentInventory) {
+    public void setCurrentInventory(LinkedList<Item> currentInventory) {
         this.currentInventory = currentInventory;
     }
     
-    public void addObjectToInventory(String object) {
+    public void addObjectToInventory(Item object) {
         this.currentInventory.add(object);
     }
     
@@ -114,8 +114,9 @@ public class Player {
             return "nothing.";
         }
         else {
-            for(String obj : this.currentInventory) {
-                result += " " + obj;
+            for(Item obj : this.currentInventory) {
+                result += " " + obj.name;
+		result += (" (" + obj.weight + ") ");
             }
             result += ".";
         }

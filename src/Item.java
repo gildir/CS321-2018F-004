@@ -4,7 +4,7 @@ public class Item
 	double  weight;
 	double price;
 
-	public void Item(String name, double weight, double price)
+	public Item(String name, double weight, double price)
 	{
 		this.name = name;
 		this.weight = weight;
@@ -39,5 +39,11 @@ public class Item
 	public double getPrice()
 	{
 		return this.price;
+	}
+	
+	public String toString()
+	{
+		String ret = this.name + " (" + this.weight + ") ";
+		return ret;
 	}
 }

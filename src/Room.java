@@ -8,7 +8,7 @@ public class Room {
     private final int id;
     private final String title;
     private final String description;
-    private final LinkedList<String> objects;
+    private final LinkedList<Item> objects;
     private final LinkedList<Exit> exits;
     
     public Room(int id, String title, String description) {
@@ -92,19 +92,24 @@ public class Room {
             return "None.";
         }
         else {
-            return this.objects.toString();
+		String ret = "";
+		for(Item obj : this.objects) {
+			ret += " " + obj.toString();
+		}
+		return ret;
         }
     }
     
-    public void addObject(String obj) {
+    public void addObject(Item obj) {
         if(this.objects.size() < 5) {
             this.objects.add(obj);
         }
     }
     
-    public String removeObject(String target) {
-        for(String obj : this.objects) {
-            if(obj.equalsIgnoreCase(target)) {
+    public Item removeObject(String target) {
+        for(Item obj : this.objects) {
+		String nameToRemove = obj.name;
+            if(nameToRemove.equalsIgnoreCase(target)) {
                 this.objects.remove(obj);
                 return obj;
             }

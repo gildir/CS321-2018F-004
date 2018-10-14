@@ -31,8 +31,12 @@ public class GameCore implements GameCoreInterface {
             public void run() {
                 Random rand = new Random();
                 Room room;
-                String object;
-                String[] objects = {"Flower", "Textbook", "Phone", "Newspaper"};
+                Item object;
+		Item tempItem1 = new Item("Flower", 1.0, 0.0);
+		Item tempItem2 = new Item("Textbook", 10.3, 5.2);
+		Item tempItem3 = new Item("Phone", 2.9, 1.0);
+		Item tempItem4 = new Item("Newspaper", 10.0, 9.0);
+                Item[] objects = {tempItem1, tempItem2, tempItem3, tempItem4};
                 while(true) {
                     try {
                         Thread.sleep(rand.nextInt(60000));
@@ -250,7 +254,7 @@ public class GameCore implements GameCoreInterface {
         Player player = this.playerList.findPlayer(name);
         if(player != null) {
             Room room = map.findRoom(player.getCurrentRoom());
-            String object = room.removeObject(target);
+            Item object = room.removeObject(target);
             if(object != null) {
                 player.addObjectToInventory(object);
                 this.broadcast(player, player.getName() + " bends over to pick up a " + target + " that was on the ground.");
