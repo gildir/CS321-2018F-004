@@ -114,6 +114,18 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
     }
 
     /**
+     * Reply "message" to last whisper.
+     * @param srcName Name of the player to speak
+     * @param message Message to speak
+     * @return Message showing success
+     * @throws RemoteException
+     */
+    @Override
+    public String quickReply(String srcName, String message) throws RemoteException {
+        return core.quickReply(srcName, message);
+    }
+
+    /**
      * Player ignores further messages from another Player
      * @param srcName Player making the ignore request
      * @param dstName Player to be ignored

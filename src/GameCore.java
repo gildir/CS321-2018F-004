@@ -228,7 +228,30 @@ public class GameCore implements GameCoreInterface {
         else if (dstPlayer.isIgnoring(srcPlayer))
             returnMessage = "Player " + dstPlayer.getName() + " is ignoring you.";
         else {
+            dstPlayer.setLastPlayer(srcName);
             dstPlayer.getReplyWriter().println(srcPlayer.getName() + " whispers you, " + message);
+            returnMessage = "You whisper to " + dstPlayer.getName() + ", " + message;
+        }
+        return returnMessage;
+    }
+
+    /**
+     * Reply "message" to last whisper.
+     * @param srcName Name of the player to speak
+     * @param message Message to speak
+     * @return Message showing success
+     */
+    public String quickReply(String srcName, String message) {
+        Player srcPlayer = this.playerList.findPlayer(srcName);
+        Player dstPlayer = this.playerList.findPlayer(srcPlayer.getLastPlayer());
+        String returnMessage;
+        if (dstPlayer == null)
+            returnMessage = "No whisper to reply to.";
+        else if (srcPlayer == null)
+            returnMessage = "Message failed, check connection to server.";
+        else {
+        	dstPlayer.setLastPlayer(srcName);
+        	dstPlayer.getReplyWriter().println(srcPlayer.getName() + " whispers you, " + message);
             returnMessage = "You whisper to " + dstPlayer.getName() + ", " + message;
         }
         return returnMessage;
