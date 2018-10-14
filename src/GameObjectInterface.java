@@ -102,4 +102,13 @@ public interface GameObjectInterface extends Remote {
      * @throws RemoteException
      */
     public String shop(String name) throws RemoteException;
+    
+    /**
+     * @author Team 4: King
+     * Returns how much money the player has
+     * @param name Name of the player
+     * @return String with how much money the player has
+     * @throws RemoteException
+     */
+    public String wallet(String name) throws RemoteException;
 }
