@@ -287,7 +287,7 @@ public class GameCore implements GameCoreInterface {
     public String challenge(String challenger, String challengee){
         Player playerChallenger = this.playerList.findPlayer(challenger);
         Player playerChallengee = this.playerList.findPlayer(challengee);
-        if(playerChallenger != null && playerChallengee != null && playerChallenger != playerChallengee) {
+        if(playerChallenger != null && playerChallengee != null && playerChallenger != playerChallengee && playerChallenger.getCurrentRoom() == playerChallengee.getCurrentRoom()) {
              playerChallengee.getReplyWriter().println(playerChallenger.getName() + " challenges you to a R-P-S");
              return "You challenged " + playerChallengee.getName() + " to a R-P-S.";
          }
