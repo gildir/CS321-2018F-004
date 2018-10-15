@@ -189,6 +189,9 @@ public class GameClient {
                     remoteGameInterface.leave(this.playerName);
                     runListener = false;
                     break;
+                case "HELP":
+                    showCommand();
+                    break;
                 default:
                     System.out.println("Invalid Command, Enter \"help\" to get help");
                     break;

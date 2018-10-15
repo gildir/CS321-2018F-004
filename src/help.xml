@@ -47,6 +47,6 @@ object are on the ground and what direction you are facing.
         <description>  QUIT          - Quits the game.</description>
     </help>
     <help command = "HELP">
-        <description></description>
+        <description>  HELP          - Shows you all possible commands.</description>
     </help>
 </helps>
