@@ -50,14 +50,16 @@ public class GameClient {
         System.out.println("You will be able to see if any other players are in the same area as well as what");
         System.out.println("objects are on the ground and what direction you are facing.\n");
         System.out.println("The game allows you to use the following commands:");
-        System.out.println("  LOOK          - Shows you the area around you");
-        System.out.println("  SAY message   - Says 'message' to any other players in the same area.");
-        System.out.println("  LEFT          - Turns your player left 90 degrees.");
-        System.out.println("  RIGHT         - Turns your player right 90 degrees.");
-        System.out.println("  MOVE distance - Tries to walk forward <distance> times.");
-        System.out.println("  PICKUP obect  - Tries to pick up an object in the same area.");
-        System.out.println("  INVENTORY     - Shows you what objects you have collected.");
-        System.out.println("  QUIT          - Quits the game.");
+        System.out.println("  LOOK                     - Shows you the area around you");
+        System.out.println("  SAY message              - Says 'message' to any other players in the same area.");
+        System.out.println("  WHISPER player message   - Whispers 'message' to 'player'");
+        System.out.println("  IGNORE player            - Ignore messages from from 'player'");
+        System.out.println("  LEFT                     - Turns your player left 90 degrees.");
+        System.out.println("  RIGHT                    - Turns your player right 90 degrees.");
+        System.out.println("  MOVE distance            - Tries to walk forward <distance> times.");
+        System.out.println("  PICKUP obect             - Tries to pick up an object in the same area.");
+        System.out.println("  INVENTORY                - Shows you what objects you have collected.");
+        System.out.println("  QUIT                     - Quits the game.");
         System.out.println();
         
 
@@ -123,6 +125,25 @@ public class GameClient {
             System.exit(-1);
         }        
     }
+
+    // Helper for Features 4XX - Chat System
+    /**
+     * Method to decorate messages intended for use with the chat system.
+     * @param msgTokens User input words to decorate into a "message".
+     * @return "message" to be sent by the user
+     */
+    private String parseMessage(ArrayList<String> msgTokens) {
+        //TODO: Note - Tokenizer currently trims out multiple spaces - bug or feature?
+        StringBuilder msgBuilder = new StringBuilder();
+        msgBuilder.append("\"");
+        while (!msgTokens.isEmpty()) {
+            msgBuilder.append(msgTokens.remove(0));
+            if (!msgTokens.isEmpty())
+                msgBuilder.append(" ");
+        }
+        msgBuilder.append("\"");
+        return msgBuilder.toString();
+    }
     
     /** 
      * Simple method to parse the local input and remotely execute the RMI commands.
@@ -169,6 +190,31 @@ public class GameClient {
                             }
                         }                        
                         System.out.println(remoteGameInterface.say(this.playerName, message));
+                    }
+                    break;
+                // Feature 401. Whisper
+                case "W":
+                case "WHISPER":
+                    if (tokens.isEmpty()) {
+                        System.err.println("You need to provide a player to whisper.");
+                    }
+                    else if (tokens.size() < 2) {
+                        System.err.println("You need to provide a message to whisper.");
+                    }
+                    else {
+                        String dstPlayerName = tokens.remove(0).toLowerCase();
+                        message = parseMessage(tokens);
+                        System.out.println(remoteGameInterface.whisper(this.playerName, dstPlayerName, message));
+                    }
+                    break;
+                // End 401.
+                // Feature 405. Ignore Player
+                case "IGNORE":
+                    if(tokens.isEmpty()) {
+                        System.err.println("You need to provide a player to ignore");
+                    }
+                    else {
+                        System.out.println(remoteGameInterface.ignorePlayer(this.playerName, tokens.remove(0)));
                     }
                     break;
                 case "MOVE":
