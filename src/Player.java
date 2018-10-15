@@ -35,10 +35,8 @@ public class Player {
      */
     public boolean unIgnorePlayer(Player playerToUnIgnore) {
         if(ignoredPlayers.contains(playerToUnIgnore)){
-            System.out.println(playerToUnIgnore.name + " has been unignored.");
             return ignoredPlayers.remove(playerToUnIgnore);
-        }else{
-            System.out.println("This player is currently not being ignored.");
+        }else {
             return false;
         }
     }

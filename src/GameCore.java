@@ -232,7 +232,7 @@ public class GameCore implements GameCoreInterface {
             returnMessage = "You aren't ignoring " + dstPLayer.getName() + "!";
         else {
             srcPlayer.unIgnorePlayer(dstPLayer);
-            returnMessage = "You're now unignoring " + dstPLayer.getName() + ".";
+            returnMessage = "You're no longer ignoring " + dstPLayer.getName() + ".";
         }
         return returnMessage;
     }
