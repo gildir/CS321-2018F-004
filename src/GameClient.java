@@ -52,14 +52,8 @@ public class GameClient {
     public GameClient(String host) {
         this.runGame = true;
         boolean nameSat = false;
-        
-        System.out.println("Welcome to the client for an RMI based online game.\n");
-        System.out.println("This game allows you to connect to a server an walk around a virtual,");
-        System.out.println(" text-based version of the George Mason University campus.\n");
-        System.out.println("You will be asked to create a character momentarily.");
-        System.out.println("When you do, you will join the game at the George Mason Clock, in the main quad.");
-        System.out.println("You will be able to see if any other players are in the same area as well as what");
-        System.out.println("objects are on the ground and what direction you are facing.\n");
+
+        showIntroduction();
 
         showCommand();
 
@@ -246,8 +240,34 @@ public class GameClient {
 
                 description = xmlElement.getElementsByTagName("description").item(0).getTextContent();
 
-                System.out.println(description);
+                if ( !description.equals("") ){
+                    System.out.println(description);
+                }
             }
+        } catch (ParserConfigurationException | SAXException | IOException ex) {
+            Logger.getLogger(Map.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    //Shows the introduction of the game
+    private void showIntroduction()
+    {
+        try {
+            File commandFile = new File("./help.xml");
+            
+            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+            Document document = dBuilder.parse(commandFile);
+
+            document.getDocumentElement().normalize();
+            NodeList xmlCommands = document.getElementsByTagName("introduction");
+
+            String description;
+            Element xmlElement;
+
+            xmlElement = (Element) xmlCommands.item(0);
+            description = xmlElement.getElementsByTagName("description").item(0).getTextContent();
+            System.out.println(description);
         } catch (ParserConfigurationException | SAXException | IOException ex) {
             Logger.getLogger(Map.class.getName()).log(Level.SEVERE, null, ex);
         }
