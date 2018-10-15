@@ -115,10 +115,11 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
      * Player displays the list of players that are being ignored
      * @param name Player who's list is being targeted
      * @return The list of players being ignored
+     * @throws RemoteException
      */
    @Override
-    public String GetIgnoredPlayersList(String name) throws RemoteException{
-        return core.GetIgnoredPlayersList(name);
+    public String getIgnoredPlayersList(String name) throws RemoteException{
+        return core.getIgnoredPlayersList(name);
     }
     
 

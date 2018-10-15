@@ -203,17 +203,8 @@ public class GameClient {
                         System.out.println(remoteGameInterface.unIgnorePlayer(this.playerName, tokens.remove(0)));
                     }
                     break;
-                case "UNIGNORE":
-                    if(tokens.isEmpty()) {
-                        System.err.println("You need to provide a player to unignore");
-                    }
-                    else {
-                        System.out.println(remoteGameInterface.unIgnorePlayer(this.playerName, tokens.remove(0)));
-                    }
-                    break;
-                
                 case "IGNORELIST":
-                        System.out.println(remoteGameInterface.GetIgnoredPlayersList(this.playerName));
+                        System.out.println(remoteGameInterface.getIgnoredPlayersList(this.playerName));
                     break;
                 case "MOVE":
                     if(tokens.isEmpty()) {

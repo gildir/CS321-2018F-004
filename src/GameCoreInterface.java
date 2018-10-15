@@ -67,15 +67,6 @@ public interface GameCoreInterface {
      */
     public String say(String name, String message);
 
-   //Feature 408. Unignore Player.
-    /**
-     * Player unIgnores further messages from another Player
-     * @param srcName Player making the unIgnore request
-     * @param dstName Player to be unIgnored
-     * @return Message showing success
-     */
-    public String unIgnorePlayer(String srcName, String dstName);
-
    /**
      * Player unIgnores further messages from another Player
      * @param srcName Player making the unIgnore request
@@ -89,7 +80,7 @@ public interface GameCoreInterface {
      * @param name Player who's list is being targeted
      * @return The list of players being ignored
      */
-    public String GetIgnoredPlayersList(String name);
+    public String getIgnoredPlayersList(String name);
 
     /**
      * Returns a string representation of all objects you are carrying.

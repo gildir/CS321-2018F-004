@@ -240,15 +240,15 @@ public class GameCore implements GameCoreInterface {
      * @param name Player who's list is being targeted
      * @return The list of players being ignored
      */
-    public String GetIgnoredPlayersList(String name) {
+    public String getIgnoredPlayersList(String name) {
         Player player = this.playerList.findPlayer(name);
-        String returnMessage = "";
+        String returnMessage;
         if(player != null){
-            returnMessage += player.GetIgnoredPlayersList();
-            return returnMessage;
+            returnMessage = player.getIgnoredPlayersList();
         }else{
-            return null;
+            returnMessage = "Error: Could not find player. Check server connection status";
         }
+        return returnMessage;
     }
 
     /**
