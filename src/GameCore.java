@@ -255,7 +255,6 @@ public class GameCore implements GameCoreInterface {
         }
         return returnMessage;
     }
-    // End 404.
 
     /**
      * Attempts to walk forward < distance > times.  If unable to make it all the way,

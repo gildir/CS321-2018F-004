@@ -63,8 +63,7 @@ public interface GameObjectInterface extends Remote {
      * @throws RemoteException
      */
     public String whisper(String srcName, String dstName, String message) throws RemoteException;
-    // End 401.
-    
+
     // Feature 404. Quick Reply
     /**
      * Reply "message" to last whisper.
@@ -74,7 +73,6 @@ public interface GameObjectInterface extends Remote {
      * @throws RemoteException
      */
     public String quickReply(String srcName, String message) throws RemoteException;
-    // End 404.
 
     
     /**
