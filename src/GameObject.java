@@ -112,7 +112,20 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
     public String whisper(String srcName, String dstName, String message) throws RemoteException {
         return core.whisper(srcName, dstName, message);
     }
-    // End 401.
+
+    // Feature 405. Ignore Player
+   /**
+     * Player ignores further messages from another Player
+     * @param srcName Player making the ignore request
+     * @param dstName Player to be ignored
+     * @return Message showing success
+     * @throws RemoteException
+     */
+   @Override
+    public String ignorePlayer(String srcName, String dstName) throws RemoteException {
+        return core.ignorePlayer(srcName, dstName);
+    }
+
 
       
     /**

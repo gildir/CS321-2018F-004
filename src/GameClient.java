@@ -59,6 +59,7 @@ public class GameClient {
         System.out.println("  INVENTORY     - Shows you what objects you have collected.");
         System.out.println("  QUIT          - Quits the game.");
         System.out.println("  WHISPER player message   - Whispers 'message' to 'player'");
+        System.out.println("  IGNORE player            - Ignore messages from from 'player'");
         System.out.println();
         
 
@@ -207,6 +208,15 @@ public class GameClient {
                     }
                     break;
                 // End 401.
+                // Feature 405. Ignore Player
+                case "IGNORE":
+                    if(tokens.isEmpty()) {
+                        System.err.println("You need to provide a player to ignore");
+                    }
+                    else {
+                        System.out.println(remoteGameInterface.ignorePlayer(this.playerName, tokens.remove(0)));
+                    }
+                    break;
                 case "MOVE":
                     if(tokens.isEmpty()) {
                         System.err.println("You need to provide a distance in order to move.");
