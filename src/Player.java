@@ -40,7 +40,13 @@ public class Player {
      * @return - whether player reference was successfully added to set ignorePlayer.
      */
     public boolean ignorePlayer(Player playerToIgnore) {
-        return ignoredPlayers.add(playerToIgnore);
+        if(!ignoredPlayers.contains(playerToIgnore)){
+            System.out.println(playerToIgnore.name + " has been ignored.");
+            return ignoredPlayers.add(playerToIgnore);
+        } else {
+            System.out.println(playerToIgnore.name + " is already being ignored.");
+            return false;
+        }
     }
 
     /**
@@ -51,7 +57,13 @@ public class Player {
      *
      */
     public boolean unIgnorePlayer(Player playerToUnIgnore) {
-        return ignoredPlayers.remove(playerToUnIgnore);
+        if(ignoredPlayers.contains(playerToUnIgnore)){
+            System.out.println(playerToUnIgnore.name + " has been unignored.");
+            return ignoredPlayers.remove(playerToUnIgnore);
+        }else{
+            System.out.println("This player is currently not being ignored.");
+            return false;
+        }
     }
 
     /**
