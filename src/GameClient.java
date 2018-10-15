@@ -209,20 +209,13 @@ public class GameClient {
                         System.out.println(remoteGameInterface.whisper(this.playerName, dstPlayerName, message));
                     }
                     break;
+                case "R":
                 case "REPLY":
                     if (tokens.isEmpty()) {
                         System.err.println("You need to provide a message.");
                     }
                     else {
-                        StringBuilder msgReplyBuilder = new StringBuilder();
-                        msgReplyBuilder.append("\"");
-                        while (!tokens.isEmpty()) {
-                            msgReplyBuilder.append(tokens.remove(0));
-                            if (!tokens.isEmpty())
-                                msgReplyBuilder.append(" ");
-                        }
-                        msgReplyBuilder.append("\"");
-                        message = msgReplyBuilder.toString();
+                        message = parseMessage(tokens);
                         System.out.println(remoteGameInterface.quickReply(this.playerName, message));
                     }
                     break;

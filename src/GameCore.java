@@ -250,9 +250,7 @@ public class GameCore implements GameCoreInterface {
         else if (srcPlayer == null)
             returnMessage = "Message failed, check connection to server.";
         else {
-        	dstPlayer.setLastPlayer(srcName);
-        	dstPlayer.getReplyWriter().println(srcPlayer.getName() + " whispers you, " + message);
-            returnMessage = "You whisper to " + dstPlayer.getName() + ", " + message;
+        	returnMessage = this.whisper(srcName,dstPlayer.getName(),message);
         }
         return returnMessage;
     }
