@@ -233,6 +233,10 @@ public class GameCore implements GameCoreInterface {
         return returnMessage;
     }
     
+    /**
+     * Generates list of all online players.
+     * @return String of linked list PlayerList
+     */
     public String showPlayers(){
       StringBuilder users = new StringBuilder();
       users.append("Players online:\n");
