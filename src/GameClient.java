@@ -229,7 +229,7 @@ public class GameClient {
                     break;
                 
                 case "IGNORELIST":
-                        System.out.println(remoteGameInterface.GetIgnoredPlayersList(this.playerName));
+                        System.out.println(remoteGameInterface.getIgnoredPlayersList(this.playerName));
                     break;
                 case "MOVE":
                     if(tokens.isEmpty()) {

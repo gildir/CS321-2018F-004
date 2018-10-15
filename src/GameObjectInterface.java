@@ -90,8 +90,9 @@ public interface GameObjectInterface extends Remote {
      * Player displays the list of players that are being ignored
      * @param name Player who's list is being targeted
      * @return The list of players being ignored
+     * @throws RemoteException
      */
-    public String GetIgnoredPlayersList(String name) throws RemoteException;
+    public String getIgnoredPlayersList(String name) throws RemoteException;
     
     /**
      * Attempts to walk forward < distance > times.  If unable to make it all the way,

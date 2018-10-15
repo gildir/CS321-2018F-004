@@ -100,7 +100,7 @@ public interface GameCoreInterface {
      * @param name Player who's list is being targeted
      * @return The list of players being ignored
      */
-    public String GetIgnoredPlayersList(String name);
+    public String getIgnoredPlayersList(String name);
 
     /**
      * Returns a string representation of all objects you are carrying.

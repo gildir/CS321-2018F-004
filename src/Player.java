@@ -76,38 +76,26 @@ public class Player {
 
 
     /**
-     *
-     * @return - Returns a list (in String format) of all player references stored
-     * in the set ignoredPlayers.
-     *
+     * Access the list of players this player is ignoring.
+     * @return - Returns a String of all player names this player is ignoring
      */
-    public String GetIgnoredPlayersList() {
-
-        String ignoredPlayersList = "\nIgnored Players: ";
-
-        if(ignoredPlayers.isEmpty()) { ignoredPlayersList += " None.\n"; }
+    public String getIgnoredPlayersList() {
+        StringBuilder ignoredPlayersList = new StringBuilder();
+        ignoredPlayersList.append("\nIgnored Players: ");
+        if(ignoredPlayers.isEmpty()) { ignoredPlayersList.append(" Your ignore list is empty.\n"); }
         else {
-
             int count = 1;
-
             for(Player ignored : ignoredPlayers) {
-
-                ignoredPlayersList += ignored.name;
-
+                ignoredPlayersList.append(ignored.name);
                 if(count == ignoredPlayers.size()) {
-
-                    ignoredPlayersList += ".\n";
-
+                    ignoredPlayersList.append(".\n");
                 } else {
-
                     count++;
-                    ignoredPlayersList += ", ";
-
+                    ignoredPlayersList.append(", ");
                 }
             }
         }
-
-        return ignoredPlayersList;
+        return ignoredPlayersList.toString();
     }
 
     /**
