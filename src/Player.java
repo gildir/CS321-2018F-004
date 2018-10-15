@@ -1,4 +1,3 @@
-
 import java.io.DataOutputStream;
 import java.io.PrintWriter;
 import java.util.HashSet;
@@ -24,8 +23,25 @@ public class Player {
     }
 
     private HashSet<Player> ignoredPlayers = new HashSet<Player>();
-    
-    //Feature 408. Unignore Player.
+    // missed Messages - not yet in uses
+    private HashSet<Message> missedMessages = new HashSet<Message>();
+
+
+    /**
+     * Adds a player's reference to set ignoredPlayers.
+     * @param playerToIgnore
+     * @return - whether player reference was successfully added to set ignorePlayer.
+     */
+    public boolean ignorePlayer(Player playerToIgnore) {
+       // if(!ignoredPlayers.contains(playerToIgnore)){
+       //     System.out.println(playerToIgnore.name + " has been ignored.");
+            return ignoredPlayers.add(playerToIgnore);
+       // } else {
+       //     System.out.println(playerToIgnore.name + " is already being ignored.");
+       //     return false;
+       // }
+    }
+
     /**
      *
      * Removes a given player form the set ignoredPlayers

@@ -61,6 +61,7 @@ public class GameClient {
         System.out.println("  WHISPER player message   - Whispers 'message' to 'player'");
         System.out.println("  IGNORE player            - Ignore messages from from 'player'");
         System.out.println("  UNIGNORE player          - Unignore messages from from 'player'");
+        System.out.println("  IGNORELIST               - Displays a list of players you are ignoring");
         System.out.println();
         
 
@@ -201,6 +202,18 @@ public class GameClient {
                     else {
                         System.out.println(remoteGameInterface.unIgnorePlayer(this.playerName, tokens.remove(0)));
                     }
+                    break;
+                case "UNIGNORE":
+                    if(tokens.isEmpty()) {
+                        System.err.println("You need to provide a player to unignore");
+                    }
+                    else {
+                        System.out.println(remoteGameInterface.unIgnorePlayer(this.playerName, tokens.remove(0)));
+                    }
+                    break;
+                
+                case "IGNORELIST":
+                        System.out.println(remoteGameInterface.GetIgnoredPlayersList(this.playerName));
                     break;
                 case "MOVE":
                     if(tokens.isEmpty()) {

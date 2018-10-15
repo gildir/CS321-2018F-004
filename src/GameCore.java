@@ -210,8 +210,6 @@ public class GameCore implements GameCoreInterface {
         }
     }  
 
-
-    //Feature 408. Unignore Player.
    /**
      * Player unIgnores further messages from another Player
      * @param srcName Player making the unIgnore request
@@ -231,12 +229,28 @@ public class GameCore implements GameCoreInterface {
         else if (!srcPlayer.isIgnoring(dstPLayer))
             returnMessage = "You aren't ignoring " + dstPLayer.getName() + "!";
         else {
-            srcPlayer.unIgnorePlayer(dstPLayer);
-            returnMessage = "You're no longer ignoring " + dstPLayer.getName() + ".";
+            srcPlayer.ignorePlayer(dstPLayer);
+            returnMessage = "You're now unignoring " + dstPLayer.getName() + ".";
         }
         return returnMessage;
     }
    
+    /**
+     * Player displays the list of players that are being ignored
+     * @param name Player who's list is being targeted
+     * @return The list of players being ignored
+     */
+    public String GetIgnoredPlayersList(String name) {
+        Player player = this.playerList.findPlayer(name);
+        String returnMessage = "";
+        if(player != null){
+            returnMessage += player.GetIgnoredPlayersList();
+            return returnMessage;
+        }else{
+            return null;
+        }
+    }
+
     /**
      * Attempts to walk forward < distance > times.  If unable to make it all the way,
      *  a message will be returned.  Will display LOOK on any partial success.

@@ -53,7 +53,16 @@ public interface GameObjectInterface extends Remote {
      */
     public String say(String name, String message) throws RemoteException;
 
-    //Feature 408. Unignore player.
+    /**
+     * Player ignores further messages from another Player
+     * @param srcName Player making the ignore request
+     * @param dstName Player to be ignored
+     * @return Message showing success
+     * @throws RemoteException
+     */
+    public String ignorePlayer(String srcName, String dstName) throws RemoteException;
+
+
     /**
      * Player unIgnores further messages from another Player
      * @param srcName Player making the unIgnore request
@@ -63,6 +72,13 @@ public interface GameObjectInterface extends Remote {
      */
     public String unIgnorePlayer(String srcName, String dstName) throws RemoteException;
 
+    /**
+     * Player displays the list of players that are being ignored
+     * @param name Player who's list is being targeted
+     * @return The list of players being ignored
+     */
+    public String GetIgnoredPlayersList(String name) throws RemoteException;
+    
     /**
      * Attempts to walk forward < distance > times.  If unable to make it all the way,
      *  a message will be returned.  Will display LOOK on any partial success.
