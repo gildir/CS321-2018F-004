@@ -76,16 +76,6 @@ public interface GameObjectInterface extends Remote {
      */
     public String ignorePlayer(String srcName, String dstName) throws RemoteException;
 
-
-    /**
-     * Player unIgnores further messages from another Player
-     * @param srcName Player making the unIgnore request
-     * @param dstName Player to be unIgnored
-     * @return Message showing success
-     * @throws RemoteException
-     */
-    public String unIgnorePlayer(String srcName, String dstName) throws RemoteException;
-
     /**
      * Player displays the list of players that are being ignored
      * @param name Player who's list is being targeted

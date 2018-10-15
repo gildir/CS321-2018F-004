@@ -49,23 +49,6 @@ public class Player {
     }
 
     /**
-     *
-     * Removes a given player form the set ignoredPlayers
-     * @param playerToUnIgnore - player to remove from set
-     * @return - whether the player reference was successfully removed
-     *
-     */
-    public boolean unIgnorePlayer(Player playerToUnIgnore) {
-       // if(ignoredPlayers.contains(playerToUnIgnore)){
-       //     System.out.println(playerToUnIgnore.name + " has been unignored.");
-            return ignoredPlayers.remove(playerToUnIgnore);
-       // }else{
-      //      System.out.println("This player is currently not being ignored.");
-      //      return false;
-      //  }
-    }
-
-    /**
      * Checks a given other player to see if they're on the THIS player's ignore list.
      * @param otherPlayer - other player this player may or may not be ignoring.
      * @return - whether the other player is being ignored by this player.
