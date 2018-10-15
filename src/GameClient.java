@@ -60,6 +60,7 @@ public class GameClient {
         System.out.println("  QUIT          - Quits the game.");
         System.out.println("  WHISPER player message   - Whispers 'message' to 'player'");
         System.out.println("  IGNORE player            - Ignore messages from from 'player'");
+        System.out.println("  UNIGNORE player          - Unignore messages from from 'player'");
         System.out.println();
         
 
@@ -192,29 +193,13 @@ public class GameClient {
                         System.out.println(remoteGameInterface.say(this.playerName, message));
                     }
                     break;
-                // Feature 401. Whisper
-                case "W":
-                case "WHISPER":
-                    if (tokens.isEmpty()) {
-                        System.err.println("You need to provide a player to whisper.");
-                    }
-                    else if (tokens.size() < 2) {
-                        System.err.println("You need to provide a message to whisper.");
-                    }
-                    else {
-                        String dstPlayerName = tokens.remove(0).toLowerCase();
-                        message = parseMessage(tokens);
-                        System.out.println(remoteGameInterface.whisper(this.playerName, dstPlayerName, message));
-                    }
-                    break;
-                // End 401.
-                // Feature 405. Ignore Player
-                case "IGNORE":
+                //Feature 408. Unignore player.
+                case "UNIGNORE":
                     if(tokens.isEmpty()) {
-                        System.err.println("You need to provide a player to ignore");
+                        System.err.println("You need to provide a player to unignore");
                     }
                     else {
-                        System.out.println(remoteGameInterface.ignorePlayer(this.playerName, tokens.remove(0)));
+                        System.out.println(remoteGameInterface.unIgnorePlayer(this.playerName, tokens.remove(0)));
                     }
                     break;
                 case "MOVE":

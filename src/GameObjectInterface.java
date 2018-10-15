@@ -53,29 +53,16 @@ public interface GameObjectInterface extends Remote {
      */
     public String say(String name, String message) throws RemoteException;
 
-    // Feature 401. Whisper
+    //Feature 408. Unignore player.
     /**
-     * Whispers "message" to a specific player.
-     * @param srcName Name of the player to speak
-     * @param dstName Name of the player to receive
-     * @param message Message to speak
+     * Player unIgnores further messages from another Player
+     * @param srcName Player making the unIgnore request
+     * @param dstName Player to be unIgnored
      * @return Message showing success
      * @throws RemoteException
      */
-    public String whisper(String srcName, String dstName, String message) throws RemoteException;
-    // End 401.
+    public String unIgnorePlayer(String srcName, String dstName) throws RemoteException;
 
-    // Feature 405. Ignore Player
-
-    /**
-     * Player ignores further messages from another Player
-     * @param srcName Player making the ignore request
-     * @param dstName Player to be ignored
-     * @return Message showing success
-     * @throws RemoteException
-     */
-    public String ignorePlayer(String srcName, String dstName) throws RemoteException;
-    
     /**
      * Attempts to walk forward < distance > times.  If unable to make it all the way,
      *  a message will be returned.  Will display LOOK on any partial success.

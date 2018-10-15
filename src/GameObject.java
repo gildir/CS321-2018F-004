@@ -98,35 +98,19 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
     public String say(String name, String message) throws RemoteException {
         return core.say(name, message);
     }
-
-    // Feature 401. Whisper
+   
+    //Feature 408. Unignore Player.
     /**
-     * Whispers "message" to a specific player.
-     * @param srcName Name of the player to speak
-     * @param dstName Name of the player to receive
-     * @param message Message to speak
-     * @return Message showing success
-     * @throws RemoteException
-     */
-    @Override
-    public String whisper(String srcName, String dstName, String message) throws RemoteException {
-        return core.whisper(srcName, dstName, message);
-    }
-
-    // Feature 405. Ignore Player
-   /**
-     * Player ignores further messages from another Player
-     * @param srcName Player making the ignore request
-     * @param dstName Player to be ignored
+     * Player unIgnores further messages from another Player
+     * @param srcName Player making the unIgnore request
+     * @param dstName Player to be unIgnored
      * @return Message showing success
      * @throws RemoteException
      */
    @Override
-    public String ignorePlayer(String srcName, String dstName) throws RemoteException {
-        return core.ignorePlayer(srcName, dstName);
+    public String unIgnorePlayer(String srcName, String dstName) throws RemoteException {
+        return core.unIgnorePlayer(srcName, dstName);
     }
-
-
       
     /**
      * Attempts to walk forward < distance > times.  If unable to make it all the way,

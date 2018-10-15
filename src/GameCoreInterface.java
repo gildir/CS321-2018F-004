@@ -67,25 +67,14 @@ public interface GameCoreInterface {
      */
     public String say(String name, String message);
 
-    // Feature 401. Whisper
+   //Feature 408. Unignore Player.
     /**
-     * Whispers "message" to a specific player.
-     * @param srcName Name of the player to speak
-     * @param dstName Name of the player to receive
-     * @param message Message to speak
+     * Player unIgnores further messages from another Player
+     * @param srcName Player making the unIgnore request
+     * @param dstName Player to be unIgnored
      * @return Message showing success
      */
-    public String whisper(String srcName, String dstName, String message);
-
-
-    // Feature 405. Ignore Player
-   /**
-     * Player ignores further messages from another Player
-     * @param srcName Player making the ignore request
-     * @param dstName Player to be ignored
-     * @return Message showing success
-     */
-    public String ignorePlayer(String srcName, String dstName);
+    public String unIgnorePlayer(String srcName, String dstName);
 
     /**
      * Returns a string representation of all objects you are carrying.
