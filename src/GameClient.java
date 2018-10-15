@@ -227,7 +227,6 @@ public class GameClient {
                         System.out.println(remoteGameInterface.unIgnorePlayer(this.playerName, tokens.remove(0)));
                     }
                     break;
-                
                 case "IGNORELIST":
                         System.out.println(remoteGameInterface.getIgnoredPlayersList(this.playerName));
                     break;

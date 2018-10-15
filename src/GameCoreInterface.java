@@ -94,7 +94,7 @@ public interface GameCoreInterface {
      * @return Message showing success
      */
     public String unIgnorePlayer(String srcName, String dstName);
-    
+
     /**
      * Player displays the list of players that are being ignored
      * @param name Player who's list is being targeted
