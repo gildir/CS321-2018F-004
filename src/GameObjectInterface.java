@@ -66,6 +66,7 @@ public interface GameObjectInterface extends Remote {
     /**
      * Generates list of all online players.
      * @return String of linked list PlayerList
+     * @throws RemoteException
      */
     public String showPlayers() throws RemoteException;
     

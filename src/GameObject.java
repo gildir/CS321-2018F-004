@@ -115,6 +115,7 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
     /**
      * Generates list of all online players.
      * @return String of linked list PlayerList
+     * @throws RemoteException
      */
     @Override
     public String showPlayers() throws RemoteException {
