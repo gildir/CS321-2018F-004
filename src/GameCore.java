@@ -210,57 +210,8 @@ public class GameCore implements GameCoreInterface {
         }
     }  
 
-    // Feature 401. Whisper
-    /**
-     * Whispers "message" to a specific player.
-     * @param srcName Name of the player to speak
-     * @param dstName Name of the player to receive
-     * @param message Message to speak
-     * @return Message showing success
-     */
-    public String whisper(String srcName, String dstName, String message){
-        Player srcPlayer = this.playerList.findPlayer(srcName);
-        Player dstPlayer = this.playerList.findPlayer(dstName);
-        String returnMessage;
-        if (dstPlayer == null)
-            returnMessage = "Player " + dstName + " not found.";
-        else if (srcPlayer == null)
-            returnMessage = "Message failed, check connection to server.";
-        else if (dstPlayer.isIgnoring(srcPlayer))
-            returnMessage = "Player " + dstPlayer.getName() + " is ignoring you.";
-        else {
-            dstPlayer.getReplyWriter().println(srcPlayer.getName() + " whispers you, " + message);
-            returnMessage = "You whisper to " + dstPlayer.getName() + ", " + message;
-        }
-        return returnMessage;
-    }
 
-    // Feature 405. Ignore Player
-   /**
-     * Player ignores further messages from another Player
-     * @param srcName Player making the ignore request
-     * @param dstName Player to be ignored
-     * @return Message showing success
-     */
-    public String ignorePlayer(String srcName, String dstName) {
-        Player srcPlayer = this.playerList.findPlayer(srcName);
-        Player dstPLayer = this.playerList.findPlayer(dstName);
-        String returnMessage;
-        if (dstPLayer == null)
-            returnMessage = "Player " + dstName + " not found.";
-        else if (srcPlayer == null)
-            returnMessage = "Ignore failed, check connection to server.";
-        else if (srcPlayer.getName() == dstPLayer.getName())
-            returnMessage = "You cannot ignore yourself! <no matter how hard you try>";
-        else if (srcPlayer.isIgnoring(dstPLayer))
-            returnMessage = "You're already ignoring " + dstPLayer.getName() + "!";
-        else {
-            srcPlayer.ignorePlayer(dstPLayer);
-            returnMessage = "You're now ignoring " + dstPLayer.getName() + ".";
-        }
-        return returnMessage;
-    }
-
+    //Feature 408. Unignore Player.
    /**
      * Player unIgnores further messages from another Player
      * @param srcName Player making the unIgnore request
@@ -280,7 +231,7 @@ public class GameCore implements GameCoreInterface {
         else if (!srcPlayer.isIgnoring(dstPLayer))
             returnMessage = "You aren't ignoring " + dstPLayer.getName() + "!";
         else {
-            srcPlayer.ignorePlayer(dstPLayer);
+            srcPlayer.unIgnorePlayer(dstPLayer);
             returnMessage = "You're now unignoring " + dstPLayer.getName() + ".";
         }
         return returnMessage;

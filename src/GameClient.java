@@ -52,8 +52,6 @@ public class GameClient {
         System.out.println("The game allows you to use the following commands:");
         System.out.println("  LOOK                     - Shows you the area around you");
         System.out.println("  SAY message              - Says 'message' to any other players in the same area.");
-        System.out.println("  WHISPER player message   - Whispers 'message' to 'player'");
-        System.out.println("  IGNORE player            - Ignore messages from from 'player'");
         System.out.println("  UNIGNORE player          - Unignore messages from from 'player'");
         System.out.println("  LEFT                     - Turns your player left 90 degrees.");
         System.out.println("  RIGHT                    - Turns your player right 90 degrees.");
@@ -193,31 +191,7 @@ public class GameClient {
                         System.out.println(remoteGameInterface.say(this.playerName, message));
                     }
                     break;
-                // Feature 401. Whisper
-                case "W":
-                case "WHISPER":
-                    if (tokens.isEmpty()) {
-                        System.err.println("You need to provide a player to whisper.");
-                    }
-                    else if (tokens.size() < 2) {
-                        System.err.println("You need to provide a message to whisper.");
-                    }
-                    else {
-                        String dstPlayerName = tokens.remove(0).toLowerCase();
-                        message = parseMessage(tokens);
-                        System.out.println(remoteGameInterface.whisper(this.playerName, dstPlayerName, message));
-                    }
-                    break;
-                // End 401.
-                // Feature 405. Ignore Player
-                case "IGNORE":
-                    if(tokens.isEmpty()) {
-                        System.err.println("You need to provide a player to ignore");
-                    }
-                    else {
-                        System.out.println(remoteGameInterface.ignorePlayer(this.playerName, tokens.remove(0)));
-                    }
-                    break;
+                //Feature 408. Unignore player.
                 case "UNIGNORE":
                     if(tokens.isEmpty()) {
                         System.err.println("You need to provide a player to unignore");
@@ -226,10 +200,6 @@ public class GameClient {
                         System.out.println(remoteGameInterface.unIgnorePlayer(this.playerName, tokens.remove(0)));
                     }
                     break;
-                /*
-                case "IGNORELIST":
-                        System.out.println(remoteGameInterface.GetIgnoredPlayersList(tokens.remove(0)));
-                    break; */
                 case "MOVE":
                     if(tokens.isEmpty()) {
                         System.err.println("You need to provide a distance in order to move.");
