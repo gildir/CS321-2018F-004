@@ -16,6 +16,17 @@ import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.w3c.dom.Document;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
+import java.io.File;
+import java.io.IOException;
+
+
 /**
  *
  * @author Kevin
@@ -41,25 +52,10 @@ public class GameClient {
     public GameClient(String host) {
         this.runGame = true;
         boolean nameSat = false;
-        
-        System.out.println("Welcome to the client for an RMI based online game.\n");
-        System.out.println("This game allows you to connect to a server an walk around a virtual,");
-        System.out.println(" text-based version of the George Mason University campus.\n");
-        System.out.println("You will be asked to create a character momentarily.");
-        System.out.println("When you do, you will join the game at the George Mason Clock, in the main quad.");
-        System.out.println("You will be able to see if any other players are in the same area as well as what");
-        System.out.println("objects are on the ground and what direction you are facing.\n");
-        System.out.println("The game allows you to use the following commands:");
-        System.out.println("  LOOK          - Shows you the area around you");
-        System.out.println("  SAY message   - Says 'message' to any other players in the same area.");
-        System.out.println("  LEFT          - Turns your player left 90 degrees.");
-        System.out.println("  RIGHT         - Turns your player right 90 degrees.");
-        System.out.println("  MOVE distance - Tries to walk forward <distance> times.");
-        System.out.println("  PICKUP obect  - Tries to pick up an object in the same area.");
-        System.out.println("  INVENTORY     - Shows you what objects you have collected.");
-        System.out.println("  QUIT          - Quits the game.");
-        System.out.println();
-        
+
+        showIntroduction();
+
+        showCommand();
 
         // Set up for keyboard input for local commands.
         InputStreamReader keyboardReader = new InputStreamReader(System.in);
@@ -151,12 +147,6 @@ public class GameClient {
                 case "LOOK":
                     System.out.println(remoteGameInterface.look(this.playerName));
                     break;
-                case "LEFT":
-                    System.out.println(remoteGameInterface.left(this.playerName));
-                    break;
-                case "RIGHT":
-                    System.out.println(remoteGameInterface.right(this.playerName));
-                    break;
                 case "SAY":
                     if(tokens.isEmpty()) {
                         System.err.println("You need to say something in order to SAY.");
@@ -173,10 +163,12 @@ public class GameClient {
                     break;
                 case "MOVE":
                     if(tokens.isEmpty()) {
-                        System.err.println("You need to provide a distance in order to move.");
-                    }
-                    else {
-                        System.out.println(remoteGameInterface.move(this.playerName, Integer.parseInt(tokens.remove(0))));
+                        System.err.println("You need to provide a direction to move.");
+                    } else {
+                        Direction dir = Direction.toValue(tokens.remove(0));
+                        if(dir!=null) {
+                            System.out.println(remoteGameInterface.move(this.playerName, dir));
+                        }                    
                     }
                     break;
                 case "PICKUP":
@@ -187,12 +179,18 @@ public class GameClient {
                         System.out.println(remoteGameInterface.pickup(this.playerName, tokens.remove(0)));
                     }
                     break;
+                case "PICKUPALL":
+                    System.out.println(remoteGameInterface.pickupAll(this.playerName));
+                    break;
                 case "INVENTORY":
                     System.out.println(remoteGameInterface.inventory(this.playerName));
                     break;                                                            
                 case "QUIT":
                     remoteGameInterface.leave(this.playerName);
                     runListener = false;
+                    break;
+                default:
+                    System.out.println("Invalid Command, Enter \"help\" to get help");
                     break;
             }
         } catch (RemoteException ex) {
@@ -208,6 +206,71 @@ public class GameClient {
 		
         System.out.println("[STARTUP] Game Client Now Starting...");
         new GameClient(args[0]);
+    }
+
+    /*If no parameter has been given for showCommand, pass in null to showCommand.
+     *This will cause showCommand to print every commands available in game
+     */
+    private void showCommand()
+    {
+        showCommand(null);
+    }
+
+    //Shows every command available in game
+    private void showCommand(String commandToShow)
+    {
+        try {
+            File commandFile = new File("./help.xml");
+            
+            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+            Document document = dBuilder.parse(commandFile);
+
+            document.getDocumentElement().normalize();
+            NodeList xmlCommands = document.getElementsByTagName("help");
+
+            String description;
+            Element xmlElement;
+
+            System.out.println("The game allows you to use the following commands:");
+
+            //Get every commands from xml file and print them
+            for (int i = 0; i < xmlCommands.getLength(); i++) {
+                xmlElement = (Element) xmlCommands.item(i);
+
+                description = xmlElement.getElementsByTagName("description").item(0).getTextContent();
+
+                if ( !description.equals("") ){
+                    System.out.println(description);
+                }
+            }
+        } catch (ParserConfigurationException | SAXException | IOException ex) {
+            Logger.getLogger(Map.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    //Shows the introduction of the game
+    private void showIntroduction()
+    {
+        try {
+            File commandFile = new File("./help.xml");
+            
+            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+            Document document = dBuilder.parse(commandFile);
+
+            document.getDocumentElement().normalize();
+            NodeList xmlCommands = document.getElementsByTagName("introduction");
+
+            String description;
+            Element xmlElement;
+
+            xmlElement = (Element) xmlCommands.item(0);
+            description = xmlElement.getElementsByTagName("description").item(0).getTextContent();
+            System.out.println(description);
+        } catch (ParserConfigurationException | SAXException | IOException ex) {
+            Logger.getLogger(Map.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -260,6 +323,5 @@ public class GameClient {
                 Logger.getLogger(GameClient.class.getName()).log(Level.SEVERE, null, ex);
             }            
         }
-    }    
-    
+    }
 }
