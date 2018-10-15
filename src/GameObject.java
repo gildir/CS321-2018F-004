@@ -114,7 +114,6 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
     
     /**
      * Generates list of all online players.
-     * @param players The player list of online users.
      * @return String of linked list PlayerList
      */
     @Override
