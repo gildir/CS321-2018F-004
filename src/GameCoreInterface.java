@@ -87,6 +87,14 @@ public interface GameCoreInterface {
      */
     public String ignorePlayer(String srcName, String dstName);
 
+   /**
+     * Player unIgnores further messages from another Player
+     * @param srcName Player making the unIgnore request
+     * @param dstName Player to be unIgnored
+     * @return Message showing success
+     */
+    public String unIgnorePlayer(String srcName, String dstName);
+
     /**
      * Returns a string representation of all objects you are carrying.
      * @param name Name of the player to move
