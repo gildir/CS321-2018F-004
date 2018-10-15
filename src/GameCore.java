@@ -1,6 +1,6 @@
 
-import java.io.IOException;
-import java.rmi.RemoteException;
+import java.io.File;
+import java.sql.Timestamp;
 import java.util.Random;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
@@ -19,6 +19,8 @@ public class GameCore implements GameCoreInterface {
 	// Acounts and Login
 	private final Object loginLock = new Object();
 	private final Object createAccountLock = new Object();
+	private Logger playerLogger;
+	private FileHandler playerLogFile;
 
 	/**
 	 * Creates a new GameCoreObject. Namely, creates the map for the rooms in the
@@ -38,6 +40,7 @@ public class GameCore implements GameCoreInterface {
 		playerList = new PlayerList();
 
 		accountManager = new PlayerAccountManager(playerAccountsLocation);
+		initConnectionLogging();
 
 		Thread objectThread = new Thread(new Runnable() {
 			@Override
@@ -138,9 +141,10 @@ public class GameCore implements GameCoreInterface {
 			this.playerList.addPlayer(player);
 
 			this.broadcast(player, player.getName() + " has arrived.");
-      connectionLog(true, name);
+			connectionLog(true, name);
 			return player;
 		}
+	}
 
 	/**
 	 * Allows a player to create an account. If the player name already exists this
@@ -352,35 +356,14 @@ public class GameCore implements GameCoreInterface {
 		}
 		return null;
 	}
-	
-private void connectionLog(boolean connecting, String name) {
-	//Logger for tracking player log-ins and outs
-		Logger Plogger = Logger.getLogger("connection");
-		//will handle the log file
-		FileHandler Lfile;
-		try {
-			Lfile = new FileHandler("../log/connections.log", true);
-			Plogger.addHandler(Lfile);
-			SimpleFormatter formatter = new SimpleFormatter();
-			Lfile.setFormatter(formatter);
-			if(connecting) {
-				Plogger.info(name + " logged in");
-			} else {
-				Plogger.info(name + " logged out");
-			}
-			Lfile.close();
-		} catch (IOException ex) {
-			Logger.getLogger(GameCore.class.getName()).log(Level.SEVERE, null, ex);
-		}
-		
+
 	/**
 	 * Delete a player's account.
 	 * 
 	 * @param name Name of the player to be deleted
 	 * @return Player that was just deleted.
 	 */
-	public Player deleteAccount(String name)
-	{
+	public Player deleteAccount(String name) {
 		Player player = this.playerList.findPlayer(name);
 		if (player != null) {
 			this.broadcast(player, "You hear that " + player.getName() + " has dropped out of school.");
@@ -388,6 +371,28 @@ private void connectionLog(boolean connecting, String name) {
 			this.accountManager.deleteAccount(player.getName());
 			return player;
 		}
-		return null; //No such player was found.
+		return null; // No such player was found.
+	}
+
+	private void initConnectionLogging() throws Exception {
+		playerLogger = Logger.getLogger("connection");
+		File logFolder = new File("log");
+		if (logFolder.exists() && !logFolder.isDirectory())
+			throw new Exception("A file is in place of the log folder");
+		else if (!logFolder.exists())
+			if (!logFolder.mkdir())
+				throw new Exception("There was an unknown error creating the log folder");
+		Timestamp startTime = new Timestamp(System.currentTimeMillis());
+		playerLogFile = new FileHandler(String.format("log/connections %s.log", startTime.toString().replace(":", "_")),
+				true);
+		playerLogFile.setFormatter(new SimpleFormatter());
+		playerLogger.addHandler(playerLogFile);
+
+	}
+
+	private void connectionLog(boolean connecting, String name) {
+		Timestamp eventTime = new Timestamp(System.currentTimeMillis());
+		playerLogger.info(String.format("[%s] [%s] logged %s", eventTime.toString(), name, connecting ? "in" : "out"));
+		playerLogFile.flush();
 	}
 }
