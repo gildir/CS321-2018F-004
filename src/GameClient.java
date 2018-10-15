@@ -124,6 +124,25 @@ public class GameClient {
             System.exit(-1);
         }        
     }
+
+    // Helper for Features 4XX - Chat System
+    /**
+     * Method to decorate messages intended for use with the chat system.
+     * @param msgTokens User input words to decorate into a "message".
+     * @return "message" to be sent by the user
+     */
+    private String parseMessage(ArrayList<String> msgTokens) {
+        //TODO: Note - Tokenizer currently trims out multiple spaces - bug or feature?
+        StringBuilder msgBuilder = new StringBuilder();
+        msgBuilder.append("\"");
+        while (!msgTokens.isEmpty()) {
+            msgBuilder.append(msgTokens.remove(0));
+            if (!msgTokens.isEmpty())
+                msgBuilder.append(" ");
+        }
+        msgBuilder.append("\"");
+        return msgBuilder.toString();
+    }
     
     /** 
      * Simple method to parse the local input and remotely execute the RMI commands.
@@ -183,15 +202,7 @@ public class GameClient {
                     }
                     else {
                         String dstPlayerName = tokens.remove(0).toLowerCase();
-                        StringBuilder msgBuilder = new StringBuilder();
-                        msgBuilder.append("\"");
-                        while (!tokens.isEmpty()) {
-                            msgBuilder.append(tokens.remove(0));
-                            if (!tokens.isEmpty())
-                                msgBuilder.append(" ");
-                        }
-                        msgBuilder.append("\"");
-                        message = msgBuilder.toString();
+                        message = parseMessage(tokens);
                         System.out.println(remoteGameInterface.whisper(this.playerName, dstPlayerName, message));
                     }
                     break;
