@@ -1,11 +1,16 @@
 
 import java.io.File;
-import java.sql.Timestamp;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Random;
-import java.util.logging.FileHandler;
+import java.util.logging.Handler;
 import java.util.logging.Level;
+import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
+import java.util.logging.StreamHandler;
 
 /**
  *
@@ -19,10 +24,9 @@ public class GameCore implements GameCoreInterface {
 	// Acounts and Login
 	private final Object loginLock = new Object();
 	private final Object createAccountLock = new Object();
-	private Logger playerLogger;
-	private FileHandler playerLogFile;
+	private Logger playerLogger = Logger.getLogger("connections");
 
-	/**
+  /**
 	 * Creates a new GameCoreObject. Namely, creates the map for the rooms in the
 	 * game, and establishes a new, empty, player list.
 	 * 
@@ -38,6 +42,8 @@ public class GameCore implements GameCoreInterface {
 		map = new Map();
 
 		playerList = new PlayerList();
+		
+		initConnectionsLogger();
 
 		accountManager = new PlayerAccountManager(playerAccountsLocation);
 		initConnectionLogging();
@@ -357,6 +363,54 @@ public class GameCore implements GameCoreInterface {
 		return null;
 	}
 
+	/**
+	 * Logs player connections
+	 * 
+	 * @param connecting true if they're connecting, false if they are disconnecting
+	 * @param name
+	 */
+	private void connectionLog(boolean connecting, String name) {
+		playerLogger.info(String.format("(%s) logged %s", name, connecting ? "in" : "out"));
+		for (Handler h : playerLogger.getHandlers())
+			h.flush();
+	}
+
+	/**
+	 * Creates the logger outside of the constructor.
+	 * Uses RFC3339 timestamps
+	 * 
+	 * @throws IOException
+	 */
+	private void initConnectionsLogger() throws IOException {
+		File f = new File("connections.log");
+		if (!f.exists())
+			f.createNewFile();
+		FileOutputStream out = new FileOutputStream(f, true);
+		StreamHandler handle = new StreamHandler(out, new SimpleFormatter() {
+			private final SimpleDateFormat rfc3339 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
+
+			@Override
+			public String format(LogRecord log) {
+				StringBuilder sb = new StringBuilder();
+				sb.append("[").append(rfc3339.format(new Date(log.getMillis()))).append("] ");
+				sb.append("[").append(log.getLoggerName()).append("] ");
+				sb.append("[").append(log.getLevel()).append("] ");
+				sb.append(log.getMessage()).append("\r\n");
+				Throwable e = log.getThrown();
+				if (e != null)
+					for (StackTraceElement el : e.getStackTrace())
+						sb.append(el.toString()).append("\r\n");
+				return sb.toString();
+			}
+		});
+		playerLogger.setUseParentHandlers(false);
+		playerLogger.addHandler(handle);
+		playerLogger.info("Player connections logger has started");
+		handle.flush();
+	}
+
+	
+		
 	/**
 	 * Delete a player's account.
 	 * 

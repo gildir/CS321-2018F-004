@@ -33,6 +33,8 @@ public class GameClient {
 
 	// Members related to the player in the game.
 	protected String playerName;
+	
+	
 
 	/**
 	 * Main class for running the game client.
@@ -230,6 +232,8 @@ public class GameClient {
 			Logger.getLogger(GameClient.class.getName()).log(Level.SEVERE, null, ex);
 		}
 	}
+	
+	
 
 	public static void main(String[] args) {
 		if (args.length < 1) {
@@ -295,5 +299,7 @@ public class GameClient {
 			}
 		}
 	}
+	
+	
 
 }
