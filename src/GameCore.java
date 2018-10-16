@@ -298,21 +298,6 @@ public class GameCore implements GameCoreInterface {
          }
     }
 
-    @Override
-    public String accept(String challenger, String challengee){
-        Player playerChallenger = this.playerList.findPlayer(challenger);
-        Player playerChallengee = this.playerList.findPlayer(challengee);
-        if(playerChallenger != null && playerChallengee != null && playerChallenger != playerChallengee && playerChallenger.getCurrentRoom() == playerChallengee.getCurrentRoom()) {
-             playerChallengee.getReplyWriter().println(playerChallenger.getName() + " accepts your challenge to a R-P-S");
-             return "You accept " + playerChallengee.getName() + "\'s challenge to a R-P-S.";
-         }
-        else if(playerChallenger == playerChallengee)
-            return "You can't challenge yourself to R-P-S.";
-         else {
-             return "This person is not in the same room as you or doesn't exist in the game.";
-         }
-    }
-
 
      /**
      * Leaves the game.

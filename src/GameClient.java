@@ -58,7 +58,6 @@ public class GameClient {
         System.out.println("  PICKUP obect  - Tries to pick up an object in the same area.");
         System.out.println("  INVENTORY     - Shows you what objects you have collected.");
         System.out.println("  CHALLENGE     - Challenge a player to a R-P-S in the same area.");
-        System.out.println("  ACCEPT        - Accept a challenge from a player to a R-P-S in the same area.");
         System.out.println("  QUIT          - Quits the game.");
         System.out.println();
         
@@ -198,14 +197,6 @@ public class GameClient {
                     }
                     else{
                         System.out.println(remoteGameInterface.challenge(this.playerName, tokens.remove(0)));
-                    }
-                    break;
-                case "ACCEPT":
-                    if(tokens.isEmpty()){
-                        System.err.println("You need to provide a name.");
-                    }
-                    else{
-                        System.out.println(remoteGameInterface.accept(this.playerName, tokens.remove(0)));
                     }
                     break;
                 case "QUIT":
