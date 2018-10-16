@@ -144,6 +144,16 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
         return core.challenge(challenger, challengee);
     }
 
+    /**Prompts a message that someone is accepting a challenge to a R-P-S
+      * @param challenger is the name of the player challenging someone in the area
+      * @param challenge is the name of the player accepting
+      * @return Message showing success
+      * @throws RemoteException
+    */
+    public String accept(String challenger, String challengee) throws RemoteException{
+        return core.accept(challenger, challengee);
+    }
+
      /**
      * Leaves the game.
      * @param name Name of the player to leave
