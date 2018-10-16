@@ -26,7 +26,7 @@ public class GameCore implements GameCoreInterface {
 	private final Object createAccountLock = new Object();
 	private Logger playerLogger = Logger.getLogger("connections");
 
-  /**
+	/**
 	 * Creates a new GameCoreObject. Namely, creates the map for the rooms in the
 	 * game, and establishes a new, empty, player list.
 	 * 
@@ -42,11 +42,10 @@ public class GameCore implements GameCoreInterface {
 		map = new Map();
 
 		playerList = new PlayerList();
-		
+
 		initConnectionsLogger();
 
 		accountManager = new PlayerAccountManager(playerAccountsLocation);
-		initConnectionLogging();
 
 		Thread objectThread = new Thread(new Runnable() {
 			@Override
@@ -376,8 +375,7 @@ public class GameCore implements GameCoreInterface {
 	}
 
 	/**
-	 * Creates the logger outside of the constructor.
-	 * Uses RFC3339 timestamps
+	 * Creates the logger outside of the constructor. Uses RFC3339 timestamps
 	 * 
 	 * @throws IOException
 	 */
@@ -409,8 +407,6 @@ public class GameCore implements GameCoreInterface {
 		handle.flush();
 	}
 
-	
-		
 	/**
 	 * Delete a player's account.
 	 * 
@@ -428,25 +424,4 @@ public class GameCore implements GameCoreInterface {
 		return null; // No such player was found.
 	}
 
-	private void initConnectionLogging() throws Exception {
-		playerLogger = Logger.getLogger("connection");
-		File logFolder = new File("log");
-		if (logFolder.exists() && !logFolder.isDirectory())
-			throw new Exception("A file is in place of the log folder");
-		else if (!logFolder.exists())
-			if (!logFolder.mkdir())
-				throw new Exception("There was an unknown error creating the log folder");
-		Timestamp startTime = new Timestamp(System.currentTimeMillis());
-		playerLogFile = new FileHandler(String.format("log/connections %s.log", startTime.toString().replace(":", "_")),
-				true);
-		playerLogFile.setFormatter(new SimpleFormatter());
-		playerLogger.addHandler(playerLogFile);
-
-	}
-
-	private void connectionLog(boolean connecting, String name) {
-		Timestamp eventTime = new Timestamp(System.currentTimeMillis());
-		playerLogger.info(String.format("[%s] [%s] logged %s", eventTime.toString(), name, connecting ? "in" : "out"));
-		playerLogFile.flush();
-	}
 }
