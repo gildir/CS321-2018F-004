@@ -15,7 +15,6 @@ public class Player {
     private PrintWriter replyWriter = null;
     private DataOutputStream outputWriter = null;
     private float money;
-    private boolean isShopping;
 
     public Player(String name) {
         this.currentRoom = 1;
@@ -117,14 +116,6 @@ public class Player {
     
     public void setMoney(float m){
         this.money = m;
-    }
-    
-    public boolean isShopping() {
-    	return this.isShopping();
-    }
-    
-    public void setShopping(boolean s) {
-    	this.isShopping = s;
     }
     
     public String viewInventory() {

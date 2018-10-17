@@ -165,4 +165,12 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
 		return core.venmo(name);
 		
 	}    
+	
+	/**
+	 * @author Team 4: King
+	 * Returns a string representation of how much money a player has
+	 */
+	public String wallet(String name) throws RemoteException {
+		return core.wallet(name);
+	}
 }
