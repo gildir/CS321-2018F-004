@@ -58,6 +58,7 @@ public class GameClient {
         System.out.println("  PICKUP obect  - Tries to pick up an object in the same area.");
         System.out.println("  INVENTORY     - Shows you what objects you have collected.");
         System.out.println("  QUIT          - Quits the game.");
+		System.out.println("  DELETE        - Deletes your character permanently.");
         System.out.println();
         
 
@@ -76,26 +77,54 @@ public class GameClient {
             //   Lets the player choose a name and checks it with the server.  If the name is
             //    already taken or the user doesn't like their input, they can choose again.
             while(nameSat == false) {
-                try {
-                    System.out.println("Please enter a name for your player.");
-                    System.out.print("> ");
-                    this.playerName = keyboardInput.readLine();
-                    System.out.println("Welcome, " + this.playerName + ". Are you sure you want to use this name?");
-                    System.out.print("(Y/N) >");
-                    if(keyboardInput.readLine().equalsIgnoreCase("Y")) {
-                        // Attempt to join the server
-                        if(remoteGameInterface.joinGame(this.playerName) == false) {
-                            System.out.println("I'm sorry, " + this.playerName + ", but someone else is already logged in with your name. Please pick another.");
-                        }
-                        else {
-                            nameSat = true;
-                        }
-                    }
-                } catch (IOException ex) {
-                    System.err.println("[CRITICAL ERROR] Error at reading any input properly.  Terminating the client now.");
-                    System.exit(-1);
-                }
-            }
+				try {
+					System.out.println("Logging in or creating account?");
+					String mode;
+					do {
+						System.out.print("(L/C)> ");
+						mode = keyboardInput.readLine().toUpperCase().trim();
+					} while (!(mode.equals("L") || mode.equals("C")));
+					System.out.print("Username: ");
+					this.playerName = keyboardInput.readLine().trim();
+					System.out.print("Password: ");
+					String pass = keyboardInput.readLine();
+					switch (mode) {
+					case "L":
+						nameSat = remoteGameInterface.joinGame(this.playerName, pass);
+						if (!nameSat)
+							System.out.println("Username and password combination invalid\n");
+						break;
+					case "C":
+						Responses resp = remoteGameInterface.createAccountAndJoinGame(playerName, pass);
+						switch (resp) {
+						case BAD_USERNAME_FORMAT:
+							System.out
+									.println("This is a bad user name. Please use only spaces, numbers, and letters.");
+							break;
+						case USERNAME_TAKEN:
+							System.out.println("Sorry but this username was already taken.");
+							break;
+						case UNKNOWN_FAILURE:
+							System.out.println("The server experienced an unknown failure.");
+							break;
+						case SUCCESS:
+							nameSat = true;
+							break;
+						default:
+							System.out.println("Unknown server behavior");
+							break;
+						}
+						if (!nameSat)
+							System.out.println();
+
+					}
+
+				} catch (IOException ex) {
+					System.err.println(
+							"[CRITICAL ERROR] Error at reading any input properly.  Terminating the client now.");
+					System.exit(-1);
+				}
+			}
 
             // Player has joined, now start up the remote socket.
             this.runListener = true;
@@ -194,6 +223,10 @@ public class GameClient {
                     remoteGameInterface.leave(this.playerName);
                     runListener = false;
                     break;
+			case "DELETE":
+				remoteGameInterface.deleteAccount(this.playerName);
+				runListener = false;
+				break;
             }
         } catch (RemoteException ex) {
             Logger.getLogger(GameClient.class.getName()).log(Level.SEVERE, null, ex);

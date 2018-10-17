@@ -43,7 +43,7 @@ public class GameServer {
 			//  a) Create the security manager.
 			System.setSecurityManager(new SecurityManager());
 			//  b) Create the RMI remote object.
-			remoteObject = new GameObject();
+			remoteObject = new GameObject("players");
 			//  c) Bind the remote object to the rmi service (rmiregistry must be running)
 			Naming.rebind("rmi://"+host+"/GameService", remoteObject);
 			System.err.println("[RUN] Game Server is now running and accepting connections.");
@@ -51,6 +51,8 @@ public class GameServer {
 			Logger.getLogger(GameServer.class.getName()).log(Level.SEVERE, null, re);
 		} catch (MalformedURLException ex) {
 			Logger.getLogger(GameServer.class.getName()).log(Level.SEVERE, null, ex);
+		} catch (Exception e) {
+			Logger.getLogger(GameServer.class.getName()).log(Level.SEVERE, null, e);
 		}
 	}
     
