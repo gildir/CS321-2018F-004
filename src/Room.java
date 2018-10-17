@@ -10,6 +10,12 @@ public class Room {
     private final String description;
     private final LinkedList<String> objects;
     private final LinkedList<Exit> exits;
+<<<<<<< HEAD
+=======
+
+    //add tem state check for ghoul
+    public boolean hasGhoul = false;
+>>>>>>> yuqiao_Ghoul
     
     public Room(int id, String title, String description) {
         this.objects = new LinkedList<>();

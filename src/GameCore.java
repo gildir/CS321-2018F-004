@@ -48,6 +48,42 @@ public class GameCore implements GameCoreInterface {
                 }
             }
         });
+<<<<<<< HEAD
+=======
+
+	//new thread awake and control the action of Ghoul. 
+	//team5 added in 10/13/2018
+        Thread awakeDayGhoul = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Random rand = new Random();
+		Room room = map.randomRoom();
+		Ghoul dayGhoul = new Ghoul(room.getId());
+		room.hasGhoul = true;
+		GameCore.this.broadcast(room, "You see a Ghoul appear in this room");
+
+                while(true) {
+                    try {
+			//Ghoul move in each 5-10 seconds. 
+                        Thread.sleep(5000+rand.nextInt(5000));
+			
+			//make Ghoul walk to other room; 
+			GameCore.this.ghoulWander(dayGhoul,room);
+			room.hasGhoul = false;
+			GameCore.this.broadcast(room, "You see a Ghoul leave this room");
+			room = map.findRoom(dayGhoul.getRoom());
+			room.hasGhoul = true;
+			GameCore.this.broadcast(room, "You see a Ghoul enter this room");
+
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(GameObject.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
+        });
+		
+
+>>>>>>> yuqiao_Ghoul
         objectThread.setDaemon(true);
         objectThread.start();
     }
