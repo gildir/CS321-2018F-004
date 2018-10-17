@@ -136,7 +136,7 @@ public class GameCore implements GameCoreInterface {
 	public Player joinGame(String name, String password) {
 		synchronized (loginLock) {
 			// Check to see if the player of that name is already in game.
-		Player player = findPlayer(name);
+			Player player = this.playerList.findPlayer(name);
 			if (player != null)
 				return null;
 			PlayerAccountManager.AccountResponse resp = accountManager.getAccount(name, password);
@@ -146,7 +146,7 @@ public class GameCore implements GameCoreInterface {
 			this.playerList.addPlayer(player);
 
 			this.broadcast(player, player.getName() + " has arrived.");
-			connectionLog(true, name);
+			connectionLog(true, player.getName());
 			return player;
 		}
 	}
@@ -182,7 +182,7 @@ public class GameCore implements GameCoreInterface {
 	 */
 	@Override
 	public String look(String playerName) {
-		Player player = playerList.findPlayer(playerName);
+		Player player = this.playerList.findPlayer(playerName);
 
 		if (player != null) {
 			// Find the room the player is in.
@@ -355,7 +355,7 @@ public class GameCore implements GameCoreInterface {
 		if (player != null) {
 			this.broadcast(player, "You see " + player.getName() + " heading off to class.");
 			this.playerList.removePlayer(name);
-			connectionLog(false, name);
+			connectionLog(false, player.getName());
 			this.accountManager.forceUpdateData(player);
 			return player;
 		}
