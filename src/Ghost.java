@@ -19,7 +19,7 @@ public class Ghost extends Thread{
 		public void run() {
 			Random rn = new Random();
 			int i = rn.nextInt(100 - 1 + 1) + 1;
-			if (i >= 0) {
+			if (i >= 75) {
 				p.getReplyWriter().println("A ghost has appeared");
 				int sayingIndex = rn.nextInt(this.sayings.size());
 				p.getReplyWriter().println(this.sayings.get(sayingIndex));
