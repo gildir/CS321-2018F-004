@@ -33,7 +33,7 @@ public class Ghost extends Thread{
 		}
 		
 		private void loadSayings() {
-			File file = new File("ghostSayings.txt");
+			File file = new File("ghost_sayings.txt");
 			try {
 				Scanner scan = new Scanner(file);
 				while(scan.hasNextLine()) {
