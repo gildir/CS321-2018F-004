@@ -43,13 +43,14 @@ public class PlayerAccountManager {
 	}
 
 	public synchronized AccountResponse createNewAccount(String username, String password) {
-		if (accountExists(username))
+		String lower = username.toLowerCase();
+		if (accountExists(lower))
 			return new AccountResponse(Responses.USERNAME_TAKEN);
-		if (!username.matches("^[a-zA-Z 0-9]+$"))
+		if (!lower.matches("^[a-zA-Z 0-9]+$"))
 			return new AccountResponse(Responses.BAD_USERNAME_FORMAT);
-		File userDir = new File(accountFolder.getAbsolutePath() + "/" + username);
+		File userDir = new File(accountFolder.getAbsolutePath() + "/" + lower);
 		try {
-			playerIds.add(username);
+			playerIds.add(lower);
 			Player p = new Player(username);
 			userDir.mkdir();
 			writePlayerDataFile(p);
@@ -59,14 +60,14 @@ public class PlayerAccountManager {
 			return new AccountResponse(p);
 		} catch (Exception e) {
 			logger.log(Level.SEVERE, null, e);
-			playerIds.remove(username);
+			playerIds.remove(lower);
 			userDir.delete();
 			return new AccountResponse(Responses.INTERNAL_SERVER_ERROR);
 		}
 	}
 
 	private void writePlayerDataFile(Player p) throws Exception {
-		File userDir = new File(accountFolder.getAbsolutePath() + "/" + p.getName());
+		File userDir = new File(accountFolder.getAbsolutePath() + "/" + p.getName().toLowerCase());
 		FileOutputStream dataFile = new FileOutputStream(userDir.getAbsolutePath() + "/data.json");
 		dataFile.write(JsonMarshaller.MARSHALLER.marshalIndent(p).getBytes());
 		dataFile.close();
@@ -80,6 +81,7 @@ public class PlayerAccountManager {
 	}
 
 	public boolean deleteAccount(String username) {
+		username = username.toLowerCase();
 		if (!playerIds.contains(username))
 			return false;
 		File userDir = new File(accountFolder.getAbsolutePath() + "/" + username);
@@ -92,6 +94,7 @@ public class PlayerAccountManager {
 	}
 
 	public AccountResponse getAccount(String username, String password) {
+		username = username.toLowerCase();
 		if (!accountExists(username))
 			return new AccountResponse(Responses.NOT_FOUND);
 		File userData = new File(accountFolder.getAbsolutePath() + "/" + username + "/data.json");
