@@ -13,6 +13,8 @@ public class GameCore implements GameCoreInterface {
     private final PlayerList playerList;
     private final Map map;
     
+	
+	
     /**
      * Creates a new GameCoreObject.  Namely, creates the map for the rooms in the game,
      *  and establishes a new, empty, player list.
@@ -49,7 +51,6 @@ public class GameCore implements GameCoreInterface {
             }
         });
 
-
 	//new thread awake and control the action of Ghoul. 
 	//team5 added in 10/13/2018
         Thread awakeDayGhoul = new Thread(new Runnable() {
@@ -81,9 +82,30 @@ public class GameCore implements GameCoreInterface {
             }
         });
 		
-
         objectThread.setDaemon(true);
+        awakeDayGhoul.setDaemon(true);
         objectThread.start();
+        awakeDayGhoul.start();
+    }
+	
+	public void ghoulWander(Ghoul g,Room room){
+		Random rand = new Random();
+		int[] candinateRoom = new int[4];
+		
+		//easiest way to get all possible room;
+		candinateRoom[0] = room.getLink(Direction.NORTH);
+		candinateRoom[1] = room.getLink(Direction.SOUTH);
+		candinateRoom[2] = room.getLink(Direction.WEST);
+		candinateRoom[3] = room.getLink(Direction.EAST);
+
+		//random walk. 
+		while(true){
+			int roomID = candinateRoom[rand.nextInt(4)];
+			if (roomID != 0){
+				g.setRoom(roomID);
+				return;
+			}
+		}
     }
     
     /**
@@ -172,13 +194,20 @@ public class GameCore implements GameCoreInterface {
             this.broadcast(player, player.getName() + " takes a look around.");
 
             // Return a string representation of the room state.
-            return room.toString(this.playerList, player);
+            //return room.toString(this.playerList, player);
+	    //modified in 2018.10.17, which for player can look ghoul.
+	    if(room.hasGhoul){
+		String watchGhoul = "\n\nTHERE IS A GHOUL IN THE ROOM!!!!!!\n\n";
+            	return room.toString(this.playerList, player) + watchGhoul;
+	    }else{
+            	return room.toString(this.playerList, player);
+	    }
         }
         // No such player exists
         else {
             return null;
         }
-    }        
+    }         
    
     /**
      * Turns the player left.
