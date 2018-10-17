@@ -11,7 +11,7 @@ public class Ghost extends Thread{
 		
 		public Ghost(Player p){
 			this.p = p;
-			sayings = new ArrayList<String>();
+			this.sayings = new ArrayList<String>();
 			loadSayings();
 		}
 
