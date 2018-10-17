@@ -1,2 +1,2 @@
-@rem start /b rmiregistry
+start /b rmiregistry
 java -Djava.security.policy=game.policy GameServer localhost
