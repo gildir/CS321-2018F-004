@@ -308,7 +308,7 @@ public class GameCore implements GameCoreInterface {
             playerChallengee.setChallenger(" ");
             playerChallengee.setHasChallenge(false); 
             if(playerChallenger != null && playerChallengee != null && playerChallenger != playerChallengee && playerChallenger.getCurrentRoom() == playerChallengee.getCurrentRoom()) {
-                playerChallengee.getReplyWriter().println(playerChallengee.getName() + " accepts your challenge to a R-P-S");
+                playerChallenger.getReplyWriter().println(playerChallengee.getName() + " accepts your challenge to a R-P-S");
                 return "You accept " + playerChallenger.getName() + "\'s challenge to a R-P-S.";
             }
             else if(playerChallenger == playerChallengee)
