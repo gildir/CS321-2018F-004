@@ -230,6 +230,8 @@ public class GameCore implements GameCoreInterface {
                 player.getReplyWriter().println(room.exitMessage(player.getDirection()));
                 player.setCurrentRoom(room.getLink(player.getDirection()));
                 this.broadcast(player, player.getName() + " just walked into the area.");
+                Ghost g = new Ghost(player);
+                g.start();
                 player.getReplyWriter().println(this.map.findRoom(player.getCurrentRoom()).toString(playerList, player));
             }
             else {
