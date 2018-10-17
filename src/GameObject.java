@@ -154,6 +154,10 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
         return core.accept(challenger, challengee);
     }
 
+    public String reject(String challenger, String challengee) throws RemoteException{
+	    return core.reject(challenger, challengee);
+    }
+
      /**
      * Leaves the game.
      * @param name Name of the player to leave

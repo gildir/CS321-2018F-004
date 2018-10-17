@@ -320,7 +320,28 @@ public class GameCore implements GameCoreInterface {
         return "You have not been challenged by " + playerChallenger.getName();
     }
 
+    @Override
+    public String reject(String challengee, String challenger){
+	Player playerChallenger = this.playerList.findPlayer(challenger);
+	Player playerChallengee = this.playerList.findPLayer(challengee);
+	if(playerChallengee.getChallenger() != " " && playerChallengee.getHasChallenge() == true){
+            playerChallengee.setChallenger(" ");
+            playerChallengee.setHasChallenge(false);
+            if(playerChallenger != null && playerChallengee != null && playerChallenger != playerChallengee && playerChallenger.getCurrentRoom() == playerChallengee.getCurrentRoom()) {
+                playerChallengee.getReplyWriter().println(playerChallengee.getName() + " rejects your challenge to a R-P-S");
+                return "You reject " + playerChallenger.getName() + "\'s challenge to a R-P-S.";
+            }
+            else if(playerChallenger == playerChallengee)
+                return "You can't challenge yourself to R-P-S.";
+            else {
+                return "This person is not in the same room as you or doesn't exist in the game.";
+            }
+        }
+        return "You have not been challenged by " + playerChallenger.getName();
 
+
+
+    }	
      /**
      * Leaves the game.
      * @param name Name of the player to leave

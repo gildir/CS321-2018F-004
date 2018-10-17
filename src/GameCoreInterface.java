@@ -89,7 +89,8 @@ public interface GameCoreInterface {
       * @return String message of the acceptence
       */
     public String accept(String challenger, String challengee);
-
+	
+    public String reject(String challenger, String challengee);
     /**
      * Leaves the game.
      * @param name Name of the player to leave
