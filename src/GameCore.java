@@ -48,8 +48,7 @@ public class GameCore implements GameCoreInterface {
                 }
             }
         });
-<<<<<<< HEAD
-=======
+
 
 	//new thread awake and control the action of Ghoul. 
 	//team5 added in 10/13/2018
@@ -83,7 +82,6 @@ public class GameCore implements GameCoreInterface {
         });
 		
 
->>>>>>> yuqiao_Ghoul
         objectThread.setDaemon(true);
         objectThread.start();
     }
