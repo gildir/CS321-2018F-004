@@ -27,7 +27,4 @@ public class Ghoul{
 		this.currentRoom = room;
 	}
 
-	
-		
-
 }
