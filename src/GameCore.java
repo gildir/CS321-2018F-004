@@ -211,6 +211,7 @@ public class GameCore implements GameCoreInterface {
         }
     }  
 
+    // Feature 401. Whisper
     /**
      * Whispers "message" to a specific player.
      * @param srcName Name of the player to speak
@@ -232,7 +233,7 @@ public class GameCore implements GameCoreInterface {
         }
         return returnMessage;
     }
-    
+
     /**
      * Generates list of all online players.
      * @return String of linked list PlayerList

@@ -67,6 +67,7 @@ public interface GameCoreInterface {
      */
     public String say(String name, String message);
 
+    // Feature 401. Whisper
     /**
      * Whispers "message" to a specific player.
      * @param srcName Name of the player to speak
@@ -75,7 +76,7 @@ public interface GameCoreInterface {
      * @return Message showing success
      */
     public String whisper(String srcName, String dstName, String message);
-    
+
     /**
      * Generates list of all online players.
      * @return String of linked list PlayerList

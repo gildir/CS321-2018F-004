@@ -53,6 +53,7 @@ public interface GameObjectInterface extends Remote {
      */
     public String say(String name, String message) throws RemoteException;
 
+    // Feature 401. Whisper
     /**
      * Whispers "message" to a specific player.
      * @param srcName Name of the player to speak
@@ -62,6 +63,7 @@ public interface GameObjectInterface extends Remote {
      * @throws RemoteException
      */
     public String whisper(String srcName, String dstName, String message) throws RemoteException;
+    // End 401.
     
     /**
      * Generates list of all online players.
