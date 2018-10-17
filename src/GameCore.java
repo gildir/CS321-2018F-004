@@ -39,12 +39,11 @@ public class GameCore implements GameCoreInterface {
                         object = objects[rand.nextInt(objects.length)];
                         room = map.randomRoom();
 
-                        if(room.getObjects().length() < 5) {
+                        try{
                             room.addObject(object);
-
                             GameCore.this.broadcast(room, "You see a student rush past and drop a " + object + " on the ground.");
                         }
-                        else {
+                        catch (IndexOutOfBoundsException e) {
                             GameCore.this.broadcast(room, "You see a student rush past.");
                         }
 
