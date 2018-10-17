@@ -81,6 +81,7 @@ public class GameCore implements GameCoreInterface {
                 }
             }
         });
+		
 
         objectThread.setDaemon(true);
         awakeDayGhoul.setDaemon(true);

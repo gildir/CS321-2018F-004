@@ -11,7 +11,6 @@ public class Room {
     private final LinkedList<String> objects;
     private final LinkedList<Exit> exits;
 
-
     //add tem state check for ghoul
     public boolean hasGhoul = false;
     
