@@ -231,6 +231,7 @@ public class GameClient {
                     else {
                         System.out.println(remoteGameInterface.unIgnorePlayer(this.playerName, tokens.remove(0)));
                     }
+                    break;
                 case "ONLINE":
                     System.out.println(remoteGameInterface.showPlayers());
                     break;
