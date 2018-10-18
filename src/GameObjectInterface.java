@@ -63,10 +63,6 @@ public interface GameObjectInterface extends Remote {
      * @throws RemoteException
      */
     public String whisper(String srcName, String dstName, String message) throws RemoteException;
-<<<<<<< HEAD
-    // End 401.
-
-    // Feature 405. Ignore Player
 
     /**
      * Player ignores further messages from another Player
@@ -101,7 +97,6 @@ public interface GameObjectInterface extends Remote {
      * @throws RemoteException
      */
     public String showPlayers() throws RemoteException;
-=======
 
     // Feature 404. Quick Reply
     /**
@@ -113,8 +108,6 @@ public interface GameObjectInterface extends Remote {
      */
     public String quickReply(String srcName, String message) throws RemoteException;
 
->>>>>>> 404_QuickReply
-    
     /**
      * Attempts to walk forward < distance > times.  If unable to make it all the way,
      *  a message will be returned.  Will display LOOK on any partial success.
