@@ -83,7 +83,7 @@ public interface GameObjectInterface extends Remote {
      * @throws RemoteException
      */
     public String getIgnoredPlayersList(String name) throws RemoteException;
-    
+
     //Feature 408. Unignore player.
     /**
      * Player unIgnores further messages from another Player

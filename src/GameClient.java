@@ -55,7 +55,6 @@ public class GameClient {
         System.out.println("  WHISPER player message   - Whispers 'message' to 'player'");
         System.out.println("  IGNORE player            - Ignore messages from from 'player'");
         System.out.println("  IGNORELIST               - Displays a list of players you are ignoring");
-        System.out.println("  UNIGNORE player          - Unignore messages from from 'player'");
         System.out.println("  LEFT                     - Turns your player left 90 degrees.");
         System.out.println("  RIGHT                    - Turns your player right 90 degrees.");
         System.out.println("  MOVE distance            - Tries to walk forward <distance> times.");

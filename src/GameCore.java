@@ -210,7 +210,6 @@ public class GameCore implements GameCoreInterface {
         }
     }  
 
-
     //Feature 408. Unignore Player.
    /**
      * Player unIgnores further messages from another Player
