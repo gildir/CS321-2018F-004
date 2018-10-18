@@ -52,6 +52,7 @@ public class GameClient {
         System.out.println("The game allows you to use the following commands:");
         System.out.println("  LOOK                     - Shows you the area around you");
         System.out.println("  SAY message              - Says 'message' to any other players in the same area.");
+        System.out.println("  ONLINE                 - Displays list of players in the area.");
         System.out.println("  WHISPER player message   - Whispers 'message' to 'player'");
         System.out.println("  IGNORE player            - Ignore messages from from 'player'");
         System.out.println("  UNIGNORE player          - Remove 'player' from ignore list");
@@ -230,6 +231,8 @@ public class GameClient {
                     else {
                         System.out.println(remoteGameInterface.unIgnorePlayer(this.playerName, tokens.remove(0)));
                     }
+                case "ONLINE":
+                    System.out.println(remoteGameInterface.showPlayers());
                     break;
                 case "MOVE":
                     if(tokens.isEmpty()) {

@@ -77,7 +77,6 @@ public interface GameCoreInterface {
      */
     public String whisper(String srcName, String dstName, String message);
 
-
     // Feature 405. Ignore Player
     /**
      * Player ignores further messages from another Player
@@ -101,7 +100,13 @@ public interface GameCoreInterface {
      * @param name Player who's list is being targeted
      * @return The list of players being ignored
      */
+
     public String getIgnoredPlayersList(String name);
+    /**
+     * Generates list of all online players.
+     * @return String of linked list PlayerList
+     */
+    public String showPlayers();
 
     /**
      * Returns a string representation of all objects you are carrying.

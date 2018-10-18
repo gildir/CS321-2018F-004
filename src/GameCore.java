@@ -4,6 +4,7 @@
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.lang.StringBuilder;
 
 /**
  *
@@ -295,12 +296,25 @@ public class GameCore implements GameCoreInterface {
     public String getIgnoredPlayersList(String name) {
         Player player = this.playerList.findPlayer(name);
         String returnMessage;
-        if(player != null){
+        if (player != null) {
             returnMessage = player.getIgnoredPlayersList();
-        }else{
+        } else {
             returnMessage = "Error: Could not find player. Check server connection status";
         }
         return returnMessage;
+    }
+
+    /**
+     * Generates list of all online players.
+     * @return String of linked list PlayerList
+     */
+    public String showPlayers(){
+      StringBuilder users = new StringBuilder();
+      users.append("Players online:\n");
+      for(Player a : playerList){
+        users.append(a.getName() + "\n");
+      }
+      return users.toString();
     }
 
     /**

@@ -113,6 +113,16 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
         return core.whisper(srcName, dstName, message);
     }
 
+    /**
+     * Generates list of all online players.
+     * @return String of linked list PlayerList
+     * @throws RemoteException
+     */
+    @Override
+    public String showPlayers() throws RemoteException {
+      return core.showPlayers();
+    }
+
     // Feature 405. Ignore Player
     /**
      * Player ignores further messages from another Player

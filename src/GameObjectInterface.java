@@ -95,6 +95,13 @@ public interface GameObjectInterface extends Remote {
     public String getIgnoredPlayersList(String name) throws RemoteException;
 
     /**
+     * Generates list of all online players.
+     * @return String of linked list PlayerList
+     * @throws RemoteException
+     */
+    public String showPlayers() throws RemoteException;
+    
+    /**
      * Attempts to walk forward < distance > times.  If unable to make it all the way,
      *  a message will be returned.  Will display LOOK on any partial success.
      * @param name Name of the player to move
