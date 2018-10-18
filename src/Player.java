@@ -24,8 +24,6 @@ public class Player {
     }
 
     private HashSet<Player> ignoredPlayers = new HashSet<Player>();
-
-
     // missed Messages - not yet in uses
     private HashSet<Message> missedMessages = new HashSet<Message>();
 
@@ -36,19 +34,27 @@ public class Player {
      * @return - whether player reference was successfully added to set ignorePlayer.
      */
     public boolean ignorePlayer(Player playerToIgnore) {
-            return ignoredPlayers.add(playerToIgnore);
+        // if(!ignoredPlayers.contains(playerToIgnore)){
+        //     System.out.println(playerToIgnore.name + " has been ignored.");
+        return ignoredPlayers.add(playerToIgnore);
+        // } else {
+        //     System.out.println(playerToIgnore.name + " is already being ignored.");
+        //     return false;
+        // }
     }
 
     //Feature 408. Unignore Player.
     /**
+     *
      * Removes a given player form the set ignoredPlayers
      * @param playerToUnIgnore - player to remove from set
      * @return - whether the player reference was successfully removed
+     *
      */
     public boolean unIgnorePlayer(Player playerToUnIgnore) {
-        if (ignoredPlayers.contains(playerToUnIgnore)) {
+        if(ignoredPlayers.contains(playerToUnIgnore)){
             return ignoredPlayers.remove(playerToUnIgnore);
-        } else {
+        }else {
             return false;
         }
     }
@@ -90,6 +96,7 @@ public class Player {
      * @param sentMessage - the Message being sent to this player.
      * @return - whether or not the sent message was successfully added to the set of received messages.
      */
+
     public boolean receiveMessage(Message sentMessage) {
         boolean received = false;
 
@@ -134,10 +141,10 @@ public class Player {
                 break;
             case "West":
                 this.currentDirection = Direction.SOUTH;
-                break;                
+                break;
         }
     }
-    
+
     public void turnRight() {
         switch(this.currentDirection.toString()) {
             case "North":
@@ -151,10 +158,18 @@ public class Player {
                 break;
             case "West":
                 this.currentDirection = Direction.NORTH;
-                break;                
+                break;
         }
     }
-    
+
+    public String getLastPlayer() {
+        return lastPlayer;
+    }
+
+    public void setLastPlayer(String lastPlayer) {
+        this.lastPlayer = lastPlayer;
+    }
+
     public String getName() {
         return name;
     }
@@ -170,43 +185,43 @@ public class Player {
     public void setCurrentInventory(LinkedList<String> currentInventory) {
         this.currentInventory = currentInventory;
     }
-    
+
     public void addObjectToInventory(String object) {
         this.currentInventory.add(object);
     }
-    
+
     public void setReplyWriter(PrintWriter writer) {
         this.replyWriter = writer;
     }
-    
+
     public PrintWriter getReplyWriter() {
         return this.replyWriter;
     }
-    
+
     public void setOutputWriter(DataOutputStream writer) {
         this.outputWriter = writer;
     }
-    
+
     public DataOutputStream getOutputWriter() {
         return this.outputWriter;
     }
-    
+
     public int getCurrentRoom() {
         return this.currentRoom;
     }
-    
+
     public void setCurrentRoom(int room) {
         this.currentRoom = room;
     }
-    
+
     public String getCurrentDirection() {
         return this.currentDirection.name();
     }
-    
+
     public Direction getDirection() {
         return this.currentDirection;
     }
-    
+
     public String viewInventory() {
         String result = "";
         if(this.currentInventory.isEmpty() == true) {
