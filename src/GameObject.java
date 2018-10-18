@@ -136,19 +136,7 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
     public String getIgnoredPlayersList(String name) throws RemoteException{
         return core.getIgnoredPlayersList(name);
     }
-    
-   /**
-     * Player unIgnores further messages from another Player
-     * @param srcName Player making the unIgnore request
-     * @param dstName Player to be unIgnored
-     * @return Message showing success
-     * @throws RemoteException
-     */
-   @Override
-    public String unIgnorePlayer(String srcName, String dstName) throws RemoteException {
-        return core.unIgnorePlayer(srcName, dstName);
-    }
-      
+
     /**
      * Attempts to walk forward < distance > times.  If unable to make it all the way,
      *  a message will be returned.  Will display LOOK on any partial success.
