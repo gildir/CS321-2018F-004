@@ -57,6 +57,7 @@ public class GameClient {
         System.out.println("  IGNORE player            - Ignore messages from from 'player'");
         System.out.println("  UNIGNORE player          - Remove 'player' from ignore list");
         System.out.println("  IGNORELIST               - Displays a list of players you are ignoring");
+        System.out.println("  REPLY message            - Reply 'message' to last whisper");
         System.out.println("  LEFT                     - Turns your player left 90 degrees.");
         System.out.println("  RIGHT                    - Turns your player right 90 degrees.");
         System.out.println("  MOVE distance            - Tries to walk forward <distance> times.");
@@ -210,7 +211,6 @@ public class GameClient {
                         System.out.println(remoteGameInterface.whisper(this.playerName, dstPlayerName, message));
                     }
                     break;
-                // End 401.
                 // Feature 405. Ignore Player
                 case "IGNORE":
                     if(tokens.isEmpty()) {
@@ -233,6 +233,16 @@ public class GameClient {
                     }
                 case "ONLINE":
                     System.out.println(remoteGameInterface.showPlayers());
+                    break;
+                case "R":
+                case "REPLY":
+                    if (tokens.isEmpty()) {
+                        System.err.println("You need to provide a message.");
+                    }
+                    else {
+                        message = parseMessage(tokens);
+                        System.out.println(remoteGameInterface.quickReply(this.playerName, message));
+                    }
                     break;
                 case "MOVE":
                     if(tokens.isEmpty()) {

@@ -169,7 +169,7 @@ public class Player {
     public void setLastPlayer(String lastPlayer) {
         this.lastPlayer = lastPlayer;
     }
-
+    
     public String getName() {
         return name;
     }

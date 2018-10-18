@@ -108,6 +108,15 @@ public interface GameCoreInterface {
      */
     public String showPlayers();
 
+    // Feature 404. Quick Reply
+    /**
+     * Reply "message" to last whisper.
+     * @param srcName Name of the player to speak
+     * @param message Message to speak
+     * @return Message showing success
+     */
+    public String quickReply(String srcName, String message);
+    // End 404.
     /**
      * Returns a string representation of all objects you are carrying.
      * @param name Name of the player to move
