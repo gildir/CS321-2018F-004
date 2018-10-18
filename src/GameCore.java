@@ -4,6 +4,7 @@
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.HashMap;
 
 /**
  *
@@ -12,6 +13,7 @@ import java.util.logging.Logger;
 public class GameCore implements GameCoreInterface {
     private final PlayerList playerList;
     private final Map map;
+    private HashMap<Integer,Shop> shoplist;
     
     /**
      * Creates a new GameCoreObject.  Namely, creates the map for the rooms in the game,
@@ -23,8 +25,12 @@ public class GameCore implements GameCoreInterface {
         
         // Generate the game map.
         map = new Map();
-        
         playerList = new PlayerList();
+        
+        // Builds a list of shops mapped to their map id (can be expanded as needed)
+        shoplist = new HashMap<Integer,Shop>() {{
+        	shoplist.put(new Integer(1), new Shop());
+        }};
         
         Thread objectThread = new Thread(new Runnable() {
             @Override
@@ -268,21 +274,21 @@ public class GameCore implements GameCoreInterface {
     
     /**
      * @author Group 4: King
-     * Sets player to shopping mode if possible, adds them to list of players in store
+     * Adds the player to list of players in store, and returns shop they just entered
      * @param name Name of the player to add to shop
-     * @return Message showing success
+     * @return The shop the player entered if possible, null otherwise
      */
-    public String shop(String name) {
+    public Shop shop(String name) {
     	Player player = this.playerList.findPlayer(name);
     	Room room = map.findRoom(player.getCurrentRoom());
     	
+    	// Add player to shop in room if applicable
     	if (map.isShoppable(room)) {
-    		// Shop shop = (Shop) room;
-    		// shop.addPlayer(player);
-    		// player.setShopping(True);
-    		return "You enter the shop";
+    		Shop shop = shoplist.get(room.getId());
+    		shop.addPlayer(player);
+    		return shop;
     	}
-    	return "There is no shop here";
+    	return null;
     }
     
     /**

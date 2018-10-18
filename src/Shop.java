@@ -1,3 +1,6 @@
+/**
+ * Keeps track of items in the shop on the 
+ */
 
 //import java.util.Iterator;
 import java.util.LinkedList;
@@ -45,6 +48,10 @@ public class Shop
 	//use something like a switch statement
 	public void printMenu() {}
 	
+	public void addPlayer(Player p) {
+		playerlist.addPlayer(p);
+	}	
+
 	/**
 	 * @return The tag line of the shop
 	 */

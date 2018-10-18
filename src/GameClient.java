@@ -196,7 +196,15 @@ public class GameClient {
                     System.out.println(remoteGameInterface.venmo(this.playerName));
                     break;   
                 case "SHOP":
-                	System.out.println(remoteGameInterface.shop(this.playerName));
+                	Shop shop = remoteGameInterface.shop(this.playerName);
+                	if (shop != null) {
+                		System.out.println("You enter the shop");
+                		// Runs the shop method
+                		new ShopClient(remoteGameInterface.getPlayer(this.playerName), shop);
+                	}
+                	else {
+                		System.out.println("There is no shop here");
+                	}
                 	break;
                 case "WALLET":
                 	System.out.println(remoteGameInterface.wallet(this.playerName));
