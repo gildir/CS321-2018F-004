@@ -15,6 +15,19 @@ public class ShopClient {
 	
 	private void run() {
 		// Put text parser here and call 
-		System.out.println("Hurray, you shopped!");
+		this.shop.addPlayer(this.player);
+		
+		System.out.println(this.shop);
+		
+		// TODO run infinite loop waiting for input that breaks when player exits
+		// or runs through switch statement triggering shop methods
+		
+		this.shop.removePlayer(this.player);
 	}
+	
+	//In terms of the player buying items
+	public void buy(Object k) {}
+	
+	//In terms of the player selling items
+	public void sell(Object k) {}
 }

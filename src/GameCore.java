@@ -29,7 +29,7 @@ public class GameCore implements GameCoreInterface {
         
         // Builds a list of shops mapped to their map id (can be expanded as needed)
         shoplist = new HashMap<Integer,Shop>() {{
-        	shoplist.put(new Integer(1), new Shop());
+        	shoplist.put(new Integer(1), new Shop("Clocktower shop", "The shopping destination for all of your gaming needs."));
         }};
         
         Thread objectThread = new Thread(new Runnable() {
@@ -285,7 +285,6 @@ public class GameCore implements GameCoreInterface {
     	// Add player to shop in room if applicable
     	if (map.isShoppable(room)) {
     		Shop shop = shoplist.get(room.getId());
-    		shop.addPlayer(player);
     		return shop;
     	}
     	return null;

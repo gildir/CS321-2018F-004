@@ -199,7 +199,7 @@ public class GameClient {
                 	Shop shop = remoteGameInterface.shop(this.playerName);
                 	if (shop != null) {
                 		System.out.println("You enter the shop");
-                		// Runs the shop method
+                		// Runs the shop method (encapsulated in ShopClient class)
                 		new ShopClient(remoteGameInterface.getPlayer(this.playerName), shop);
                 	}
                 	else {
