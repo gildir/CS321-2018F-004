@@ -1,4 +1,3 @@
-
 import java.io.DataOutputStream;
 import java.io.PrintWriter;
 import java.util.HashSet;
@@ -15,6 +14,7 @@ public class Player {
     private Direction currentDirection;
     private PrintWriter replyWriter = null;
     private DataOutputStream outputWriter = null;
+    private String lastPlayer = "";
 
     public Player(String name) {
         this.currentRoom = 1;
@@ -24,19 +24,31 @@ public class Player {
     }
 
     private HashSet<Player> ignoredPlayers = new HashSet<Player>();
-    
+
+
+    // missed Messages - not yet in uses
+    private HashSet<Message> missedMessages = new HashSet<Message>();
+
+
+    /**
+     * Adds a player's reference to set ignoredPlayers.
+     * @param playerToIgnore
+     * @return - whether player reference was successfully added to set ignorePlayer.
+     */
+    public boolean ignorePlayer(Player playerToIgnore) {
+            return ignoredPlayers.add(playerToIgnore);
+    }
+
     //Feature 408. Unignore Player.
     /**
-     *
      * Removes a given player form the set ignoredPlayers
      * @param playerToUnIgnore - player to remove from set
      * @return - whether the player reference was successfully removed
-     *
      */
     public boolean unIgnorePlayer(Player playerToUnIgnore) {
-        if(ignoredPlayers.contains(playerToUnIgnore)){
+        if (ignoredPlayers.contains(playerToUnIgnore)) {
             return ignoredPlayers.remove(playerToUnIgnore);
-        }else {
+        } else {
             return false;
         }
     }
@@ -49,7 +61,66 @@ public class Player {
     public boolean isIgnoring(Player otherPlayer) {
         return ignoredPlayers.contains(otherPlayer);
     }
-    
+
+    /**
+     * Access the list of players this player is ignoring.
+     * @return - Returns a String of all player names this player is ignoring
+     */
+    public String getIgnoredPlayersList() {
+        StringBuilder ignoredPlayersList = new StringBuilder();
+        ignoredPlayersList.append("\nIgnored Players: ");
+        if(ignoredPlayers.isEmpty()) { ignoredPlayersList.append(" Your ignore list is empty.\n"); }
+        else {
+            int count = 1;
+            for(Player ignored : ignoredPlayers) {
+                ignoredPlayersList.append(ignored.name);
+                if(count == ignoredPlayers.size()) {
+                    ignoredPlayersList.append(".\n");
+                } else {
+                    count++;
+                    ignoredPlayersList.append(", ");
+                }
+            }
+        }
+        return ignoredPlayersList.toString();
+    }
+
+    /**
+     *
+     * @param sentMessage - the Message being sent to this player.
+     * @return - whether or not the sent message was successfully added to the set of received messages.
+     */
+    public boolean receiveMessage(Message sentMessage) {
+        boolean received = false;
+
+        //put ignore detection here
+
+        /*if(recievedMessages.add(sentMessage)) {
+
+            sentMessage.SetReceived();
+            received = true;
+        }*/
+
+        // if recipient is offline, detect here
+
+        return received;
+    }
+
+    /**
+     *
+     * @param textOfMessage - The actual input message from the user.
+     * @param intendedRecipient - A reference to the user the message is being sent to.
+     * @return - Whether the recipient successfully received the sent message.
+     */
+    public boolean sendMessage(String textOfMessage, Player intendedRecipient) {
+
+        Message newMessage = new Message(textOfMessage, this, intendedRecipient);
+        return intendedRecipient.receiveMessage(newMessage);
+
+    }
+
+    /**Reeds changes end here**/
+
     public void turnLeft() {
         switch(this.currentDirection.toString()) {
             case "North":

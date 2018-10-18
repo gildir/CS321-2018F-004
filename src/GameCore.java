@@ -238,6 +238,22 @@ public class GameCore implements GameCoreInterface {
     }
    
     /**
+     * Player displays the list of players that are being ignored
+     * @param name Player who's list is being targeted
+     * @return The list of players being ignored
+     */
+    public String getIgnoredPlayersList(String name) {
+        Player player = this.playerList.findPlayer(name);
+        String returnMessage;
+        if(player != null){
+            returnMessage = player.getIgnoredPlayersList();
+        }else{
+            returnMessage = "Error: Could not find player. Check server connection status";
+        }
+        return returnMessage;
+    }
+   
+    /**
      * Attempts to walk forward < distance > times.  If unable to make it all the way,
      *  a message will be returned.  Will display LOOK on any partial success.
      * @param name Name of the player to move
