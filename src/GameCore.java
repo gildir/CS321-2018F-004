@@ -261,6 +261,31 @@ public class GameCore implements GameCoreInterface {
         return returnMessage;
     }
 
+   /**
+     * Player unIgnores further messages from another Player
+     * @param srcName Player making the unIgnore request
+     * @param dstName Player to be unIgnored
+     * @return Message showing success
+     */
+    public String unIgnorePlayer(String srcName, String dstName) {
+        Player srcPlayer = this.playerList.findPlayer(srcName);
+        Player dstPLayer = this.playerList.findPlayer(dstName);
+        String returnMessage;
+        if (dstPLayer == null)
+            returnMessage = "Player " + dstName + " not found.";
+        else if (srcPlayer == null)
+            returnMessage = "Unignore failed, check connection to server.";
+        else if (srcPlayer.getName() == dstPLayer.getName())
+            returnMessage = "You never ignored yourself in the first place";
+        else if (!srcPlayer.isIgnoring(dstPLayer))
+            returnMessage = "You aren't ignoring " + dstPLayer.getName() + "!";
+        else {
+            srcPlayer.ignorePlayer(dstPLayer);
+            returnMessage = "You're now unignoring " + dstPLayer.getName() + ".";
+        }
+        return returnMessage;
+    }
+   
     /**
      * Player displays the list of players that are being ignored
      * @param name Player who's list is being targeted
