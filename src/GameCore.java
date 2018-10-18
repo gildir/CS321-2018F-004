@@ -4,6 +4,10 @@
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.ArrayList;
+import java.util.Scanner;
+import java.io.File;
+import java.io.IOException;
 
 /**
  *
@@ -32,15 +36,37 @@ public class GameCore implements GameCoreInterface {
                 Random rand = new Random();
                 Room room;
                 Item object;
-		Item tempItem1 = new Item("Flower", 1.0, 0.0);
-		Item tempItem2 = new Item("Textbook", 10.3, 5.2);
-		Item tempItem3 = new Item("Phone", 2.9, 1.0);
-		Item tempItem4 = new Item("Newspaper", 10.0, 9.0);
-                Item[] objects = {tempItem1, tempItem2, tempItem3, tempItem4};
+		ArrayList<Item> objects = new ArrayList<Item>();
+		try
+		{
+			double inWeight = 0;
+			double inValue = 0;
+			String inName = "";
+			Scanner scanner = new Scanner(new File("./items.csv"));
+			scanner.nextLine();
+			scanner.useDelimiter(",|\\r\\n|\\n|\\r");
+
+			while(scanner.hasNext())
+			{
+				inName = scanner.next();
+				inWeight = Double.parseDouble(scanner.next().replace(",", ""));
+				inValue = Double.parseDouble(scanner.next().replace("\\r\\n|\\r|\\n", ""));
+				Item newItem = new Item(inName, inWeight, inValue);
+				objects.add(newItem);
+				
+			}
+		}
+		catch(IOException e)
+		{
+			objects.add(new Item("Flower", 1.0, 0.0));
+			objects.add(new Item("Textbook", 10.3, 5.2));
+			objects.add(new Item("Phone", 2.9, 1.0));
+			objects.add(new Item("Newspaper", 10.0, 9.0));
+		}
                 while(true) {
                     try {
                         Thread.sleep(rand.nextInt(60000));
-                        object = objects[rand.nextInt(objects.length)];
+                        object = objects.get(rand.nextInt(objects.size()));
                         room = map.randomRoom();
                         room.addObject(object);
                         
