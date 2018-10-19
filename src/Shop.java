@@ -52,6 +52,7 @@ public class Shop
 	}
 
 	/**
+	 * @author Team 4: Alaqeel
 	 * @return The tag line of the shop
 	 */
 	public String getDescription() {
@@ -59,13 +60,13 @@ public class Shop
 	}
 	
 	/**
+	 * @author Team 4: Alaqeel
 	 * @return The shop name
 	 */
 	public String getTitle() {
         return this.title;
     }
 	
-//	public String toString(Player player) {
 	public String toString() {
         
 		// white spaces around the billboard
@@ -99,6 +100,8 @@ public class Shop
     }
 	
 	/**
+	 * @author Team 4: Alaqeel
+	 * 
 	 * returns a list of the players, separated by comma and using the Oxford comma.
 	 * 
 	 * @param players
@@ -129,6 +132,8 @@ public class Shop
 	
 	
 	/**
+	 * @author Team 4: Alaqeel
+	 * 
 	 * Iterates through the list of the objects and creates a table populated with object names and prices.
 	 * @return table of the objects
 	 */
@@ -183,6 +188,13 @@ public class Shop
 		return menu;
 	}
 	
+	/**
+	 * @author Team 4: Alaqeel
+	 * Centers a string of text in a provided column length
+	 * @param str String to be centered
+	 * @param len Column length
+	 * @return A string of width len with str centered in it
+	 */
 	private String strCenter(String str, int len) {
 		String result = str;
 		// spaces before
