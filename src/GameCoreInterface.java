@@ -89,7 +89,13 @@ public interface GameCoreInterface {
       * @return String message of the acceptence
       */
     public String accept(String challenger, String challengee);
-	
+
+    /**
+     *
+     * Reject someones challenge to a R-P-s
+     * @param challenger is the name of the player challenging to R-P-S
+     * @param challengee is the name of the player accepting 
+     * @return String message of the rejection
     public String reject(String challenger, String challengee);
     /**
      * Leaves the game.
