@@ -44,7 +44,7 @@ public class Room {
     public String getExits() {
         String result = "";
         for(Exit exit : this.exits) {
-            if(exit.getRoom() != 0) {
+            if(exit.getRoom() > 0) {
                 result += exit.getDirection().name() + " ";
             }
         }
@@ -76,7 +76,10 @@ public class Room {
     public int getLink(Direction direction) {
         for(Exit exit : this.exits) {
             if(exit.getDirection() == direction) {
-                return exit.getRoom();
+                int link = exit.getRoom();
+		if(link < 0)
+		   link = -link;
+		return link;
             }
         }
         return 0; 
