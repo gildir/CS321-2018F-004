@@ -135,4 +135,11 @@ public interface GameObjectInterface extends Remote {
      * @param item The item the player is selling (eventually will be an Item obj)
      */
     public int sellItem(String name, int shopId, String item) throws RemoteException;
+    
+    /**
+     * Returns a Shop's inventory as a formatted string
+     * @param id The shop ID
+     * @return A formatted string representing the Shop's inventory
+     */
+    public String getShopInv(int id);
 }

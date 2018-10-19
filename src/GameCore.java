@@ -369,4 +369,14 @@ public class GameCore implements GameCoreInterface {
 		
 		return "$" + String.format("%.02f", m);
 	}
+	
+	/**
+     * Returns a Shop's inventory as a formatted string
+     * @param id The shop ID
+     * @return A formatted string representing the Shop's inventory
+     */
+    public String getShopInv(int id) {
+		Shop s = this.shoplist.get(id);
+		return s.getObjects();
+	}
 }
