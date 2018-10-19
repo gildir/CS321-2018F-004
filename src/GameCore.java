@@ -58,7 +58,7 @@ public class GameCore implements GameCoreInterface {
             public void run() {
                 Random rand = new Random();
 				Room room = map.randomRoom();
-				ghoul = new Ghoul(room.getId());
+				this.ghoul = new Ghoul(room.getId());
 				room.hasGhoul = true;
 				GameCore.this.broadcast(room, "You see a Ghoul appear in this room");
 
