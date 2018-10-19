@@ -96,11 +96,13 @@ public interface GameCoreInterface {
      * @param challenger is the name of the player challenging to R-P-S
      * @param challengee is the name of the player accepting 
      * @return String message of the rejection
+     */
     public String reject(String challenger, String challengee);
+
     /**
      * Leaves the game.
      * @param name Name of the player to leave
      * @return Player that was just removed.
-     */    
+     */   
     public Player leave(String name);    
 }
