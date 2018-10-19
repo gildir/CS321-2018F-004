@@ -98,10 +98,10 @@ public interface GameObjectInterface extends Remote {
      * @author Team 4: King
      * Lets player shop if in a shoppable area
      * @param name Name of the player
-     * @return Returns the shop the player just entered or Null if they can't shop
+     * @return Returns the id of the shop the player just entered or -1 if they can't shop
      * @throws RemoteException
      */
-    public Shop shop(String name) throws RemoteException;
+    public int shop(String name) throws RemoteException;
     
     /**
      * Returns a player object when given the player's name

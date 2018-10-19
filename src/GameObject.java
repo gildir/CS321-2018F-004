@@ -142,9 +142,10 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
      * @return Returns the shop the player just entered or Null if they couldnt enter one
      * @throws RemoteException
      */
-    public Shop shop(String name) throws RemoteException{
+    public int shop(String name) throws RemoteException{
     	return core.shop(name);
     }
+   
     
     /**
      * @author Group 4: King

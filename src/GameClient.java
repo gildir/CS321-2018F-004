@@ -196,11 +196,10 @@ public class GameClient {
                     System.out.println(remoteGameInterface.venmo(this.playerName));
                     break;   
                 case "SHOP":
-                	Shop shop = remoteGameInterface.shop(this.playerName);
-                	if (shop != null) {
+                	int shopId = remoteGameInterface.shop(this.playerName); // Need to make this a serializable type
+                	if (shopId != -1) {
                 		System.out.println("You enter the shop");
-                		// Runs the shop method (encapsulated in ShopClient class)
-                		new ShopClient(remoteGameInterface.getPlayer(this.playerName), shop);
+                		new ShopClient(this.playerName, shopId, remoteGameInterface);
                 	}
                 	else {
                 		System.out.println("There is no shop here");

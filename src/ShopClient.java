@@ -4,25 +4,25 @@
  *
  */
 public class ShopClient {
-	private Player player;
-	private Shop shop;
+	private String player;
+	private int shopId;
+	private GameObjectInterface remote;
 	
-	public ShopClient(Player p, Shop s) {
+	public ShopClient(String p, int s, GameObjectInterface remote) {
 		this.player = p;
-		this.shop = s;
+		this.shopId = s;
+		this.remote = remote;
 		run();
 	}
 	
 	private void run() {
 		// Put text parser here and call 
-		this.shop.addPlayer(this.player);
 		
-		System.out.println(this.shop);
+		System.out.println("It worked!");
 		
 		// TODO run infinite loop waiting for input that breaks when player exits
 		// or runs through switch statement triggering shop methods
-		
-		this.shop.removePlayer(this.player);
+	
 	}
 	
 	//In terms of the player buying items

@@ -81,6 +81,7 @@ public interface GameCoreInterface {
      */    
     public Player leave(String name);
     
+    
     /**
      * Takes the player into venmo. The new and improved way to exchange money with other players.
      * @param name Name of the player enter the bank
