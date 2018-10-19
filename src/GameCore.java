@@ -323,7 +323,7 @@ public class GameCore implements GameCoreInterface {
     @Override
     public String reject(String challengee, String challenger){
 	Player playerChallenger = this.playerList.findPlayer(challenger);
-	Player playerChallengee = this.playerList.findPLayer(challengee);
+	Player playerChallengee = this.playerList.findPlayer(challengee);
 	if(playerChallengee.getChallenger() != " " && playerChallengee.getHasChallenge() == true){
             playerChallengee.setChallenger(" ");
             playerChallengee.setHasChallenge(false);
