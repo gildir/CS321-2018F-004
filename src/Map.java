@@ -14,11 +14,11 @@ import java.util.Scanner;
 public class Map{   
     private final LinkedList<Room> map;
     
-    public Map() {
+    public Map(String worldFile) {
         map = new LinkedList<>();
         try {
-            File mapFile = new File("./rooms.csv");
-            Scanner mapIn = new Scanner(mapFile).useDelimiter(",|\\n|\\r\\n");
+            File mapFile = new File(worldFile);
+	    Scanner mapIn = new Scanner(mapFile).useDelimiter(",|\\n|\\r\\n");
  
 	    int numRooms, numExits;
 
@@ -65,8 +65,10 @@ public class Map{
                 map.add(newRoom);
             }
         mapIn.close();
-        } catch (IOException ex) {
+        } catch (IOException | java.lang.IllegalArgumentException ex) {
             Logger.getLogger(Map.class.getName()).log(Level.SEVERE, null, ex);
+	    System.out.println("[SHUTDOWN] Invalid File " + worldFile);
+	    System.exit(-1);
         }
     }
     
