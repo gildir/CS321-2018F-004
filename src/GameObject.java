@@ -188,4 +188,15 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
 	public String getShopStr(int id) throws RemoteException{
 		return core.getShopStr(id);
 	}
+	
+	/**
+     * Allows player to sell an item to a shop, and increases their money
+     * @author Team 4: King
+     * @param name Name of the player
+     * @param shopId The ID of the shop the player is selling an item to
+     * @param item The item the player is selling (eventually will be an Item obj)
+     */
+    public int sellItem(String name, int shopId, String item) throws RemoteException{
+    	return core.sellItem(name, shopId, item);
+    }
 }
