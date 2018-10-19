@@ -77,60 +77,83 @@ public class GameClient {
             //   Lets the player choose a name and checks it with the server.  If the name is
             //    already taken or the user doesn't like their input, they can choose again.
             while(nameSat == false) {
-				try {
-					System.out.println("Logging in or creating account?");
-					String mode;
-					do {
-						System.out.print("(L/C)> ");
-						mode = keyboardInput.readLine().toUpperCase().trim();
-					} while (!(mode.equals("L") || mode.equals("C")));
-					System.out.print("Username: ");
-					this.playerName = keyboardInput.readLine().trim();
-					System.out.print("Password: ");
-					String pass = keyboardInput.readLine();
-					switch (mode) {
-					case "L":
-						nameSat = remoteGameInterface.joinGame(this.playerName, pass);
-						if (!nameSat)
-							System.out.println("Username and password combination invalid\n");
-						break;
-					case "C":
-						Responses resp = remoteGameInterface.createAccountAndJoinGame(playerName, pass);
-						switch (resp) {
-						case BAD_USERNAME_FORMAT:
-							System.out
-									.println("This is a bad user name. Please use only spaces, numbers, and letters.");
-							break;
-						case USERNAME_TAKEN:
-							System.out.println("Sorry but this username was already taken.");
-							break;
-						case UNKNOWN_FAILURE:
-							System.out.println("The server experienced an unknown failure.");
-							break;
-						case SUCCESS:
-							nameSat = true;
-							break;
-						default:
-							System.out.println("Unknown server behavior");
-							break;
-						}
-						if (!nameSat)
-							System.out.println();
-
-					}
-
-				} catch (IOException ex) {
-					System.err.println(
-							"[CRITICAL ERROR] Error at reading any input properly.  Terminating the client now.");
-					System.exit(-1);
-				}
-			}
+                try {
+                    System.out.println("Logging in or creating account?");
+                    String mode;
+                    do {
+                            System.out.print("(L/C)> ");
+                            mode = keyboardInput.readLine().toUpperCase().trim();
+                    } while (!(mode.equals("L") || mode.equals("C")));
+                    System.out.print("Username: ");
+                    this.playerName = keyboardInput.readLine().trim();
+                    System.out.print("Password: ");
+                    String pass = keyboardInput.readLine();
+                    switch (mode) {
+                    case "L":
+                            nameSat = remoteGameInterface.joinGame(this.playerName, pass);
+                            if (!nameSat)
+                                    System.out.println("Username and password combination invalid\n");
+                            break;
+                    case "C":
+                            Responses resp = remoteGameInterface.createAccountAndJoinGame(playerName, pass);
+                            switch (resp) {
+                            case BAD_USERNAME_FORMAT:
+                                    System.out
+                                                    .println("This is a bad user name. Please use only spaces, numbers, and letters.");
+                                    break;
+                            case USERNAME_TAKEN:
+                                    System.out.println("Sorry but this username was already taken.");
+                                    break;
+                            case UNKNOWN_FAILURE:
+                                    System.out.println("The server experienced an unknown failure.");
+                                    break;
+                            case SUCCESS:
+                                    nameSat = true;
+                                    break;
+                            default:
+                                    System.out.println("Unknown server behavior");
+                                    break;
+                            }
+                            if (!nameSat)
+                                    System.out.println();
+                    }
+                } catch (IOException ex) {
+                        System.err.println(
+                                        "[CRITICAL ERROR] Error at reading any input properly.  Terminating the client now.");
+                        System.exit(-1);
+                }
+            }
 
             // Player has joined, now start up the remote socket.
             this.runListener = true;
             remoteOutputThread = new Thread(new GameClient.ReplyRemote(host));
             remoteOutputThread.setDaemon(true);
             remoteOutputThread.start();
+            
+            //Sends a heartbeat every 10 seconds
+            Thread objectThread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                        while(true) {
+                            try {
+                                Thread.sleep(10000);
+                                try{
+                                    remoteGameInterface.heartbeatCheck(playerName);
+                                }catch(RemoteException re) {
+                                    System.err.println("[CRITICAL ERROR] There was a severe error with the RMI mechanism.");
+                                    System.err.println("[CRITICAL ERROR] Code: " + re);
+                                    System.exit(-1);
+                                } 
+                            } catch (InterruptedException ex) {
+                            }
+                        }
+                    }
+                });
+            
+            objectThread.setDaemon(true);
+            objectThread.setName("heartbeat");
+            objectThread.start();
+            
 
             // Collect input for the game.
             while(runGame) {
