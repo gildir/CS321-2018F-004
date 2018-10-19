@@ -8,6 +8,14 @@ import java.rmi.RemoteException;
  * @author Kevin
  */
 public interface GameObjectInterface extends Remote {
+	
+	/**
+	 * Pokes the ghoul in the current room
+	 * @param playerName Player name
+	 * @return String message of ghoul
+	 * @throws RemoteException
+	 */
+	public String pokeGhoul(String playerName) throws RemoteException;
 
     /**
      * Sends a request to join the game.  
