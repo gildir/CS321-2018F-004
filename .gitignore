@@ -21,18 +21,3 @@
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
-<<<<<<< HEAD
-
-#eclipse project files
-.project
-.classpath
-=======
-/bin/
-
-# Eclipse project files
-.project
-.classpath
-
-# Mac files
-.DS_Store
->>>>>>> 474a87350a3d383e77a6ac797150b23b72c649c6
