@@ -28,9 +28,8 @@ public class GameCore implements GameCoreInterface {
         playerList = new PlayerList();
         
         // Builds a list of shops mapped to their map id (can be expanded as needed)
-        shoplist = new HashMap<Integer,Shop>() {{
-        	shoplist.put(new Integer(1), new Shop());
-        }};
+        shoplist = new HashMap<Integer,Shop>();
+        shoplist.put(new Integer(1), new Shop("Clocktower shop", "The shopping destination for all of your gaming needs."));
         
         Thread objectThread = new Thread(new Runnable() {
             @Override
@@ -276,19 +275,17 @@ public class GameCore implements GameCoreInterface {
      * @author Group 4: King
      * Adds the player to list of players in store, and returns shop they just entered
      * @param name Name of the player to add to shop
-     * @return The shop the player entered if possible, null otherwise
+     * @return The id of the shop the player will enter, -1 otherwise
      */
-    public Shop shop(String name) {
+    public int shop(String name) {
     	Player player = this.playerList.findPlayer(name);
     	Room room = map.findRoom(player.getCurrentRoom());
     	
     	// Add player to shop in room if applicable
     	if (map.isShoppable(room)) {
-    		Shop shop = shoplist.get(room.getId());
-    		shop.addPlayer(player);
-    		return shop;
+    		return room.getId();
     	}
-    	return null;
+    	return -1;
     }
     
     /**
@@ -324,6 +321,15 @@ public class GameCore implements GameCoreInterface {
         return null;
     }
 
+    /**
+     * Returns Shop.tostring
+     * @param id The shop's id in the hashmap
+     * @return a reference to the shop
+     */
+    public String getShopStr(int id) {
+    	return this.shoplist.get(id).toString();
+    }
+    
 	@Override
 	public String venmo(String name) {
 		// TODO Auto-generated method stub

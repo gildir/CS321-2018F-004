@@ -20,20 +20,14 @@ public class Shop
 	private String title;
 	
 	
-	public Shop()
+	public Shop(String name, String desc)
 	{
 		this.inventory = new LinkedList<Object>();
 		this.inDemand = new LinkedList<Object>();
 		this.playerlist = new PlayerList();
-		this.description = "The shopping destination for all of your gaming needs.";
-		this.title = "The Shop";
+		this.description = desc;
+		this.title = name;
 	}
-	
-	//In terms of the player buying items
-	public void buy(Object k) {}
-	
-	//In terms of the player selling items
-	public void sell(Object k) {}
 	
 	//used to add methods to the linked list
 	public void add(Object k) {}
@@ -51,6 +45,11 @@ public class Shop
 	public void addPlayer(Player p) {
 		playerlist.addPlayer(p);
 	}	
+	
+	public void removePlayer(Player p) {
+		// Why does add take a player object and remove take a name?? --IK
+		playerlist.removePlayer(p.getName()); 
+	}
 
 	/**
 	 * @return The tag line of the shop
@@ -66,7 +65,8 @@ public class Shop
         return this.title;
     }
 	
-	public String toString(PlayerList playerList, Player player) {
+//	public String toString(Player player) {
+	public String toString() {
         
 		// white spaces around the billboard
 		String billboard = "Welcome to " + this.getTitle();
@@ -91,7 +91,7 @@ public class Shop
         result += "...................\n";
         result += this.getObjects();
         
-        String players = this.getPlayers(playerList);
+        String players = this.getPlayers();
         if (players.length() == 0) result += "You are here by yourself.\n";
         else {
         	result += "You are here along with:\n";
@@ -113,7 +113,7 @@ public class Shop
 	 * @param players
 	 * @return list of players
 	 */
-	public String getPlayers(PlayerList players) {
+	public String getPlayers() {
 		String result = "";
 		
 		int i = 0;

@@ -142,9 +142,10 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
      * @return Returns the shop the player just entered or Null if they couldnt enter one
      * @throws RemoteException
      */
-    public Shop shop(String name) throws RemoteException{
+    public int shop(String name) throws RemoteException{
     	return core.shop(name);
     }
+   
     
     /**
      * @author Group 4: King
@@ -152,7 +153,7 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
      * @param name The player's name
      * @return A reference to the Player object
      */
-    public Player getPlayer(String name) {
+    public Player getPlayer(String name) throws RemoteException{
     	return core.findPlayer(name);
     }
     
@@ -182,5 +183,9 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
 	 */
 	public String wallet(String name) throws RemoteException {
 		return core.wallet(name);
+	}
+	
+	public String getShopStr(int id) throws RemoteException{
+		return core.getShopStr(id);
 	}
 }
