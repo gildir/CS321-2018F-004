@@ -20,7 +20,7 @@ public class ShopClient {
 	
 	private void run() throws RemoteException {
 		// Put text parser here and call 
-		//System.out.println(remote.getShopStr(this.id));
+		System.out.println(remote.getShopStr(this.id));
 		
 		// TODO run infinite loop waiting for input that breaks when player exits
 		// or runs through switch statement triggering shop methods
