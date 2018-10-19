@@ -153,7 +153,7 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
      * @param name The player's name
      * @return A reference to the Player object
      */
-    public Player getPlayer(String name) {
+    public Player getPlayer(String name) throws RemoteException{
     	return core.findPlayer(name);
     }
     
@@ -183,5 +183,9 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
 	 */
 	public String wallet(String name) throws RemoteException {
 		return core.wallet(name);
+	}
+	
+	public String getShopStr(int id) throws RemoteException{
+		return core.getShopStr(id);
 	}
 }

@@ -321,6 +321,15 @@ public class GameCore implements GameCoreInterface {
         return null;
     }
 
+    /**
+     * Returns Shop.tostring
+     * @param id The shop's id in the hashmap
+     * @return a reference to the shop
+     */
+    public String getShopStr(int id) {
+    	return this.shoplist.get(id).toString();
+    }
+    
 	@Override
 	public String venmo(String name) {
 		// TODO Auto-generated method stub

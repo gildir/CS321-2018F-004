@@ -118,4 +118,12 @@ public interface GameObjectInterface extends Remote {
      * @throws RemoteException
      */
     public String wallet(String name) throws RemoteException;
+    
+    /**
+     * Returns a reference to a shop 
+     * @param id
+     * @return the shop or null
+     * @throws RemoteException 
+     */
+    public String getShopStr(int id) throws RemoteException;
 }

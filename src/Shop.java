@@ -65,7 +65,8 @@ public class Shop
         return this.title;
     }
 	
-	public String toString(Player player) {
+//	public String toString(Player player) {
+	public String toString() {
         
 		// white spaces around the billboard
 		String billboard = "Welcome to " + this.getTitle();

@@ -80,7 +80,7 @@ public interface GameCoreInterface {
      * @return Player that was just removed.
      */    
     public Player leave(String name);
-    
+   
     
     /**
      * Takes the player into venmo. The new and improved way to exchange money with other players.
@@ -88,5 +88,12 @@ public interface GameCoreInterface {
      * @throws RemoteException 
      */    
     public String venmo(String name);
+    
+    /**
+     * Returns a reference to a shop 
+     * @param id
+     * @return the shop or null
+     */
+    public String getShopStr(int id);
     
 }
