@@ -7,7 +7,7 @@ import java.util.Random;
 
 public class Ghoul{
 
-	private int angryLevel;
+	private int angryLevel; //Measure of a ghoul's anger on a scale of 0(calm) to 10(furious)
 	private int currentRoom;
 
 	//Summon a new Ghoul. New Ghoul will always very claim.
@@ -25,6 +25,10 @@ public class Ghoul{
 	}
 	public void setRoom(int room){
 		this.currentRoom = room;
+	}
+	
+	public void modifyAngryLevel(int amount) {
+		this.angryLevel += amount;
 	}
 
 }
