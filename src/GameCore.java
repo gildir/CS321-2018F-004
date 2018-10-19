@@ -352,6 +352,42 @@ public class GameCore implements GameCoreInterface {
     	return value;
     }
     
+    /**
+     * Allows player to sell an item to a shop, and increases their money
+     * @author Team 4: Mistry
+     * @param name Name of the player
+     * @param shopId The ID of the shop the player is selling an item to
+     * @param item The item the player is buying (eventually will be an Item obj)
+     */
+    public boolean buyItem(String name, int shopId, String item)
+    {
+    	int val = 0;
+    	Player player = this.playerList.findPlayer(name);
+    	Shop s = shoplist.get(shopId);
+    	
+    	if(player.getMoney() < 12)
+    	{
+    		System.out.println("Not Enough Money!!!");
+    		return false;
+    	}
+    	
+    	if(s.getInven().contains(item))
+    	{
+    		s.remove(item);
+    	}
+    	else
+    	{
+    		System.out.println("Item not in stock!!!");
+    		return false;
+    	}
+    	
+    	player.addObjectToInventory(item);
+    
+    	//val = removed.getValue() * 1.2;
+    	val = 12;
+    	player.setMoney(player.getMoney() - val);
+    	return true;
+    }
 	@Override
 	public String venmo(String name) {
 		// TODO Auto-generated method stub

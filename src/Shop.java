@@ -29,11 +29,21 @@ public class Shop
 		this.title = name;
 	}
 	
+	//get method to get inventory linkedlist
+	public LinkedList<Object> getInven()
+	{
+		return this.inventory;
+	}
 	//used to add methods to the linked list
 	public void add(Object k) {
 		this.inventory.add(k);
 	}
 	
+	//used to remove items form the linked list
+	public void remove(Object k)
+	{
+		this.inventory.remove(k);
+	}
 	//prints the inventory of the shop class
 	public void printInv() {}
 	
