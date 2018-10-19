@@ -78,6 +78,15 @@ public class Player {
         this.currentInventory.add(object);
     }
     
+    public String removeObjectFromInventory(String object) {
+    	if (this.currentInventory.remove(object)) {
+    		return object;
+    	}
+    	else {
+    		return null;
+    	}
+    }
+    
     public void setReplyWriter(PrintWriter writer) {
         this.replyWriter = writer;
     }

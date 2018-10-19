@@ -4,6 +4,7 @@
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.HashMap;
 
 /**
  *
@@ -12,6 +13,7 @@ import java.util.logging.Logger;
 public class GameCore implements GameCoreInterface {
     private final PlayerList playerList;
     private final Map map;
+    private HashMap<Integer,Shop> shoplist;
     
     /**
      * Creates a new GameCoreObject.  Namely, creates the map for the rooms in the game,
@@ -23,8 +25,11 @@ public class GameCore implements GameCoreInterface {
         
         // Generate the game map.
         map = new Map();
-        
         playerList = new PlayerList();
+        
+        // Builds a list of shops mapped to their map id (can be expanded as needed)
+        shoplist = new HashMap<Integer,Shop>();
+        shoplist.put(new Integer(1), new Shop("Clocktower shop", "The shopping destination for all of your gaming needs."));
         
         Thread objectThread = new Thread(new Runnable() {
             @Override
@@ -264,7 +269,24 @@ public class GameCore implements GameCoreInterface {
         else {
             return null;
         }
-    }       
+    }  
+    
+    /**
+     * @author Group 4: King
+     * Adds the player to list of players in store, and returns shop they just entered
+     * @param name Name of the player to add to shop
+     * @return The id of the shop the player will enter, -1 otherwise
+     */
+    public int shop(String name) {
+    	Player player = this.playerList.findPlayer(name);
+    	Room room = map.findRoom(player.getCurrentRoom());
+    	
+    	// Add player to shop in room if applicable
+    	if (map.isShoppable(room)) {
+    		return room.getId();
+    	}
+    	return -1;
+    }
     
     /**
      * Returns a string representation of all objects you are carrying.
@@ -299,9 +321,52 @@ public class GameCore implements GameCoreInterface {
         return null;
     }
 
+    /**
+     * Returns Shop.tostring
+     * @param id The shop's id in the hashmap
+     * @return a reference to the shop
+     */
+    public String getShopStr(int id) {
+    	return this.shoplist.get(id).toString();
+    }
+    
+    /**
+     * Allows player to sell an item to a shop, and increases their money
+     * @author Team 4: King
+     * @param name Name of the player
+     * @param shopId The ID of the shop the player is selling an item to
+     * @param item The item the player is selling (eventually will be an Item obj)
+     */
+    public int sellItem(String name, int shopId, String item) {
+    	Player player = this.playerList.findPlayer(name);
+    	Shop s = shoplist.get(shopId);
+    	
+    	String removed = player.removeObjectFromInventory(item);
+    	if (removed != null) {
+    		s.add(removed);
+    	}
+    	
+    	//int value = removed.getValue();
+    	int value = 10;
+    	player.setMoney(player.getMoney() + value);
+    	return value;
+    }
+    
 	@Override
 	public String venmo(String name) {
 		// TODO Auto-generated method stub
 		return null;
-	}       
+	}      
+	
+	/**
+	 * Shows player how much money they have
+	 * @param name Name of the player
+	 * @return A string representation of the player's money
+	 */
+	public String wallet(String name) {
+		Player player = this.playerList.findPlayer(name);
+		float m = player.getMoney();
+		
+		return "$" + String.format("%.02f", m);
+	}
 }

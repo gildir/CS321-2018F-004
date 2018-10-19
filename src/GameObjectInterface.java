@@ -93,4 +93,46 @@ public interface GameObjectInterface extends Remote {
      * @throws RemoteException 
      */    
     public String venmo(String name) throws RemoteException;
+
+    /**
+     * @author Team 4: King
+     * Lets player shop if in a shoppable area
+     * @param name Name of the player
+     * @return Returns the id of the shop the player just entered or -1 if they can't shop
+     * @throws RemoteException
+     */
+    public int shop(String name) throws RemoteException;
+    
+    /**
+     * Returns a player object when given the player's name
+     * @param name The name of the player to find
+     * @return The player object or Null if not found
+     * @throws RemoteException
+     */
+    public Player getPlayer(String name) throws RemoteException;
+   
+    /**
+     * Returns the amount of money in a player's wallet
+     * @param name The name of the player
+     * @return The amount of money a player has formatted with 2 decimals
+     * @throws RemoteException
+     */
+    public String wallet(String name) throws RemoteException;
+    
+    /**
+     * Returns a reference to a shop 
+     * @param id
+     * @return the shop or null
+     * @throws RemoteException 
+     */
+    public String getShopStr(int id) throws RemoteException;
+    
+    /**
+     * Allows player to sell an item to a shop, and increases their money
+     * @author Team 4: King
+     * @param name Name of the player
+     * @param shopId The ID of the shop the player is selling an item to
+     * @param item The item the player is selling (eventually will be an Item obj)
+     */
+    public int sellItem(String name, int shopId, String item) throws RemoteException;
 }
