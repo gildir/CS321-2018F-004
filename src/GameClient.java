@@ -56,7 +56,9 @@ public class GameClient {
         System.out.println("  RIGHT         - Turns your player right 90 degrees.");
         System.out.println("  MOVE distance - Tries to walk forward <distance> times.");
         System.out.println("  PICKUP obect  - Tries to pick up an object in the same area.");
+        System.out.println("  SHOP          - Tries to enter a shop if you are near one.");
         System.out.println("  INVENTORY     - Shows you what objects you have collected.");
+        System.out.println("  WALLET        - Shows you how much money you have.");
         System.out.println("  QUIT          - Quits the game.");
         System.out.println();
         
@@ -194,7 +196,17 @@ public class GameClient {
                     System.out.println(remoteGameInterface.venmo(this.playerName));
                     break;   
                 case "SHOP":
-                	System.out.println(remoteGameInterface.shop(this.playerName));
+                	int shopId = remoteGameInterface.shop(this.playerName); // Need to make this a serializable type
+                	if (shopId != -1) {
+                		System.out.println("You enter the shop");
+                		new ShopClient(this.playerName, shopId, remoteGameInterface);
+                	}
+                	else {
+                		System.out.println("There is no shop here");
+                	}
+                	break;
+                case "WALLET":
+                	System.out.println(remoteGameInterface.wallet(this.playerName));
                 	break;
                 case "QUIT":
                     remoteGameInterface.leave(this.playerName);

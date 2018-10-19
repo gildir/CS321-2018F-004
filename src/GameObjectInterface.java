@@ -98,8 +98,32 @@ public interface GameObjectInterface extends Remote {
      * @author Team 4: King
      * Lets player shop if in a shoppable area
      * @param name Name of the player
-     * @return Message showing success
+     * @return Returns the id of the shop the player just entered or -1 if they can't shop
      * @throws RemoteException
      */
-    public String shop(String name) throws RemoteException;
+    public int shop(String name) throws RemoteException;
+    
+    /**
+     * Returns a player object when given the player's name
+     * @param name The name of the player to find
+     * @return The player object or Null if not found
+     * @throws RemoteException
+     */
+    public Player getPlayer(String name) throws RemoteException;
+   
+    /**
+     * Returns the amount of money in a player's wallet
+     * @param name The name of the player
+     * @return The amount of money a player has formatted with 2 decimals
+     * @throws RemoteException
+     */
+    public String wallet(String name) throws RemoteException;
+    
+    /**
+     * Returns a reference to a shop 
+     * @param id
+     * @return the shop or null
+     * @throws RemoteException 
+     */
+    public String getShopStr(int id) throws RemoteException;
 }

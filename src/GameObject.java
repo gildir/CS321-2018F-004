@@ -139,11 +139,22 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
      * @author Group 4: King
      * Lets player shop if in a shoppable location
      * @param name Name of the player trying to shop
-     * @return Message showing success
+     * @return Returns the shop the player just entered or Null if they couldnt enter one
      * @throws RemoteException
      */
-    public String shop(String name) throws RemoteException{
+    public int shop(String name) throws RemoteException{
     	return core.shop(name);
+    }
+   
+    
+    /**
+     * @author Group 4: King
+     * Returns the Player object from the name
+     * @param name The player's name
+     * @return A reference to the Player object
+     */
+    public Player getPlayer(String name) throws RemoteException{
+    	return core.findPlayer(name);
     }
     
      /**
@@ -165,4 +176,16 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
 		return core.venmo(name);
 		
 	}    
+	
+	/**
+	 * @author Team 4: King
+	 * Returns a string representation of how much money a player has
+	 */
+	public String wallet(String name) throws RemoteException {
+		return core.wallet(name);
+	}
+	
+	public String getShopStr(int id) throws RemoteException{
+		return core.getShopStr(id);
+	}
 }
