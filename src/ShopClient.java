@@ -20,7 +20,6 @@ public class ShopClient {
 	
 	private void run() throws RemoteException {
 		// Put text parser here and call 
-		
 		// TODO run infinite loop waiting for input that breaks when player exits
 		// or runs through switch statement triggering shop methods
 			
