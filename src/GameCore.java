@@ -58,7 +58,7 @@ public class GameCore implements GameCoreInterface {
             public void run() {
                 Random rand = new Random();
 				Room room = map.randomRoom();
-				this.ghoul = new Ghoul(room.getId());
+				ghoul = new Ghoul(room.getId());
 				room.hasGhoul = true;
 				GameCore.this.broadcast(room, "You see a Ghoul appear in this room");
 
@@ -117,10 +117,10 @@ public class GameCore implements GameCoreInterface {
 				return "There is no ghoul in this room.";
 			}
 
-			this.ghoul.modifyAngryLevel(1);
+			ghoul.modifyAngryLevel(1);
 
 			//Return a different string depending on ghoul's anger level
-			int angerLvl = this.ghoul.getAngryLevel();
+			int angerLvl = ghoul.getAngryLevel();
 			if(angerLvl == 1) return "Ghoul: Leave me alone.";
 			if(angerLvl == 2) return "Ghoul: Cut that out.";
 			if(angerLvl == 3) return "Ghoul: You better quit that.";
