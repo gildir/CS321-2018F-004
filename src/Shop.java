@@ -30,7 +30,9 @@ public class Shop
 	}
 	
 	//used to add methods to the linked list
-	public void add(Object k) {}
+	public void add(Object k) {
+		this.inventory.add(k);
+	}
 	
 	//prints the inventory of the shop class
 	public void printInv() {}
