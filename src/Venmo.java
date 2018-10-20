@@ -20,7 +20,7 @@ public class Venmo {
 		// fix transaction ID
 		
 		if (from.getName() == to.getName()) return "You can't Venmo yourself";
-//		if (amount <= 0) return "Please enter a number that is higher that 0";
+		if (amount <= 0) return "Please enter a number that is higher that 0";
 		if (from.getMoney() < amount) return "You don't have enough money to complete the transaction.";
 		
 		String TranID;
@@ -37,10 +37,6 @@ public class Venmo {
 	        buffer.append((char) randomLimitedInt);
 	    }
 	    TranID = buffer.toString();
-	    
-//		byte[] array = new byte[7];
-//	    new Random().nextBytes(array);
-//	    TranID = new String(array, Charset.forName("UTF-8"));
 	    
 	    float rounded = (float) (Math.round(amount * 100.0) /100.0);
 	    from.changeMoney(-rounded);
