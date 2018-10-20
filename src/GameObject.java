@@ -100,19 +100,6 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
     }
 
     /**
-     * Whispers "message" to a specific player.
-     * @param srcName Name of the player to speak
-     * @param dstName Name of the player to receive
-     * @param message Message to speak
-     * @return Message showing success
-     * @throws RemoteException
-     */
-    @Override
-    public String whisper(String srcName, String dstName, String message) throws RemoteException {
-        return core.whisper(srcName, dstName, message);
-    }
-    
-    /**
      * Generates list of all online players.
      * @return String of linked list PlayerList
      * @throws RemoteException

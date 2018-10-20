@@ -68,15 +68,6 @@ public interface GameCoreInterface {
     public String say(String name, String message);
 
     /**
-     * Whispers "message" to a specific player.
-     * @param srcName Name of the player to speak
-     * @param dstName Name of the player to receive
-     * @param message Message to speak
-     * @return Message showing success
-     */
-    public String whisper(String srcName, String dstName, String message);
-    
-    /**
      * Generates list of all online players.
      * @return String of linked list PlayerList
      */

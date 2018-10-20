@@ -54,16 +54,6 @@ public interface GameObjectInterface extends Remote {
     public String say(String name, String message) throws RemoteException;
 
     /**
-     * Whispers "message" to a specific player.
-     * @param srcName Name of the player to speak
-     * @param dstName Name of the player to receive
-     * @param message Message to speak
-     * @return Message showing success
-     * @throws RemoteException
-     */
-    public String whisper(String srcName, String dstName, String message) throws RemoteException;
-    
-    /**
      * Generates list of all online players.
      * @return String of linked list PlayerList
      * @throws RemoteException

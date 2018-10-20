@@ -52,7 +52,6 @@ public class GameClient {
         System.out.println("The game allows you to use the following commands:");
         System.out.println("  LOOK                   - Shows you the area around you");
         System.out.println("  SAY message            - Says 'message' to any other players in the same area.");
-        System.out.println("  WHISPER player message - Says 'message' only to 'player' in the area.");
         System.out.println("  ONLINE                 - Displays list of players in the area.");
         System.out.println("  LEFT                   - Turns your player left 90 degrees.");
         System.out.println("  RIGHT                  - Turns your player right 90 degrees.");
@@ -171,28 +170,6 @@ public class GameClient {
                             }
                         }                        
                         System.out.println(remoteGameInterface.say(this.playerName, message));
-                    }
-                    break;
-                case "W":
-                case "WHISPER":
-                    if (tokens.isEmpty()) {
-                        System.err.println("You need to provide a player to whisper.");
-                    }
-                    else if (tokens.size() < 2) {
-                        System.err.println("You need to provide a message to whisper.");
-                    }
-                    else {
-                        String dstPlayerName = tokens.remove(0).toLowerCase();
-                        StringBuilder msgBuilder = new StringBuilder();
-                        msgBuilder.append("\"");
-                        while (!tokens.isEmpty()) {
-                            msgBuilder.append(tokens.remove(0));
-                            if (!tokens.isEmpty())
-                                msgBuilder.append(" ");
-                        }
-                        msgBuilder.append("\"");
-                        message = msgBuilder.toString();
-                        System.out.println(remoteGameInterface.whisper(this.playerName, dstPlayerName, message));
                     }
                     break;
               case "ONLINE":
