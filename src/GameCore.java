@@ -340,15 +340,16 @@ public class GameCore implements GameCoreInterface {
     public int sellItem(String name, int shopId, String item) {
     	Player player = this.playerList.findPlayer(name);
     	Shop s = shoplist.get(shopId);
+    	int value = 0;
     	
     	String removed = player.removeObjectFromInventory(item);
     	if (removed != null) {
     		s.add(removed);
+    		value = 10;
+        	player.setMoney(player.getMoney() + value);
     	}
     	
     	//int value = removed.getValue();
-    	int value = 10;
-    	player.setMoney(player.getMoney() + value);
     	return value;
     }
     
@@ -368,5 +369,10 @@ public class GameCore implements GameCoreInterface {
 		float m = player.getMoney();
 		
 		return "$" + String.format("%.02f", m);
+	}
+	
+	public String getShopInv(int id) {
+		Shop s = this.shoplist.get(new Integer(id));
+		return s.getObjects();
 	}
 }

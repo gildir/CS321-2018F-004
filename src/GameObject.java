@@ -199,4 +199,9 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
     public int sellItem(String name, int shopId, String item) throws RemoteException{
     	return core.sellItem(name, shopId, item);
     }
+
+	@Override
+	public String getShopInv(int id) throws RemoteException {
+		return core.getShopInv(id);
+	}
 }
