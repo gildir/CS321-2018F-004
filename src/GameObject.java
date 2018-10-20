@@ -153,6 +153,7 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
      * @param name The player's name
      * @return A reference to the Player object
      */
+    // Warning: Doesn't work because player obj not serializable
     public Player getPlayer(String name) throws RemoteException{
     	return core.findPlayer(name);
     }
@@ -205,7 +206,7 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
      * @param id The shop ID
      * @return A formatted string representing the Shop's inventory
      */
-    public String getShopInv(int id) {
+    public String getShopInv(int id) throws RemoteException{
     	return core.getShopInv(id);
     }
 }

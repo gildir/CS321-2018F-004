@@ -12,14 +12,14 @@ import java.util.StringTokenizer;
  */
 public class ShopClient {
 	private String player;
-	private int id;
+	private Integer id;
 	private GameObjectInterface remote;
 	private boolean shopping;
 //	private Shop shop;
 	
 	public ShopClient(String p, int s, GameObjectInterface remote) throws RemoteException {
 		this.player = p;
-		this.id = s;
+		this.id = new Integer(s);
 		this.remote = remote;
 		this.shopping = true;
 		run();
@@ -31,9 +31,8 @@ public class ShopClient {
 	 * @throws RemoteException
 	 */
 	private void run() throws RemoteException {
-		// Put text parser here and call 
-		// TODO run infinite loop waiting for input that breaks when player exits
-		// or runs through switch statement triggering shop methods
+		// Display instructions
+		printMenu();
 			
 		// Copy and pasted from GameClient
 		// Set up for keyboard input for local commands.
@@ -114,9 +113,12 @@ public class ShopClient {
             case "LEAVE":
             	this.shopping = false;
             	System.out.println("You exit the store.");
-            	break;
+            	return;	// Don't print instructions after you leave the store
         }
+        printMenu();
 	}
+	
+	public void printMenu() {}
 	
 	//In terms of the player buying items
 	public void buy(Object k) {}
@@ -126,7 +128,7 @@ public class ShopClient {
 		remote.sellItem(this.player, this.id, item);
 	}
 	
-	public String getInv() {
+	public String getInv() throws RemoteException{
 		return remote.getShopInv(this.id);
 	}
 }

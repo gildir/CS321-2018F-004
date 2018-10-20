@@ -141,5 +141,5 @@ public interface GameObjectInterface extends Remote {
      * @param id The shop ID
      * @return A formatted string representing the Shop's inventory
      */
-    public String getShopInv(int id);
+    public String getShopInv(int id) throws RemoteException;
 }
