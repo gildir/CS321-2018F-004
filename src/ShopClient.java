@@ -3,7 +3,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
-import java.util.Scanner;
 import java.util.StringTokenizer;
 /**
  * Lets player interact with the shop. Many to 1 relationship with Shop class
@@ -125,7 +124,13 @@ public class ShopClient {
 	
 	//In terms of the player selling items
 	public void sell(String item) throws RemoteException{
-		remote.sellItem(this.player, this.id, item);
+		int val = remote.sellItem(this.player, this.id, item);
+		if (val != 0) {
+			System.out.println("You have sold " + item + " for $" + val + ".00.");
+		}
+		else {
+			System.out.println("You must have a " + item + " in your inventory to sell one.");
+		}
 	}
 	
 	public String getInv() throws RemoteException{
