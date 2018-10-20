@@ -193,7 +193,14 @@ public class GameClient {
                     System.out.println(remoteGameInterface.inventory(this.playerName));
                     break; 
                 case "VENMO":
-                    System.out.println(remoteGameInterface.venmo(this.playerName));
+                	if (tokens.size() < 2) {
+                		System.err.println("You need to provide more arguments.\n"
+                				+ "1- To send money, type: venmo send [recepient] [amount]\n"
+                				+ "2- To accept a money transfer, type: venmo accept [transaction ID]\n"
+                				+ "3- To reject a money transfer, type: venmo reject [transaction ID]");
+                	} 
+                	else System.out.println(remoteGameInterface.venmo(this.playerName, tokens));
+                	
                     break;   
                 case "SHOP":
                 	int shopId = remoteGameInterface.shop(this.playerName); // Need to make this a serializable type

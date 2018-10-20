@@ -1,4 +1,5 @@
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 
 /**
  *
@@ -87,7 +88,7 @@ public interface GameCoreInterface {
      * @param name Name of the player enter the bank
      * @throws RemoteException 
      */    
-    public String venmo(String name);
+    public String venmo(String name, ArrayList<String> tokens);
     
     /**
      * Returns a reference to a shop 

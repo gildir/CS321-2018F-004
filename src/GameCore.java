@@ -4,6 +4,7 @@
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -14,6 +15,7 @@ public class GameCore implements GameCoreInterface {
     private final PlayerList playerList;
     private final Map map;
     private HashMap<Integer,Shop> shoplist;
+    private Venmo venmo;
     
     /**
      * Creates a new GameCoreObject.  Namely, creates the map for the rooms in the game,
@@ -25,11 +27,14 @@ public class GameCore implements GameCoreInterface {
         
         // Generate the game map.
         map = new Map();
-        playerList = new PlayerList();
+        playerList = new PlayerList(); 
         
         // Builds a list of shops mapped to their map id (can be expanded as needed)
         shoplist = new HashMap<Integer,Shop>();
         shoplist.put(new Integer(1), new Shop("Clocktower shop", "The shopping destination for all of your gaming needs."));
+        
+        // Initializes the Venmo core
+        venmo = new Venmo();
         
         Thread objectThread = new Thread(new Runnable() {
             @Override
@@ -353,9 +358,34 @@ public class GameCore implements GameCoreInterface {
     }
     
 	@Override
-	public String venmo(String name) {
-		// TODO Auto-generated method stub
-		return null;
+	public String venmo(String name, ArrayList<String> tokens) {
+		Player player1 = this.playerList.findPlayer(name);
+		
+		if (tokens.isEmpty()) {
+			return "You need to provide more arguments.\n" + Venmo.instructions();
+		}
+		switch(tokens.remove(0).toUpperCase()) {
+			case "SEND":
+				if (tokens.isEmpty()) return "Specify recipient and amount.";
+				Player player2 = this.playerList.findPlayer(tokens.remove(0));
+				if (player2 == null) return "Incorrect player name.";
+				if (tokens.isEmpty()) return "Specify venmo amount";
+				float amount;
+				try {
+					amount = Float.parseFloat(tokens.remove(0));
+				} catch (NumberFormatException e) {
+					return "Please enter a valid number.";
+				}
+				return venmo.send(player1, player2, amount);
+			case "ACCEPT":
+				if (tokens.isEmpty()) return "Missing transaction ID";
+				return venmo.accept(player1, tokens.remove(0));
+			case "REJECT":
+				if (tokens.isEmpty()) return "Missing transaction ID";
+				return venmo.reject(player1, tokens.remove(0));
+			default:
+				return "Unknown argument.\n" + Venmo.instructions();
+		}		
 	}      
 	
 	/**

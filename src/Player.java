@@ -127,6 +127,10 @@ public class Player {
         this.money = m;
     }
     
+    public void changeMoney(float m){
+        this.money += m;
+    }
+    
     public String viewInventory() {
         String result = "";
         if(this.currentInventory.isEmpty() == true) {

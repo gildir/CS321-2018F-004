@@ -4,6 +4,7 @@
 import java.io.PrintWriter;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.ArrayList;
 
 /**
  *
@@ -171,9 +172,9 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
     }
 
 	@Override
-	public String venmo(String name) throws RemoteException {
+	public String venmo(String name, ArrayList<String> tokens) throws RemoteException {
 		// TODO Auto-generated method stub
-		return core.venmo(name);
+		return core.venmo(name, tokens);
 		
 	}    
 	

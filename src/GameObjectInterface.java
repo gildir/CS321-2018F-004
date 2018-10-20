@@ -2,6 +2,7 @@
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 
 /**
  *
@@ -90,9 +91,10 @@ public interface GameObjectInterface extends Remote {
     /**
      * Takes the player into venmo. The new and improved way to exchange money with other players.
      * @param name Name of the player enter the bank
+     * @param tokens 
      * @throws RemoteException 
      */    
-    public String venmo(String name) throws RemoteException;
+    public String venmo(String name, ArrayList<String> tokens) throws RemoteException;
 
     /**
      * @author Team 4: King
