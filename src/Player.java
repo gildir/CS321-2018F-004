@@ -27,6 +27,22 @@ public class Player {
     // missed Messages - not yet in uses
     private HashSet<Message> missedMessages = new HashSet<Message>();
 
+    //Collection of words to be filtered from game chat
+    private HashSet<String> filteredWords = new HashSet<String>();
+
+    public boolean addFilteredWord(String wordToAdd) {
+        return filteredWords.add(wordToAdd);
+    }
+
+    public boolean removeFilteredWord(String wordToRemove) {
+        return filteredWords.remove(wordToRemove);
+    }
+
+    public boolean isFiltering(String word) {
+        return filteredWords.contains(word);
+    }
+
+
 
     /**
      * Adds a player's reference to set ignoredPlayers.

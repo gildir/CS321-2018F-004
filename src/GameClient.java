@@ -57,6 +57,8 @@ public class GameClient {
         System.out.println("  IGNORE player            - Ignore messages from from 'player'");
         System.out.println("  UNIGNORE player          - Remove 'player' from ignore list");
         System.out.println("  IGNORELIST               - Displays a list of players you are ignoring");
+        System.out.println("  FILTER word              - Filters a given word from chat");
+        System.out.println("  UNFILTER word            - Removes a given word from the chat filter");
         System.out.println("  REPLY message            - Reply 'message' to last whisper");
         System.out.println("  LEFT                     - Turns your player left 90 degrees.");
         System.out.println("  RIGHT                    - Turns your player right 90 degrees.");
@@ -232,6 +234,26 @@ public class GameClient {
                         System.out.println(remoteGameInterface.unIgnorePlayer(this.playerName, tokens.remove(0)));
                     }
                     break;
+                //Feature 409. Filter Word.
+                case "F":
+                case "FILTER":
+                    if(tokens.isEmpty()) {
+                        System.err.println("You need to provide a word to filter.");
+                    } else {
+                        remoteGameInterface.filterWord(tokens.remove(0), this.playerName);
+                    }
+                    break;
+
+                case "U":
+                case "UNFILTER":
+                    if(tokens.isEmpty()) {
+                        System.err.println("You need to provide a word to filter.");
+                    } else {
+                        remoteGameInterface.unFilterWord(tokens.remove(0), this.playerName);
+                    }
+                    break;
+                // END Feature 409.
+
                 case "ONLINE":
                     System.out.println(remoteGameInterface.showPlayers());
                     break;

@@ -161,6 +161,18 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
         return core.unIgnorePlayer(srcName, dstName);
     }
 
+    //Feature 409. Word Filter.
+
+    public boolean filterWord(String wordToFilterFromChat, String playerName) {
+        Player player = core.findPlayer(playerName);
+        return player.addFilteredWord(wordToFilterFromChat);
+    }
+
+    public boolean unFilterWord(String wordToStopFiltering, String playerName) {
+        Player player = core.findPlayer(playerName);
+        return player.removeFilteredWord(wordToStopFiltering);
+    }
+
     /**
      * Player displays the list of players that are being ignored
      * @param name Player who's list is being targeted

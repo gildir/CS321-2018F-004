@@ -108,6 +108,22 @@ public interface GameObjectInterface extends Remote {
      */
     public String quickReply(String srcName, String message) throws RemoteException;
 
+    // Feature 409 Word Filter
+    /**
+     * Adds a word to the chat filter.
+     * @param wordToFilterFromChat - word to be filtered from future chat
+     * @return - whether the given word was successfully added to the list
+     */
+    public boolean filterWord(String wordToFilterFromChat, String playerName);
+
+    /**
+     * Removes a word from the chat filter.
+     * @param wordToStopFiltering - word to remove from the chat filter.
+     * @return - whether the given word was successfully removed from the list.
+     */
+    public boolean unFilterWord(String wordToStopFiltering, String playerName);
+    // End Feature 409 Word Filter
+
     /**
      * Attempts to walk forward < distance > times.  If unable to make it all the way,
      *  a message will be returned.  Will display LOOK on any partial success.
