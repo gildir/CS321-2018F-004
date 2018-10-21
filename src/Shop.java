@@ -139,7 +139,7 @@ public class Shop
 	 * Iterates through the list of the objects and creates a table populated with object names and prices.
 	 * @return table of the objects
 	 */
-	private String getObjects() {
+	public String getObjects() {
 		
 		if (inventory.size() == 0) {
 			return "We usually have a huge catalog.\n"
