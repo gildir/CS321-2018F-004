@@ -240,7 +240,9 @@ public class GameClient {
                     if(tokens.isEmpty()) {
                         System.err.println("You need to provide a word to filter.");
                     } else {
-                        remoteGameInterface.filterWord(tokens.remove(0), this.playerName);
+                        String wordToFilter = tokens.remove(0);
+                        System.err.print("\nPlayer " + this.playerName + " filtering " + wordToFilter + ".\n");
+                        remoteGameInterface.filterWord(wordToFilter, this.playerName);
                     }
                     break;
 

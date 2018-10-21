@@ -108,20 +108,23 @@ public interface GameObjectInterface extends Remote {
      */
     public String quickReply(String srcName, String message) throws RemoteException;
 
+
     // Feature 409 Word Filter
+
     /**
      * Adds a word to the chat filter.
      * @param wordToFilterFromChat - word to be filtered from future chat
      * @return - whether the given word was successfully added to the list
      */
-    public boolean filterWord(String wordToFilterFromChat, String playerName);
+    public boolean filterWord(String wordToFilterFromChat, String playerName) throws RemoteException;
 
     /**
      * Removes a word from the chat filter.
      * @param wordToStopFiltering - word to remove from the chat filter.
      * @return - whether the given word was successfully removed from the list.
      */
-    public boolean unFilterWord(String wordToStopFiltering, String playerName);
+    public boolean unFilterWord(String wordToStopFiltering, String playerName) throws RemoteException;
+
     // End Feature 409 Word Filter
 
     /**

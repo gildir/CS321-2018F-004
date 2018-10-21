@@ -62,7 +62,10 @@ public class GameCore implements GameCoreInterface {
     public void broadcast(Player player, String message) {
         for(Player otherPlayer : this.playerList) {
             if(otherPlayer != player && !otherPlayer.isIgnoring(player) && otherPlayer.getCurrentRoom() == player.getCurrentRoom()) {
-                otherPlayer.getReplyWriter().println(message);
+                String newMessage = filterMessage(otherPlayer, message);
+
+                //otherPlayer.getReplyWriter().println(message);
+                otherPlayer.getReplyWriter().println(newMessage);
             }
         }
     }
@@ -77,11 +80,11 @@ public class GameCore implements GameCoreInterface {
         for(Player player : this.playerList) {
 
             //altered for 409 Word Filter
-            String newMessage = filterMessage(player, message);
+            //String newMessage = filterMessage(player, message);
 
             if(player.getCurrentRoom() == room.getId()) {
-                //player.getReplyWriter().println(message);
-                player.getReplyWriter().println(newMessage);
+                player.getReplyWriter().println(message);
+                //player.getReplyWriter().println(newMessage);
             }
         }
     }
@@ -209,7 +212,9 @@ public class GameCore implements GameCoreInterface {
         Player player = this.playerList.findPlayer(name);
         if(player != null) {
             this.broadcast(player, player.getName() + " says, \"" + message + "\"");
-            return "You say, \"" + message + "\"";
+            String newMessage = filterMessage(player, message);
+            //return "You say, \"" + message + "\"";
+            return "You say, \"" + newMessage + "\"";
         }
         else {
             return null;

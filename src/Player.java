@@ -27,19 +27,47 @@ public class Player {
     // missed Messages - not yet in uses
     private HashSet<Message> missedMessages = new HashSet<Message>();
 
+
     //Collection of words to be filtered from game chat
     private HashSet<String> filteredWords = new HashSet<String>();
 
     public boolean addFilteredWord(String wordToAdd) {
-        return filteredWords.add(wordToAdd);
+        boolean ret = filteredWords.add(wordToAdd);
+        listFilteredWords();
+        return ret;
     }
 
     public boolean removeFilteredWord(String wordToRemove) {
-        return filteredWords.remove(wordToRemove);
+        boolean ret = filteredWords.remove(wordToRemove);
+        listFilteredWords();
+        return ret;
     }
 
     public boolean isFiltering(String word) {
         return filteredWords.contains(word);
+    }
+
+    private void listFilteredWords() {
+        String filteredWordsList = "\nCurrent filtered words: ";
+
+        if (filteredWords.size() == 0) {
+            filteredWordsList += "None.";
+        } else {
+            int i = 0;
+
+            for (String word : filteredWords) {
+                filteredWordsList += word;
+                i++;
+
+                if (i == filteredWords.size()) {
+                    filteredWordsList += ".\n";
+                } else {
+                    filteredWordsList += ", ";
+                }
+            }
+        }
+
+        System.err.print(filteredWordsList);
     }
 
 
