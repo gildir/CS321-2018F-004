@@ -160,6 +160,7 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
      * @param challengee is the name of the player rejecting 
      * @return Messaging showing success
      * @throws RemoteException
+     */
     public String reject(String challenger, String challengee) throws RemoteException{
 	    return core.reject(challenger, challengee);
     }

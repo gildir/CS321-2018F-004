@@ -214,7 +214,7 @@ public class GameClient {
 			    System.err.println("You need to provide a name.");
 		    }
 		    else{
-			    System.out.println(remoteGameInterface.accept(this.playerName, tokens.remove(0)));
+			    System.out.println(remoteGameInterface.reject(this.playerName, tokens.remove(0)));
 		    }
 		    break;
                 case "QUIT":

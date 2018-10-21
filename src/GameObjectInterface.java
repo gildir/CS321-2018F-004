@@ -104,6 +104,7 @@ public interface GameObjectInterface extends Remote {
      * @param challengee is the name of the player accepting
      * @return MEssage showing success
      * @throws Remote Exception
+     */
     public String reject(String challenger, String challengee) throws RemoteException;
      /**
      * Leaves the game.
