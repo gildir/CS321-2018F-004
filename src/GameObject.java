@@ -146,6 +146,17 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
     public String inventory(String name) throws RemoteException {
         return core.inventory(name);
     }    
+ 
+    /**
+     * Sorts the given player's inventory
+     * @param name Name of the player
+     * @return Message showing success.
+     * @throws RemoteException 
+     */    
+    @Override
+    public String sort(String name, String modes) throws RemoteException {
+        return core.sort(name, modes);
+    }    
     
      /**
      * Leaves the game.

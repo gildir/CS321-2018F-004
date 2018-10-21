@@ -2,6 +2,7 @@
 import java.io.DataOutputStream;
 import java.io.PrintWriter;
 import java.util.LinkedList;
+import java.util.*;
 
 /**
  *
@@ -89,6 +90,34 @@ public class Player {
         return null;
     }
 
+    public void sortCurrentInventory(String modes) {
+	switch(modes) {
+		case "ni":
+			Collections.sort(currentInventory, new ItemNameComparator());	
+			break;
+		case "nd":
+			Collections.sort(currentInventory, new ItemNameComparator());
+			Collections.reverse(currentInventory);
+			break;
+		case "wi":
+			Collections.sort(currentInventory, new ItemWeightComparator());
+			break;
+		case "wd":
+			Collections.sort(currentInventory, new ItemWeightComparator());
+			Collections.reverse(currentInventory);
+			break;
+		case "pi":
+			Collections.sort(currentInventory, new ItemPriceComparator());
+			break;
+		case "pd":
+			Collections.sort(currentInventory, new ItemWeightComparator());
+			Collections.reverse(currentInventory);
+			break;	
+		default:
+			System.out.println("Please enter in valid input or use the correct format (n/w/p) -> (i/d)");
+	}
+    }
+
     public void setReplyWriter(PrintWriter writer) {
         this.replyWriter = writer;
     }
@@ -139,5 +168,42 @@ public class Player {
     @Override
     public String toString() {
         return "Player " + this.name + ": " + currentDirection.toString();
+    }
+
+    private static class ItemNameComparator implements Comparator<Item> {
+	@Override
+	public int compare(Item ItemA, Item ItemB) {
+		return ItemA.getName().compareTo(ItemB.getName());
+	}
+    }
+
+    private static class ItemWeightComparator implements Comparator<Item> {
+	@Override
+	public int compare(Item ItemA, Item ItemB) {
+		if(ItemA.getWeight() > ItemB.getWeight()) {
+			return 1;
+		}
+		else if(ItemA.getWeight() < ItemB.getWeight()) {
+			return -1;
+		}
+		else {
+			return 0;
+		}
+	}
+    }
+
+    private static class ItemPriceComparator implements Comparator<Item> {
+	@Override
+	public int compare(Item ItemA, Item ItemB) {
+		if(ItemA.getPrice() > ItemB.getPrice()) {
+			return 1;
+		}
+		else if(ItemA.getPrice() < ItemB.getPrice()) {
+			return -1;
+		}
+		else {
+			return 0;
+		}
+	}
     }
 }
