@@ -345,6 +345,22 @@ public class GameCore implements GameCoreInterface {
         }
     }    
 
+    /**
+     * Returns a string representation of all objects you are carrying.
+     * @param name Name of the player to move
+     * @return Message showing success.
+     */    
+    public String sort(String name, String modes) {
+        Player player = this.playerList.findPlayer(name);
+        if(player != null) {
+	    player.sortCurrentInventory(modes);
+            return "You sort the items in your inventory";
+        }
+        else {
+            return null;
+        }
+    } 
+
      /**
      * Leaves the game.
      * @param name Name of the player to leave

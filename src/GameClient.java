@@ -58,6 +58,7 @@ public class GameClient {
         System.out.println("  PICKUP object - Tries to pick up an object in the same area.");
 	System.out.println("  DROP object   - Tries to drop an object from your pockets in the same area");
         System.out.println("  INVENTORY     - Shows you what objects you have collected.");
+	System.out.println("  SORT          - Sorts your inventory");
         System.out.println("  QUIT          - Quits the game.");
         System.out.println();
         
@@ -198,7 +199,54 @@ public class GameClient {
                     break;
                 case "INVENTORY":
                     System.out.println(remoteGameInterface.inventory(this.playerName));
-                    break;                                                            
+                    break;
+		case "SORT":
+	            InputStreamReader keyReader = new InputStreamReader(System.in);
+        	    BufferedReader keyInput = new BufferedReader(keyReader);
+		    boolean validInput = true;
+		    String mode = "";
+		    try {
+		    	while(validInput) {
+				System.out.println("Sort by name, weight, or price? (n/w/p)");
+	                	String option1 = keyInput.readLine();
+        	        	System.out.println("Increasing or decreasing order? (i/d)");
+                		String option2 = keyInput.readLine();
+
+                		option1.toLowerCase();
+                		option2.toLowerCase();
+
+        	        	mode = option1 + option2;
+	
+                		switch(mode) {
+                        		case "ni":
+                                		validInput = false;
+                                		break;
+                        		case "nd":
+                                		validInput = false;
+                                		break;
+                        		case "wi":
+                                		validInput = false;
+                                		break;
+                        		case "wd":
+                                		validInput = false;
+                                		break;
+                        		case "pi":
+                                		validInput = false;
+                                		break;
+                        		case "pd":
+                                		validInput = false;
+                                		break;
+                        		default:
+                	                	System.out.println("Please enter in valid input or use the correct format (n/w/p) -> (i/d)");	
+			    		}
+			    	}
+	    	    }
+		    catch(IOException e) {
+ 	                   System.err.println("[CRITICAL ERROR] Error at reading any input properly.  Terminating the client now.");
+       	 	           System.exit(-1);		
+		    }	    
+		    System.out.println(remoteGameInterface.sort(this.playerName, mode));
+		    break;		    
                 case "QUIT":
                     remoteGameInterface.leave(this.playerName);
                     runListener = false;

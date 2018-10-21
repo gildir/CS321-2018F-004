@@ -80,6 +80,14 @@ public interface GameObjectInterface extends Remote {
      * @throws RemoteException 
      */ 
     public String drop(String name, String object) throws RemoteException;
+   
+    /**
+     * Attempts to sort the player's inventory. Will return a message on any success or failure.
+     * @param name Name of the player
+     * @return Message showing success.
+     * @throws RemoteException 
+     */ 
+    public String sort(String name, String modes) throws RemoteException; 
     
      /**
      * Returns a string representation of all objects you are carrying.
