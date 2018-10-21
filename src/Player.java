@@ -15,6 +15,7 @@ public class Player {
     private PrintWriter replyWriter = null;
     private DataOutputStream outputWriter = null;
     private boolean hasChallenge = false;
+    private boolean inBattle = false;
     private String challenger = " ";
 
     public Player(String name) {
@@ -72,7 +73,14 @@ public class Player {
     public void setHasChallenge(boolean challenged){
         hasChallenge = challenged;
     }
-    
+
+    public void setInBattle(boolean battle){
+	inBattle = battle;
+    }
+
+    public boolean getInBattle(){
+	return inBattle;
+    } 
     public String getName() {
         return name;
     }
