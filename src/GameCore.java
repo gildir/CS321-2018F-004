@@ -345,20 +345,23 @@ public class GameCore implements GameCoreInterface {
 	if(playerChallengee == null || playerChallenger == null){
 		return "This player does not exist in the game.";
         }
-	if(playerChallengee.getChallenger() != " " && playerChallengee.getHasChallenge() == true){
-            playerChallengee.setChallenger(" ");
-            playerChallengee.setHasChallenge(false);
+	if(playerChallengee.getChallenger().equals(playerChallenger.getName()) && playerChallengee.getHasChallenge() == true){
             if(playerChallenger != playerChallengee && playerChallenger.getCurrentRoom() == playerChallengee.getCurrentRoom()) {
+                playerChallengee.setChallenger(" ");
+                playerChallengee.setHasChallenge(false);
                 playerChallengee.getReplyWriter().println(playerChallengee.getName() + " rejects your challenge to a R-P-S");
                 return "You reject " + playerChallenger.getName() + "\'s challenge to a R-P-S.";
             }
-            else if(playerChallenger == playerChallengee)
-                return "You can't challenge yourself to R-P-S.";
             else {
                 return "This person is not in the same room as you or doesn't exist in the game.";
             }
         }
-        return "You have not been challenged by " + playerChallenger.getName();
+	else if(playerChallenger == playerChallengee){
+		return "You can't challenge yourself to R-P-S.";
+        }
+	else{
+                return "You have not been challenged by " + playerChallenger.getName();
+        }
 
 
 
