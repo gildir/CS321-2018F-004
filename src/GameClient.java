@@ -57,6 +57,7 @@ public class GameClient {
         System.out.println("  MOVE distance - Tries to walk forward <distance> times.");
         System.out.println("  PICKUP obect  - Tries to pick up an object in the same area.");
         System.out.println("  INVENTORY     - Shows you what objects you have collected.");
+ 		System.out.println("  FRIENDS       - Displays friend subcommand list.");
         System.out.println("  QUIT          - Quits the game.");
 		System.out.println("  DELETE        - Deletes your character permanently.");
         System.out.println();
