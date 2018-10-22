@@ -36,7 +36,6 @@ public class Room {
         result += "Players in the area: " + this.getPlayers(playerList) + "\n";
         result += "You see paths in these directions: " + this.getExits() + "\n";
         result += "...................\n";
-        result += "You are facing: " + player.getCurrentDirection() + "\n";
         return result;
     }
     

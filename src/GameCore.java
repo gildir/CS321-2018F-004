@@ -146,52 +146,6 @@ public class GameCore implements GameCoreInterface {
             return null;
         }
     }        
-   
-    /**
-     * Turns the player left.
-     * @param name Player Name
-     * @return String message of the player turning left.
-     */
-    @Override
-    public String left(String name) {
-        Player player = this.playerList.findPlayer(name);
-        if(player != null) {
-            // Compel the player to turn left 90 degrees.
-            player.turnLeft();
-            
-            // Send a message to every other player in the room that the player has turned left.
-            this.broadcast(player, player.getName() + " turns to the left.");
-            
-            // Return a string back to the calling function with an update.
-            return "You turn to the left to face " + player.getCurrentDirection();
-        }
-        else {
-            return null;
-        }
-    }
-    
-    /**
-     * Turns the player right.
-     * @param name Player Name
-     * @return String message of the player turning right.
-     */
-    @Override
-    public String right(String name) {
-        Player player = this.playerList.findPlayer(name);
-        if(player != null) {
-            // Compel the player to turn left 90 degrees.
-            player.turnRight();
-            
-            // Send a message to every other player in the room that the player has turned right.
-            this.broadcast(player, player.getName() + " turns to the right.");
-            
-            // Return a string back to the calling function with an update.
-            return "You turn to the right to face " + player.getCurrentDirection();
-        }
-        else {
-            return null;
-        }
-    }    
     
     /**
      * Says "message" to everyone in the current area.
@@ -212,31 +166,27 @@ public class GameCore implements GameCoreInterface {
     }  
     
     /**
-     * Attempts to walk forward < distance > times.  If unable to make it all the way,
+     * Attempts to walk towards <direction> 1 time.  If unable to make it all the way,
      *  a message will be returned.  Will display LOOK on any partial success.
      * @param name Name of the player to move
      * @param distance Number of rooms to move forward through.
      * @return Message showing success.
      */
-    public String move(String name, int distance) {
+    public String move(String name, Direction direction) {
         Player player = this.playerList.findPlayer(name);
-        if(player == null || distance <= 0) {
+        if(player == null) {
             return null;
         }
-        Room room;
-        while(distance-- != 0) {
-            room = map.findRoom(player.getCurrentRoom());
-            if(room.canExit(player.getDirection())) {
-                this.broadcast(player, player.getName() + " has walked off to the " + player.getCurrentDirection());
-                player.getReplyWriter().println(room.exitMessage(player.getDirection()));
-                player.setCurrentRoom(room.getLink(player.getDirection()));
-                this.broadcast(player, player.getName() + " just walked into the area.");
-                player.getReplyWriter().println(this.map.findRoom(player.getCurrentRoom()).toString(playerList, player));
-            }
-            else {
-                player.getReplyWriter().println(room.exitMessage(player.getDirection()));
-                return "You grumble a little and stop moving.";
-            }
+        Room room = map.findRoom(player.getCurrentRoom());
+        if(room.canExit(direction)) {
+            this.broadcast(player, player.getName() + " has walked off to the " + direction);
+            player.getReplyWriter().println(room.exitMessage(direction));
+            player.setCurrentRoom(room.getLink(direction));
+            this.broadcast(player, player.getName() + " just walked into the area.");
+            player.getReplyWriter().println(this.map.findRoom(player.getCurrentRoom()).toString(playerList, player));
+        } else {
+            player.getReplyWriter().println(room.exitMessage(direction));
+            return "You grumble a little and stop moving.";
         }
         return "You stop moving and begin to stand around again.";
     }
