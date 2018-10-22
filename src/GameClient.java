@@ -268,6 +268,7 @@ public class GameClient {
 
                 description = xmlElement.getElementsByTagName("description").item(0).getTextContent();
 
+                //If the commmand does not have description yet, do not show it.
                 if ( !description.equals("") ){
                     System.out.println(description);
                 }
