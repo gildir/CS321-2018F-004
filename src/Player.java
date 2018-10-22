@@ -127,6 +127,12 @@ public class Player {
         this.money = m;
     }
     
+    /**
+     * Allows the caller to add/take money in user's wallet.
+     * 
+     * @author Team 4: Alaqeel
+     * @param m Amount to be added/taken.
+     */
     public void changeMoney(float m){
         this.money += m;
     }

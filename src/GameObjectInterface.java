@@ -90,6 +90,8 @@ public interface GameObjectInterface extends Remote {
     
     /**
      * Takes the player into venmo. The new and improved way to exchange money with other players.
+     * 
+     * @author Team 4: Alaqeel
      * @param name Name of the player enter the bank
      * @param tokens 
      * @throws RemoteException 

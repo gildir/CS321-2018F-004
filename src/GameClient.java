@@ -59,6 +59,7 @@ public class GameClient {
         System.out.println("  SHOP          - Tries to enter a shop if you are near one.");
         System.out.println("  INVENTORY     - Shows you what objects you have collected.");
         System.out.println("  WALLET        - Shows you how much money you have.");
+        System.out.println("  VENMO         - Allows you to send money to people. Try: VENMO HELP"); // Team 4: Alaqeel
         System.out.println("  QUIT          - Quits the game.");
         System.out.println();
         
@@ -192,15 +193,8 @@ public class GameClient {
                 case "INVENTORY":
                     System.out.println(remoteGameInterface.inventory(this.playerName));
                     break; 
-                case "VENMO":
-                	if (tokens.size() < 2) {
-                		System.err.println("You need to provide more arguments.\n"
-                				+ "1- To send money, type: venmo send [recepient] [amount]\n"
-                				+ "2- To accept a money transfer, type: venmo accept [transaction ID]\n"
-                				+ "3- To reject a money transfer, type: venmo reject [transaction ID]");
-                	} 
-                	else System.out.println(remoteGameInterface.venmo(this.playerName, tokens));
-                	
+                case "VENMO": // Team 4: Alaqeel
+                	System.out.println(remoteGameInterface.venmo(this.playerName, tokens));
                     break;   
                 case "SHOP":
                 	int shopId = remoteGameInterface.shop(this.playerName); // Need to make this a serializable type

@@ -170,10 +170,18 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
             player.getReplyWriter().close();
         }
     }
-
+    
+    
+    /**
+     * Takes the player into venmo. The new and improved way to exchange money with other players.
+     * 
+     * @author Team 4: Alaqeel
+     * @param name Name of the player enter the bank
+     * @param tokens 
+     * @throws RemoteException 
+     */    
 	@Override
 	public String venmo(String name, ArrayList<String> tokens) throws RemoteException {
-		// TODO Auto-generated method stub
 		return core.venmo(name, tokens);
 		
 	}    
