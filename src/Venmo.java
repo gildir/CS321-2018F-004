@@ -34,6 +34,9 @@ public class Venmo {
 		// Displays a message to the user
 		to.getReplyWriter().println(String.format("Hooray! %s sent you $%.2f.\n", from.getName(), rounded));
 		
+		// logging the transaction
+		System.out.printf("[Venmo] %s send %s $%.2f\n", from.getName(), to.getName(), rounded);
+		
 		// Generates and returns a transaction summary
 		return String.format("You just Venmoed %s $%.2f.", to.getName(), rounded);
 	}

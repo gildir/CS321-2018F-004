@@ -395,6 +395,7 @@ public class GameCore implements GameCoreInterface {
 			case "DEMO": // helpful for demo purposes
 				if (!tokens.isEmpty() && tokens.remove(0).equalsIgnoreCase("********")) {
 					player1.changeMoney(10);
+					System.out.printf("[Venmo] %s excuted the demo command\n", player1.getName());
 					return "Shush! Don't tell anyone that I added $10.00 to your wallet.";
 				}
 			default:
