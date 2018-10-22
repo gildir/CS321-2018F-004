@@ -32,6 +32,8 @@ public class ShopClient {
 	private void run() throws RemoteException {
 		// Display instructions
 		printMenu();
+
+
 			
 		// Copy and pasted from GameClient
 		// Set up for keyboard input for local commands.
@@ -117,7 +119,13 @@ public class ShopClient {
         printMenu();
 	}
 	
-	public void printMenu() {}
+	public void printMenu() {
+		System.out.println("\nTo buy an item, enter \"buy [item name]\"");
+		System.out.println("To sell an item, enter \"sell [item name]\"");
+		System.out.println("To see our inventory, enter \"inv\"");
+		System.out.println("To see what item is currently in demand, enter \"dem\"");
+		System.out.println("To exit the shop, enter \"leave\"\n");
+	}
 	
 	//In terms of the player buying items
 	public void buy(Object k) {}
