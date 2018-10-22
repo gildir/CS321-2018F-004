@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.Random;
 import java.util.logging.Handler;
 import java.util.logging.Level;
@@ -51,7 +50,7 @@ public class GameCore implements GameCoreInterface {
         
         accountManager = new PlayerAccountManager(playerAccountsLocation);
         
-        friendsManager = loadFriendsManager();
+		friendsManager = FriendsManager.Create(new File("friends.json"));
         		
         Thread objectThread = new Thread(new Runnable() {
             @Override
@@ -453,10 +452,6 @@ public class GameCore implements GameCoreInterface {
 			return this.friendsManager.removeFriend(name, ex);
 		}
 	}
-
-	private FriendsManager loadFriendsManager() {
-		return new FriendsManager();
-	}
 	
 	/**
 	 * Returns a message showing all online friends
@@ -484,4 +479,5 @@ public class GameCore implements GameCoreInterface {
 		}
 		return message;
 	}
+
 }
