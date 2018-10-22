@@ -32,10 +32,10 @@ public class Venmo {
 		to.changeMoney(rounded);
 		
 		// Displays a message to the user
-		to.getReplyWriter().println(String.format("Horay!\n%s sent you $%.2f.\n", from.getName(), rounded));
+		to.getReplyWriter().println(String.format("Hooray! %s sent you $%.2f.\n", from.getName(), rounded));
 		
 		// Generates and returns a transaction summary
-		return String.format("You just Venmoed %s $%.2f. Transaction ID: %s", to.getName(), rounded);
+		return String.format("You just Venmoed %s $%.2f.", to.getName(), rounded);
 	}
 
 
