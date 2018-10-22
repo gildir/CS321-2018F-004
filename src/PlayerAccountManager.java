@@ -1,7 +1,10 @@
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -42,7 +45,7 @@ public class PlayerAccountManager {
 		logger = Logger.getLogger(PlayerAccountManager.class.getName());
 	}
 
-	public synchronized AccountResponse createNewAccount(String username, String password) {
+	public synchronized AccountResponse createNewAccount(String username, String password, String question, String answer) {
 		String lower = username.toLowerCase();
 		if (accountExists(lower))
 			return new AccountResponse(Responses.USERNAME_TAKEN);
@@ -51,7 +54,7 @@ public class PlayerAccountManager {
 		File userDir = new File(accountFolder.getAbsolutePath() + "/" + lower);
 		try {
 			playerIds.add(lower);
-			Player p = new Player(username);
+			Player p = new Player(username, question, answer);
 			userDir.mkdir();
 			writePlayerDataFile(p);
 			FileOutputStream passFile = new FileOutputStream(userDir.getAbsolutePath() + "/pass.txt");
@@ -125,5 +128,42 @@ public class PlayerAccountManager {
 
 	public boolean accountExists(String username) {
 		return playerIds.contains(username);
+	}
+	
+	public Player getPlayer(String name) {
+		Player player = null;
+		name = name.toLowerCase();
+		if(!playerIds.contains(name))
+			return null;
+		File userData = new File(accountFolder.getAbsoluteFile() + "/" + name + "/data.json");
+		if(!userData.exists())
+			return null;
+		try {
+			player = JsonMarshaller.MARSHALLER.unmarshalFile(userData.getAbsolutePath(), Player.class);
+		} catch (Exception e) {
+			logger.log(Level.SEVERE, null, e);
+			return null;
+		}
+		if(player == null) {
+			return null;
+		}
+		return player;
+	}
+	
+	public  Responses resetPassword(Player p, String password) {
+		File userDir = new File(accountFolder.getAbsolutePath() + "/" + p.getName().toLowerCase());
+		try {
+			FileOutputStream passFile = new FileOutputStream(userDir.getAbsolutePath() + "/pass.txt");
+			passFile.write(password.getBytes());
+			passFile.close();
+		} catch (FileNotFoundException e) {
+			logger.log(Level.SEVERE, null, e);
+			return Responses.INTERNAL_SERVER_ERROR;
+		} catch (IOException e) {
+			logger.log(Level.SEVERE, null, e);
+			return Responses.INTERNAL_SERVER_ERROR;
+		}
+		return Responses.SUCCESS;
+		
 	}
 }

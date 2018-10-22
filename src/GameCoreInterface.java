@@ -1,4 +1,4 @@
-
+import java.rmi.RemoteException;
 
 /**
  *
@@ -48,7 +48,7 @@ public interface GameCoreInterface {
 	 * @param password
 	 * @return an enumeration representing the creation status.
 	 */
-	public Responses createAccountAndJoinGame(String name, String password);
+	public Responses createAccountAndJoinGame(String name, String password, String question, String answer);
 
     /**
      * Returns a look at the area of the specified player.
@@ -100,4 +100,26 @@ public interface GameCoreInterface {
 	 * @return Player that was just deleted.
 	 */
 	public Player deleteAccount(String name);
+	
+	/**
+	 * Gets recovery question
+	 * @param name User of recovery question 
+	 * @return String of recovery question, null if user doesn't exist
+	 */
+	public String getQuestion(String name);
+	
+	/**
+	 * Gets recovery answer
+	 * @param name User of recovery answer
+	 * @return String of recovery question, null if user doesn't exist
+	 */
+	public String getAnswer(String name);
+	
+	/**
+	 * Resets passwords.
+	 * 
+	 * @param name Name of player getting password reset
+	 * @param password New password to be saved
+	 */
+	public Responses resetPassword(String name, String pass);
 }

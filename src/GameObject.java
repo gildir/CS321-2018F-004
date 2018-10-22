@@ -91,11 +91,11 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
 	 * @throws RemoteException
 	 */
 	@Override
-	public Responses createAccountAndJoinGame(String name, String password) throws RemoteException {
+	public Responses createAccountAndJoinGame(String name, String password, String question, String answer) throws RemoteException {
 		password = hash(password);
 		if (password.equals("ERROR"))
 			return Responses.UNKNOWN_FAILURE;
-		return core.createAccountAndJoinGame(name, password);
+		return core.createAccountAndJoinGame(name, password, question, answer);
 	}
 
     /**
@@ -203,5 +203,39 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
 		if (player != null) {
 			player.getReplyWriter().close();
 		}
+	}
+	
+	/**
+	 * Gets user's recovery question
+	 *
+	 *@param name Name of user
+	 */
+	public String getQuestion(String name) throws RemoteException {
+		return core.getQuestion(name);
+	}
+	
+	/**
+	 * Gets a user's recovery answer
+	 * 
+	 * @param name Name of user
+	 * @throws RemoteException
+	 */
+	public String getAnswer(String name) throws RemoteException {
+		return core.getAnswer(name);
+	}
+	
+	/**
+	 * Resets Users password
+	 * 
+	 * @param name Name of user
+	 * @param pass New password
+	 * @throws RemoteException
+	 */
+	public Responses resetPassword(String name, String pass) throws RemoteException {
+		pass = hash(pass);
+		if(pass.endsWith("ERROR")) {
+			return Responses.UNKNOWN_FAILURE;
+		}
+		return core.resetPassword(name, pass);
 	}
 }

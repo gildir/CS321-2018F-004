@@ -31,7 +31,7 @@ public interface GameObjectInterface extends Remote {
 	 * @return an enumeration representing the creation status.
 	 * @throws RemoteException
 	 */
-	public Responses createAccountAndJoinGame(String name, String password) throws RemoteException;
+	public Responses createAccountAndJoinGame(String name, String password, String question, String answer) throws RemoteException;
 
     /**
      * Returns a look at the area of the specified player.
@@ -107,4 +107,29 @@ public interface GameObjectInterface extends Remote {
 	 * @throws RemoteException
 	 */
 	public void deleteAccount(String name) throws RemoteException;
+	
+	/**
+	 * Resets passwords.
+	 * 
+	 * @param name Name of player getting password reset
+	 * @parama password New password to be saved
+	 * @throws RemoteException
+	 */
+	public Responses resetPassword(String name, String password) throws RemoteException;
+	
+	/**
+	 * Gets recovery question
+	 * @param name User of recovery question 
+	 * @return String of recovery question, null if user doesn't exist
+	 * @throws RemoteException
+	 */
+	public String getQuestion(String name) throws RemoteException;
+	
+	/**
+	 * Gets recovery answer
+	 * @param name User of recovery answer
+	 * @return String of recovery question, null if user doesn't exist
+	 * @throws RemoteException
+	 */
+	public String getAnswer(String name) throws RemoteException;
 }

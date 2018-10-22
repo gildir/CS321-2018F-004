@@ -156,9 +156,9 @@ public class GameCore implements GameCoreInterface {
 	 */
 	@Override
 
-	public synchronized Responses createAccountAndJoinGame(String name, String password) {
+	public synchronized Responses createAccountAndJoinGame(String name, String password, String questoin, String answer) {
 		synchronized (createAccountLock) {
-			PlayerAccountManager.AccountResponse resp = accountManager.createNewAccount(name, password);
+			PlayerAccountManager.AccountResponse resp = accountManager.createNewAccount(name, password, questoin, answer);
 			if (!resp.success())
 				return resp.error;
 			if (joinGame(name, password) != null)
@@ -407,6 +407,49 @@ public class GameCore implements GameCoreInterface {
 			return player;
 		}
 		return null; // No such player was found.
+	}
+	
+	/**
+	 * Gets recovery question
+	 * @param name User of recovery question 
+	 * @return String of recovery question, null if user doesn't exist
+	 */
+	public String getQuestion(String name) {
+		Player player = this.accountManager.getPlayer(name);
+		if (player != null) {
+			//String string = player.getQuestion();
+			
+				return player.getQuestion();
+			
+		} else {
+			return null;
+		}
+	}
+	
+	/**
+	 * Gets recovery answer
+	 * @param name User of recovery answer
+	 * @return String of recovery question, null if user doesn't exist
+	 */
+	public String getAnswer(String name) {
+		Player player = this.accountManager.getPlayer(name);
+		if(player != null) {
+			return player.getAnswer();
+		} else {
+			return null;
+		}
+	}
+	
+	/**
+	 * Resets passwords.
+	 * 
+	 * @param name Name of player getting password reset
+	 * @param password New password to be saved
+	 */
+	public Responses resetPassword(String name, String password) {
+		Player player = this.accountManager.getPlayer(name);
+		return accountManager.resetPassword(player, password);
+		
 	}
 
 }

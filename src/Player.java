@@ -19,11 +19,15 @@ public class Player {
     private Direction currentDirection;
     private PrintWriter replyWriter = null;
     private DataOutputStream outputWriter = null;
+    private String question;
+    private String answer;
 
-	public Player(@JsonProperty("name") String name) {
+	public Player(@JsonProperty("name") String name, @JsonProperty("question") String question, @JsonProperty("answer") String answer) {
         this.currentRoom = 1;
         this.currentDirection = Direction.NORTH;
         this.name = name;
+        this.question = question;
+        this.answer = answer;
         this.currentInventory = new LinkedList<>();
     }
 
@@ -74,6 +78,14 @@ public class Player {
     public void setName(String name) {
         this.name = name;
     }
+	
+	public String getQuestion() {
+		return this.question;
+	}
+	
+	public String getAnswer() {
+		return this.answer;
+	}
 
     public LinkedList<String> getCurrentInventory() {
         return currentInventory;
@@ -121,6 +133,8 @@ public class Player {
     public Direction getDirection() {
         return this.currentDirection;
     }
+    
+    
     
     public String viewInventory() {
         String result = "";
