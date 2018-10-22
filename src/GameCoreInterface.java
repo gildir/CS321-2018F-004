@@ -1,5 +1,3 @@
-
-
 /**
  *
  * @author Kevin
@@ -119,4 +117,12 @@ public interface GameCoreInterface {
 	 * @return reponseType
 	 */
 	public Responses removeFriend(String name, String ex);
+	
+	/**
+	 * returns a message showing all online friends
+	 * 
+	 * @param Player name
+	 * @return Message showing online friends
+	 */
+	public String viewOnlineFriends(String name);
 }

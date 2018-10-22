@@ -115,5 +115,4 @@ public class FriendsManager {
 	public HashMap<String, HashSet<String>> getAddedMe() {
 		return addedMe;
 	}
-
 }
