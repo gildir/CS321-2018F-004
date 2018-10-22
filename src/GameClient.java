@@ -34,6 +34,7 @@ public class GameClient {
     
     // Members related to the player in the game.
     protected String playerName;
+    private boolean tradeInProgress = false;
     
     /** 
      * Main class for running the game client.
@@ -189,6 +190,15 @@ public class GameClient {
                         System.out.println(remoteGameInterface.pickup(this.playerName, tokens.remove(0)));
                     }
                     break;
+                case "TRADE":
+                    if(tradeInProgress){
+                        System.err.println("There is already a trade happening elsewhere. Please try again another time.");
+                    }
+                    else{
+                        tradeInProgress = true;
+                        //code for trading action will be added here.
+                        tradeInProgress = false;
+                    }
 		case "DROP":
                     if(tokens.isEmpty()) {
                         System.err.println("You need to provide an object to drop.");
