@@ -59,6 +59,7 @@ public class GameClient {
         System.out.println("  SHOP          - Tries to enter a shop if you are near one.");
         System.out.println("  INVENTORY     - Shows you what objects you have collected.");
         System.out.println("  WALLET        - Shows you how much money you have.");
+        System.out.println("  VENMO         - Allows you to send money to people. Try: VENMO HELP"); // Team 4: Alaqeel
         System.out.println("  QUIT          - Quits the game.");
         System.out.println();
         
@@ -192,8 +193,8 @@ public class GameClient {
                 case "INVENTORY":
                     System.out.println(remoteGameInterface.inventory(this.playerName));
                     break; 
-                case "VENMO":
-                    System.out.println(remoteGameInterface.venmo(this.playerName));
+                case "VENMO": // Team 4: Alaqeel
+                	System.out.println(remoteGameInterface.venmo(this.playerName, tokens));
                     break;   
                 case "SHOP":
                 	int shopId = remoteGameInterface.shop(this.playerName); // Need to make this a serializable type
