@@ -1,4 +1,6 @@
 import java.util.LinkedList;
+import java.lang.StringBuilder;
+import java.lang.IllegalArgumentException; 
 
 /**
  *
@@ -10,10 +12,14 @@ public class Room {
     private final String description;
     private final LinkedList<String> objects;
     private final LinkedList<Exit> exits;
+
+    private static final int MAX_WHITEBOARD_LEN = 120;
+    private StringBuilder whiteboard;
     
     public Room(int id, String title, String description) {
         this.objects = new LinkedList<>();
         this.exits = new LinkedList<>();        
+        this.whiteboard = new StringBuilder(MAX_WHITEBOARD_LEN);
         
         this.id = id;
         this.title = title;
@@ -124,6 +130,49 @@ public class Room {
         this.objects.clear();
         return removedObjects;
     }
+
+    /**
+     *  This method returns the current whiteboard text
+     *   
+     *  @return Current text on whiteboard
+     * 
+     */
+    public String getWhiteboardText() {
+        return whiteboard.toString();
+    }
+
+    /**
+     *  This method adds text to the whiteboard
+     *
+     *  @param Text to add to whiteboard
+     *   
+     *  @return true if text added to whiteboard; false if whiteboard is full 
+     * 
+     */
+    public boolean addWhiteboardText(String textToAdd) {
+
+        if (textToAdd == null) { 
+            throw new IllegalArgumentException("Text can't be null");
+        }
+
+        if (textToAdd.length() + whiteboard.length() > MAX_WHITEBOARD_LEN) {
+            return false;
+        }
+        else {
+            whiteboard.append(textToAdd);
+            return true;
+        }
+    }
+
+    /**
+     *  This method erases the whiteboard
+     *
+     */
+    public void eraseWhiteboard() {
+        whiteboard.setLength(0);
+    }
+
+
     
     public String getPlayers(PlayerList players) {
         String localPlayers = "";

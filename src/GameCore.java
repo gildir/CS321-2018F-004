@@ -294,6 +294,78 @@ public class GameCore implements GameCoreInterface {
             return null;
         }
     }       
+
+    /**
+     * Attempts to erase the whiteboard in the room. Will return a message on any success or failure.
+     * @param name Name of the player to erase the whiteboard
+     * @return Message showing success. 
+     */    
+    public String eraseWhiteboard(String name) {
+        Player player = this.playerList.findPlayer(name);
+        if(player != null) {
+            Room room = map.findRoom(player.getCurrentRoom());
+            room.eraseWhiteboard()
+            this.broadcast(player, player.getName() + " erases the text on the whiteboard.");
+            return "You erase the text on the whiteboard.";
+        }
+        else {
+            return null;
+        }
+    }
+
+    /**
+     * Attempts to read the whiteboard in the room. Will return a message on any success or failure.
+     * @param name Name of the player to erase the whiteboard
+     * @return Message showing success. 
+     */    
+    public String readWhiteboard(String name) {
+        Player player = this.playerList.findPlayer(name);
+        if(player != null) {
+            Room room = map.findRoom(player.getCurrentRoom());
+            String text = room.getWhiteboardText();
+
+            this.broadcast(player, player.getName() + " reads the text on the whiteboard.");
+            if (text != null && !text.isEmpty()) {
+                return "The whiteboard says: \"" + text + "\".";
+            }
+            else {
+                return "The whiteboard is empty";
+            }
+
+        }
+        else {
+            return null;
+        }
+    }
+
+    /**
+     * Attempts to  the whiteboard in the room. Will return a message on any success or failure.
+     * @param name Name of the player to erase the whiteboard
+     * @param text Text to write on the whiteboard
+     * @return Message showing success. 
+     */    
+    public String writeOnWhiteboard(String name, String text) {
+        try {
+            Player player = this.playerList.findPlayer(name);
+            if(player != null) {
+                Room room = map.findRoom(player.getCurrentRoom());
+                boolean success = room.addWhiteboardText(text);
+                if (success) { 
+                    this.broadcast(player, player.getName() + " writes on the whiteboard.");
+                    return "You write text on the whiteboard.";
+                }
+                else {
+                    this.broadcast(player, player.getName() + " tries to write on the whiteboard, but it's full.");
+                    return "You try to write text on the whiteboard, but it's full.";
+                }
+            }
+            else {
+                return null;
+            }
+        } catch (IllegalArgumentException e) {
+            return null;
+        }
+    }
     
     /**
      * Returns a string representation of all objects you are carrying.
