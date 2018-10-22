@@ -98,7 +98,19 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
     public String say(String name, String message) throws RemoteException {
         return core.say(name, message);
     }
-      
+
+   // Feature 410: Joke
+    /**
+     * Tells a joke to the room. Reads local "chat config" file
+     * that keeps a list of jokes, one per line. The command
+     * chooses a random joke.
+     * @param filename the "chat config" file to read the joke from.
+     * */
+   @Override
+   public String joke(String filename) throws RemoteException{
+     return core.joke(filename);
+   }
+
     /**
      * Attempts to walk forward < distance > times.  If unable to make it all the way,
      *  a message will be returned.  Will display LOOK on any partial success.

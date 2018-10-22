@@ -58,6 +58,7 @@ public class GameClient {
         System.out.println("  PICKUP obect  - Tries to pick up an object in the same area.");
         System.out.println("  INVENTORY     - Shows you what objects you have collected.");
         System.out.println("  QUIT          - Quits the game.");
+        System.out.println("  JOKE                     - Tells a joke to everyone in the room.");
         System.out.println();
         
 
@@ -171,6 +172,9 @@ public class GameClient {
                         System.out.println(remoteGameInterface.say(this.playerName, message));
                     }
                     break;
+              case "JOKE":
+                System.out.println(remoteGameInterface.say(this.playerName, remoteGameInterface.joke("jokes.txt")));
+                break;
                 case "MOVE":
                     if(tokens.isEmpty()) {
                         System.err.println("You need to provide a distance in order to move.");
@@ -201,11 +205,11 @@ public class GameClient {
     }
     
     public static void main(String[] args) {
-		if(args.length < 1) {
-			System.out.println("[SHUTDOWN] .. This program requires one argument. Run as java -Djava.security.policy=game.policy GameClient hostname");
-			System.exit(-1);
-		}
-		
+  if(args.length < 1) {
+   System.out.println("[SHUTDOWN] .. This program requires one argument. Run as java -Djava.security.policy=game.policy GameClient hostname");
+   System.exit(-1);
+  }
+  
         System.out.println("[STARTUP] Game Client Now Starting...");
         new GameClient(args[0]);
     }
@@ -216,12 +220,12 @@ public class GameClient {
      *  - Spawns multiple threads, one for each remote connection.
      */
     public class ReplyRemote implements Runnable {
-		private String host;
-		
-		public ReplyRemote(String host) {
-			this.host = host;
-		}
-		
+  private String host;
+  
+  public ReplyRemote(String host) {
+   this.host = host;
+  }
+  
         @Override
         public void run() {
             // This thread is interruptable, which will allow it to clean up before

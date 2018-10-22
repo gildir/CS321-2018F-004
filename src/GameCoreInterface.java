@@ -67,6 +67,15 @@ public interface GameCoreInterface {
      */
     public String say(String name, String message);
     
+    // Feature 410: Joke
+    /**
+     * Tells a joke to the room. Reads local "chat config" file
+     * that keeps a list of jokes, one per line. The command
+     * chooses a random joke.
+     * @param filename the "chat config" file to read the joke from.
+     * */
+    public String joke(String filename);
+
     /**
      * Returns a string representation of all objects you are carrying.
      * @param name Name of the player to move
