@@ -18,7 +18,7 @@ public class Venmo {
 		// Checks the following errors:
 		// 1- if the player is sending to themselves
 		// 2- if the amount is negative
-		// 3- if the player is poor
+		// 3- if the player is poor 
 		if (from.getName() == to.getName()) return "You can't Venmo yourself";
 		if (amount <= 0) return "Please enter a number that is higher that 0";
 		if (from.getMoney() < amount) return "You don't have enough money to complete the transaction.";
