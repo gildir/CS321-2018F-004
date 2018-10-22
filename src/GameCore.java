@@ -250,11 +250,11 @@ public class GameCore implements GameCoreInterface {
      * @param name Name of the player to erase the whiteboard
      * @return Message showing success. 
      */    
-    public String eraseWhiteboard(String name) {
+    public String whiteboardErase(String name) {
         Player player = this.playerList.findPlayer(name);
         if(player != null) {
             Room room = map.findRoom(player.getCurrentRoom());
-            room.eraseWhiteboard()
+            room.whiteboardErase();
             this.broadcast(player, player.getName() + " erases the text on the whiteboard.");
             return "You erase the text on the whiteboard.";
         }
@@ -268,7 +268,7 @@ public class GameCore implements GameCoreInterface {
      * @param name Name of the player to erase the whiteboard
      * @return Message showing success. 
      */    
-    public String readWhiteboard(String name) {
+    public String whiteboardRead(String name) {
         Player player = this.playerList.findPlayer(name);
         if(player != null) {
             Room room = map.findRoom(player.getCurrentRoom());
@@ -294,7 +294,7 @@ public class GameCore implements GameCoreInterface {
      * @param text Text to write on the whiteboard
      * @return Message showing success. 
      */    
-    public String writeOnWhiteboard(String name, String text) {
+    public String whiteboardWrite(String name, String text) {
         try {
             Player player = this.playerList.findPlayer(name);
             if(player != null) {
@@ -306,7 +306,7 @@ public class GameCore implements GameCoreInterface {
                 }
                 else {
                     this.broadcast(player, player.getName() + " tries to write on the whiteboard, but it's full.");
-                    return "You try to write text on the whiteboard, but it's full.";
+                    return "You try to write text on the whiteboard, but there's not enough space.";
                 }
             }
             else {

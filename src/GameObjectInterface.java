@@ -68,14 +68,14 @@ public interface GameObjectInterface extends Remote {
      * @param name Name of the player to erase the whiteboard
      * @return Message showing success. 
      */    
-    public String eraseWhiteboard(String name) throws RemoteException;
+    public String whiteboardErase(String name) throws RemoteException;
 
     /**
      * Attempts to read the whiteboard in the room. Will return a message on any success or failure.
      * @param name Name of the player to erase the whiteboard
      * @return Message showing success. 
      */    
-    public String readWhiteboard(String name) throws RemoteException; 
+    public String whiteboardRead(String name) throws RemoteException; 
 
     /**
      * Attempts to  the whiteboard in the room. Will return a message on any success or failure.
@@ -83,7 +83,7 @@ public interface GameObjectInterface extends Remote {
      * @param text Text to write on the whiteboard
      * @return Message showing success. 
      */    
-    public String writeOnWhiteboard(String name, String text) throws RemoteException;
+    public String whiteboardWrite(String name, String text) throws RemoteException;
 
 
      /**

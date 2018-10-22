@@ -116,8 +116,8 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
      * @param name Name of the player to erase the whiteboard
      * @return Message showing success. 
      */    
-    public String eraseWhiteboard(String name) throws RemoteException {
-        return core.eraseWhiteboard(name);
+    public String whiteboardErase(String name) throws RemoteException {
+        return core.whiteboardErase(name);
     }
 
     /**
@@ -125,8 +125,8 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
      * @param name Name of the player to erase the whiteboard
      * @return Message showing success. 
      */    
-    public String readWhiteboard(String name) throws RemoteException {
-        return core.readWhiteboard(name);
+    public String whiteboardRead(String name) throws RemoteException {
+        return core.whiteboardRead(name);
     }
 
     /**
@@ -135,8 +135,8 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
      * @param text Text to write on the whiteboard
      * @return Message showing success. 
      */    
-    public String writeOnWhiteboard(String name, String text) throws RemoteException {
-        return core.writeOnWhiteboard(name, text);
+    public String whiteboardWrite(String name, String text) throws RemoteException {
+        return core.whiteboardWrite(name, text);
     }
 
     /**

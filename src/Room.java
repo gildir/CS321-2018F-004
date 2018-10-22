@@ -167,7 +167,7 @@ public class Room {
      *  This method erases the whiteboard
      *
      */
-    public void eraseWhiteboard() {
+    public void whiteboardErase() {
         whiteboard.setLength(0);
     }
 
