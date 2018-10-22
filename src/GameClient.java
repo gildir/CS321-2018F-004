@@ -58,7 +58,7 @@ public class GameClient {
         System.out.println("  PICKUP obect  - Tries to pick up an object in the same area.");
         System.out.println("  INVENTORY     - Shows you what objects you have collected.");
         System.out.println("  QUIT          - Quits the game.");
-        System.out.println("  JOKE                     - Tells a joke to everyone in the room.");
+        System.out.println("  JOKE          - Tells a joke to everyone in the room.");
         System.out.println();
         
 
