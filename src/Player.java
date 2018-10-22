@@ -31,46 +31,19 @@ public class Player {
     //Collection of words to be filtered from game chat
     private HashSet<String> filteredWords = new HashSet<String>();
 
-    public boolean addFilteredWord(String wordToAdd) {
-        boolean ret = filteredWords.add(wordToAdd);
-        listFilteredWords();
-        return ret;
+    public void setFilteredWords(HashSet<String> newFilteredWords) {
+        filteredWords = newFilteredWords;
     }
 
-    public boolean removeFilteredWord(String wordToRemove) {
-        boolean ret = filteredWords.remove(wordToRemove);
-        listFilteredWords();
+    public boolean addFilteredWord(String wordToAdd) {
+        System.err.print("\nPlayer " + name + " adding word \"" + wordToAdd + "\" to filtered word list.\n");
+        boolean ret = filteredWords.add(wordToAdd);
         return ret;
     }
 
     public boolean isFiltering(String word) {
         return filteredWords.contains(word);
     }
-
-    private void listFilteredWords() {
-        String filteredWordsList = "\nCurrent filtered words: ";
-
-        if (filteredWords.size() == 0) {
-            filteredWordsList += "None.";
-        } else {
-            int i = 0;
-
-            for (String word : filteredWords) {
-                filteredWordsList += word;
-                i++;
-
-                if (i == filteredWords.size()) {
-                    filteredWordsList += ".\n";
-                } else {
-                    filteredWordsList += ", ";
-                }
-            }
-        }
-
-        System.err.print(filteredWordsList);
-    }
-
-
 
     /**
      * Adds a player's reference to set ignoredPlayers.

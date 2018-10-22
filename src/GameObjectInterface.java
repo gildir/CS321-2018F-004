@@ -2,6 +2,7 @@
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.util.HashSet;
 
 /**
  *
@@ -112,18 +113,11 @@ public interface GameObjectInterface extends Remote {
     // Feature 409 Word Filter
 
     /**
-     * Adds a word to the chat filter.
-     * @param wordToFilterFromChat - word to be filtered from future chat
-     * @return - whether the given word was successfully added to the list
+     * Returns a player reference from the game core, from the player's name.
+     * @param playerName the name of the player you're lookng for
+     * @return the player (if found) from the game core
      */
-    public boolean filterWord(String wordToFilterFromChat, String playerName) throws RemoteException;
-
-    /**
-     * Removes a word from the chat filter.
-     * @param wordToStopFiltering - word to remove from the chat filter.
-     * @return - whether the given word was successfully removed from the list.
-     */
-    public boolean unFilterWord(String wordToStopFiltering, String playerName) throws RemoteException;
+    public void setPlayerFilteredWords(String playerName, HashSet<String> newFilteredWords) throws RemoteException;
 
     // End Feature 409 Word Filter
 

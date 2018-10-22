@@ -1,9 +1,6 @@
 
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.ConnectException;
 import java.net.MalformedURLException;
 import java.net.ServerSocket;
@@ -15,6 +12,7 @@ import java.util.ArrayList;
 import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.HashSet;
 
 /**
  *
@@ -57,8 +55,6 @@ public class GameClient {
         System.out.println("  IGNORE player            - Ignore messages from from 'player'");
         System.out.println("  UNIGNORE player          - Remove 'player' from ignore list");
         System.out.println("  IGNORELIST               - Displays a list of players you are ignoring");
-        System.out.println("  FILTER word              - Filters a given word from chat");
-        System.out.println("  UNFILTER word            - Removes a given word from the chat filter");
         System.out.println("  REPLY message            - Reply 'message' to last whisper");
         System.out.println("  LEFT                     - Turns your player left 90 degrees.");
         System.out.println("  RIGHT                    - Turns your player right 90 degrees.");
@@ -111,6 +107,9 @@ public class GameClient {
             remoteOutputThread.setDaemon(true);
             remoteOutputThread.start();
 
+            // 409 Word Filter
+            readWordFilterFile();
+
             // Collect input for the game.
             while(runGame) {
                 try {
@@ -150,6 +149,37 @@ public class GameClient {
         msgBuilder.append("\"");
         return msgBuilder.toString();
     }
+
+
+    // Begin Feature 409 Word Filter
+
+    private void readWordFilterFile() {
+
+        HashSet<String> words = new HashSet<String>();
+        String filename = "FilteredWordsList.txt";
+
+        try {
+            File filteredWordsFile = new File(filename);
+            if(!filteredWordsFile.exists()) { filteredWordsFile.createNewFile(); }
+            BufferedReader br = new BufferedReader(new FileReader(filename));
+            String line = br.readLine();
+
+            while (line != null) {
+                //System.err.print("\nLine read: " + line);
+                words.add(line.toLowerCase());
+                line = br.readLine();
+            }
+
+            remoteGameInterface.setPlayerFilteredWords(playerName, words);
+
+        } catch(IOException i) {
+            System.err.print("\nI/O Exception thrown while attempting to read from filtered words File!\n");
+        }
+    }
+
+
+    //End Feature 409 Word Filter
+
 
     /**
      * Simple method to parse the local input and remotely execute the RMI commands.
@@ -234,27 +264,6 @@ public class GameClient {
                         System.out.println(remoteGameInterface.unIgnorePlayer(this.playerName, tokens.remove(0)));
                     }
                     break;
-                //Feature 409. Filter Word.
-                case "F":
-                case "FILTER":
-                    if(tokens.isEmpty()) {
-                        System.err.println("You need to provide a word to filter.");
-                    } else {
-                        String wordToFilter = tokens.remove(0);
-                        System.err.print("\nPlayer " + this.playerName + " filtering " + wordToFilter + ".\n");
-                        remoteGameInterface.filterWord(wordToFilter, this.playerName);
-                    }
-                    break;
-
-                case "U":
-                case "UNFILTER":
-                    if(tokens.isEmpty()) {
-                        System.err.println("You need to provide a word to filter.");
-                    } else {
-                        remoteGameInterface.unFilterWord(tokens.remove(0), this.playerName);
-                    }
-                    break;
-                // END Feature 409.
 
                 case "ONLINE":
                     System.out.println(remoteGameInterface.showPlayers());

@@ -63,9 +63,8 @@ public class GameCore implements GameCoreInterface {
         for(Player otherPlayer : this.playerList) {
             if(otherPlayer != player && !otherPlayer.isIgnoring(player) && otherPlayer.getCurrentRoom() == player.getCurrentRoom()) {
                 String newMessage = filterMessage(otherPlayer, message);
-
                 //otherPlayer.getReplyWriter().println(message);
-                otherPlayer.getReplyWriter().println(newMessage);
+                otherPlayer.getReplyWriter().println(message);
             }
         }
     }
@@ -80,11 +79,11 @@ public class GameCore implements GameCoreInterface {
         for(Player player : this.playerList) {
 
             //altered for 409 Word Filter
-            //String newMessage = filterMessage(player, message);
+            String newMessage = filterMessage(player, message);
 
             if(player.getCurrentRoom() == room.getId()) {
-                player.getReplyWriter().println(message);
-                //player.getReplyWriter().println(newMessage);
+                //player.getReplyWriter().println(message);
+                player.getReplyWriter().println(newMessage);
             }
         }
     }
@@ -220,33 +219,6 @@ public class GameCore implements GameCoreInterface {
             return null;
         }
     }
-
-    //Feature 409 WordFilter
-
-    /**
-     * Parses a message, replacing filtered words with "[BLEEEEP]"
-     * @param player - player to filter chat for
-     * @param message - message being filtered.
-     * @return - new filtered message.
-     */
-    private String filterMessage(Player player, String message) {
-        String newMessage = "";
-        String bleep = "[BLEEEEP]";
-
-        for(String word : message.split("\\s+")) {
-            if(player.isFiltering(word)) {
-                newMessage += " " + bleep;
-            } else {
-                newMessage += " " + word;
-            }
-        }
-
-        return newMessage;
-    }
-
-
-    //End Feature 409 WordFilter
-
 
     // Feature 401. Whisper
     /**
@@ -463,4 +435,33 @@ public class GameCore implements GameCoreInterface {
         }
         return null;
     }
+
+
+    //Feature 409 WordFilter
+
+    /**
+     * Parses a message, replacing filtered words with "[BLEEEEP]"
+     * @param player - player to filter chat for
+     * @param message - message being filtered.
+     * @return - new filtered message.
+     */
+    private String filterMessage(Player player, String message) {
+        //System.err.print("\nFILTERING MESSAGE\n");
+        String newMessage = "";
+        String bleep = "[BLEEEEP]";
+
+        for(String word : message.split("\\s+")) {
+            if(player.isFiltering(word.toLowerCase())) {
+                newMessage += " " + bleep;
+            } else {
+                newMessage += " " + word;
+            }
+        }
+
+        return newMessage;
+    }
+
+
+    //End Feature 409 WordFilter
+
 }

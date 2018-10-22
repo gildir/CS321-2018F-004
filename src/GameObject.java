@@ -4,6 +4,7 @@
 import java.io.PrintWriter;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.HashSet;
 
 /**
  *
@@ -162,28 +163,12 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
     }
 
     //Begin 409 Word Filter.
-
-    /**
-     * Adds a new word to the list of words filtered from chat.
-     * @param wordToFilterFromChat - word to be filtered from future chat
-     * @param playerName - name of player owning the word filter list
-     * @return - whether the word was successfully added to the given player's filtered words list
-     */
-    public boolean filterWord(String wordToFilterFromChat, String playerName) {
+    @Override
+    public void setPlayerFilteredWords(String playerName, HashSet<String> filteredWords) {
         Player player = core.findPlayer(playerName);
-        return player.addFilteredWord(wordToFilterFromChat);
+        player.setFilteredWords(filteredWords);
     }
 
-    /**
-     * Removes a word from a given player's chat filter list
-     * @param wordToStopFiltering - word to remove from the chat filter.
-     * @param playerName - player owning list to remove the word from
-     * @return - whether the word was successfully removed from the given player's filtered words list
-     */
-    public boolean unFilterWord(String wordToStopFiltering, String playerName) {
-        Player player = core.findPlayer(playerName);
-        return player.removeFilteredWord(wordToStopFiltering);
-    }
 
     //End 409 Word Filter
 
