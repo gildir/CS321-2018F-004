@@ -95,7 +95,8 @@ public class FriendsManager {
 	}
 
 	private boolean remove(HashMap<String, HashSet<String>> removeFrom, String a, String b) {
-		return removeFrom.get(a).remove(b);
+		HashSet<String> list = removeFrom.get(a);
+		return list != null && list.remove(b);
 	}
 
 	/**
