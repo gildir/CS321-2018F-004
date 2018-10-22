@@ -182,6 +182,32 @@ public class GameClient {
                 case "PICKUPALL":
                     System.out.println(remoteGameInterface.pickupAll(this.playerName));
                     break;
+                case "WHITEBOARD":
+                    if(tokens.isEmpty()) {
+                        System.err.println("You need to provide an argument to the WHITEBOARD command.");
+                    }
+                    else {
+                        switch(tokens.remove(0).toUpperCase()) {
+                            case "ERASE":
+                                System.out.println(remoteGameInterface.whiteboardErase(this.playerName));
+                                break;
+                            case "READ":
+                                System.out.println(remoteGameInterface.whiteboardRead(this.playerName));
+                                break;
+                            case "WRITE":
+                                if (tokens.isEmpty()) { 
+                                    System.err.println("You need to provide an argument to the WHITEBOARD WRITE command");
+                                }
+                                else {
+                                    System.out.println(remoteGameInterface.whiteboardWrite(this.playerName, tokens.remove(0)));
+                                }
+                                break;
+                            default:
+                                System.err.println("Invalid argument provided to WHITEBOARD command.");
+                                break;
+                        }
+                    }
+                    break;
                 case "INVENTORY":
                     System.out.println(remoteGameInterface.inventory(this.playerName));
                     break;                                                            
