@@ -22,13 +22,6 @@ public class ShopClient {
 		// Put text parser here and call 
 		// TODO run infinite loop waiting for input that breaks when player exits
 		// or runs through switch statement triggering shop methods
-			
-		
-		System.out.println("Type the item you want to sell");
-		Scanner sc = new Scanner(System.in);
-		String s = sc.nextLine();
-		
-		this.sell(s);
 		
 	}
 	
