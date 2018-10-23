@@ -50,20 +50,7 @@ public class ShopClient {
                 System.err.println("[CRITICAL ERROR] Error at reading any input properly.  Terminating the client now.");
                 System.exit(-1);
             }
-        }          
-		
-		System.out.println("Type the item you want to sell");
-		sc = new Scanner(System.in);
-		s = sc.nextLine();
-		
-		this.sell(s);
-		
-		System.out.println("Type the item you want to sell");
-		sc = new Scanner(System.in);
-		s = sc.nextLine();
-		
-		this.buy(s);
-		
+        }
 	}
 	
 	// Mostly copied and pasted from GameClient
