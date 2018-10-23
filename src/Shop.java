@@ -83,15 +83,6 @@ public class Shop
         // catalog
         result += this.getObjects();
         
-        // players names
-//        String players = this.getPlayers();
-//        if (players.length() > 1) result += "You are here by yourself.\n";
-//        else {
-//        	result += "You are here along with:\n";
-//        	result += players;
-//        }
-//        result += players;
-        
         result += "\n";
         result += "Players in the area: " + this.getPlayers() + "\n";
 
