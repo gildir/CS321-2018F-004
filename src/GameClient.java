@@ -60,6 +60,8 @@ public class GameClient {
         System.out.println("  INVENTORY     - Shows you what objects you have collected.");
 	System.out.println("  SORT          - Sorts your inventory");
         System.out.println("  QUIT          - Quits the game.");
+    System.out.println("  R_TRADE player  - Set up a trade with another player");
+    System.out.println("  A_TRADE player  - Accept a trade with another player");
         System.out.println();
         
 
@@ -187,6 +189,23 @@ public class GameClient {
                     }
                     else {
                         System.out.println(remoteGameInterface.pickup(this.playerName, tokens.remove(0)));
+                    }
+                    break;
+        case "R_TRADE":
+                    if(tokens.isEmpty()) {
+                            System.err.println("You need to provide the name of the player that you want to trade with");
+                    }
+                    else{
+                        remoteGameInterface.requestPlayer(this.playerName, tokens.remove(0));
+                    }
+                    break;
+
+        case "A_TRADE":
+                    if(tokens.isEmpty()) {
+                            System.err.println("You need to provide the name of the player you are accepting");
+                    }
+                    else{
+                        System.out.println(remoteGameInterface.playerResponse(this.playerName, tokens.remove(0)));
                     }
                     break;
 		case "DROP":
