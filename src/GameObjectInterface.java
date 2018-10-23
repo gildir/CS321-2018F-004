@@ -17,6 +17,8 @@ public interface GameObjectInterface extends Remote {
 	 */
 	public String pokeGhoul(String playerName) throws RemoteException;
 
+	public String giveToGhoul(String object, String playerName) throws RemoteException;
+	
     /**
      * Sends a request to join the game.  
      * Returns with the status of the join.  On true, the server expects the client
