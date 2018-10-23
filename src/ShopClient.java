@@ -50,9 +50,6 @@ public class ShopClient {
                 System.exit(-1);
             }
         }          
-		
-		
-		
 	}
 	
 	// Mostly copied and pasted from GameClient
