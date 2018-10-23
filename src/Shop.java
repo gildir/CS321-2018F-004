@@ -42,12 +42,7 @@ public class Shop
 	
 	//Menu for the player to be interacting with the shop 
 	//use something like a switch statement
-	public void printMenu() {
-		System.out.println("To buy an item, enter \"buy [item ID].\n\"");
-		System.out.println("To sell an item, enter \"sell [item ID]\".\n");
-		System.out.println("To see the inventory, enter \"Inventory\"");
-		Sysetem.out.println("To see what item is in demand, enter \"demand\"\n");
-	}
+	public void printMenu() {}
 	
 	public void addPlayer(Player p) {
 		playerlist.addPlayer(p);
