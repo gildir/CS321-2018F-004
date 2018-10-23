@@ -9,7 +9,6 @@ public class ShopClient {
 	private String player;
 	private int id;
 	private GameObjectInterface remote;
-//	private Shop shop;
 	
 	public ShopClient(String p, int s, GameObjectInterface remote) throws RemoteException {
 		this.player = p;
