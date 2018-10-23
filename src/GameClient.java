@@ -106,7 +106,7 @@ public class GameClient {
 						question = keyboardInput.readLine().trim();
 						System.out.println("Please give the answer");
 						System.out.print(">");
-						answer = keyboardInput.readLine().trim();
+						answer = keyboardInput.readLine().toLowerCase().trim();
 						//remoteGameInterface.resetPassword("test");
 						Responses resp = remoteGameInterface.createAccountAndJoinGame(playerName, pass, question, answer);
 						switch (resp) {
@@ -288,7 +288,7 @@ public class GameClient {
 	    					System.out.println();
 		    				System.out.println(question);
 		    				System.out.print("Answer:");
-		    				input = keyboardInput.readLine().trim();
+		    				input = keyboardInput.readLine().toLowerCase().trim();
 		    				//gets new password if recovery question answered
 		    				if(input.equals(answer)) {
 		    					test = false;
