@@ -359,12 +359,49 @@ public class GameCore implements GameCoreInterface {
     }
     
     /**
+     * 605B_buy_method
+     * Allows player to sell an item to a shop, and increases their money
+     * @author Team 4: Mistry
+     * @param name Name of the player
+     * @param shopId The ID of the shop the player is selling an item to
+     * @param item The item the player is buying (eventually will be an Item obj)
+     */
+    public boolean buyItem(String name, int shopId, String item)
+    {
+    	int val = 0;
+    	Player player = this.playerList.findPlayer(name);
+    	Shop s = shoplist.get(shopId);
+    	
+    	if(player.getMoney() < 12)
+    	{
+    		System.out.println("Not Enough Money!!!");
+    		return false;
+    	}
+    	
+    	if(s.getInven().contains(item))
+    	{
+    		s.remove(item);
+    	}
+    	else
+    	{
+    		System.out.println("Item not in stock!!!");
+    		return false;
+    	}
+    	
+    	player.addObjectToInventory(item);
+    
+    	//val = removed.getValue() * 1.2;
+    	val = 12;
+    	player.setMoney(player.getMoney() - val);
+    	return true;
+    }
+
+    /**
      * Takes the player into venmo. The new and improved way to exchange money with other players.
      * 
      * @author Team 4: Alaqeel
      * @param name Name of the player enter the bank
-     */
-	@Override
+     */	@Override
 	public String venmo(String name, ArrayList<String> tokens) {
 		// checks if the player forgot to enter enough commands
 		if (tokens.isEmpty()) return "You need to provide more arguments.\n" + Venmo.instructions();

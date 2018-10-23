@@ -52,6 +52,18 @@ public class ShopClient {
             }
         }          
 		
+		System.out.println("Type the item you want to sell");
+		sc = new Scanner(System.in);
+		s = sc.nextLine();
+		
+		this.sell(s);
+		
+		System.out.println("Type the item you want to sell");
+		sc = new Scanner(System.in);
+		s = sc.nextLine();
+		
+		this.buy(s);
+		
 	}
 	
 	// Mostly copied and pasted from GameClient
@@ -129,7 +141,9 @@ public class ShopClient {
 	}
 	
 	//In terms of the player buying items
-	public void buy(Object k) {}
+	public void buy(String item) throws RemoteException{
+		remote.buyItem(this.player, this.id, item);
+	}
 	
 	//In terms of the player selling items
 	public void sell(String item) throws RemoteException{
