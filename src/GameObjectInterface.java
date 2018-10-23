@@ -88,7 +88,22 @@ public interface GameObjectInterface extends Remote {
      * @throws RemoteException 
      */ 
     public String sort(String name, String modes) throws RemoteException; 
-    
+
+    /**
+     * Prints message to player if request can processed, contacts other player about their request
+     * @param requestingTrader Name of the player who has requested the trade
+     * @param traderToRequest Name of the player whom the first player has requested to trade with
+     */ 
+    public void requestPlayer(String requestingTrader, String traderToRequest) throws RemoteException;
+
+    /**
+     * Return string representation of trade acceptance
+     * @param acceptingTrader Name of the player who is accepting the trade
+     * @param traderToAccept Name of the player who has requested a trade
+     * @return Message of success or fail
+     */ 
+    public String playerResponse(String acceptingTrader, String traderToAccept) throws RemoteException;
+
      /**
      * Returns a string representation of all objects you are carrying.
      * @param name Name of the player to view their inventory

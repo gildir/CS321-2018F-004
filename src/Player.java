@@ -1,5 +1,8 @@
 
 import java.io.DataOutputStream;
+import java.io.DataInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.LinkedList;
 import java.util.*;
@@ -15,6 +18,10 @@ public class Player {
     private Direction currentDirection;
     private PrintWriter replyWriter = null;
     private DataOutputStream outputWriter = null;
+    private DataInputStream inputWriter = null;
+    private boolean inTrade = false;
+    private boolean tradeRequested = false;
+    private String tradePartner = "";
 
     public Player(String name) {
         this.currentRoom = 1;
@@ -117,6 +124,30 @@ public class Player {
 			System.out.println("Please enter in valid input or use the correct format (n/w/p) -> (i/d)");
 	}
     }
+    
+    public boolean hasTradeRequest(){
+        return tradeRequested;
+    }
+
+    public void setTradeRequest(boolean val){
+        tradeRequested = val;
+    }
+
+    public boolean isInTrade(){
+        return inTrade;
+    }
+    public void setInTrade(boolean val){
+        inTrade = val;
+    }
+
+    public String getTradePartner(){
+        return tradePartner;
+    }
+    public void setTradePartner(String s){
+        tradePartner = s;
+    }
+
+
 
     public void setReplyWriter(PrintWriter writer) {
         this.replyWriter = writer;

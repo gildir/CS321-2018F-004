@@ -362,6 +362,68 @@ public class GameCore implements GameCoreInterface {
     } 
 
      /**
+     * Prints message to player if request can processed, contacts other player about their request
+     * @param requestingTrader Name of the player who has requested the trade
+     * @param traderToRequest Name of the player whom the first player has requested to trade with
+     */ 
+    public void requestPlayer(String requestingTrader, String traderToRequest){
+        Player playerToRequest = this.playerList.findPlayer(traderToRequest);
+        Player requestingPlayer = this.playerList.findPlayer(requestingTrader);
+        if(requestingTrader.equals(traderToRequest)){
+            requestingPlayer.getReplyWriter().println("You cannot trade with yourself.");
+            return;
+        }
+        else if(playerToRequest == null){
+            requestingPlayer.getReplyWriter().println("This player does not exist, choose an existing trade partner");
+            return;
+        }
+
+        boolean tradeInProgress = false;
+        for(Player player : this.playerList) {
+            if(player.isInTrade()) {
+                tradeInProgress = true;
+            }
+        }
+
+        if(tradeInProgress){
+            requestingPlayer.getReplyWriter().println("There is already a trade in progress. ");
+            return; 
+        }
+
+        playerToRequest.setTradeRequest(true);
+        playerToRequest.getReplyWriter().println(requestingTrader + " has requested a trade. You may ignore this request or type accept_trade " +requestingTrader+" to proceed. ");
+        requestingPlayer.getReplyWriter().println("Player has been contacted. You will receive a notification when they accept. ");
+    }
+
+    /**
+     * Return string representation of trade acceptance
+     * @param acceptingTrader Name of the player who is accepting the trade
+     * @param traderToAccept Name of the player who has requested a trade
+     * @return Message of success or fail
+     */ 
+    public String playerResponse(String acceptingTrader, String traderToAccept){
+
+        Player playerToAccept = this.playerList.findPlayer(traderToAccept);
+        Player acceptingPlayer = this.playerList.findPlayer(acceptingTrader); 
+        if(playerToAccept == null){
+            return "This player does not exist. ";
+        }
+        if(!acceptingPlayer.hasTradeRequest()){
+            return "You cannot accept a trade because you have not been asked to enter a trade by " + traderToAccept;
+        }
+
+        acceptingPlayer.setInTrade(true);
+        acceptingPlayer.setTradeRequest(false);
+
+        acceptingPlayer.setTradePartner(traderToAccept);
+        playerToAccept.setTradePartner(acceptingTrader);
+
+        playerToAccept.getReplyWriter().println(playerToAccept.getTradePartner() + " has accepted your request.");
+
+        return "You have accepted to enter a trade with " + acceptingPlayer.getTradePartner();
+    }
+
+     /**
      * Leaves the game.
      * @param name Name of the player to leave
      * @return Player that was just removed.

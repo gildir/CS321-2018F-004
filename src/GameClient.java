@@ -34,7 +34,6 @@ public class GameClient {
     
     // Members related to the player in the game.
     protected String playerName;
-    private boolean tradeInProgress = false;
     
     /** 
      * Main class for running the game client.
@@ -61,6 +60,8 @@ public class GameClient {
         System.out.println("  INVENTORY     - Shows you what objects you have collected.");
 	System.out.println("  SORT          - Sorts your inventory");
         System.out.println("  QUIT          - Quits the game.");
+    System.out.println("  R_TRADE player  - Set up a trade with another player");
+    System.out.println("  A_TRADE player  - Accept a trade with another player");
         System.out.println();
         
 
@@ -190,15 +191,23 @@ public class GameClient {
                         System.out.println(remoteGameInterface.pickup(this.playerName, tokens.remove(0)));
                     }
                     break;
-                case "TRADE":
-                    if(tradeInProgress){
-                        System.err.println("There is already a trade happening elsewhere. Please try again another time.");
+        case "R_TRADE":
+                    if(tokens.isEmpty()) {
+                            System.err.println("You need to provide the name of the player that you want to trade with");
                     }
                     else{
-                        tradeInProgress = true;
-                        //code for trading action will be added here.
-                        tradeInProgress = false;
+                        remoteGameInterface.requestPlayer(this.playerName, tokens.remove(0));
                     }
+                    break;
+
+        case "A_TRADE":
+                    if(tokens.isEmpty()) {
+                            System.err.println("You need to provide the name of the player you are accepting");
+                    }
+                    else{
+                        System.out.println(remoteGameInterface.playerResponse(this.playerName, tokens.remove(0)));
+                    }
+                    break;
 		case "DROP":
                     if(tokens.isEmpty()) {
                         System.err.println("You need to provide an object to drop.");
