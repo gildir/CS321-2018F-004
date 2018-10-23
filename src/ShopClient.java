@@ -52,17 +52,7 @@ public class ShopClient {
             }
         }          
 		
-		System.out.println("Type the item you want to sell");
-		sc = new Scanner(System.in);
-		s = sc.nextLine();
 		
-		this.sell(s);
-		
-		System.out.println("Type the item you want to sell");
-		sc = new Scanner(System.in);
-		s = sc.nextLine();
-		
-		this.buy(s);
 		
 	}
 	
