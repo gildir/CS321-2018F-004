@@ -1,0 +1,22 @@
+Daily Log for 10-22-2018
+[10-22-2018 08:21:47] - SERVER STARTED
+[10-22-2018 08:21:53] - patrick joined the server
+[10-22-2018 08:21:53] - patrick used command LOOK @ Clock in the Main Quad
+[10-22-2018 08:21:55] - patrick used command LOOK @ Clock in the Main Quad
+[10-22-2018 08:21:56] - patrick used command SAY hello @ Clock in the Main Quad
+[10-22-2018 08:21:57] - patrick used command MOVE South [moved from Clock in the Main Quad to Exploratory Hall]
+[10-22-2018 08:22:13] - Phone dropped at Mason Statue
+[10-22-2018 08:22:18] - Newspaper dropped at Exploratory Hall
+[10-22-2018 08:29:10] - SERVER STARTED
+[10-22-2018 08:29:23] - patrick joined the server
+[10-22-2018 08:29:23] - patrick used command LOOK @ Clock in the Main Quad
+[10-22-2018 08:29:24] - patrick used command LOOK @ Clock in the Main Quad
+[10-22-2018 08:29:25] - patrick used command SAY hello @ Clock in the Main Quad
+[10-22-2018 08:29:27] - patrick used command MOVE South [moved from Clock in the Main Quad to Exploratory Hall]
+[10-22-2018 08:29:30] - patrick used command INVENTORY @ Exploratory Hall
+[10-22-2018 08:29:34] - patrick used command LOOK @ Exploratory Hall
+[10-22-2018 08:30:04] - Phone dropped at Clock in the Main Quad
+[10-22-2018 08:30:12] - zach joined the server
+[10-22-2018 08:30:12] - zach used command LOOK @ Clock in the Main Quad
+[10-22-2018 08:30:13] - zach used command LOOK @ Clock in the Main Quad
+[10-22-2018 08:30:14] - zach used command SAY hello @ Clock in the Main Quad

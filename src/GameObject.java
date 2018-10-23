@@ -11,6 +11,8 @@ import java.rmi.server.UnicastRemoteObject;
  */
 public class GameObject extends UnicastRemoteObject implements GameObjectInterface {
     private final GameCore core;
+
+
     
     /**
      * Creates a new GameObject.  Namely, creates the map for the rooms in the game,
@@ -21,6 +23,7 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
         super();
         
         core = new GameCore();
+
     }
 
     /**
