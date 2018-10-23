@@ -220,6 +220,7 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
      */
     public boolean buyItem(String name, int shopId, String item) throws RemoteException{
     	return core.buyItem(name, shopId, item);
+    }
     
     /**
      * Returns a Shop's inventory as a formatted string
