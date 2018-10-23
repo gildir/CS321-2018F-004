@@ -153,6 +153,10 @@ public class GameClient {
 
     // Begin Feature 409 Word Filter
 
+    /**
+     * Reads a list of words from file, adds them to this player's list of words filtered from chat.
+     *
+     */
     private void readWordFilterFile() {
 
         HashSet<String> words = new HashSet<String>();
@@ -165,18 +169,22 @@ public class GameClient {
             String line = br.readLine();
 
             while (line != null) {
-                //System.err.print("\nLine read: " + line);
-                words.add(line.toLowerCase());
+                System.err.print("\nPlayer " + playerName + " added word \"" + line + "\" to their filter list.\n");
+                String word = line.toLowerCase();
+                words.add(word);
+                words.add("\"" + word + "\"");
+                words.add("\"" + word);
+                words.add(word + "\"");
                 line = br.readLine();
             }
 
-            remoteGameInterface.setPlayerFilteredWords(playerName, words);
+            remoteGameInterface.setPlayerFilteredWords(this.playerName, words);
+            br.close();
 
         } catch(IOException i) {
             System.err.print("\nI/O Exception thrown while attempting to read from filtered words File!\n");
         }
     }
-
 
     //End Feature 409 Word Filter
 
