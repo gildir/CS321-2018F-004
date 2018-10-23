@@ -32,7 +32,8 @@ public class ShopClient {
 	private void run() throws RemoteException {
 		// Display instructions
 		printMenu();
-
+		// Display shop specific greeting
+		System.out.println(remote.getShopStr(this.id));
 
 			
 		// Copy and pasted from GameClient
