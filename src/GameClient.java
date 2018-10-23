@@ -216,6 +216,7 @@ public class GameClient {
                     }
                     break;
                 default:
+                    //If command does not match with any, see if it is custom command
                     if (!executeCustomCommand(command)) {
                         System.out.println("Invalid Command, Enter \"help\" to get help");
                     }
