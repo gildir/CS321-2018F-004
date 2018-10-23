@@ -4,6 +4,7 @@
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -14,6 +15,7 @@ public class GameCore implements GameCoreInterface {
     private final PlayerList playerList;
     private final Map map;
     private HashMap<Integer,Shop> shoplist;
+    private Venmo venmo; // Team 4: Aalaqeel
     
     /**
      * Creates a new GameCoreObject.  Namely, creates the map for the rooms in the game,
@@ -25,11 +27,14 @@ public class GameCore implements GameCoreInterface {
         
         // Generate the game map.
         map = new Map();
-        playerList = new PlayerList();
+        playerList = new PlayerList(); 
         
         // Builds a list of shops mapped to their map id (can be expanded as needed)
         shoplist = new HashMap<Integer,Shop>();
         shoplist.put(new Integer(1), new Shop("Clocktower shop", "The shopping destination for all of your gaming needs."));
+        
+        // Initializes the Venmo core. Team 4: Alaqeel
+        venmo = new Venmo();
         
         Thread objectThread = new Thread(new Runnable() {
             @Override
@@ -340,19 +345,21 @@ public class GameCore implements GameCoreInterface {
     public int sellItem(String name, int shopId, String item) {
     	Player player = this.playerList.findPlayer(name);
     	Shop s = shoplist.get(shopId);
+    	int value = 0;
     	
     	String removed = player.removeObjectFromInventory(item);
     	if (removed != null) {
     		s.add(removed);
+    		value = 10;
+        	player.setMoney(player.getMoney() + value);
     	}
     	
     	//int value = removed.getValue();
-    	int value = 10;
-    	player.setMoney(player.getMoney() + value);
     	return value;
     }
     
     /**
+     * 605B_buy_method
      * Allows player to sell an item to a shop, and increases their money
      * @author Team 4: Mistry
      * @param name Name of the player
@@ -388,10 +395,50 @@ public class GameCore implements GameCoreInterface {
     	player.setMoney(player.getMoney() - val);
     	return true;
     }
-	@Override
-	public String venmo(String name) {
-		// TODO Auto-generated method stub
-		return null;
+
+    /**
+     * Takes the player into venmo. The new and improved way to exchange money with other players.
+     * 
+     * @author Team 4: Alaqeel
+     * @param name Name of the player enter the bank
+     */	@Override
+	public String venmo(String name, ArrayList<String> tokens) {
+		// checks if the player forgot to enter enough commands
+		if (tokens.isEmpty()) return "You need to provide more arguments.\n" + Venmo.instructions();
+		
+		// Gets the object of the caller player
+		Player player1 = this.playerList.findPlayer(name);
+			
+		// Executes the relevant commands
+		switch(tokens.remove(0).toUpperCase()) {
+			case "SEND": // sending a transaction
+				if (tokens.isEmpty()) return "Specify recipient and amount.";
+				// gets the object of the receiving player
+				Player player2 = this.playerList.findPlayer(tokens.remove(0));
+				// checks that the name is correct
+				if (player2 == null) return "Incorrect player name."; 
+				// checks if user entered a transaction amount
+				if (tokens.isEmpty()) return "Specify transaction amount";
+				
+				float amount;
+				// checks if the player entered a valid number
+				try {
+					amount = Float.parseFloat(tokens.remove(0));
+				} catch (NumberFormatException e) {
+					return "Please enter a valid number.";
+				}
+				return venmo.send(player1, player2, amount);
+			case "HELP": // prints the help menu
+				return "This is how you can use Venmo:\n" + Venmo.instructions();
+			case "DEMO": // helpful for demo purposes
+				if (!tokens.isEmpty() && tokens.remove(0).equalsIgnoreCase("********")) {
+					player1.changeMoney(10);
+					System.out.printf("[Venmo] %s excuted the demo command\n", player1.getName());
+					return "Shush! Don't tell anyone that I added $10.00 to your wallet.";
+				}
+			default:
+				return "Unknown argument.\n" + Venmo.instructions();
+		}		
 	}      
 	
 	/**
@@ -404,5 +451,15 @@ public class GameCore implements GameCoreInterface {
 		float m = player.getMoney();
 		
 		return "$" + String.format("%.02f", m);
+	}
+	
+	/**
+     * Returns a Shop's inventory as a formatted string
+     * @param id The shop ID
+     * @return A formatted string representing the Shop's inventory
+     */
+    public String getShopInv(int id) {
+		Shop s = this.shoplist.get(new Integer(id));
+		return s.getObjects();
 	}
 }

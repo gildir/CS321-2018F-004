@@ -52,7 +52,12 @@ public class Shop
 	
 	//Menu for the player to be interacting with the shop 
 	//use something like a switch statement
-	public void printMenu() {}
+	public void printMenu() {
+		System.out.println("To buy an item, enter \"buy [item ID].\n\"");
+		System.out.println("To sell an item, enter \"sell [item ID]\".\n");
+		System.out.println("To see the inventory, enter \"Inventory\"");
+		Sysetem.out.println("To see what item is in demand, enter \"demand\"\n");
+	}
 	
 	public void addPlayer(Player p) {
 		playerlist.addPlayer(p);
@@ -149,7 +154,7 @@ public class Shop
 	 * Iterates through the list of the objects and creates a table populated with object names and prices.
 	 * @return table of the objects
 	 */
-	private String getObjects() {
+	public String getObjects() {
 		
 		if (inventory.size() == 0) {
 			return "We usually have a huge catalog.\n"
@@ -179,7 +184,7 @@ public class Shop
 		// adding menu items
 		int i = 1;
 		for (Object obj : inventory) {
-			float price = 0; // TODO: replace with price getter
+			float price = 12; // TODO: replace with price getter
 			
 			if (this.inDemand.contains(obj)) price *= 1.2; // change price according to demand list
 			String item = obj.toString();
