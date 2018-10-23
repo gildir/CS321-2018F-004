@@ -1,5 +1,6 @@
 import java.io.*;
 import java.util.Scanner;
+import java.util.StringTokenizer;
 
 //import LinkedList.Node;
 
@@ -63,13 +64,173 @@ public class addRoom{
     	
     }
     
-    addRoom( String infile, String outfile)
+    addRoom( String infile, String outfile) throws IOException
     {
     	this.defineOutputFileName(infile);
     	this.defineOutputFileName(outfile);
     	
     	this.openInputFile();
     	this.openOutputFile();
+    	
+    	this.readAndAppend();
+    	this.appendFromUser();
+    	this.printToFile();
+    }
+    
+    
+    
+    private void readAndAppend() throws FileNotFoundException
+    {
+    	File file = new File("/home/christopher/workspace/CS321_Game/test.csv"); 
+    	  
+    	BufferedReader br = new BufferedReader(new FileReader(file)); 
+    	  
+    	  String working = ""; 
+    	  String description = "";
+    	  String tempWorking = "";
+    	  try 
+    	  {
+			if ( (working = br.readLine()) == null)
+			{
+				//This is the original number of Rooms in the file
+				//since this will be overwritten by the addition of rooms it will be ignored
+			}
+			StringTokenizer st = new StringTokenizer(working, ",");
+		     
+    		//Begin the parsing of the data in the file.  
+    		 
+			do{
+				working = br.readLine();
+				st = new StringTokenizer(working, ",");
+				System.out.println(working);
+				System.out.println(st.countTokens());
+				tempWorking += st.nextToken();	//Read and discard original room number
+				//System.out.println(tempWorking);
+				tempWorking = "";
+				//System.out.println(st.countTokens());
+				//System.out.println();
+				tempWorking += st.nextToken();
+				Node temp = new Node();
+			    while (st.hasMoreTokens()) 
+			    {
+			    	
+			    	if ( tempWorking.compareTo(this.indoorDesignation) == 0)
+			        {
+			        	temp.indorOutdoor = 'i';
+			        }
+			        else
+			        {
+			        	temp.indorOutdoor = 'o';
+			        }
+			    	while ( st.hasMoreElements())
+			    	{
+			    		description += st.nextToken();
+			    	}
+			    	temp.roomDescription = description;
+			    	if((working = br.readLine()) != null)
+			    	{
+			    		st = new StringTokenizer(working, ",");
+			    		System.out.println(working);
+						System.out.println(st.countTokens());
+			    		tempWorking = "";
+			    		tempWorking = st.nextToken();	//Disregard the direction description, formatted data
+			    		tempWorking = "";
+			    		description = "";
+			    		tempWorking = st.nextToken();
+			    		temp.northConnecting = Integer.parseUnsignedInt(tempWorking);
+			    		tempWorking = "";
+			    		while ( st.hasMoreElements())
+				    	{
+				    		description += st.nextToken();
+				    	}
+			    		temp.northDescription = description;
+			    	}
+			    	else
+			    	{
+			    		System.out.println("FAILURE IN READING THE NORTH DATA");
+			    		System.exit(-1);
+			    	}
+			    	if((working = br.readLine()) != null)
+			    	{
+			    		st = new StringTokenizer(working, ",");
+			    		System.out.println(working);
+						System.out.println(st.countTokens());
+			    		tempWorking = "";
+			    		tempWorking = st.nextToken();	//Disregard the direction description, formatted data
+			    		tempWorking = "";
+			    		description = "";
+			    		tempWorking = st.nextToken();
+			    		temp.southConnecting = Integer.parseUnsignedInt(tempWorking);
+			    		tempWorking = "";
+			    		while ( st.hasMoreElements())
+				    	{
+				    		description += st.nextToken();
+				    	}
+			    		temp.southDescription = description;
+			    	}
+			    	else
+			    	{
+			    		System.out.println("FAILURE IN READING THE SOUTH DATA");
+			    		System.exit(-1);
+			    	}
+			    	if((working = br.readLine()) != null)
+			    	{
+			    		st = new StringTokenizer(working, ",");
+			    		System.out.println(working);
+						System.out.println(st.countTokens());
+			    		tempWorking = "";
+			    		tempWorking = st.nextToken();	//Disregard the direction description, formatted data
+			    		tempWorking = "";
+			    		description = "";
+			    		tempWorking = st.nextToken();
+			    		temp.eastConnecting = Integer.parseUnsignedInt(tempWorking);
+			    		tempWorking = "";
+			    		while ( st.hasMoreElements())
+				    	{
+				    		description += st.nextToken();
+				    	}
+			    		temp.eastDescription = description;
+			    	}
+			    	else
+			    	{
+			    		System.out.println("FAILURE IN READING THE EAST DATA");
+			    		System.exit(-1);
+			    	}
+			    	if((working = br.readLine()) != null)
+			    	{
+			    		st = new StringTokenizer(working, ",");
+			    		System.out.println(working);
+						System.out.println(st.countTokens());
+			    		tempWorking = "";
+			    		tempWorking = st.nextToken();	//Disregard the direction description, formatted data
+			    		tempWorking = "";
+			    		description = "";
+			    		tempWorking = st.nextToken();
+			    		temp.westConnecting = Integer.parseUnsignedInt(tempWorking);
+			    		tempWorking = "";
+			    		while ( st.hasMoreElements())
+				    	{
+				    		description += st.nextToken();
+				    	}
+			    		temp.westDescription = description;
+			    	}
+			    	else
+			    	{
+			    		//System.out.println("FAILURE IN READING THE West DATA");
+			    		//System.exit(-1);
+			    	}
+			    	this.addNodeToList(temp);
+			    }
+			        
+			   }while ((working = br.readLine()) != null);
+			    
+			    
+    	  } catch (IOException e) {
+			// TODO Auto-generated catch block
+    		  System.out.println("ERROR IN THE READING OF THE FILE");
+    		  e.printStackTrace();
+		}
+    	    
     }
     
     addRoom( String outfile) throws IOException
@@ -112,7 +273,7 @@ public class addRoom{
 			output += this.head.roomDescription;	//add the description of the room to the string
 			output += ',';	//
 			//output += this.head.indorOutdoor;	//old format changed 10/19/2018 by Jorge to implement the Indoor Outdoor when entering a room feature
-			//output += '\n';
+			output += '\n';
 			strToBytes = output.getBytes();	//Convert the data into bytes to be sent to the file writer
 			this.outputFile.write(strToBytes);	//append the output to the file.
 			
@@ -121,7 +282,7 @@ public class addRoom{
 			output += this.north;	//Writes the word NORTH in the output string
 			output += ',';
 			output += Integer.toString(this.head.northConnecting);	//Writes the room number that connects to the north, 0 if there i none
-			output += "'";
+			output += ",";
 			output += this.head.northDescription;	//Writes the description of the north side of the room
 			output += '\n';
 			strToBytes = output.getBytes();	//Convert the string to bytes to output to the file.
@@ -130,9 +291,9 @@ public class addRoom{
 			//Setup and write the south definition of the file
 			output = "";
 			output += this.south;	//Write the Word "SOUTH" to the output string
-			output += "'";
+			output += ",";
 			output += Integer.toString(this.head.southConnecting);	//Write the room connected to the south, or 0 if there is no room connected
-			output += "'";
+			output += ",";
 			output += this.head.southDescription;	//Write the description of the south side of the room 
 			output += '\n';
 			strToBytes = output.getBytes();	//convert the string to bytes to be output to the file
@@ -141,9 +302,9 @@ public class addRoom{
 			//Setup and write the east of definition of the file
 			output = "";	
 			output += this.east;	//Write the word "EAST" the string 
-			output += "'";
+			output += ",";
 			output += Integer.toString(this.head.eastConnecting);	//Write the connecting room to the east if one exists.
-			output += "'";
+			output += ",";
 			output += this.head.eastDescription;	//Description of the east side of the room
 			output += '\n';
 			strToBytes = output.getBytes();	//Convert the string to bytes to be written to the file.
@@ -152,9 +313,9 @@ public class addRoom{
 			//Setup and write the west definition of the file
 			output = "";
 			output += this.west;	//Write the word "WEST" to the string
-			output += "'";
+			output += ",";
 			output += Integer.toString(this.head.westConnecting);	//Define the room connecting to the west of the room
-			output += "'";
+			output += ",";
 			output += this.head.westDescription;	//Describe the west
 			output += '\n';
 			strToBytes = output.getBytes();
@@ -165,6 +326,8 @@ public class addRoom{
 		outputFile.close();
 			
 	}
+    
+    
 
 	//Internal methods 
     private void defineInputFileName(String name)
@@ -181,7 +344,7 @@ public class addRoom{
     {
     	try
     	{
-    		inputFile = new FileInputStream(inputFileName);
+    		inputFile = new FileInputStream("test.csv");
     	}
     	catch(Exception e)
     	{
