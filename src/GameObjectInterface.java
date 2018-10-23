@@ -100,13 +100,14 @@ public interface GameObjectInterface extends Remote {
      */    
     public void leave(String name) throws RemoteException;       
 	
-    /**
-     * Delete a player's account.
-     * 
-     * @param name Name of the player to be deleted
-     * @throws RemoteException
-     */
-    public void deleteAccount(String name) throws RemoteException;
+	/**
+	 * Delete a player's account.
+	 * 
+	 * @param name Name of the player to be deleted
+	 * @throws RemoteException
+	 */
+	public void deleteAccount(String name) throws RemoteException;
+
     
     /**
      * Player check in to ensure the client has not crashed. A client needs to 

@@ -73,7 +73,7 @@ public class GameCore implements GameCoreInterface {
         objectThread.setDaemon(true);
         objectThread.start();
         
-        objectThread = new Thread(new Runnable() {
+        Thread hbThread = new Thread(new Runnable() {
             @Override
             public void run() {
                 while(true) {
@@ -88,9 +88,9 @@ public class GameCore implements GameCoreInterface {
                 }
             }
         });
-        objectThread.setDaemon(true);
-        objectThread.setName("heartbeatChecker");
-        objectThread.start();
+        hbThread.setDaemon(true);
+        hbThread.setName("heartbeatChecker");
+        hbThread.start();
     }
     
     /**
@@ -367,67 +367,67 @@ public class GameCore implements GameCoreInterface {
         return null;
     }       
 
-    /**
-     * Logs player connections
-     * 
-     * @param connecting true if they're connecting, false if they are disconnecting
-     * @param name
-     */
-    private void connectionLog(boolean connecting, String name) {
-            playerLogger.info(String.format("(%s) logged %s", name, connecting ? "in" : "out"));
-            for (Handler h : playerLogger.getHandlers())
-                    h.flush();
-    }
+	/**
+	 * Logs player connections
+	 * 
+	 * @param connecting true if they're connecting, false if they are disconnecting
+	 * @param name
+	 */
+	private void connectionLog(boolean connecting, String name) {
+		playerLogger.info(String.format("(%s) logged %s", name, connecting ? "in" : "out"));
+		for (Handler h : playerLogger.getHandlers())
+			h.flush();
+	}
 
-    /**
-     * Creates the logger outside of the constructor. Uses RFC3339 timestamps
-     * 
-     * @throws IOException
-     */
-    private void initConnectionsLogger() throws IOException {
-            File f = new File("connections.log");
-            if (!f.exists())
-                    f.createNewFile();
-            FileOutputStream out = new FileOutputStream(f, true);
-            StreamHandler handle = new StreamHandler(out, new SimpleFormatter() {
-                    private final SimpleDateFormat rfc3339 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
+	/**
+	 * Creates the logger outside of the constructor. Uses RFC3339 timestamps
+	 * 
+	 * @throws IOException
+	 */
+	private void initConnectionsLogger() throws IOException {
+		File f = new File("connections.log");
+		if (!f.exists())
+			f.createNewFile();
+		FileOutputStream out = new FileOutputStream(f, true);
+		StreamHandler handle = new StreamHandler(out, new SimpleFormatter() {
+			private final SimpleDateFormat rfc3339 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
 
-                    @Override
-                    public String format(LogRecord log) {
-                            StringBuilder sb = new StringBuilder();
-                            sb.append("[").append(rfc3339.format(new Date(log.getMillis()))).append("] ");
-                            sb.append("[").append(log.getLoggerName()).append("] ");
-                            sb.append("[").append(log.getLevel()).append("] ");
-                            sb.append(log.getMessage()).append("\r\n");
-                            Throwable e = log.getThrown();
-                            if (e != null)
-                                    for (StackTraceElement el : e.getStackTrace())
-                                            sb.append(el.toString()).append("\r\n");
-                            return sb.toString();
-                    }
-            });
-            playerLogger.setUseParentHandlers(false);
-            playerLogger.addHandler(handle);
-            playerLogger.info("Player connections logger has started");
-            handle.flush();
-    }
+			@Override
+			public String format(LogRecord log) {
+				StringBuilder sb = new StringBuilder();
+				sb.append("[").append(rfc3339.format(new Date(log.getMillis()))).append("] ");
+				sb.append("[").append(log.getLoggerName()).append("] ");
+				sb.append("[").append(log.getLevel()).append("] ");
+				sb.append(log.getMessage()).append("\r\n");
+				Throwable e = log.getThrown();
+				if (e != null)
+					for (StackTraceElement el : e.getStackTrace())
+						sb.append(el.toString()).append("\r\n");
+				return sb.toString();
+			}
+		});
+		playerLogger.setUseParentHandlers(false);
+		playerLogger.addHandler(handle);
+		playerLogger.info("Player connections logger has started");
+		handle.flush();
+	}
 
-    /**
-     * Delete a player's account.
-     * 
-     * @param name Name of the player to be deleted
-     * @return Player that was just deleted.
-     */
-    public Player deleteAccount(String name) {
-            Player player = this.playerList.findPlayer(name);
-            if (player != null) {
-                    this.broadcast(player, "You hear that " + player.getName() + " has dropped out of school.");
-                    this.playerList.removePlayer(name);
-                    this.accountManager.deleteAccount(player.getName());
-                    return player;
-            }
-            return null; // No such player was found.
-    }
+	/**
+	 * Delete a player's account.
+	 * 
+	 * @param name Name of the player to be deleted
+	 * @return Player that was just deleted.
+	 */
+	public Player deleteAccount(String name) {
+		Player player = this.playerList.findPlayer(name);
+		if (player != null) {
+			this.broadcast(player, "You hear that " + player.getName() + " has dropped out of school.");
+			this.playerList.removePlayer(name);
+			this.accountManager.deleteAccount(player.getName());
+			return player;
+		}
+		return null; // No such player was found.
+	}
         
     @Override
     public void heartbeatCheck(String name){

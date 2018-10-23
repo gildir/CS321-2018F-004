@@ -192,19 +192,18 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
         }
     }    
 	
-    /**
-     * Delete a player's account.
-     * 
-     * @param name Name of the player to be deleted
-     * @throws RemoteException
-     */
-    @Override
-    public void deleteAccount(String name) throws RemoteException{
-            Player player = core.deleteAccount(name);
-            if (player != null) {
-                    player.getReplyWriter().close();
-            }
-    }
+	/**
+	 * Delete a player's account.
+	 * 
+	 * @param name Name of the player to be deleted
+	 * @throws RemoteException
+	 */
+	public void deleteAccount(String name) throws RemoteException{
+		Player player = core.deleteAccount(name);
+		if (player != null) {
+			player.getReplyWriter().close();
+		}
+	}
     
     @Override
     public void heartbeatCheck(String name) throws RemoteException{
