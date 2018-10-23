@@ -98,11 +98,6 @@ public class Shop
         	result += players;
         }
         
-//        result += "Players in the area: " + this.getPlayers(playerList) + "\n";
-//        result += "You see paths in these directions: " + this.getExits() + "\n";
-//        result += "...................\n";
-//        result += "You are facing: " + player.getCurrentDirection() + "\n";
-        
         result += "How can we help you?\n";
         return result;
     }
@@ -135,33 +130,6 @@ public class Shop
 		return result + "\n";
 		
 	}
-	
-	// copied from Room.java
-//	public String getPlayers(PlayerList players) {
-//        String localPlayers = "";
-//        for(Player player : players) {
-//        	System.err.println("Checking to see if " + player.getName() + " in room " + player.getCurrentRoom() + " is in this room (" + this.id + ")");
-//            if(player.getCurrentRoom() == this.id) {
-//                localPlayers += player.getName() + " ";
-//            }
-//        }
-//        if(localPlayers.equals("")) {
-//            return "None.";
-//        }
-//        else {
-//            return localPlayers;
-//        }
-//    }
-	
-//	public String getExits() {
-//        String result = "";
-//        for(Exit exit : this.exits) {
-//            if(exit.getRoom() != 0) {
-//                result += exit.getDirection().name() + " ";
-//            }
-//        }
-//        return result;
-//    }
 	
 	/**
 	 * Iterates through the list of the objects and creates a table populated with object names and prices.
