@@ -111,6 +111,7 @@ public class addRoom{
 				//System.out.println();
 				tempWorking += st.nextToken();
 				Node temp = new Node();
+				this.numberOfRooms++;
 			    while (st.hasMoreTokens()) 
 			    {
 			    	
