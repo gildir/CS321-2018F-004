@@ -160,7 +160,7 @@ public class GameClient {
     private void readWordFilterFile() {
 
         HashSet<String> words = new HashSet<String>();
-        String filename = "FilteredWordsList.txt";
+        String filename = "FilteredWordsList-" + playerName + ".txt";
 
         try {
             File filteredWordsFile = new File(filename);
