@@ -150,9 +150,8 @@ public class GameClient {
         String command = tokens.remove(0).toUpperCase();
 
         try {
-
+            boolean success = true; //Trips whenever the user enters a bad command. Used so redo doesnt redo bad commands atm
             switch(command) {
-                boolean success = true; //Trips whenever the user enters a bad command. Used so redo doesnt redo bad commands atm
                 case "LOOK":
                     System.out.println(remoteGameInterface.look(this.playerName));   
                     break;
