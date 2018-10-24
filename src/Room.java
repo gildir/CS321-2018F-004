@@ -19,16 +19,17 @@ public class Room {
         
         this.id = id;
         this.title = title;
+	this.room_type = room_type;
         this.description = description;
-        this.npcs = null;
+        this.npcs = new LinkedList<>();
     }
 
-    public Room(int id, String title, String description, LinkedList<NPC> npcs) {
+    public Room(int id, String room_type, String title, String description, LinkedList<NPC> npcs) {
         this.objects = new LinkedList<>();
         this.exits = new LinkedList<>();
-
         this.id = id;
         this.title = title;
+	this.room_type = room_type;
         this.description = description;
 
         this.npcs = npcs;

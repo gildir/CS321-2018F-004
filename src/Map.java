@@ -23,7 +23,7 @@ public class Map {
 	    int numRooms, numExits;
 
 
-            String title, description;
+            String title, room_type, description;
             String message;
             int id, link;
 
@@ -40,6 +40,7 @@ public class Map {
                 mapIn.useDelimiter(",|\\n|\\r\\n");
                 id = Integer.parseInt(mapIn.next());
                 title = mapIn.next();
+		room_type = mapIn.next();
                 mapIn.useDelimiter("\\S|\\s");
                 mapIn.next();
                 mapIn.useDelimiter("\\n|\\r\\n");
@@ -50,11 +51,11 @@ public class Map {
 
                 if(id == 1){
                     LinkedList<String> quests = new LinkedList<>(Arrays.asList("quest1", "quest2", "quest3"));
-                    newRoom = new Room(id, title, description, new LinkedList<>(Arrays.asList(
+                    newRoom = new Room(id, title, room_type, description, new LinkedList<>(Arrays.asList(
                             new NPC("questNPC", 1, quests))));
                 }
                 else {
-                    newRoom = new Room(id, title, description);
+                    newRoom = new Room(id, title, room_type, description);
                 }
 
                 for (int j = 0; j < numExits; j++) {
