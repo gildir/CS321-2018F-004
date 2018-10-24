@@ -28,8 +28,8 @@ public class addRoom{
     private static final String east = "EAST";
     private static final String south = "SOUTH";
     private static final String west = "WEST";
-    private static final String outdoorDesignation = "outdoors";
-    private static final String indoorDesignation = "indoors";
+    private static final String outdoorDesignation = "outside";
+    private static final String indoorDesignation = "inside";
     
     //Room Definition Variables
     private class Node<T>
@@ -239,11 +239,73 @@ public class addRoom{
     	
     	this.defineOutputFileName(outfile);
     	
-    	
+    	this.autoMapBuild();
     	this.openOutputFile();
-    	this.appendFromUser();
+    	//this.appendFromUser();
     	this.printToFile();
     }
+    
+    
+    private void autoMapBuild()
+    {
+    	for ( int a = 1; a <= 100; a++)
+    	{
+    		for ( int b = 1; b <= 200; b++)
+    		{
+    			char outdoor = 'o';
+    			int connectionNum;		
+    			this.numberOfRooms++;
+    			Node temp = new Node();
+    			temp.roomDescription = "Room Description";
+    			temp.roomID = this.numberOfRooms;
+    			temp.indorOutdoor = 'o';
+    			temp.northDescription = "North Discription";
+    			temp.eastDescription = "East Description";
+    			temp.southDescription = "South Descripton";
+    			temp.westDescription = "West Description";
+    			if ( (a-1) < 1)
+    			{
+    				temp.northConnecting = 0;
+    			}
+    			else
+    			{
+    				temp.northConnecting = (a-1);
+    			}
+    			if ( (b+1) > 200)
+    			{
+    				temp.eastConnecting = 0;
+    			}
+    			else
+    			{
+    				temp.eastConnecting = (b+1);
+    			}
+    			if ((a+1) > 100)
+    			{
+    				temp.southConnecting = 0;
+    			}
+    			else
+    			{
+    				temp.southConnecting = (a+1);
+    			}
+    			if ( (b -1) < 1)
+    			{
+    				temp.westConnecting = 0;
+    			}
+    			else
+    			{
+    				temp.westConnecting = (a-1);
+    			}
+    			temp.NextNode = null;
+    			this.addNodeToList(temp);
+    			System.out.println("working " + this.numberOfRooms);
+    			
+    			
+    		}
+    	}
+    }
+    
+    
+    
     
     private void printToFile() throws IOException {
 		// TODO Auto-generated method stub
@@ -320,7 +382,7 @@ public class addRoom{
 			output += this.head.westDescription;	//Describe the west
 			output += '\n';
 			strToBytes = output.getBytes();
-			this.outputFile.write(strToBytes);	//Wrte to the file
+			//this.outputFile.write(strToBytes);	//Write to the file
 			
 			head = head.NextNode;	//Move to the next node
 		}
