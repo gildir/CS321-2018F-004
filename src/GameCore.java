@@ -296,11 +296,12 @@ public class GameCore implements GameCoreInterface {
 	if(playerChallengee.getInBattle() == true){
 	     return playerChallengee.getName() + " is already in a R-P-S battle.";
 	}
-        playerChallengee.setChallenger(challenger);
-        playerChallengee.setHasChallenge(true);
         if(playerChallenger != playerChallengee && playerChallenger.getCurrentRoom() == playerChallengee.getCurrentRoom()) {
-             playerChallengee.getReplyWriter().println(playerChallenger.getName() + " challenges you to a R-P-S");
-             return "You challenged " + playerChallengee.getName() + " to a R-P-S.";
+            playerChallengee.setChallenger(challenger);
+            playerChallenger.setChallenger(challengee);
+            playerChallengee.setHasChallenge(true);
+            playerChallengee.getReplyWriter().println(playerChallenger.getName() + " challenges you to a R-P-S");
+            return "You challenged " + playerChallengee.getName() + " to a R-P-S.";
          }
         else if(playerChallenger == playerChallengee)
             return "You can't challenge yourself to R-P-S.";
@@ -318,12 +319,11 @@ public class GameCore implements GameCoreInterface {
         }
         if(playerChallengee.getChallenger().equals(playerChallenger.getName()) && playerChallengee.getHasChallenge() == true){
             if(playerChallenger != playerChallengee && playerChallenger.getCurrentRoom() == playerChallengee.getCurrentRoom()) {
-                playerChallenger.getReplyWriter().println(playerChallengee.getName() + " accepts your challenge to a R-P-S");
-                playerChallengee.setChallenger(" "); 
+                playerChallenger.getReplyWriter().println(playerChallengee.getName() + " accepts your challenge to a R-P-S. \nPick rock, paper, or scissors: ");
                 playerChallengee.setHasChallenge(false);
 		playerChallengee.setInBattle(true);
 		playerChallenger.setInBattle(true);
-                return "You accept " + playerChallenger.getName() + "\'s challenge to a R-P-S.";
+                return "You accept " + playerChallenger.getName() + "\'s challenge to a R-P-S. \nPick rock, paper, or scissors: ";
             }
             else 
 	    {
@@ -348,6 +348,7 @@ public class GameCore implements GameCoreInterface {
 	if(playerChallengee.getChallenger().equals(playerChallenger.getName()) && playerChallengee.getHasChallenge() == true){
             if(playerChallenger != playerChallengee && playerChallenger.getCurrentRoom() == playerChallengee.getCurrentRoom()) {
                 playerChallengee.setChallenger(" ");
+                playerChallenger.setChallenger(" ");
                 playerChallengee.setHasChallenge(false);
                 playerChallengee.getReplyWriter().println(playerChallengee.getName() + " rejects your challenge to a R-P-S");
                 return "You reject " + playerChallenger.getName() + "\'s challenge to a R-P-S.";
@@ -362,11 +363,88 @@ public class GameCore implements GameCoreInterface {
 	else{
                 return "You have not been challenged by " + playerChallenger.getName();
         }
-
-
-
     }	
-     /**
+
+    @Override
+    public String pickRPS(String name,  String option){
+        Player player = this.playerList.findPlayer(name);
+        Player challengee = this.playerList.findPlayer(player.getChallenger());
+        
+        if(player.getHasChallenge() == true){
+          if(player.getOption().equals("ROCK") || player.getOption().equals("PAPER") || player.getOption().equals("SCISSORS")){
+            return "You already pick rock, paper or scissors. You picked " + player.getOption();
+          }
+          player.setOption(option);
+          challengee.setChallengerOption(option);
+          String message = "You picked " + option;
+
+          if(challengee.getOption().equals("ROCK") || challengee.getOption().equals("PAPER") || challengee.getOption().equals("SCISSORS")){
+            switch(player.getOption()) {
+              case "ROCK":
+                if (challengee.getOption().equals("PAPER")) {
+                  message = challengee.getName() + " wins with " + challengee.getOption();
+                } 
+                else if (challengee.getOption().equals("ROCK")){
+                  message = "It is a tie.";
+                }
+                else {
+                  message = player.getName() + " wins with " + player.getOption();
+                }
+                challengee.getReplyWriter().println(message);
+                player.setInBattle(false);
+                player.setChallenger(" ");
+                player.setOption("");
+                challengee.setChallenger(" ");
+                challengee.setInBattle(false);
+                challengee.setOption("");
+                break;
+              case "PAPER":
+                if (challengee.getOption().equals("SCISSORS")) {
+                  message = challengee.getName() + " wins with " + challengee.getOption();
+                } 
+                else if (challengee.getOption().equals("PAPER")){
+                  message = "It is a tie.";
+                }
+                else {
+                  message = player.getName() + " wins with " + player.getOption();
+                }
+                challengee.getReplyWriter().println(message);
+                player.setInBattle(false);
+                player.setChallenger(" ");
+                player.setOption("");
+                challengee.setChallenger(" ");
+                challengee.setInBattle(false);
+                player.setOption("");
+                break;
+              case "SCISSORS":
+                if (challengee.getOption().equals("ROCK")) {
+                  message = challengee.getName() + " wins with " + challengee.getOption();
+                } 
+                else if (challengee.getOption().equals("SCISSORS")){
+                  message = "It is a tie";
+                }
+                else {
+                  message = player.getName() + " wins with " + player.getOption();
+                }
+                challengee.getReplyWriter().println(message);
+                player.setInBattle(false);
+                player.setChallenger(" ");
+                player.setOption("");
+                challengee.setChallenger(" ");
+                challengee.setInBattle(false);
+                challengee.setOption("");
+                break;
+              default:
+                break;
+            }
+          }
+          return message;
+        }
+        else
+          return "You are not in a R-P-S challenge.";
+    }
+
+    /**
      * Leaves the game.
      * @param name Name of the player to leave
      * @return Player that was just removed.
