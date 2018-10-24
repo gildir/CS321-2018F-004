@@ -4,6 +4,7 @@
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.LinkedList;
 
 /**
  *
@@ -88,6 +89,8 @@ public class GameCore implements GameCoreInterface {
         awakeDayGhoul.start();
     }
 	
+
+
 	public void ghoulWander(Ghoul g,Room room){
 		Random rand = new Random();
 		int[] candinateRoom = new int[4];
@@ -107,6 +110,71 @@ public class GameCore implements GameCoreInterface {
 			}
 		}
     }
+
+	public String bribeGhoul(String playerName, String item){
+		item = item.toLowerCase();
+		Player player = playerList.findPlayer(playerName);
+		Room room = this.map.findRoom(player.getCurrentRoom());
+		if(player == null){
+			return null;
+		}
+		if(room.hasGhoul){
+			LinkedList<String> itemList = player.getCurrentInventory();
+			boolean giveAble = false;
+			for (String thing : itemList){
+				if(thing.equalsIgnoreCase(item)){
+					giveAble = itemList.remove(thing);
+					break;			
+				}
+			}
+
+			if(giveAble){
+				ghoul.modifyAngryLevel(-1);
+				String message = "Ghoul get " + item + ", ";    
+				int angryLv = ghoul.getAngryLevel();
+				switch(angryLv){
+					case 0:
+						message += "and as angry as angry level 0";
+						break;
+					case 1:
+						message += "and as angry as angry level 1";
+						break;
+					case 2:
+						message += "and as angry as angry level 2";
+						break;
+					case 3:
+						message += "and as angry as angry level 3";
+						break;
+					case 4:
+						message += "and as angry as angry level 4";
+						break;
+					case 5:
+						message += "and as angry as angry level 5";
+						break;
+					case 6:
+						message += "and as angry as angry level 6";
+						break;
+					case 7:
+						message += "and as angry as angry level 7";
+						break;
+					case 8:
+						message += "and as angry as angry level 8";
+						break;
+					case 9:
+						message += "and as angry as angry level 9";
+						break;
+					default:
+						message += "and as angry as angry level...who care?";
+				}
+				return  message;
+			}else{
+				return "Do not have this item......";
+			}
+		}else{
+			return "No Ghoul in this room";
+		}
+		
+	}
 	
 	public String pokeGhoul(String playerName) {
 		Player player = playerList.findPlayer(playerName);
