@@ -196,7 +196,7 @@ public class GameClient {
                     System.out.println(remoteGameInterface.venmo(this.playerName));
                     break;   
                 case "SHOP":
-                	int shopId = remoteGameInterface.shop(this.playerName); // Need to make this a serializable type
+                	int shopId = remoteGameInterface.shop(this.playerName); 
                 	if (shopId != -1) {
                 		System.out.println("You enter the shop");
                 		new ShopClient(this.playerName, shopId, remoteGameInterface);
