@@ -129,6 +129,7 @@ public class GameClient {
     /** 
      * Simple method to parse the local input and remotely execute the RMI commands.
      * @param input 
+     * @param inputCallCount
      */
     private void parseInput(String input) {
         boolean reply;
@@ -146,10 +147,10 @@ public class GameClient {
         }
         
         String message = "";
-        String command = tokens.remove(0).toUpperCase();
+        input = tokens.remove(0).toUpperCase();
 
         try {
-            switch(command) {
+            switch(input) {
 
                 case "LOOK":
                     System.out.println(remoteGameInterface.look(this.playerName));
@@ -215,7 +216,7 @@ public class GameClient {
                     break;
                 default:
                     //If command does not match with any, see if it is custom command
-                    if (!executeCustomCommand(command, tokens)) {
+                    if (!executeCustomCommand(input, tokens)) {
                         System.out.println("Invalid Command, Enter \"help\" to get help");
                     }
                     break;
