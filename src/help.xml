@@ -52,4 +52,7 @@ object are on the ground and what direction you are facing.
     <help command = "HELP">
         <description>  HELP          - Shows you all possible commands.</description>
     </help>
+    <help command = "REDO">
+        <description>  REDO          - Repeats the last command you entered.</description>
+    </help>
 </helps>
