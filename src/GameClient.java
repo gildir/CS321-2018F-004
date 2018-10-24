@@ -45,7 +45,7 @@ public class GameClient {
     
     // Members related to the player in the game.
     protected String playerName;
-    
+    private String lastCommand;
     /** 
      * Main class for running the game client.
      */
@@ -144,13 +144,14 @@ public class GameClient {
 
         try {
             switch(tokens.remove(0).toUpperCase()) {
-
+            boolean success = true; //Trips whenever the user enters a bad command. Used so redo doesnt redo bad commands atm
                 case "LOOK":
                     System.out.println(remoteGameInterface.look(this.playerName));   
                     break;
                 case "SAY":
                     if(tokens.isEmpty()) {
                         System.err.println("You need to say something in order to SAY.");
+                        success = false;
                     }
                     else {
                         while(tokens.isEmpty() == false) {
@@ -165,6 +166,7 @@ public class GameClient {
                 case "MOVE":
                     if(tokens.isEmpty()) {
                         System.err.println("You need to provide a direction to move.");
+                        success = false;
                     } else {
                         Direction dir = Direction.toValue(tokens.remove(0));
                         if(dir!=null) {
@@ -175,6 +177,7 @@ public class GameClient {
                 case "PICKUP":
                     if(tokens.isEmpty()) {
                         System.err.println("You need to provide an object to pickup.");
+                        success = false;
                     }
                     else {
                         System.out.println(remoteGameInterface.pickup(this.playerName, tokens.remove(0)));
@@ -183,6 +186,32 @@ public class GameClient {
                 case "PICKUPALL":
                     System.out.println(remoteGameInterface.pickupAll(this.playerName));
                     break;
+                case "WHITEBOARD":
+                    if(tokens.isEmpty()) {
+                        System.err.println("You need to provide an argument to the WHITEBOARD command.");
+                    }
+                    else {
+                        switch(tokens.remove(0).toUpperCase()) {
+                            case "ERASE":
+                                System.out.println(remoteGameInterface.whiteboardErase(this.playerName));
+                                break;
+                            case "READ":
+                                System.out.println(remoteGameInterface.whiteboardRead(this.playerName));
+                                break;
+                            case "WRITE":
+                                if (tokens.isEmpty()) { 
+                                    System.err.println("You need to provide an argument to the WHITEBOARD WRITE command");
+                                }
+                                else {
+                                    System.out.println(remoteGameInterface.whiteboardWrite(this.playerName, tokens.remove(0)));
+                                }
+                                break;
+                            default:
+                                System.err.println("Invalid argument provided to WHITEBOARD command.");
+                                break;
+                        }
+                    }
+                    break;
                 case "INVENTORY":
                     System.out.println(remoteGameInterface.inventory(this.playerName));
                     break;                                                            
@@ -190,9 +219,22 @@ public class GameClient {
                     remoteGameInterface.leave(this.playerName);
                     runListener = false;
                     break;
+                case "HELP":
+                    showCommand();
+                    break;
+                case "REDO":
+                    if(lastCommand==null){
+                        System.out.println("No command to redo.");
+                        break;
+                    }
+                    parseInput(lastCommand);
+                    break;
                 default:
                     System.out.println("Invalid Command, Enter \"help\" to get help");
                     break;
+            }
+            if(!input.equals("REDO")&&success) {
+                this.lastCommand = input;
             }
         } catch (RemoteException ex) {
             Logger.getLogger(GameClient.class.getName()).log(Level.SEVERE, null, ex);
@@ -324,5 +366,4 @@ public class GameClient {
             }            
         }
     }
-
 }
