@@ -3,6 +3,7 @@ import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.LinkedList;
+import java.io.IOException;
 
 /**
  *
@@ -127,6 +128,13 @@ public class GameCore implements GameCoreInterface {
 			}
 
 			if(giveAble){
+				try {
+					GhoulLog myLog = new GhoulLog();
+					myLog.glLog("GameCore","bribeGhoul", "Player" + " " + playerName + " has just given a " + item + " to the Ghoul");
+				} catch (Exception e){
+					e.printStackTrace();
+				}
+				
 				ghoul.modifyAngryLevel(-1);
 				int angryLv = ghoul.getAngryLevel();
 				String message = "Ghoul gets " + item + ", " + "and its anger level decreases to " + angryLv + ".";
@@ -149,9 +157,14 @@ public class GameCore implements GameCoreInterface {
 				return "There is no ghoul in this room.";
 			}
 
+			try {
+				GhoulLog myLog = new GhoulLog();
+				myLog.glLog("GameCore","pokeGhoul", "Player" + " " + playerName + " has just poked the Ghoul");
+			} catch (Exception e){
+				e.printStackTrace();
+			}
+			
 			ghoul.modifyAngryLevel(1);
-
-			// Return a different string depending on ghoul's anger level
 			int angerLvl = ghoul.getAngryLevel();
 			if (angerLvl >= 7) {
 				ghoul.Drag(player);
