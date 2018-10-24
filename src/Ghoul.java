@@ -29,6 +29,16 @@ public class Ghoul{
 	
 	public void modifyAngryLevel(int amount) {
 		this.angryLevel += amount;
+
+
+		//add some error check......
+		if(this.angryLevel > 10){
+			this.angryLevel = 10;
+		}else if (this.angryLevel < 0){
+			this.angryLevel = 0;
+		}
+		
+		return; 
 	}
 
 }

@@ -19,6 +19,14 @@ public interface GameCoreInterface {
 	 * @return String message of ghoul
 	 */
 	public String pokeGhoul(String playerName);
+
+	/**
+	 * Bribe the ghoul in the current room
+	 * @param playerName Player name
+	 * @param item item's name, which will be throw. 
+	 * @return String message of ghoul
+	 */
+	public String bribeGhoul(String playerName,String item);
     
     /**
      * Broadcasts a message to all other players in the same room as player.
