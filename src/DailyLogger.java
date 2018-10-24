@@ -13,6 +13,10 @@ public class DailyLogger{
     // Creates log file in logs folder with title "log [date].txt"
     public DailyLogger(){
         date = new SimpleDateFormat("MM-dd-yyyy").format(new Date());
+        File dir = new File("./logs/");
+        if(!dir.exists()){
+            dir.mkdir();
+        }
         filename = new String("log " + date + ".txt");
         this.f = new File("logs/" + filename);
         if (!f.exists()){
