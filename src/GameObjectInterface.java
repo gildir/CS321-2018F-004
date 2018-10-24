@@ -97,6 +97,15 @@ public interface GameObjectInterface extends Remote {
     public void requestPlayer(String requestingTrader, String traderToRequest) throws RemoteException;
 
     /**
+     * Attempts to offer a player an object
+     * @param srcName Name of the player making offer
+     * @param dstName Name of player receiving offer
+     * @param object String item beig offered
+     * @throws RemoteException
+     */
+    public String offer (String srcName, String dstName, String object) throws RemoteException;
+
+    /**
      * Return string representation of trade acceptance
      * @param acceptingTrader Name of the player who is accepting the trade
      * @param traderToAccept Name of the player who has requested a trade

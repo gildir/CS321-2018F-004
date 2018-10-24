@@ -156,8 +156,19 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
     @Override
     public String sort(String name, String modes) throws RemoteException {
         return core.sort(name, modes);
-    }    
-    
+    } 
+
+    /**
+     * Offers item from one player to another
+     * @param srcName Name player offer item
+     * @param dstName Name player being offered item
+     * @param message String name of item being offered
+     */
+    @Override
+    public String offer (String srcName, String dstName, String message) throws RemoteException{
+	    return core.offer(srcName, dstName, message);
+    }
+        
     /**
      * Prints message to player if request can processed, contacts other player about their request
      * @param requestingTrader Name of the player who has requested the trade

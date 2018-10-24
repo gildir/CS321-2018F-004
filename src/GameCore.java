@@ -329,6 +329,39 @@ public class GameCore implements GameCoreInterface {
     } 
 
     /**
+     * Returns a string of what and who you plan to offer an item to
+     * @param srcName Name of player making offer
+     * @param dstName Name of player receiving offer
+     * @param message Object item being offered
+     * @return Message showing status of offer
+     */
+    public String offer(String srcName, String dstName, String message){
+	Player srcPlayer = this.playerList.findPlayer(srcName);
+	Player dstPlayer = this.playerList.findPlayer(dstName);
+	Room room = map.findRoom(srcPlayer.getCurrentRoom());
+	String returnMessage;
+	Item object = srcPlayer.removeObjectFromInventory(message);
+	if (srcPlayer == dstPlayer)
+		returnMessage = "So now we talking to ourselves? Is that what's hot?";
+	else if (dstPlayer != null && (dstPlayer.getCurrentRoom() != srcPlayer.getCurrentRoom()))
+	    returnMessage = "Player ain't in your room, or your life";
+	else if (object == null)
+	    returnMessage = "You ain't got that fool: " + message;
+	else if (dstPlayer == null)
+	    returnMessage = "Player " + dstName + " not found.";
+	else if (srcPlayer == null)
+	    returnMessage = "Messge failed, check connection to server.";
+	else {
+	    dstPlayer.getReplyWriter().println(srcPlayer.getName() + " offers you an item: " + message);
+	    returnMessage = "You offer to " + dstPlayer.getName() + " an item: " + message;
+	}
+	if (object != null)
+	    srcPlayer.addObjectToInventory(object);
+	return returnMessage;
+    }
+
+
+    /**
      * Returns a string representation of all objects you are carrying.
      * @param name Name of the player to move
      * @return Message showing success.
@@ -391,7 +424,7 @@ public class GameCore implements GameCoreInterface {
         }
 
         playerToRequest.setTradeRequest(true);
-        playerToRequest.getReplyWriter().println(requestingTrader + " has requested a trade. You may ignore this request or type accept_trade " +requestingTrader+" to proceed. ");
+        playerToRequest.getReplyWriter().println(requestingTrader + " has requested a trade. You may ignore this request or type: A_TRADE " +requestingTrader+" to proceed. ");
         requestingPlayer.getReplyWriter().println("Player has been contacted. You will receive a notification when they accept. ");
     }
 

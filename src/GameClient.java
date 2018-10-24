@@ -60,8 +60,9 @@ public class GameClient {
         System.out.println("  INVENTORY     - Shows you what objects you have collected.");
 	System.out.println("  SORT          - Sorts your inventory");
         System.out.println("  QUIT          - Quits the game.");
-    System.out.println("  R_TRADE player  - Set up a trade with another player");
-    System.out.println("  A_TRADE player  - Accept a trade with another player");
+    	System.out.println("  R_TRADE player  - Set up a trade with another player");
+    	System.out.println("  A_TRADE player  - Accept a trade with another player");
+	System.out.println("  O or OFFER player object - Offer player an item");
         System.out.println();
         
 
@@ -183,6 +184,23 @@ public class GameClient {
                         System.out.println(remoteGameInterface.move(this.playerName, Integer.parseInt(tokens.remove(0))));
                     }
                     break;
+		
+		case "O":
+		    
+		case "OFFER":
+
+		    if (tokens.isEmpty()){
+			System.err.println("You need to provide a player to offer.");
+		    }
+		    else if (tokens.size() < 2) { 
+			System.err.println("You need to provide an item to offer.");
+		    }
+		    else {
+			String dstPlayerName = tokens.remove(0).toLowerCase();
+			System.out.println(remoteGameInterface.offer(this.playerName, dstPlayerName, tokens.remove(0)));
+		    }
+		    break;
+
                 case "PICKUP":
                     if(tokens.isEmpty()) {
                         System.err.println("You need to provide an object to pickup.");
