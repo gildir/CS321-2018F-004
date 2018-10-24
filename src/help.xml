@@ -45,4 +45,7 @@ object are on the ground and what direction you are facing.
     <help command = "REMOVECOMMAND">
         <description>  REMOVECOMMAND  - Remove a configured custom command.</description>
     </help>
+    <help command = "CUSTOMHELP">
+        <description>  CUSTOMHELP     - Show every configured custom commands.</description>
+    </help>
 </helps>

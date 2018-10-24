@@ -208,16 +208,14 @@ public class GameClient {
                     }
                     break;
                 case "REMOVECOMMAND":
-                    if(tokens.isEmpty()) {
-                        System.err.println("You need to provide a custom command to remove.");
-                    } else {
-                        String customCommand = tokens.remove(0).toUpperCase();
-                        removeCustomCommand(customCommand);
-                    }
+                    removeCustomCommand();
+                    break;
+                case "CUSTOMHELP":
+                    showCustomCommands();
                     break;
                 default:
                     //If command does not match with any, see if it is custom command
-                    if (!executeCustomCommand(command)) {
+                    if (!executeCustomCommand(command, tokens)) {
                         System.out.println("Invalid Command, Enter \"help\" to get help");
                     }
                     break;
@@ -380,7 +378,7 @@ public class GameClient {
         }
     }
 
-    private boolean executeCustomCommand(String commandName) {
+    private boolean executeCustomCommand(String commandName, ArrayList<String> parameters) {
         try {
             File customCommandFile = new File("./CommandShortcut.xml");
 
@@ -405,6 +403,11 @@ public class GameClient {
                 //If there is a custom command, use command binded to perform next aciton
                 if (commandName.equals(cCommand.getAttribute("name").toUpperCase())) {
                     String bindCommand = cCommand.getElementsByTagName("CommandToExecute").item(0).getTextContent();
+                    for (int j = 0; j < parameters.size(); j++)
+                    {
+                        bindCommand += " " + parameters.get(j).toUpperCase();
+                    }
+
                     parseInput(bindCommand);
                     return true;
                 }
@@ -416,16 +419,17 @@ public class GameClient {
         return false;
     }
 
-    private void removeCustomCommand(String commandName) {
+    private void removeCustomCommand() {
         try {
             File customCommandFile = new File("./CommandShortcut.xml");
 
-            //If no custom command exists yet, return false
-            if (!customCommandFile.exists())
-            {
-                System.out.println("There is no custom command configured");
+            if (!showCustomCommands()) {
                 return;
             }
+
+            InputStreamReader keyboardReader = new InputStreamReader(System.in);
+            BufferedReader keyboardInput = new BufferedReader(keyboardReader);
+            String commandName;
 
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
@@ -435,6 +439,9 @@ public class GameClient {
 
             Element cCommand;
 
+            System.out.println("\nEnter the custom command to delete:");
+            commandName = keyboardInput.readLine().toUpperCase();
+
             //Check if custom command with commandName exists
             for (int i = 0; i < customCommands.getLength(); i++) {
                 cCommand = (Element) customCommands.item(i);
@@ -442,7 +449,12 @@ public class GameClient {
                 //If there is a custom command, remove that command
                 if (commandName.equals(cCommand.getAttribute("name").toUpperCase())) {
                     cCommand.getParentNode().removeChild(cCommand);
+                    System.out.println("Custom command " + commandName + " has been deleted");
                     break;
+                }
+
+                if (i == (customCommands.getLength() - 1)) {
+                    System.out.println("No custom command " + commandName + " was found");
                 }
             }
 
@@ -456,6 +468,47 @@ public class GameClient {
         } catch (ParserConfigurationException | SAXException | IOException | TransformerException ex) {
             Logger.getLogger(GameClient.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    private boolean showCustomCommands()
+    {
+        try {
+            File customCommandFile = new File("./CommandShortcut.xml");
+
+            //If no custom command exists yet, return false
+            if (!customCommandFile.exists())
+            {
+                System.out.println("There is no custom command configured");
+                return false;
+            }
+
+            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+            Document document = dBuilder.parse(customCommandFile);
+
+            NodeList customCommands = document.getElementsByTagName("Command");
+
+            if (customCommands.getLength() == 0)
+            {
+                System.out.println("There is no custom command configured");
+                return false;
+            }
+
+            System.out.println("Here are the list of custom commands currently available:");
+
+            Element cCommand;
+
+            //Show every custom commands
+            for (int i = 0; i < customCommands.getLength(); i++) {
+                cCommand = (Element) customCommands.item(i);
+
+                System.out.println(cCommand.getAttribute("name").toUpperCase() + " - " + cCommand.getElementsByTagName("CommandToExecute").item(0).getTextContent());
+            }
+        } catch (ParserConfigurationException | SAXException | IOException ex) {
+            Logger.getLogger(GameClient.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return true;
     }
 
     /**
