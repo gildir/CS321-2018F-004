@@ -12,7 +12,7 @@ import java.util.logging.Logger;
 public class GameCore implements GameCoreInterface {
     private final PlayerList playerList;
     private final Map map;
-    
+    private Ghoul ghoul;
 	
 	
     /**
@@ -57,23 +57,23 @@ public class GameCore implements GameCoreInterface {
             @Override
             public void run() {
                 Random rand = new Random();
-		Room room = map.randomRoom();
-		Ghoul dayGhoul = new Ghoul(room.getId());
-		room.hasGhoul = true;
-		GameCore.this.broadcast(room, "You see a Ghoul appear in this room");
+				Room room = map.randomRoom();
+				ghoul = new Ghoul(room.getId());
+				room.hasGhoul = true;
+				GameCore.this.broadcast(room, "You see a Ghoul appear in this room");
 
                 while(true) {
                     try {
-			//Ghoul move in each 5-10 seconds. 
-                        Thread.sleep(5000+rand.nextInt(5000));
+						//Ghoul move in each 10-15 seconds. 
+                        Thread.sleep(10000+rand.nextInt(5000));
 			
-			//make Ghoul walk to other room; 
-			GameCore.this.ghoulWander(dayGhoul,room);
-			room.hasGhoul = false;
-			GameCore.this.broadcast(room, "You see a Ghoul leave this room");
-			room = map.findRoom(dayGhoul.getRoom());
-			room.hasGhoul = true;
-			GameCore.this.broadcast(room, "You see a Ghoul enter this room");
+						//make Ghoul walk to other room; 
+						GameCore.this.ghoulWander(ghoul,room);
+						room.hasGhoul = false;
+						GameCore.this.broadcast(room, "You see a Ghoul leave this room");
+						room = map.findRoom(ghoul.getRoom());
+						room.hasGhoul = true;
+						GameCore.this.broadcast(room, "You see a Ghoul enter this room");
 
                     } catch (InterruptedException ex) {
                         Logger.getLogger(GameObject.class.getName()).log(Level.SEVERE, null, ex);
@@ -107,6 +107,35 @@ public class GameCore implements GameCoreInterface {
 			}
 		}
     }
+	
+	public String pokeGhoul(String playerName) {
+		Player player = playerList.findPlayer(playerName);
+		Room room = this.map.findRoom(player.getCurrentRoom());
+
+		if(player != null) {
+			if(!room.hasGhoul) {
+				return "There is no ghoul in this room.";
+			}
+
+			ghoul.modifyAngryLevel(1);
+
+			//Return a different string depending on ghoul's anger level
+			int angerLvl = ghoul.getAngryLevel();
+			if(angerLvl == 1) return "Ghoul: Leave me alone.";
+			if(angerLvl == 2) return "Ghoul: Cut that out.";
+			if(angerLvl == 3) return "Ghoul: You better quit that.";
+			if(angerLvl == 4) return "Ghoul: You're making me pretty mad.";
+			if(angerLvl == 5) return "Ghoul: You're really starting to get on my nerves.";
+			if(angerLvl == 6) return "Ghoul: This is the last straw.";
+			if(angerLvl == 7) return "Ghoul: That's it! You're done for!";
+			if(angerLvl == 8) return "Ghoul: I'm going to get you now!";
+			if(angerLvl == 9) return "Ghoul: GAAAHHH You're going to regret that!";
+			else              return "Ghoul: AAAAHHHHHHH I'M GOING TO GRAB THAT FINGER AND SNAP IT IN HALF!";
+		}
+		else {
+			return null;
+		}
+	}
     
     /**
      * Broadcasts a message to all other players in the same room as player.
