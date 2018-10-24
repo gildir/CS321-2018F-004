@@ -128,8 +128,7 @@ public class GameClient {
     
     /** 
      * Simple method to parse the local input and remotely execute the RMI commands.
-     * @param input 
-     * @param inputCallCount
+     * @param input
      */
     private void parseInput(String input) {
         boolean reply;
