@@ -144,12 +144,12 @@ public class GameClient {
             System.out.println("The keyboard input had no commands.");
             return;
         }
-        
+
         String message = "";
-        input = tokens.remove(0).toUpperCase();
+        String command = tokens.remove(0).toUpperCase();
 
         try {
-            switch(input) {
+            switch(command) {
 
                 case "LOOK":
                     System.out.println(remoteGameInterface.look(this.playerName));
@@ -215,7 +215,7 @@ public class GameClient {
                     break;
                 default:
                     //If command does not match with any, see if it is custom command
-                    if (!executeCustomCommand(input, tokens)) {
+                    if (!executeCustomCommand(command, tokens)) {
                         System.out.println("Invalid Command, Enter \"help\" to get help");
                     }
                     break;
