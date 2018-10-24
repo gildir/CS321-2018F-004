@@ -1,6 +1,7 @@
 
 import java.io.DataOutputStream;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -19,15 +20,15 @@ public class Player {
     private Direction currentDirection;
     private PrintWriter replyWriter = null;
     private DataOutputStream outputWriter = null;
-    private String question;
-    private String answer;
-
-	public Player(@JsonProperty("name") String name, @JsonProperty("question") String question, @JsonProperty("answer") String answer) {
+    @JsonProperty("recovery")
+    private ArrayList<String> recovery;
+    
+    
+	public Player(@JsonProperty("name") String name, @JsonProperty("recovery") ArrayList<String> recovery) {
         this.currentRoom = 1;
         this.currentDirection = Direction.NORTH;
         this.name = name;
-        this.question = question;
-        this.answer = answer;
+        this.recovery = recovery;
         this.currentInventory = new LinkedList<>();
     }
 
@@ -73,18 +74,27 @@ public class Player {
     public String getName() {
         return name;
     }
+    
+    @JsonProperty("recovery")
+    public void setRecovery(ArrayList<String> recovery) {
+    	this.recovery = recovery;
+    }
 
 	@JsonProperty("name")
     public void setName(String name) {
         this.name = name;
     }
 	
-	public String getQuestion() {
-		return this.question;
+	public String getQuestion(int num) {
+		if(this.recovery.size() >= num * 2)
+			return this.recovery.get(num * 2);
+		return null;
 	}
 	
-	public String getAnswer() {
-		return this.answer;
+	public String getAnswer(int num) {
+		if(this.recovery.size() >= (num * 2) + 1)
+			return this.recovery.get((num * 2) + 1);
+		return null;
 	}
 
     public LinkedList<String> getCurrentInventory() {

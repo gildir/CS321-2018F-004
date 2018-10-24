@@ -1,4 +1,5 @@
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 
 /**
  *
@@ -46,9 +47,10 @@ public interface GameCoreInterface {
 	 * 
 	 * @param name
 	 * @param password
+	 * @param recovery List of recovery questions and answers, ordered q1,a1,q2,a2,q3,a3
 	 * @return an enumeration representing the creation status.
 	 */
-	public Responses createAccountAndJoinGame(String name, String password, String question, String answer);
+	public Responses createAccountAndJoinGame(String name, String password, ArrayList<String> recovery);
 
     /**
      * Returns a look at the area of the specified player.
@@ -104,16 +106,18 @@ public interface GameCoreInterface {
 	/**
 	 * Gets recovery question
 	 * @param name User of recovery question 
+	 * @param num Marks which question will be grabbed
 	 * @return String of recovery question, null if user doesn't exist
 	 */
-	public String getQuestion(String name);
+	public String getQuestion(String name, int num);
 	
 	/**
 	 * Gets recovery answer
 	 * @param name User of recovery answer
+	 * @param num Marks which answer will be grabbed
 	 * @return String of recovery question, null if user doesn't exist
 	 */
-	public String getAnswer(String name);
+	public String getAnswer(String name, int num);
 	
 	/**
 	 * Resets passwords.

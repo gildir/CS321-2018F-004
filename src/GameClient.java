@@ -81,8 +81,8 @@ public class GameClient {
 					System.out.println("Logging in or creating account?");
 					String mode;
 					String reset;
-					String question;
-					String answer;
+					ArrayList<String> recovery = new ArrayList<String>();//questions and answers, order q1,a1,q2,a2,q3,a3
+					int count;
 					do {
 						System.out.print("(L/C)> ");
 						mode = keyboardInput.readLine().toUpperCase().trim();
@@ -100,15 +100,27 @@ public class GameClient {
 							}
 						break;
 					case "C":
-						//prompt user for recovery question
-						System.out.println("Please create a security question for password recovery");
+						//prompt user for recovery questions
+						count = 0;
+						System.out.println("Please create 1st security question for password recovery");
 						System.out.print(">");
-						question = keyboardInput.readLine().trim();
+						recovery.add(keyboardInput.readLine().trim());
 						System.out.println("Please give the answer");
 						System.out.print(">");
-						answer = keyboardInput.readLine().toLowerCase().trim();
-						//remoteGameInterface.resetPassword("test");
-						Responses resp = remoteGameInterface.createAccountAndJoinGame(playerName, pass, question, answer);
+						recovery.add(keyboardInput.readLine().trim());
+						System.out.println("Please create 2nd security question for password recovery");
+						System.out.print(">");
+						recovery.add(keyboardInput.readLine().trim());
+						System.out.println("Please give the answer");
+						System.out.print(">");
+						recovery.add(keyboardInput.readLine().trim());
+						System.out.println("Please create 3rd security question for password recovery");
+						System.out.print(">");
+						recovery.add(keyboardInput.readLine().trim());
+						System.out.println("Please give the answer");
+						System.out.print(">");
+						recovery.add(keyboardInput.readLine().trim());
+						Responses resp = remoteGameInterface.createAccountAndJoinGame(playerName, pass, recovery);
 						switch (resp) {
 						case BAD_USERNAME_FORMAT:
 							System.out
@@ -259,6 +271,8 @@ public class GameClient {
     	String input;
     	String password;
     	Responses response;
+    	int count;
+    	boolean correct;
     	//booleans for dialogue loops
     	boolean go;
     	boolean test;
@@ -279,18 +293,25 @@ public class GameClient {
 	    			System.out.println("Please enter your account name");
 	    			System.out.print(">");
 	    			name = keyboardInput.readLine().trim();
-	    			question = remoteGameInterface.getQuestion(name);
-	    			answer = remoteGameInterface.getAnswer(name);
+	    			question = remoteGameInterface.getQuestion(name, 0);
+	    			answer = remoteGameInterface.getAnswer(name, 0);
 	    			if (question != null && answer != null) {
 	    				test = true;
 	    				while (test) {
 	    					//asks recovery question
-	    					System.out.println();
-		    				System.out.println(question);
-		    				System.out.print("Answer:");
-		    				input = keyboardInput.readLine().toLowerCase().trim();
+	    					correct = true;
+	    					for(int i = 0; i < 3; i++) {
+	    						question = remoteGameInterface.getQuestion(name, i);
+	    		    			answer = remoteGameInterface.getAnswer(name, i);
+		    					System.out.println();
+			    				System.out.println(question);
+			    				System.out.print("Answer:");
+			    				input = keyboardInput.readLine().toLowerCase().trim();
+			    				if(correct)
+			    					correct = input.equals(answer);
+	    					}
 		    				//gets new password if recovery question answered
-		    				if(input.equals(answer)) {
+		    				if(correct) {
 		    					test = false;
 		    					System.out.println();
 		    					System.out.println("Please input new password");
@@ -363,6 +384,7 @@ public class GameClient {
     	}catch (IOException ex) {
     		Logger.getLogger(GameClient.class.getName()).log(Level.SEVERE, null, ex);
     	}
+    	System.out.println();
     }
     
     public static void main(String[] args) {
