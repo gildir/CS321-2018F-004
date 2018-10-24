@@ -56,7 +56,7 @@ public class Shop
 		System.out.println("To buy an item, enter \"buy [item ID].\n\"");
 		System.out.println("To sell an item, enter \"sell [item ID]\".\n");
 		System.out.println("To see the inventory, enter \"Inventory\"");
-		Sysetem.out.println("To see what item is in demand, enter \"demand\"\n");
+		System.out.println("To see what item is in demand, enter \"demand\"\n");
 	}
 	
 	public void addPlayer(Player p) {
