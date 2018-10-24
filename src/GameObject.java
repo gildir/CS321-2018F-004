@@ -218,7 +218,7 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
      * @param shopId The ID of the shop the player is selling an item to
      * @param item The item the player is selling (eventually will be an Item obj)
      */
-    public boolean buyItem(String name, int shopId, String item) throws RemoteException{
+    public String buyItem(String name, int shopId, String item) throws RemoteException{
     	return core.buyItem(name, shopId, item);
     }
     

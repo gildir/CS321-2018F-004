@@ -29,11 +29,11 @@ public class ShopClient {
 	 * @throws RemoteException
 	 */
 	private void run() throws RemoteException {
-		// Display instructions
-		printMenu();
 		// Display shop specific greeting
 		System.out.println(remote.getShopStr(this.id));
 
+    // Display instructions
+		printMenu();
 			
 		// Copy and pasted from GameClient
 		// Set up for keyboard input for local commands.
@@ -128,7 +128,7 @@ public class ShopClient {
 	
 	//In terms of the player buying items
 	public void buy(String item) throws RemoteException{
-		remote.buyItem(this.player, this.id, item);
+		System.out.println(remote.buyItem(this.player, this.id, item));
 	}
 	
 	//In terms of the player selling items

@@ -50,10 +50,6 @@ public class Shop
 	//Prints the list of object in demand
 	public void printDem() {}
 	
-	//Menu for the player to be interacting with the shop 
-	//use something like a switch statement
-	public void printMenu() {}
-	
 	public void addPlayer(Player p) {
 		playerlist.addPlayer(p);
 	}	

@@ -366,26 +366,25 @@ public class GameCore implements GameCoreInterface {
      * @param shopId The ID of the shop the player is selling an item to
      * @param item The item the player is buying (eventually will be an Item obj)
      */
-    public boolean buyItem(String name, int shopId, String item)
+    public String buyItem(String name, int shopId, String item)
     {
     	int val = 0;
     	Player player = this.playerList.findPlayer(name);
     	Shop s = shoplist.get(shopId);
-    	
-    	if(player.getMoney() < 12)
-    	{
-    		System.out.println("Not Enough Money!!!");
-    		return false;
-    	}
+
     	
     	if(s.getInven().contains(item))
     	{
-    		s.remove(item);
+    		if (player.getMoney() > 12) {
+    			s.remove(item);
+    		}
+    		else {
+    			return "Not enough money!!!";
+    		}
     	}
     	else
     	{
-    		System.out.println("Item not in stock!!!");
-    		return false;
+    		return "Item not in stock!!!";
     	}
     	
     	player.addObjectToInventory(item);
@@ -393,7 +392,7 @@ public class GameCore implements GameCoreInterface {
     	//val = removed.getValue() * 1.2;
     	val = 12;
     	player.setMoney(player.getMoney() - val);
-    	return true;
+    	return "Thank you, that will be $" + val + ".";
     }
 
     /**
