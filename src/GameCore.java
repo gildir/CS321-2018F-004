@@ -64,10 +64,7 @@ public class GameCore implements GameCoreInterface {
 
         for(Player otherPlayer : this.playerList) {
             if(otherPlayer != player && !otherPlayer.isIgnoring(player) && otherPlayer.getCurrentRoom() == player.getCurrentRoom()) {
-                //String newMessage = filterMessage(otherPlayer, message);
-                //otherPlayer.getReplyWriter().println(message); //origninal
-                //otherPlayer.getReplyWriter().println(newMessage); // mine1
-                otherPlayer.say(otherPlayer.getName(), "says", message); // mine2
+                otherPlayer.getReplyWriter().println(message); //origninal
             }
         }
     }
@@ -80,9 +77,7 @@ public class GameCore implements GameCoreInterface {
     @Override
     public void broadcast(Room room, String message) {
         for(Player player : this.playerList) {
-
-            //altered for 409 Word Filter
-            String newMessage = filterMessage(player, message);
+            String newMessage = player.filterMessage(message);
 
             if(player.getCurrentRoom() == room.getId()) {
                 //player.getReplyWriter().println(message);
@@ -213,12 +208,22 @@ public class GameCore implements GameCoreInterface {
     public String say(String name, String message) {
         Player player = this.playerList.findPlayer(name);
         if(player != null) {
-            this.broadcast(player, message);
+            //this.broadcast(player, player.getName() + " says, \"" + message + "\"");
+            this.sayToAll(message, player);
             String newMessage = player.filterMessage(message);
             return "You say, \"" + newMessage + "\"";
         }
         else {
             return null;
+        }
+    }
+
+
+    public void sayToAll(String message, Player player) {
+        for(Player otherPlayer : this.playerList) {
+            if(otherPlayer != player && !otherPlayer.isIgnoring(player) && otherPlayer.getCurrentRoom() == player.getCurrentRoom()) {
+                otherPlayer.printMessage(player, message, "says");
+            }
         }
     }
 
@@ -241,11 +246,10 @@ public class GameCore implements GameCoreInterface {
         else if (dstPlayer.isIgnoring(srcPlayer))
             returnMessage = "Player " + dstPlayer.getName() + " is ignoring you.";
         else {
-            String dstMessage = dstPlayer.filterMessage(message);
             dstPlayer.setLastPlayer(srcName);
-            dstPlayer.getReplyWriter().println(srcPlayer.getName() + " whispers you, " + dstMessage);
-            String srcMessage = srcPlayer.filterMessage(message);
-            returnMessage = "You whisper to " + dstPlayer.getName() + ", " + srcMessage;
+            dstPlayer.printMessage(srcPlayer, message.substring(1, message.length()-1), "whispers");
+            String srcMessage = srcPlayer.filterMessage(message.substring(1, message.length()-1));
+            returnMessage = "You whisper to " + dstPlayer.getName() + ", \"" + srcMessage + "\"";
         }
         return returnMessage;
     }
@@ -440,31 +444,5 @@ public class GameCore implements GameCoreInterface {
         return null;
     }
 
-
-    //Feature 409 WordFilter
-
-    /**
-     * Parses a message, replacing filtered words with "[BLEEEEP]"
-     * @param player - player to filter chat for
-     * @param message - message being filtered.
-     * @return - new filtered message.
-     */
-    private String filterMessage(Player player, String message) {
-        //System.err.print("\nFILTERING MESSAGE\n");
-        String newMessage = "";
-        String bleep = "[BLEEEEP]";
-
-        for(String word : message.split("\\s+")) {
-            if(playerList.findPlayer(word.toLowerCase()) == null && player.isFiltering(word.toLowerCase())) {
-                newMessage += bleep + " ";
-            } else {
-                newMessage += word + " ";
-            }
-        }
-
-        return newMessage;
-    }
-
-    //End Feature 409 WordFilter
 
 }

@@ -50,6 +50,10 @@ public class Player {
         }
     }
 
+    public HashSet<String> getFilteredWords() {
+        return filteredWords;
+    }
+
     /**
      * Adds a new word to the list of words filtered from this player's chat.
      * @param wordToAdd - word to be added to the filter list.
@@ -93,6 +97,11 @@ public class Player {
         newMessage = newMessage.substring(0, (newMessage.length()-1));
 
         return newMessage;
+    }
+
+    public void printMessage(Player speaker, String message, String action) {
+        String newMessage = filterMessage(message);
+        this.getReplyWriter().println(speaker.getName() + " " + action + " \"" + newMessage + "\"");
     }
 
 
