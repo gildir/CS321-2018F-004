@@ -353,7 +353,7 @@ public class GameCore implements GameCoreInterface {
                 playerChallengee.setChallenger(" ");
                 playerChallenger.setChallenger(" ");
                 playerChallengee.setHasChallenge(false);
-                playerChallengee.getReplyWriter().println(playerChallengee.getName() + " rejects your challenge to a R-P-S");
+                playerChallenger.getReplyWriter().println(playerChallengee.getName() + " rejects your challenge to a R-P-S");
                 return "You reject " + playerChallenger.getName() + "\'s challenge to a R-P-S.";
             }
             else {
