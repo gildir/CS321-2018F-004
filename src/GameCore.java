@@ -4,9 +4,11 @@
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.HashSet;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.lang.StringBuilder;
 import java.util.Scanner;
 import java.io.File;
 import java.util.ArrayList;
@@ -86,8 +88,11 @@ public class GameCore implements GameCoreInterface {
     @Override
     public void broadcast(Room room, String message) {
         for(Player player : this.playerList) {
+            String newMessage = player.filterMessage(message);
+
             if(player.getCurrentRoom() == room.getId()) {
-                player.getReplyWriter().println(message);
+                //player.getReplyWriter().println(message);
+                player.getReplyWriter().println(newMessage);
             }
         }
     }
@@ -195,15 +200,15 @@ public class GameCore implements GameCoreInterface {
 
             // Send a message to every other player in the room that the player has turned right.
             this.broadcast(player, player.getName() + " turns to the right.");
-            
+
             // Return a string back to the calling function with an update.
             return "You turn to the right to face " + player.getCurrentDirection();
         }
         else {
             return null;
         }
-    }    
-    
+    }
+
     /**
      * Says "message" to everyone in the current area.
      * @param name Name of the player to speak
@@ -214,13 +219,15 @@ public class GameCore implements GameCoreInterface {
     public String say(String name, String message) {
         Player player = this.playerList.findPlayer(name);
         if(player != null) {
-            this.broadcast(player, player.getName() + " says, \"" + message + "\"");
+//            this.broadcast(player, player.getName() + " says, \"" + message + "\"");
             try {
                 chatLog(player, 0, "\""+message+"\"", "Room " + player.getCurrentRoom());
             } catch (IOException e) {
                 System.out.println("Failed to log chat");
             }
-            return "You say, \"" + message + "\"";
+            this.sayToAll(message, player);
+            String newMessage = player.filterMessage(message);
+            return "You say, \"" + newMessage + "\"";
         }
         else {
             return null;
@@ -246,8 +253,11 @@ public class GameCore implements GameCoreInterface {
             returnMessage = "Player " + dstPlayer.getName() + " is ignoring you.";
         else {
             dstPlayer.setLastPlayer(srcName);
-            dstPlayer.getReplyWriter().println(srcPlayer.getName() + " whispers you, " + message);
-            returnMessage = "You whisper to " + dstPlayer.getName() + ", " + message;
+//            dstPlayer.getReplyWriter().println(srcPlayer.getName() + " whispers you, " + message);
+            dstPlayer.printMessage(srcPlayer, message.substring(1, message.length()-1), "whispers");
+            String srcMessage = srcPlayer.filterMessage(message.substring(1, message.length()-1));
+//            returnMessage = "You whisper to " + dstPlayer.getName() + ", " + message;
+            returnMessage = "You whisper to " + dstPlayer.getName() + ", \"" + srcMessage + "\"";
 
              try {
                 chatLog(srcPlayer, 1, message, dstPlayer.getName());
@@ -402,7 +412,7 @@ public class GameCore implements GameCoreInterface {
         }
         return "You stop moving and begin to stand around again.";
     }
-    
+
     /**
      * Attempts to pick up an object < target >. Will return a message on any success or failure.
      * @param name Name of the player to move
@@ -509,5 +519,18 @@ public class GameCore implements GameCoreInterface {
         pw.flush();
         pw.close();
         return;
+    }
+
+    /**
+     * Player says 'message' to everyone in the room.
+     * @param message Message to send.
+     * @param player Player to speak.
+     */
+    public void sayToAll(String message, Player player) {
+        for(Player otherPlayer : this.playerList) {
+            if(otherPlayer != player && !otherPlayer.isIgnoring(player) && otherPlayer.getCurrentRoom() == player.getCurrentRoom()) {
+                otherPlayer.printMessage(player, message, "says");
+            }
+        }
     }
 }

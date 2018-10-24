@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.HashSet;
 
 /**
  *
@@ -234,4 +235,19 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
     public String shout(String name, String message) throws RemoteException {
         return core.shout(name, message);
     }
+
+    //Begin 409 Word Filter.
+    /**
+     * Stores a list of words to filter from chat for the player
+     * @param playerName the name of the player you're lookng for
+     * @param filteredWords list of words to filter
+     */
+    @Override
+    public void setPlayerFilteredWords(String playerName, HashSet<String> filteredWords) {
+        Player player = core.findPlayer(playerName);
+        player.setFilteredWords(filteredWords);
+    }
+
+
+    //End 409 Word Filter
 }

@@ -2,6 +2,7 @@
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.util.HashSet;
 
 /**
  *
@@ -107,6 +108,17 @@ public interface GameObjectInterface extends Remote {
      * @param filename the "chat config" file to read the joke from.
      * */
     public String joke(String filename) throws RemoteException;
+
+    // Feature 409 Word Filter
+
+    /**
+     * Returns a player reference from the game core, from the player's name.
+     * @param playerName the name of the player you're lookng for
+     * @return the player (if found) from the game core
+     */
+    public void setPlayerFilteredWords(String playerName, HashSet<String> newFilteredWords) throws RemoteException;
+
+    // End Feature 409 Word Filter
 
     /**
      * Attempts to walk forward < distance > times.  If unable to make it all the way,

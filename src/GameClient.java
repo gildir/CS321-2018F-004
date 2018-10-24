@@ -1,9 +1,6 @@
 
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.ConnectException;
 import java.net.MalformedURLException;
 import java.net.ServerSocket;
@@ -15,6 +12,7 @@ import java.util.ArrayList;
 import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.HashSet;
 
 /**
  *
@@ -109,6 +107,9 @@ public class GameClient {
             remoteOutputThread = new Thread(new GameClient.ReplyRemote(host));
             remoteOutputThread.setDaemon(true);
             remoteOutputThread.start();
+
+            // 409 Word Filter
+            readWordFilterFile();
 
             // Collect input for the game.
             while(runGame) {
@@ -349,4 +350,39 @@ public class GameClient {
         }
     }
 
+    // Begin Feature 409 Word Filter
+
+    /**
+     * Reads a list of words from file, adds them to this player's list of words filtered from chat.
+     *
+     */
+    private void readWordFilterFile() {
+
+        HashSet<String> words = new HashSet<String>();
+        String filename = "FilteredWordsList.txt";
+
+        try {
+            File filteredWordsFile = new File(filename);
+            if(!filteredWordsFile.exists()) { filteredWordsFile.createNewFile(); }
+            BufferedReader br = new BufferedReader(new FileReader(filename));
+            String line = br.readLine();
+
+            while (line != null) {
+                String word = line.toLowerCase();
+                words.add(word);
+                words.add("\"" + word + "\"");
+                words.add("\"" + word);
+                words.add(word + "\"");
+                line = br.readLine();
+            }
+
+            remoteGameInterface.setPlayerFilteredWords(this.playerName, words);
+            br.close();
+
+        } catch(IOException i) {
+            System.err.print("\nI/O Exception thrown while attempting to read from filtered words File!\n");
+        }
+    }
+
+    //End Feature 409 Word Filter
 }
