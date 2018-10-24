@@ -132,4 +132,14 @@ public interface GameObjectInterface extends Remote {
      * @throws RemoteException
      */
     public void leave(String name) throws RemoteException;
+
+    //Feature 411. Shout
+    /**
+     *Shouts "message" to everyone that is online
+     *@param name Name of the player speaking
+     *@param message Meesage to be spoken
+     *@return Message showing success.
+     *@throws RemoteException
+     */
+    public String shout(String name, String message) throws RemoteException;
 }

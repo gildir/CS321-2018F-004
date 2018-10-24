@@ -4,6 +4,7 @@
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.lang.StringBuilder;
 
 /**
  *
@@ -408,5 +409,27 @@ public class GameCore implements GameCoreInterface {
             return player;
         }
         return null;
+    }
+
+    //Feature 411. Shout
+    /**
+     * Shouts "message" to everyone in the current area.
+     * @param name Name of the player to speak
+     * @param message Message to speak
+     * @return Message showing success.
+     */
+    @Override
+    public String shout(String name, String message) {
+        Player player = this.playerList.findPlayer(name);
+        if(player != null){
+            for(Player otherPlayer : this.playerList) {
+                if(otherPlayer != player && !otherPlayer.isIgnoring(player)) {
+                    otherPlayer.getReplyWriter().println(player.getName() + " shouts, \"" + message + "\"");
+                }
+            }
+            return "You shout, \"" + message + "\"";
+        } else {
+            return null;
+        }
     }
 }
