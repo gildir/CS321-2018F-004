@@ -30,7 +30,6 @@ public class Ghoul{
 	public void modifyAngryLevel(int amount) {
 		this.angryLevel += amount;
 
-
 		//add some error check......
 		if(this.angryLevel > 10){
 			this.angryLevel = 10;
@@ -38,7 +37,23 @@ public class Ghoul{
 			this.angryLevel = 0;
 		}
 		
+		System.out.println(amount);
+		
 		return; 
+	}
+	
+	public void Drag(Player p){
+		if (this.angryLevel >= 7) {
+		p.getReplyWriter().println("A Ghoul is about to drag you! Try to calm it down!");
+		try {
+			Thread.currentThread().sleep(5000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		p.getReplyWriter().println("The Ghoul knocks you unconscious!");
+		increaseAngryLevel(-1);
+		
+		}
 	}
 
 }

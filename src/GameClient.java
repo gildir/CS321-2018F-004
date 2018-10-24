@@ -55,10 +55,11 @@ public class GameClient {
         System.out.println("  LEFT          - Turns your player left 90 degrees.");
         System.out.println("  RIGHT         - Turns your player right 90 degrees.");
         System.out.println("  MOVE distance - Tries to walk forward <distance> times.");
-        System.out.println("  PICKUP obect  - Tries to pick up an object in the same area.");
+        System.out.println("  PICKUP object  - Tries to pick up an object in the same area.");
         System.out.println("  INVENTORY     - Shows you what objects you have collected.");
         System.out.println("  POKE_GHOUL    - Pokes the ghoul in the current room.");
-        System.out.println("  BRIBE_GHOUL item_name    - Give selected item to ghoul and let it claim down.");
+        System.out.println("  BRIBE_GHOUL item_name    - Gives selected item to ghoul.");
+        //System.out.println("  GIVE_GHOUL object   - Gives object to ghoul in current room");
         System.out.println("  QUIT          - Quits the game.");
         System.out.println();
         
@@ -192,16 +193,16 @@ public class GameClient {
                 case "INVENTORY":
                     System.out.println(remoteGameInterface.inventory(this.playerName));
                     break;
-		case "POKE_GHOUL":
-			System.out.println(remoteGameInterface.pokeGhoul(this.playerName));
-			break;
-		case "BRIBE_GHOUL":
-			if(tokens.isEmpty()){
-				System.err.println("You need to provide an item to give Ghoul.");
-			}else{
-				System.out.println(remoteGameInterface.bribeGhoul(this.playerName, tokens.remove(0)));
-			}
-			break;
+                case "POKE_GHOUL":
+                    System.out.println(remoteGameInterface.pokeGhoul(this.playerName));
+                    break;
+                case "BRIBE_GHOUL":
+                    if(tokens.isEmpty()){
+                        System.err.println("You need to provide an item to give Ghoul.");
+                    }else{
+                        System.out.println(remoteGameInterface.bribeGhoul(this.playerName, tokens.remove(0)));
+                    }
+                    break;
                 case "QUIT":
                     remoteGameInterface.leave(this.playerName);
                     runListener = false;

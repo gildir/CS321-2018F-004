@@ -17,6 +17,7 @@ public interface GameObjectInterface extends Remote {
 	 */
 	public String pokeGhoul(String playerName) throws RemoteException;
 
+
 	/**
 	 * Pokes the ghoul in the current room
 	 * @param playerName Player name
@@ -25,6 +26,11 @@ public interface GameObjectInterface extends Remote {
 	 * @throws RemoteException
 	 */
 	public String bribeGhoul(String playerName, String item) throws RemoteException;
+
+
+	//Same functionality as bribeGhoul. Not currently used.
+	public String giveToGhoul(String object, String playerName) throws RemoteException;
+	
 
     /**
      * Sends a request to join the game.  

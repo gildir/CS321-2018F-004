@@ -60,6 +60,9 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
 		return core.bribeGhoul(playerName,item);
 	}
 	
+	public String giveToGhoul(String object, String playerName) {
+		return core.giveToGhoul(object, playerName);
+	}
     /**
      * Allows a player to join the game.  If a player with the same name (case-insensitive)
      *  is already in the game, then this returns false.  Otherwise, adds a new player of 
