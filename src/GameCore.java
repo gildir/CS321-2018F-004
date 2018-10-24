@@ -1,14 +1,15 @@
 
 
 
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.lang.StringBuilder;
 import java.util.Scanner;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Random;
 import java.io.FileNotFoundException;
 
 /**
@@ -18,6 +19,7 @@ import java.io.FileNotFoundException;
 public class GameCore implements GameCoreInterface {
     private final PlayerList playerList;
     private final Map map;
+    private PrintWriter pw;
 
     /**
      * Creates a new GameCoreObject.  Namely, creates the map for the rooms in the game,
@@ -25,12 +27,16 @@ public class GameCore implements GameCoreInterface {
      *
      * This is the main core that both the RMI and non-RMI based servers will interface with.
      */
-    public GameCore() {
+    public GameCore() throws IOException {
 
         // Generate the game map.
         map = new Map();
 
         playerList = new PlayerList();
+
+        pw = new PrintWriter(new FileWriter("chatlog.txt"));
+        pw.flush();
+        pw.close();
 
         Thread objectThread = new Thread(new Runnable() {
             @Override
@@ -209,6 +215,11 @@ public class GameCore implements GameCoreInterface {
         Player player = this.playerList.findPlayer(name);
         if(player != null) {
             this.broadcast(player, player.getName() + " says, \"" + message + "\"");
+            try {
+                chatLog(player, 0, "\""+message+"\"", "Room " + player.getCurrentRoom());
+            } catch (IOException e) {
+                System.out.println("Failed to log chat");
+            }
             return "You say, \"" + message + "\"";
         }
         else {
@@ -237,6 +248,12 @@ public class GameCore implements GameCoreInterface {
             dstPlayer.setLastPlayer(srcName);
             dstPlayer.getReplyWriter().println(srcPlayer.getName() + " whispers you, " + message);
             returnMessage = "You whisper to " + dstPlayer.getName() + ", " + message;
+
+             try {
+                chatLog(srcPlayer, 1, message, dstPlayer.getName());
+            } catch (IOException e) {
+                System.out.println("Failed to log chat");
+            }
         }
         return returnMessage;
     }
@@ -355,6 +372,7 @@ public class GameCore implements GameCoreInterface {
         return ("File not found. Please add a joke.");
       }
     }
+    //todo chat log joke
 
     /**
      * Attempts to walk forward < distance > times.  If unable to make it all the way,
@@ -461,9 +479,36 @@ public class GameCore implements GameCoreInterface {
                     otherPlayer.getReplyWriter().println(player.getName() + " shouts, \"" + message + "\"");
                 }
             }
+             try {
+                    chatLog(player, 2, "\""+message+"\"", "Everyone");
+                } catch (IOException e) {
+                    System.out.println("Failed to log chat");
+                }
             return "You shout, \"" + message + "\"";
         } else {
             return null;
         }
+    }
+
+    private void chatLog(Player player, int chatType, String message, String target) throws IOException {
+        pw = new PrintWriter(new FileWriter("chatlog.txt", true));
+        String type = "";
+        String msg;
+        switch(chatType) {
+            case 0:
+                type = "SAID";
+                break;
+            case 1:
+                type = "WHISPERED";
+                break;
+            case 2:
+                type = "SHOUTED";
+                break;
+        }
+        msg = "PLAYER [" + player.getName() + "] " + type + " (" + message + ") to [" + target + "]\n";
+        pw.write(msg);
+        pw.flush();
+        pw.close();
+        return;
     }
 }

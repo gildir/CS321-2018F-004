@@ -1,6 +1,7 @@
 
 
 
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
@@ -17,9 +18,8 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
      *  and establishes a new, empty, player list.
      * @throws RemoteException
      */
-    public GameObject() throws RemoteException {
+    public GameObject() throws RemoteException, IOException {
         super();
-
         core = new GameCore();
     }
 
@@ -96,7 +96,7 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
      */
     @Override
     public String say(String name, String message) throws RemoteException {
-        return core.say(name, message);
+    	return core.say(name, message);
     }
 
     // Feature 401. Whisper
@@ -110,7 +110,7 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
      */
     @Override
     public String whisper(String srcName, String dstName, String message) throws RemoteException {
-        return core.whisper(srcName, dstName, message);
+       	return core.whisper(srcName, dstName, message);
     }
 
     /**
@@ -122,7 +122,7 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
      */
     @Override
     public String quickReply(String srcName, String message) throws RemoteException {
-        return core.quickReply(srcName, message);
+    	return core.quickReply(srcName, message);
     }
 
     /**
