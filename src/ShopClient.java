@@ -29,11 +29,11 @@ public class ShopClient {
 	 * @throws RemoteException
 	 */
 	private void run() throws RemoteException {
-		// Display instructions
-		printMenu();
 		// Display shop specific greeting
 		System.out.println(remote.getShopStr(this.id));
 
+    // Display instructions
+		printMenu();
 			
 		// Copy and pasted from GameClient
 		// Set up for keyboard input for local commands.
@@ -49,7 +49,7 @@ public class ShopClient {
                 System.err.println("[CRITICAL ERROR] Error at reading any input properly.  Terminating the client now.");
                 System.exit(-1);
             }
-        }          
+        }
 	}
 	
 	// Mostly copied and pasted from GameClient
