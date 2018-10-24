@@ -5,6 +5,11 @@ import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.lang.StringBuilder;
+import java.util.Scanner;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Random;
+import java.io.FileNotFoundException;
 
 /**
  *
@@ -184,15 +189,15 @@ public class GameCore implements GameCoreInterface {
 
             // Send a message to every other player in the room that the player has turned right.
             this.broadcast(player, player.getName() + " turns to the right.");
-
+            
             // Return a string back to the calling function with an update.
             return "You turn to the right to face " + player.getCurrentDirection();
         }
         else {
             return null;
         }
-    }
-
+    }    
+    
     /**
      * Says "message" to everyone in the current area.
      * @param name Name of the player to speak
@@ -322,6 +327,35 @@ public class GameCore implements GameCoreInterface {
         return returnMessage;
     }
 
+    // Feature 410: Joke
+    /**
+     * Tells a joke to the room. Reads local "chat config" file
+     * that keeps a list of jokes, one per line. The command
+     * chooses a random joke.
+     * NOTE: Importing Scanners, File, ArrayList, Random, and
+     * FileNotFoundException for this method.
+     * @param filename the "chat config" file to read the joke from.
+     * */
+    public String joke(String filename){
+      File file = new File(filename);
+      try{
+      Scanner sc = new Scanner(file);
+      // using ArrayList to store jokes in file for randomization.
+      ArrayList<String> joke = new ArrayList<String>();
+
+      while (sc.hasNextLine()){
+        joke.add(sc.nextLine());
+      }
+
+      sc.close();
+      Random r = new Random();
+      return joke.get(r.nextInt(joke.size()));
+      }
+      catch (FileNotFoundException e){
+        return ("File not found. Please add a joke.");
+      }
+    }
+
     /**
      * Attempts to walk forward < distance > times.  If unable to make it all the way,
      *  a message will be returned.  Will display LOOK on any partial success.
@@ -351,12 +385,12 @@ public class GameCore implements GameCoreInterface {
         }
         return "You stop moving and begin to stand around again.";
     }
-
+    
     /**
      * Attempts to pick up an object < target >. Will return a message on any success or failure.
      * @param name Name of the player to move
      * @param target The case-insensitive name of the object to pickup.
-     * @return Message showing success.
+     * @return Message showing success. 
      */
     public String pickup(String name, String target) {
         Player player = this.playerList.findPlayer(name);
