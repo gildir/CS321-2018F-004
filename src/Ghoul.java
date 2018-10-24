@@ -37,8 +37,6 @@ public class Ghoul{
 			this.angryLevel = 0;
 		}
 		
-		System.out.println(amount);
-		
 		return; 
 	}
 	
@@ -51,7 +49,7 @@ public class Ghoul{
 			e.printStackTrace();
 		}
 		p.getReplyWriter().println("The Ghoul knocks you unconscious!");
-		increaseAngryLevel(-1);
+		modifyAngryLevel(-1);
 		
 		}
 	}

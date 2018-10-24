@@ -128,42 +128,8 @@ public class GameCore implements GameCoreInterface {
 
 			if(giveAble){
 				ghoul.modifyAngryLevel(-1);
-				String message = "Ghoul get " + item + ", ";    
 				int angryLv = ghoul.getAngryLevel();
-				switch(angryLv){
-					case 0:
-						message += "and as angry as angry level 0";
-						break;
-					case 1:
-						message += "and as angry as angry level 1";
-						break;
-					case 2:
-						message += "and as angry as angry level 2";
-						break;
-					case 3:
-						message += "and as angry as angry level 3";
-						break;
-					case 4:
-						message += "and as angry as angry level 4";
-						break;
-					case 5:
-						message += "and as angry as angry level 5";
-						break;
-					case 6:
-						message += "and as angry as angry level 6";
-						break;
-					case 7:
-						message += "and as angry as angry level 7";
-						break;
-					case 8:
-						message += "and as angry as angry level 8";
-						break;
-					case 9:
-						message += "and as angry as angry level 9";
-						break;
-					default:
-						message += "and as angry as angry level...who care?";
-				}
+				String message = "Ghoul gets " + item + ", " + "and its anger level decreases to " + angryLv + ".";
 				return  message;
 			}else{
 				return "Do not have this item......";
@@ -173,9 +139,7 @@ public class GameCore implements GameCoreInterface {
 		}
 		
 	}
-	}
 
-	//Same functionality as bribe_ghoul, not currently used
 	public String pokeGhoul(String playerName) {
 		Player player = playerList.findPlayer(playerName);
 		Room room = this.map.findRoom(player.getCurrentRoom());
@@ -199,6 +163,7 @@ public class GameCore implements GameCoreInterface {
 		}
 	}
 
+	//Same functionality as bribe_ghoul, not currently used
 	public String giveToGhoul(String object, String playerName) {
 		Player player = playerList.findPlayer(playerName);
 		Room room = this.map.findRoom(player.getCurrentRoom());
