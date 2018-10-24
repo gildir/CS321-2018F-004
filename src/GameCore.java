@@ -6,6 +6,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.LinkedList;
 
+
+
+
 /**
  *
  * @author Kevin
@@ -13,6 +16,9 @@ import java.util.LinkedList;
 public class GameCore implements GameCoreInterface {
     private final PlayerList playerList;
     private final Map map;
+
+    // Text file which logs player-world interactions
+    protected DailyLogger dailyLogger;
     
     /**
      * Creates a new GameCoreObject.  Namely, creates the map for the rooms in the game,
@@ -24,6 +30,8 @@ public class GameCore implements GameCoreInterface {
         
         // Generate the game map.
         map = new Map();
+        this.dailyLogger = new DailyLogger();
+        dailyLogger.write("SERVER STARTED");
         
         playerList = new PlayerList();
         
@@ -42,6 +50,7 @@ public class GameCore implements GameCoreInterface {
                         room.addObject(object);
                         
                         GameCore.this.broadcast(room, "You see a student rush past and drop a " + object + " on the ground.");
+                        dailyLogger.write(object + " dropped at " + room.getTitle());
 
                     } catch (InterruptedException ex) {
                         Logger.getLogger(GameObject.class.getName()).log(Level.SEVERE, null, ex);
@@ -112,6 +121,7 @@ public class GameCore implements GameCoreInterface {
             // New player, add them to the list and return true.
             newPlayer = new Player(name);
             this.playerList.addPlayer(newPlayer);
+            dailyLogger.write(newPlayer.getName() + " joined the server");
             
             // New player starts in a room.  Send a message to everyone else in that room,
             //  that the player has arrived.
@@ -137,6 +147,7 @@ public class GameCore implements GameCoreInterface {
 
             // Send a message to all other players in the room that this player is looking around.
             this.broadcast(player, player.getName() + " takes a look around.");
+            dailyLogger.write(player.getName(), "LOOK", room.getTitle());
 
             // Return a string representation of the room state.
             return room.toString(this.playerList, player);
@@ -158,6 +169,7 @@ public class GameCore implements GameCoreInterface {
         Player player = this.playerList.findPlayer(name);
         if(player != null) {
             this.broadcast(player, player.getName() + " says, \"" + message + "\"");
+            dailyLogger.write(player.getName(), "SAY", message, map.findRoom(player.getCurrentRoom()).getTitle());
             return "You say, \"" + message + "\"";
         }
         else {
@@ -182,9 +194,13 @@ public class GameCore implements GameCoreInterface {
             this.broadcast(player, player.getName() + " has walked off to the " + direction);
             player.getReplyWriter().println(room.exitMessage(direction));
             player.setCurrentRoom(room.getLink(direction));
+            String logMessage = String.format("%s used command MOVE %s [moved from %s to %s]", player.getName(), direction.toString(), room.getTitle(), map.findRoom(player.getCurrentRoom()).getTitle());
+            dailyLogger.write(logMessage);
             this.broadcast(player, player.getName() + " just walked into the area.");
             player.getReplyWriter().println(this.map.findRoom(player.getCurrentRoom()).toString(playerList, player));
         } else {
+            String logMessage  = String.format("%s used command MOVE %s [unable to move in direction]", player.getName(), direction.toString());
+            dailyLogger.write(logMessage);
             player.getReplyWriter().println(room.exitMessage(direction));
             return "You grumble a little and stop moving.";
         }
@@ -205,10 +221,12 @@ public class GameCore implements GameCoreInterface {
             if(object != null) {
                 player.addObjectToInventory(object);
                 this.broadcast(player, player.getName() + " bends over to pick up a " + target + " that was on the ground.");
+                dailyLogger.write(player.getName(), "PICKUP", target, room.getTitle());
                 return "You bend over and pick up a " + target + ".";
             }
             else {
                 this.broadcast(player, player.getName() + " bends over to pick up something, but doesn't seem to find what they were looking for.");
+                dailyLogger.write(player.getName(), "PICKUP", target, room.getTitle());
                 return "You look around for a " + target + ", but can't find one.";
             }
         }
@@ -233,10 +251,12 @@ public class GameCore implements GameCoreInterface {
                     player.addObjectToInventory(object);
                 }
                 this.broadcast(player, player.getName() + " bends over to pick up all objects that were on the ground.");
+                dailyLogger.write(player.getName(), "PICKUPALL", room.getTitle());
                 return "You bend over and pick up all objects on the ground.";
             }
             else {
                 this.broadcast(player, player.getName() + " bends over to pick up something, but doesn't find anything.");
+                dailyLogger.write(player.getName(), "PICKUPALL", room.getTitle());
                 return "You look around for objects but can't find any.";
             }
         }
@@ -327,6 +347,7 @@ public class GameCore implements GameCoreInterface {
         Player player = this.playerList.findPlayer(name);
         if(player != null) {
             this.broadcast(player, "You see " + player.getName() + " looking through their pockets.");
+            dailyLogger.write(player.getName(), "INVENTORY", map.findRoom(player.getCurrentRoom()).getTitle());
             return "You look through your pockets and see" + player.viewInventory();
         }
         else {
@@ -345,8 +366,10 @@ public class GameCore implements GameCoreInterface {
         if(player != null) {
             this.broadcast(player, "You see " + player.getName() + " heading off to class.");
             this.playerList.removePlayer(name);
+            dailyLogger.write(player.getName() + " logged out");
             return player;
         }
         return null;
-    }       
+    }
+ 
 }

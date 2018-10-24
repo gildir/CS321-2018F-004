@@ -23,8 +23,8 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
+
 
 
 /**
@@ -56,6 +56,7 @@ public class GameClient {
         showIntroduction();
 
         showCommand();
+
 
         // Set up for keyboard input for local commands.
         InputStreamReader keyboardReader = new InputStreamReader(System.in);
@@ -145,7 +146,7 @@ public class GameClient {
             switch(tokens.remove(0).toUpperCase()) {
             boolean success = true; //Trips whenever the user enters a bad command. Used so redo doesnt redo bad commands atm
                 case "LOOK":
-                    System.out.println(remoteGameInterface.look(this.playerName));
+                    System.out.println(remoteGameInterface.look(this.playerName));   
                     break;
                 case "SAY":
                     if(tokens.isEmpty()) {
@@ -281,7 +282,6 @@ public class GameClient {
                 xmlElement = (Element) xmlCommands.item(i);
 
                 description = xmlElement.getElementsByTagName("description").item(0).getTextContent();
-
                 if ( !description.equals("") ){
                     System.out.println(description);
                 }

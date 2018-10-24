@@ -55,6 +55,13 @@ public class GameServer {
 	}
     
     public static void main(String[] args) {
+        Runtime.getRuntime().addShutdownHook(new Thread(){ 
+            public void run(){ 
+                DailyLogger dailyLogger = new DailyLogger();
+                dailyLogger.write("SERVER FORCIBLY TERMINATED");
+                System.out.println("shutdown");
+            } 
+            });
 		if(args.length < 1) {
 			System.out.println("[SHUTDOWN] .. This program requires one argument. Run as java -Djava.security.policy=game.policy GameServer hostname");
 			System.exit(-1);
