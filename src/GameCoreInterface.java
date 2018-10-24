@@ -5,6 +5,20 @@
  * @author Kevin
  */
 public interface GameCoreInterface {
+	
+	/**
+	 * Makes the ghoul walk to an adjacent room
+	 * @param g Ghoul that is being moved
+	 * @param room Room the ghoul is currently in
+	 */
+	public void ghoulWander(Ghoul g,Room room);
+	
+	/**
+	 * Pokes the ghoul in the current room
+	 * @param playerName Player name
+	 * @return String message of ghoul
+	 */
+	public String pokeGhoul(String playerName);
     
     /**
      * Broadcasts a message to all other players in the same room as player.
