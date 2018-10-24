@@ -111,13 +111,16 @@ public class GameCore implements GameCoreInterface {
 	public String pokeGhoul(String playerName) {
 		Player player = playerList.findPlayer(playerName);
 		Room room = this.map.findRoom(player.getCurrentRoom());
-		String s = "Player" + player.getName() + "has just poked the Ghoul";
+		String s = "Player" + " " + playerName + " " + "has just poked the Ghoul";
 
 		if(player != null) {
 			if(!room.hasGhoul) {
 				return "There is no ghoul in this room.";
 			}
-
+			
+			try{GhoulLog myLog = new GhoulLog();
+			myLog.glLog("GameCore","pokeGhoul", s);}
+			catch (Exception e){}
 			ghoul.modifyAngryLevel(1);
 
 			//Return a different string depending on ghoul's anger level
@@ -133,16 +136,12 @@ public class GameCore implements GameCoreInterface {
 			if(angerLvl == 9) return "Ghoul: GAAAHHH You're going to regret that!";
 			else              return "Ghoul: AAAAHHHHHHH I'M GOING TO GRAB THAT FINGER AND SNAP IT IN HALF!";
 			
-		/*	try{GhoulLog myLog = new GhoulLog();
-			myLog.glLog("GameCore","pokeGhoul", s);}
-			catch (Exception e){}   */
+			  
 		}
 		else {
 			return null;
 		}
-		try{GhoulLog myLog = new GhoulLog();
-			myLog.glLog("GameCore","pokeGhoul", s);}
-			catch (Exception e){}
+
 	}
     
     /**

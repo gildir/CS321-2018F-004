@@ -19,12 +19,13 @@ public class GhoulLog
 	SimpleFormatter formatter = new SimpleFormatter();
 	fh.setFormatter(formatter);
 	
+	
 	}
 	
 
 	public void glLog(String class_Name, String method, String msg){
 		try{
-			logger.logp(Level.WARNING, class_Name, method, msg);
+			logger.logp(Level.SEVERE, class_Name, method, msg);
 		}catch (Exception e){}
 		
 	} 
