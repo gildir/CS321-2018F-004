@@ -485,7 +485,8 @@ public class GameCore implements GameCoreInterface {
         if(player != null){
             for(Player otherPlayer : this.playerList) {
                 if(otherPlayer != player && !otherPlayer.isIgnoring(player)) {
-                    otherPlayer.getReplyWriter().println(player.getName() + " shouts, \"" + message + "\"");
+                    String newMessage = otherPlayer.filterMessage(message);
+                    otherPlayer.getReplyWriter().println(player.getName() + " shouts, \"" + newMessage + "\"");
                 }
             }
              try {
