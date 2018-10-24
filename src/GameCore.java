@@ -293,6 +293,9 @@ public class GameCore implements GameCoreInterface {
 	if(playerChallenger.getInBattle() == true){
 	     return "You are already in a R-P-S battle.";
 	}
+  if(playerChallengee.getInBattle()){
+          return "This player is already in a R-P-S battle";
+  }
 	if(playerChallengee.getInBattle() == true){
 	     return playerChallengee.getName() + " is already in a R-P-S battle.";
 	}
@@ -314,8 +317,8 @@ public class GameCore implements GameCoreInterface {
     public String accept(String challengee, String challenger){
         Player playerChallenger = this.playerList.findPlayer(challenger);
         Player playerChallengee = this.playerList.findPlayer(challengee);
-	if(playerChallengee == null || playerChallenger == null){
-		return "This player does not exist in the game.";
+	      if(playerChallengee == null || playerChallenger == null){
+		      return "This player does not exist in the game.";
         }
         if(playerChallengee.getChallenger().equals(playerChallenger.getName()) && playerChallengee.getHasChallenge() == true){
             if(playerChallenger != playerChallengee && playerChallenger.getCurrentRoom() == playerChallengee.getCurrentRoom()) {
@@ -443,6 +446,12 @@ public class GameCore implements GameCoreInterface {
         else
           return "You are not in a R-P-S challenge.";
     }
+
+    @Override
+     public String teach(String player){
+         String message = "Here is the Heirarchy of power in R-P-S:\n\tRock beats Scissors\n\tScissors beats Paper\n\tPaper beats Rock\n\nCHALLENGE <name>: \tIf you challenge someone, you must wait for them to accept or reject\nACCEPT/REJECT <name>: \tIf you have been challenge, you must accept or reject the challenge\nYou may not be challenged while in a R-P-S battle\n";
+         return message;
+     }
 
     /**
      * Leaves the game.

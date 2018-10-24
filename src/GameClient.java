@@ -61,7 +61,8 @@ public class GameClient {
         System.out.println("  ACCEPT        - Accept a challenge from a player to a R-P-S in the same area.");
         System.out.println("  REJECT        - Reject a challenge from a player to a R-P-S in the same area.");
         System.out.println("  PICK          - Pick rock, paper or scissors.");
-	System.out.println("  QUIT          - Quits the game.");
+	   System.out.println("  TEACH    - Teaches you the basics of how to play R-P-S");
+        System.out.println("  QUIT          - Quits the game.");
         System.out.println();
         
 
@@ -230,6 +231,9 @@ public class GameClient {
                         else 
                           System.out.println("Invalid option.");
                     }
+                    break;
+                case "TEACH":
+                    System.out.println(remoteGameInterface.teach(this.playerName));
                     break;
                 case "QUIT":
                     remoteGameInterface.leave(this.playerName);
