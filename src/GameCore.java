@@ -373,7 +373,7 @@ public class GameCore implements GameCoreInterface {
         Player player = this.playerList.findPlayer(name);
         Player challengee = this.playerList.findPlayer(player.getChallenger());
         
-        if(player.getHasChallenge() == true){
+        if(player.getInBattle() == true){
           if(player.getOption().equals("ROCK") || player.getOption().equals("PAPER") || player.getOption().equals("SCISSORS")){
             return "You already pick rock, paper or scissors. You picked " + player.getOption();
           }
