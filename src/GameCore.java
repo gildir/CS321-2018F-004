@@ -372,7 +372,6 @@ public class GameCore implements GameCoreInterface {
         return ("File not found. Please add a joke.");
       }
     }
-    //todo chat log joke
 
     /**
      * Attempts to walk forward < distance > times.  If unable to make it all the way,
