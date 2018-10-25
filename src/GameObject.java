@@ -39,6 +39,30 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
     }    
   
     
+	/**
+	 * Pokes the ghoul in the current room
+	 * @param playerName Player name
+	 * @return String message of ghoul
+	 * @throws RemoteException
+	 */
+	public String pokeGhoul(String playerName) throws RemoteException {
+		return core.pokeGhoul(playerName);
+	}
+
+	/**
+	 * Pokes the ghoul in the current room
+	 * @param playerName Player name
+	 * @param item item's name, which will be throw. 
+	 * @return String message of ghoul
+	 * @throws RemoteException
+	 */
+	public String bribeGhoul(String playerName, String item) throws RemoteException {
+		return core.bribeGhoul(playerName,item);
+	}
+	
+	public String giveToGhoul(String object, String playerName) {
+		return core.giveToGhoul(object, playerName);
+	}
     /**
      * Allows a player to join the game.  If a player with the same name (case-insensitive)
      *  is already in the game, then this returns false.  Otherwise, adds a new player of 
