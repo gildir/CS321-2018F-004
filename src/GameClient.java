@@ -140,10 +140,10 @@ public class GameClient {
         }
         
         String message = "";
-
+        String command = tokens.remove(0).toUpperCase();
+        boolean success = true; //Trips whenever the user enters a bad command. Used so redo doesnt redo bad commands atm
         try {
-            switch(tokens.remove(0).toUpperCase()) {
-            boolean success = true; //Trips whenever the user enters a bad command. Used so redo doesnt redo bad commands atm
+            switch(command) {
                 case "LOOK":
                     System.out.println(remoteGameInterface.look(this.playerName));
                     break;
@@ -206,7 +206,7 @@ public class GameClient {
                     System.out.println("Invalid Command, Enter \"help\" to get help");
                     break;
             }
-            if(!input.equals("REDO")&&success) {
+            if(!command.equals("REDO")&&success) {
                 this.lastCommand = input;
             }
         } catch (RemoteException ex) {
