@@ -207,6 +207,9 @@ public class GameClient {
                     remoteGameInterface.leave(this.playerName);
                     runListener = false;
                     break;
+                default:
+                    System.out.println("Invalid Command, Enter \"help\" to get help");
+                    break;
             }
         } catch (RemoteException ex) {
             Logger.getLogger(GameClient.class.getName()).log(Level.SEVERE, null, ex);
