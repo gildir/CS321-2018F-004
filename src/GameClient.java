@@ -60,6 +60,7 @@ public class GameClient {
         System.out.println("  CHALLENGE     - Challenge a player to a R-P-S in the same area.");
         System.out.println("  ACCEPT        - Accept a challenge from a player to a R-P-S in the same area.");
         System.out.println("  REJECT        - Reject a challenge from a player to a R-P-S in the same area.");
+        System.out.println("  PICK          - Pick rock, paper or scissors.");
 	System.out.println("  QUIT          - Quits the game.");
         System.out.println();
         
@@ -211,12 +212,25 @@ public class GameClient {
                     break;
 		case "REJECT":
 		    if(tokens.isEmpty()){
-			    System.err.println("You need to provide a name.");
+			System.err.println("You need to provide a name.");
 		    }
 		    else{
-			    System.out.println(remoteGameInterface.accept(this.playerName, tokens.remove(0)));
+			System.out.println(remoteGameInterface.reject(this.playerName, tokens.remove(0)));
 		    }
 		    break;
+                case "PICK":
+                    if(tokens.isEmpty()){
+                        System.err.println("You need to provide either rock, paper or scissors");
+                    }
+                    else{
+                        String options = tokens.remove(0);
+                        options = options.toUpperCase();
+                        if(options.equals("ROCK") || options.equals("PAPER") || options.equals("SCISSORS"))
+                            System.out.println(remoteGameInterface.pickRPS(this.playerName, options));
+                        else 
+                          System.out.println("Invalid option.");
+                    }
+                    break;
                 case "QUIT":
                     remoteGameInterface.leave(this.playerName);
                     runListener = false;

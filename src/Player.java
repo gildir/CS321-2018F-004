@@ -15,7 +15,11 @@ public class Player {
     private PrintWriter replyWriter = null;
     private DataOutputStream outputWriter = null;
     private boolean hasChallenge = false;
+    private boolean inBattle = false;
     private String challenger = " ";
+    private String option = "";
+    private String challengerOption = "";
+    private boolean hasOption = false;
 
     public Player(String name) {
         this.currentRoom = 1;
@@ -72,7 +76,14 @@ public class Player {
     public void setHasChallenge(boolean challenged){
         hasChallenge = challenged;
     }
-    
+
+    public void setInBattle(boolean battle){
+	inBattle = battle;
+    }
+
+    public boolean getInBattle(){
+	return inBattle;
+    } 
     public String getName() {
         return name;
     }
@@ -124,7 +135,23 @@ public class Player {
     public Direction getDirection() {
         return this.currentDirection;
     }
-    
+
+    public String getOption(){
+        return this.option;
+    }
+
+    public void setOption(String option){
+        this.option = option;
+    }
+
+    public String getChallengerOption(){
+        return this.challengerOption;
+    }
+
+    public void setChallengerOption(String challengerOption){
+        this.challengerOption = challengerOption;
+    }
+
     public String viewInventory() {
         String result = "";
         if(this.currentInventory.isEmpty() == true) {
