@@ -19,7 +19,7 @@ public class Room {
         this.id = id;
         this.title = title;
         this.description = description;
-        this.npcs = null;
+        this.npcs = new LinkedList<>();
     }
 
     public Room(int id, String title, String description, LinkedList<NPC> npcs) {
