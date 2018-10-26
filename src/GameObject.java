@@ -4,6 +4,7 @@
 import java.io.PrintWriter;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.ArrayList;
 
 /**
  *
@@ -39,6 +40,30 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
     }    
   
     
+	/**
+	 * Pokes the ghoul in the current room
+	 * @param playerName Player name
+	 * @return String message of ghoul
+	 * @throws RemoteException
+	 */
+	public String pokeGhoul(String playerName) throws RemoteException {
+		return core.pokeGhoul(playerName);
+	}
+
+	/**
+	 * Pokes the ghoul in the current room
+	 * @param playerName Player name
+	 * @param item item's name, which will be throw. 
+	 * @return String message of ghoul
+	 * @throws RemoteException
+	 */
+	public String bribeGhoul(String playerName, String item) throws RemoteException {
+		return core.bribeGhoul(playerName,item);
+	}
+	
+	public String giveToGhoul(String object, String playerName) {
+		return core.giveToGhoul(object, playerName);
+	}
     /**
      * Allows a player to join the game.  If a player with the same name (case-insensitive)
      *  is already in the game, then this returns false.  Otherwise, adds a new player of 
@@ -153,6 +178,7 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
      * @param name The player's name
      * @return A reference to the Player object
      */
+    // Warning: Doesn't work because player obj not serializable
     public Player getPlayer(String name) throws RemoteException{
     	return core.findPlayer(name);
     }
@@ -169,11 +195,19 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
             player.getReplyWriter().close();
         }
     }
-
+    
+    
+    /**
+     * Takes the player into venmo. The new and improved way to exchange money with other players.
+     * 
+     * @author Team 4: Alaqeel
+     * @param name Name of the player enter the bank
+     * @param tokens 
+     * @throws RemoteException 
+     */    
 	@Override
-	public String venmo(String name) throws RemoteException {
-		// TODO Auto-generated method stub
-		return core.venmo(name);
+	public String venmo(String name, ArrayList<String> tokens) throws RemoteException {
+		return core.venmo(name, tokens);
 		
 	}    
 	
@@ -188,4 +222,36 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
 	public String getShopStr(int id) throws RemoteException{
 		return core.getShopStr(id);
 	}
+	
+	/**
+     * Allows player to sell an item to a shop, and increases their money
+     * @author Team 4: King
+     * @param name Name of the player
+     * @param shopId The ID of the shop the player is selling an item to
+     * @param item The item the player is selling (eventually will be an Item obj)
+     */
+    public int sellItem(String name, int shopId, String item) throws RemoteException{
+    	return core.sellItem(name, shopId, item);
+    }
+
+    /**
+     * 605B_buy_method
+     * Allows player to sell an item to a shop, and increases their money
+     * @author Team 4: Mistry
+     * @param name Name of the player
+     * @param shopId The ID of the shop the player is selling an item to
+     * @param item The item the player is selling (eventually will be an Item obj)
+     */
+    public String buyItem(String name, int shopId, String item) throws RemoteException{
+    	return core.buyItem(name, shopId, item);
+    }
+    
+    /**
+     * Returns a Shop's inventory as a formatted string
+     * @param id The shop ID
+     * @return A formatted string representing the Shop's inventory
+     */
+    public String getShopInv(int id) throws RemoteException{
+    	return core.getShopInv(id);
+    }
 }

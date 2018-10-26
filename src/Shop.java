@@ -29,18 +29,26 @@ public class Shop
 		this.title = name;
 	}
 	
+	//get method to get inventory linkedlist
+	public LinkedList<Object> getInven()
+	{
+		return this.inventory;
+	}
 	//used to add methods to the linked list
-	public void add(Object k) {}
+	public void add(Object k) {
+		this.inventory.add(k);
+	}
 	
+	//used to remove items form the linked list
+	public void remove(Object k)
+	{
+		this.inventory.remove(k);
+	}
 	//prints the inventory of the shop class
 	public void printInv() {}
 	
 	//Prints the list of object in demand
 	public void printDem() {}
-	
-	//Menu for the player to be interacting with the shop 
-	//use something like a switch statement
-	public void printMenu() {}
 	
 	public void addPlayer(Player p) {
 		playerlist.addPlayer(p);
@@ -128,7 +136,7 @@ public class Shop
 	 * Iterates through the list of the objects and creates a table populated with object names and prices.
 	 * @return table of the objects
 	 */
-	private String getObjects() {
+	public String getObjects() {
 		
 		if (inventory.size() == 0) {
 			return "We usually have a huge catalog.\n"
@@ -158,7 +166,7 @@ public class Shop
 		// adding menu items
 		int i = 1;
 		for (Object obj : inventory) {
-			float price = 0; // TODO: replace with price getter
+			float price = 12; // TODO: replace with price getter
 			
 			if (this.inDemand.contains(obj)) price *= 1.2; // change price according to demand list
 			String item = obj.toString();

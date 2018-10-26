@@ -1,10 +1,37 @@
-import java.rmi.RemoteException;
+import java.util.ArrayList;
 
 /**
  *
  * @author Kevin
  */
 public interface GameCoreInterface {
+	
+	/**
+	 * Makes the ghoul walk to an adjacent room
+	 * @param g Ghoul that is being moved
+	 * @param room Room the ghoul is currently in
+	 */
+	public void ghoulWander(Ghoul g,Room room);
+	
+	/**
+	 * Pokes the ghoul in the current room
+	 * @param playerName Player name
+	 * @return String message of ghoul
+	 */
+	public String pokeGhoul(String playerName);
+	
+
+	/**
+	 * Bribe the ghoul in the current room
+	 * @param playerName Player name
+	 * @param item item's name, which will be throw. 
+	 * @return String message of ghoul
+	 */
+	public String bribeGhoul(String playerName,String item);
+
+	
+	public String giveToGhoul(String object, String playerName);
+
     
     /**
      * Broadcasts a message to all other players in the same room as player.
@@ -84,10 +111,11 @@ public interface GameCoreInterface {
     
     /**
      * Takes the player into venmo. The new and improved way to exchange money with other players.
+     * 
+     * @author Team 4: Alaqeel
      * @param name Name of the player enter the bank
-     * @throws RemoteException 
      */    
-    public String venmo(String name);
+    public String venmo(String name, ArrayList<String> tokens);
     
     /**
      * Returns a reference to a shop 
@@ -96,4 +124,29 @@ public interface GameCoreInterface {
      */
     public String getShopStr(int id);
     
+    /**
+     * Allows player to sell an item to a shop, and increases their money
+     * @author Team 4: King
+     * @param name Name of the player
+     * @param shopId The ID of the shop the player is selling an item to
+     * @param item The item the player is selling (eventually will be an Item obj)
+     */
+    public int sellItem(String name, int shopId, String item);
+    
+    /**
+     * 605B_buy_method
+     * Allows player to sell an item to a shop, and increases their money
+     * @author Team 4: Mistry
+     * @param name Name of the player
+     * @param shopId The ID of the shop the player is selling an item to
+     * @param item The item the player is buying (eventually will be an Item obj)
+     */
+    public String buyItem(String name, int shopId, String item);
+  
+    /**
+     * Returns a Shop's inventory as a formatted string
+     * @param id The shop ID
+     * @return A formatted string representing the Shop's inventory
+     */
+    public String getShopInv(int id);
 }
