@@ -5,6 +5,9 @@ import java.util.logging.Logger;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.io.IOException;
 
 /**
  *
@@ -15,28 +18,20 @@ public class GameCore implements GameCoreInterface {
     private final Map map;
     private HashMap<Integer,Shop> shoplist;
     private Venmo venmo; // Team 4: Aalaqeel
-    private Ghoul ghoul;
-    
-    /**
-     * Creates a new GameCoreObject.  Namely, creates the map for the rooms in the game,
-     *  and establishes a new, empty, player list.
-     * 
-     * This is the main core that both the RMI and non-RMI based servers will interface with.
-     */
-    public GameCore() {
-        
-        // Generate the game map.
-        map = new Map();
-        playerList = new PlayerList(); 
-        
-        // Builds a list of shops mapped to their map id (can be expanded as needed)
-        shoplist = new HashMap<Integer,Shop>();
-        shoplist.put(new Integer(1), new Shop("Clocktower shop", "The shopping destination for all of your gaming needs."));
-        
-        // Initializes the Venmo core. Team 4: Alaqeel
-        venmo = new Venmo();
-        
-        
+	private Ghoul ghoul;
+
+	/**
+	 * Creates a new GameCoreObject. Namely, creates the map for the rooms in the
+	 * game, and establishes a new, empty, player list.
+	 * 
+	 * This is the main core that both the RMI and non-RMI based servers will
+	 * interface with.
+	 */
+	public GameCore() {
+
+		// Generate the game map.
+		map = new Map();
+		playerList = new PlayerList();
 
 		Thread objectThread = new Thread(new Runnable() {
 			@Override
@@ -85,7 +80,6 @@ public class GameCore implements GameCoreInterface {
 						room = map.findRoom(ghoul.getRoom());
 						room.hasGhoul = true;
 						GameCore.this.broadcast(room, "You see a Ghoul enter this room");
-
                     } catch (InterruptedException ex) {
                         Logger.getLogger(GameObject.class.getName()).log(Level.SEVERE, null, ex);
                     }
@@ -120,8 +114,6 @@ public class GameCore implements GameCoreInterface {
 		}
     }
     
-      
-    
     /**
      * @author Group 4: King
      * Adds the player to list of players in store, and returns shop they just entered
@@ -138,7 +130,6 @@ public class GameCore implements GameCoreInterface {
     	}
     	return -1;
     }
-    
 
 
     /**
@@ -254,18 +245,6 @@ public class GameCore implements GameCoreInterface {
 				return "Unknown argument.\n" + Venmo.instructions();
 		}		
 	}      
-	
-	/**
-	 * Shows player how much money they have
-	 * @param name Name of the player
-	 * @return A string representation of the player's money
-	 */
-	public String wallet(String name) {
-		Player player = this.playerList.findPlayer(name);
-		float m = player.getMoney();
-		
-		return "$" + String.format("%.02f", m);
-	}
 
 	/**
      * Returns a Shop's inventory as a formatted string
@@ -653,5 +632,17 @@ public class GameCore implements GameCoreInterface {
 			return player;
 		}
 		return null;
+	}      
+	
+	/**
+	 * Shows player how much money they have
+	 * @param name Name of the player
+	 * @return A string representation of the player's money
+	 */
+	public String wallet(String name) {
+		Player player = this.playerList.findPlayer(name);
+		float m = player.getMoney();
+		
+		return "$" + String.format("%.02f", m);
 	}
 }

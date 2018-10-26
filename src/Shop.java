@@ -91,6 +91,7 @@ public class Shop
         // catalog
         result += this.getObjects();
         
+<<<<<<< HEAD
         // players names
 //        String players = this.getPlayers();
 //        if (players.length() > 1) result += "You are here by yourself.\n";
@@ -103,6 +104,15 @@ public class Shop
         result += "\n";
         result += "Players in the area: " + this.getPlayers() + "\n";
 
+=======
+        String players = this.getPlayers(playerList);
+        if (players.length() == 0) result += "You are here by yourself.\n";
+        else {
+        	result += "You are here along with:\n";
+        	result += players;
+        }
+        
+>>>>>>> 601a_shop_at_clocktower
         result += "How can we help you?\n";
         return result;
     }
@@ -138,7 +148,10 @@ public class Shop
 		
 	}
 	
+<<<<<<< HEAD
 	
+=======
+>>>>>>> 601a_shop_at_clocktower
 	/**
 	 * @author Team 4: Alaqeel
 	 * 
