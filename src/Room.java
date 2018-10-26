@@ -10,7 +10,12 @@ public class Room {
     private final String description;
     private final LinkedList<String> objects;
     private final LinkedList<Exit> exits;
+
+    //list of NPCs in a room, list in case additional NPCs are added to the game
     private final LinkedList<NPC> npcs;
+    //add tem state check for ghoul
+    public boolean hasGhoul = false;
+
     
     public Room(int id, String title, String description) {
         this.objects = new LinkedList<>();
