@@ -10,6 +10,7 @@ public class Room {
     private final String description;
     private final LinkedList<String> objects;
     private final LinkedList<Exit> exits;
+    private final LinkedList<NPC> npcs;
     
     public Room(int id, String title, String description) {
         this.objects = new LinkedList<>();
@@ -18,6 +19,18 @@ public class Room {
         this.id = id;
         this.title = title;
         this.description = description;
+        this.npcs = null;
+    }
+
+    public Room(int id, String title, String description, LinkedList<NPC> npcs) {
+        this.objects = new LinkedList<>();
+        this.exits = new LinkedList<>();
+
+        this.id = id;
+        this.title = title;
+        this.description = description;
+
+        this.npcs = npcs;
     }
     
     public String toString(PlayerList playerList, Player player) {
@@ -26,6 +39,7 @@ public class Room {
         result += "-------------------------\n";
         result += this.getDescription() + "\n";
         result += "...................\n";
+        result += "NPCs in the area: " + this.getNPCs() + "\n";
         result += "Objects in the area: " + this.getObjects() + "\n";
         result += "Players in the area: " + this.getPlayers(playerList) + "\n";
         result += "You see paths in these directions: " + this.getExits() + "\n";
@@ -95,10 +109,22 @@ public class Room {
             return this.objects.toString();
         }
     }
+
+    public String getNPCs() {
+        if(this.npcs.isEmpty()) {
+            return "None.";
+        }
+        else {
+            return this.npcs.toString();
+        }
+    }
     
     public void addObject(String obj) {
         if(this.objects.size() < 5) {
             this.objects.add(obj);
+        }
+        else{
+            throw new IndexOutOfBoundsException("Can not add more objects, objects is at capacity");
         }
     }
     

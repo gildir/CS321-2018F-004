@@ -4,6 +4,7 @@
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.io.IOException;
 
 /**
  *
@@ -11,7 +12,7 @@ import java.util.logging.Logger;
  */
 public class GameCore implements GameCoreInterface {
     private final PlayerList playerList;
-    private final Map map;
+    private Map map;
     
     /**
      * Creates a new GameCoreObject.  Namely, creates the map for the rooms in the game,
@@ -19,11 +20,11 @@ public class GameCore implements GameCoreInterface {
      * 
      * This is the main core that both the RMI and non-RMI based servers will interface with.
      */
-    public GameCore() {
-        
+       
+     public GameCore(String worldFile){
         // Generate the game map.
-        map = new Map();
-        
+        map = new Map(worldFile);
+
         playerList = new PlayerList();
         
         Thread objectThread = new Thread(new Runnable() {
@@ -38,9 +39,14 @@ public class GameCore implements GameCoreInterface {
                         Thread.sleep(rand.nextInt(60000));
                         object = objects[rand.nextInt(objects.length)];
                         room = map.randomRoom();
-                        room.addObject(object);
-                        
-                        GameCore.this.broadcast(room, "You see a student rush past and drop a " + object + " on the ground.");
+
+                        try{
+                            room.addObject(object);
+                            GameCore.this.broadcast(room, "You see a student rush past and drop a " + object + " on the ground.");
+                        }
+                        catch (IndexOutOfBoundsException e) {
+                            GameCore.this.broadcast(room, "You see a student rush past.");
+                        }
 
                     } catch (InterruptedException ex) {
                         Logger.getLogger(GameObject.class.getName()).log(Level.SEVERE, null, ex);
