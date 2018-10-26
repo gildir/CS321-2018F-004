@@ -516,5 +516,17 @@ public class GameCore implements GameCoreInterface {
 			return player;
 		}
 		return null;
+	}      
+	
+	/**
+	 * Shows player how much money they have
+	 * @param name Name of the player
+	 * @return A string representation of the player's money
+	 */
+	public String wallet(String name) {
+		Player player = this.playerList.findPlayer(name);
+		float m = player.getMoney();
+		
+		return "$" + String.format("%.02f", m);
 	}
 }

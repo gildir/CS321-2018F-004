@@ -134,4 +134,11 @@ public interface GameObjectInterface extends Remote {
      */
     public Player getPlayer(String name) throws RemoteException;
    
+    /**
+     * Returns the amount of money in a player's wallet
+     * @param name The name of the player
+     * @return The amount of money a player has formatted with 2 decimals
+     * @throws RemoteException
+     */
+    public String wallet(String name) throws RemoteException;
 }
