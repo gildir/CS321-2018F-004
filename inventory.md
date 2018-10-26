@@ -1,5 +1,6 @@
 # Items and Inventory
 
+
 ## Item Object - Feature 502
 ### User
 Items in the game are bundled together to hold the item name, the item weight, and the item price.
