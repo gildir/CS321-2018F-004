@@ -5,7 +5,6 @@ import java.util.logging.Logger;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.io.IOException;
 
 /**
  *
@@ -161,16 +160,15 @@ public class GameCore implements GameCoreInterface {
     public int sellItem(String name, int shopId, String item) {
     	Player player = this.playerList.findPlayer(name);
     	Shop s = shoplist.get(shopId);
-    	int value = 0;
     	
     	String removed = player.removeObjectFromInventory(item);
     	if (removed != null) {
     		s.add(removed);
-    		value = 10;
-        	player.setMoney(player.getMoney() + value);
     	}
     	
     	//int value = removed.getValue();
+    	int value = 10;
+    	player.setMoney(player.getMoney() + value);
     	return value;
     }
     
@@ -216,7 +214,8 @@ public class GameCore implements GameCoreInterface {
      * 
      * @author Team 4: Alaqeel
      * @param name Name of the player enter the bank
-     */	@Override
+     */	
+    @Override
 	public String venmo(String name, ArrayList<String> tokens) {
 		// checks if the player forgot to enter enough commands
 		if (tokens.isEmpty()) return "You need to provide more arguments.\n" + Venmo.instructions();
@@ -267,7 +266,6 @@ public class GameCore implements GameCoreInterface {
 		
 		return "$" + String.format("%.02f", m);
 	}
-	
 
 	/**
      * Returns a Shop's inventory as a formatted string

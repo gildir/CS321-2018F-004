@@ -55,19 +55,16 @@ public class GameClient {
         System.out.println("  LEFT          - Turns your player left 90 degrees.");
         System.out.println("  RIGHT         - Turns your player right 90 degrees.");
         System.out.println("  MOVE distance - Tries to walk forward <distance> times.");
-<<<<<<< HEAD
         System.out.println("  PICKUP obect  - Tries to pick up an object in the same area.");
         System.out.println("  SHOP          - Tries to enter a shop if you are near one.");
         System.out.println("  INVENTORY     - Shows you what objects you have collected.");
         System.out.println("  WALLET        - Shows you how much money you have.");
         System.out.println("  VENMO         - Allows you to send money to people. Try: VENMO HELP"); // Team 4: Alaqeel
-=======
         System.out.println("  PICKUP object  - Tries to pick up an object in the same area.");
         System.out.println("  INVENTORY     - Shows you what objects you have collected.");
         System.out.println("  POKE_GHOUL    - Pokes the ghoul in the current room.");
         System.out.println("  BRIBE_GHOUL item_name    - Gives selected item to ghoul.");
         //System.out.println("  GIVE_GHOUL object   - Gives object to ghoul in current room");
->>>>>>> master
         System.out.println("  QUIT          - Quits the game.");
         System.out.println();
         
@@ -200,13 +197,12 @@ public class GameClient {
                     break;
                 case "INVENTORY":
                     System.out.println(remoteGameInterface.inventory(this.playerName));
-<<<<<<< HEAD
                     break; 
                 case "VENMO": // Team 4: Alaqeel
                 	System.out.println(remoteGameInterface.venmo(this.playerName, tokens));
                     break;   
                 case "SHOP":
-                	int shopId = remoteGameInterface.shop(this.playerName); // Need to make this a serializable type
+                	int shopId = remoteGameInterface.shop(this.playerName); 
                 	if (shopId != -1) {
                 		System.out.println("You enter the shop");
                 		new ShopClient(this.playerName, shopId, remoteGameInterface);
@@ -218,8 +214,6 @@ public class GameClient {
                 case "WALLET":
                 	System.out.println(remoteGameInterface.wallet(this.playerName));
                 	break;
-=======
-                    break;
                 case "POKE_GHOUL":
                     System.out.println(remoteGameInterface.pokeGhoul(this.playerName));
                     break;
@@ -230,7 +224,6 @@ public class GameClient {
                         System.out.println(remoteGameInterface.bribeGhoul(this.playerName, tokens.remove(0)));
                     }
                     break;
->>>>>>> master
                 case "QUIT":
                     remoteGameInterface.leave(this.playerName);
                     runListener = false;
