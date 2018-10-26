@@ -276,6 +276,7 @@ public class GameCore implements GameCoreInterface {
             Room room = map.findRoom(player.getCurrentRoom());
             room.whiteboardErase();
             this.broadcast(player, player.getName() + " erases the text on the whiteboard.");
+            dailyLogger.write(player.getName(), "WHITEBOARD ERASE", room.getTitle());
             return "You erase the text on the whiteboard.";
         }
         else {
@@ -293,7 +294,7 @@ public class GameCore implements GameCoreInterface {
         if(player != null) {
             Room room = map.findRoom(player.getCurrentRoom());
             String text = room.getWhiteboardText();
-
+            dailyLogger.write(player.getName(), "WHITEBOARD READ", room.getTitle());
             this.broadcast(player, player.getName() + " reads the text on the whiteboard.");
             if (text != null && !text.isEmpty()) {
                 return "The whiteboard says: \"" + text + "\".";
@@ -320,6 +321,7 @@ public class GameCore implements GameCoreInterface {
             if(player != null) {
                 Room room = map.findRoom(player.getCurrentRoom());
                 boolean success = room.addWhiteboardText(text);
+                dailyLogger.write(player.getName(), "WHITEBOARD WRITE", text, room.getTitle());
                 if (success) { 
                     this.broadcast(player, player.getName() + " writes on the whiteboard.");
                     return "You write text on the whiteboard.";
