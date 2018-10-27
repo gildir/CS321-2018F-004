@@ -10,6 +10,7 @@ import java.io.IOException;
  * @author Kevin
  */
 public class GameCore implements GameCoreInterface {
+
 	private final PlayerList playerList;
 	private final Map map;
 	private Ghoul ghoul;
