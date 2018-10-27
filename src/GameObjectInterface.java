@@ -8,6 +8,29 @@ import java.rmi.RemoteException;
  * @author Kevin
  */
 public interface GameObjectInterface extends Remote {
+	
+	/**
+	 * Pokes the ghoul in the current room
+	 * @param playerName Player name
+	 * @return String message of ghoul
+	 * @throws RemoteException
+	 */
+	public String pokeGhoul(String playerName) throws RemoteException;
+
+
+	/**
+	 * Pokes the ghoul in the current room
+	 * @param playerName Player name
+	 * @param item item's name, which will be throw. 
+	 * @return String message of ghoul
+	 * @throws RemoteException
+	 */
+	public String bribeGhoul(String playerName, String item) throws RemoteException;
+
+
+	//Same functionality as bribeGhoul. Not currently used.
+	public String giveToGhoul(String object, String playerName) throws RemoteException;
+	
 
     /**
      * Sends a request to join the game.  
@@ -27,22 +50,6 @@ public interface GameObjectInterface extends Remote {
      * @throws RemoteException 
      */
     public String look(String name) throws RemoteException;
-    
-    /**
-     * Turns the player left.
-     * @param name Player Name
-     * @return String message of the player turning left.
-     * @throws RemoteException 
-     */
-    public String left(String name) throws RemoteException;
-    
-     /**
-     * Turns the player right.
-     * @param name Player Name
-     * @return String message of the player turning right.
-     * @throws RemoteException 
-     */
-    public String right(String name) throws RemoteException;
    
     /**
      * Says "message" to everyone in the current area.
@@ -61,7 +68,7 @@ public interface GameObjectInterface extends Remote {
      * @return Message showing success.
      * @throws RemoteException 
      */
-    public String move(String name, int distance) throws RemoteException;
+    public String move(String name, Direction direction) throws RemoteException;
 
     /**
      * Attempts to pick up an object < object >. Will return a message on any success or failure.
@@ -72,6 +79,13 @@ public interface GameObjectInterface extends Remote {
      */    
     public String pickup(String name, String object) throws RemoteException;
     
+    /**
+     * Attempts to pick up all objects in the room. Will return a message on any success or failure.
+     * @param name Name of the player to move
+     * @return Message showing success. 
+     */    
+    public String pickupAll(String name) throws RemoteException;
+
      /**
      * Returns a string representation of all objects you are carrying.
      * @param name Name of the player to view their inventory
