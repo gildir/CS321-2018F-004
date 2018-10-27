@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+System.out.println("Welcome to the client for an RMI based online game.\n");
+        System.out.println("This game allows you to connect to a server an walk around a virtual,");
+        System.out.println(" text-based version of the George Mason University campus.\n");
+        System.out.println("You will be asked to create a character momentarily.");
+        System.out.println("When you do, you will join the game at the George Mason Clock, in the main quad.");
+        System.out.println("You will be able to see if any other players are in the same area as well as what");
+        System.out.println("objects are on the ground and what direction you are facing.\n");
+    -->
+
+<helps>
+    <introduction>
+        <description>
+Welcome to the client for an RMI based online game.
+
+This game allows you to connect to a server an walk around a virtual,
+text-based version of the George Mason University campus.
+
+You will be asked to create a character momentarily.
+When you do, you will join the game at the George Mason Clock, in the main quad.
+You will be able to see if any other players are in the same area as well as what
+object are on the ground and what direction you are facing.
+        </description>
+    </introduction>
+
+    <help command = "LOOK">
+        <description>  LOOK          - Shows you the area around you</description>
+    </help>
+    <help command = "SAY">
+        <description>  SAY message   - Says 'message' to any other players in the same area.</description>
+    </help>
+    <help command = "MOVE">
+        <description>  MOVE direction- Tries to walk forward once toward &lt;direction&gt; times.</description>
+    </help>
+    <help command = "PICKUP">
+        <description>  PICKUP obect  - Tries to pick up an object in the same area.</description>
+    </help>
+    <help command = "PICKUPALL">
+        <description>  PICKUPALL     - Tries to pick up all objects in the same area.</description>
+    </help>
+    <help command = "INVENTORY">
+        <description>  INVENTORY     - Shows you what objects you have collected.</description>
+    </help>
+    <help command = "QUIT">
+        <description>  QUIT          - Quits the game.</description>
+    </help>
+    <help command = "HELP">
+        <description>  HELP          - Shows you all possible commands.</description>
+    </help>
+    <help command = "REDO">
+        <description>  REDO          - Repeats the last command you entered.</description>
+    </help>
+</helps>
