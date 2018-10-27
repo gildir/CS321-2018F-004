@@ -5,6 +5,7 @@ import java.util.logging.Logger;
 import java.util.LinkedList;
 import java.io.IOException;
 
+
 /**
  *
  * @author Kevin
@@ -41,10 +42,14 @@ public class GameCore implements GameCoreInterface {
 						Thread.sleep(rand.nextInt(60000));
 						object = objects[rand.nextInt(objects.length)];
 						room = map.randomRoom();
-						room.addObject(object);
-
-						GameCore.this.broadcast(room,
-								"You see a student rush past and drop a " + object + " on the ground.");
+            
+            try{
+						  room.addObject(object);
+              GameCore.this.broadcast(room, "You see a student rush past and drop a " + object + " on the ground.");
+            }
+            catch (IndexOutOfBoundsException e) {
+              GameCore.this.broadcast(room, "You see a student rush past.");
+            }
 
 					} catch (InterruptedException ex) {
 						Logger.getLogger(GameObject.class.getName()).log(Level.SEVERE, null, ex);
@@ -77,6 +82,7 @@ public class GameCore implements GameCoreInterface {
 						room.hasGhoul = true;
 						GameCore.this.broadcast(room, "You see a Ghoul enter this room");
 
+
                     } catch (InterruptedException ex) {
                         Logger.getLogger(GameObject.class.getName()).log(Level.SEVERE, null, ex);
                     }
@@ -89,6 +95,65 @@ public class GameCore implements GameCoreInterface {
         objectThread.start();
         awakeDayGhoul.start();
     }
+
+ 
+    
+    /**
+     * Attempts to walk towards <direction> 1 time.  If unable to make it all the way,
+     *  a message will be returned.  Will display LOOK on any partial success.
+     * @param name Name of the player to move
+     * @param distance Number of rooms to move forward through.
+     * @return Message showing success.
+     */
+    public String move(String name, Direction direction) {
+        Player player = this.playerList.findPlayer(name);
+        if(player == null) {
+            return null;
+        }
+        Room room = map.findRoom(player.getCurrentRoom());
+        if(room.canExit(direction)) {
+            this.broadcast(player, player.getName() + " has walked off to the " + direction);
+            player.getReplyWriter().println(room.exitMessage(direction));
+            player.setCurrentRoom(room.getLink(direction));
+            this.broadcast(player, player.getName() + " just walked into the area.");
+            Ghost g = new Ghost(player);
+			    	g.start();
+            player.getReplyWriter().println(this.map.findRoom(player.getCurrentRoom()).toString(playerList, player));
+        } else {
+            player.getReplyWriter().println(room.exitMessage(direction));
+            return "You grumble a little and stop moving.";
+        }
+        return "You stop moving and begin to stand around again.";
+    }
+    
+
+    /**
+     * Attempts to pick up all objects in the room. Will return a message on any success or failure.
+     * @param name Name of the player to move
+     * @return Message showing success. 
+     */    
+    public String pickupAll(String name) {
+        Player player = this.playerList.findPlayer(name);
+        if(player != null) {
+            Room room = map.findRoom(player.getCurrentRoom());
+            LinkedList<String> objects = room.removeAllObjects();
+            if(objects != null && objects.size() > 0) {
+                for (String object : objects)
+                {
+                    player.addObjectToInventory(object);
+                }
+                this.broadcast(player, player.getName() + " bends over to pick up all objects that were on the ground.");
+                return "You bend over and pick up all objects on the ground.";
+            }
+            else {
+                this.broadcast(player, player.getName() + " bends over to pick up something, but doesn't find anything.");
+                return "You look around for objects but can't find any.";
+            }
+        }
+        else {
+            return null;
+        }
+    }       
 	
 
 	public void ghoulWander(Ghoul g, Room room) {
@@ -321,6 +386,7 @@ public class GameCore implements GameCoreInterface {
 	 * @param name Player Name
 	 * @return String message of the player turning left.
 	 */
+  @Deprecated
 	@Override
 	public String left(String name) {
 		Player player = this.playerList.findPlayer(name);
@@ -345,6 +411,7 @@ public class GameCore implements GameCoreInterface {
 	 * @param name Player Name
 	 * @return String message of the player turning right.
 	 */
+  @Deprecated
 	@Override
 	public String right(String name) {
 		Player player = this.playerList.findPlayer(name);
@@ -405,6 +472,7 @@ public class GameCore implements GameCoreInterface {
 	 * @param distance Number of rooms to move forward through.
 	 * @return Message showing success.
 	 */
+  @Deprecated
 	public String move(String name, int distance) {
 		Player player = this.playerList.findPlayer(name);
 		if (player == null || distance <= 0) {
