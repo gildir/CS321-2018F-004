@@ -1,4 +1,4 @@
-
+ 
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -58,12 +58,15 @@ public class GameClient {
         System.out.println("  PICKUP object - Tries to pick up an object in the same area.");
 	System.out.println("  DROP object   - Tries to drop an object from your pockets in the same area");
         System.out.println("  INVENTORY     - Shows you what objects you have collected.");
-	System.out.println("  SORT          - Sorts your inventory");
+        System.out.println("  POKE_GHOUL    - Pokes the ghoul in the current room.");
+        System.out.println("  BRIBE_GHOUL item_name    - Gives selected item to ghoul.");
+        //System.out.println("  GIVE_GHOUL object   - Gives object to ghoul in current room");
         System.out.println("  QUIT          - Quits the game.");
     	System.out.println("  R_TRADE player  - Set up a trade with another player");
     	System.out.println("  A_TRADE player  - Accept a trade with another player");
 	System.out.println("  O or OFFER player object - Offer player an item");
-        System.out.println();
+	System.out.println("  SORT          - Sorts your inventory");      
+	System.out.println();
         
 
         // Set up for keyboard input for local commands.
@@ -209,7 +212,7 @@ public class GameClient {
                         System.out.println(remoteGameInterface.pickup(this.playerName, tokens.remove(0)));
                     }
                     break;
-        case "R_TRADE":
+        	case "R_TRADE":
                     if(tokens.isEmpty()) {
                             System.err.println("You need to provide the name of the player that you want to trade with");
                     }
@@ -217,8 +220,7 @@ public class GameClient {
                         remoteGameInterface.requestPlayer(this.playerName, tokens.remove(0));
                     }
                     break;
-
-        case "A_TRADE":
+		case "A_TRADE":
                     if(tokens.isEmpty()) {
                             System.err.println("You need to provide the name of the player you are accepting");
                     }
@@ -226,12 +228,22 @@ public class GameClient {
                         System.out.println(remoteGameInterface.playerResponse(this.playerName, tokens.remove(0)));
                     }
                     break;
+                case "POKE_GHOUL":
+                    System.out.println(remoteGameInterface.pokeGhoul(this.playerName));
+                    break;
 		case "DROP":
                     if(tokens.isEmpty()) {
                         System.err.println("You need to provide an object to drop.");
                     }
                     else {
                         System.out.println(remoteGameInterface.drop(this.playerName, tokens.remove(0)));
+		    }    
+		    break;
+                case "BRIBE_GHOUL":
+                    if(tokens.isEmpty()){
+                        System.err.println("You need to provide an item to give Ghoul.");
+                    }else{
+                        System.out.println(remoteGameInterface.bribeGhoul(this.playerName, tokens.remove(0)));
                     }
                     break;
                 case "INVENTORY":
@@ -287,6 +299,9 @@ public class GameClient {
                 case "QUIT":
                     remoteGameInterface.leave(this.playerName);
                     runListener = false;
+                    break;
+                default:
+                    System.out.println("Invalid Command, Enter \"help\" to get help");
                     break;
             }
         } catch (RemoteException ex) {
