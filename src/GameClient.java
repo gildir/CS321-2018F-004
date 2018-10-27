@@ -1,6 +1,11 @@
 
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.ConnectException;
 import java.net.MalformedURLException;
 import java.net.ServerSocket;
@@ -39,7 +44,7 @@ public class GameClient {
     public GameClient(String host) {
         this.runGame = true;
         boolean nameSat = false;
-
+        
         System.out.println("Welcome to the client for an RMI based online game.\n");
         System.out.println("This game allows you to connect to a server an walk around a virtual,");
         System.out.println(" text-based version of the George Mason University campus.\n");
@@ -53,9 +58,11 @@ public class GameClient {
         System.out.println("  LEFT          - Turns your player left 90 degrees.");
         System.out.println("  RIGHT         - Turns your player right 90 degrees.");
         System.out.println("  MOVE distance - Tries to walk forward <distance> times.");
-        System.out.println("  PICKUP obect  - Tries to pick up an object in the same area.");
+        System.out.println("  PICKUP object  - Tries to pick up an object in the same area.");
         System.out.println("  INVENTORY     - Shows you what objects you have collected.");
-        System.out.println("  QUIT          - Quits the game.");
+        System.out.println("  POKE_GHOUL    - Pokes the ghoul in the current room.");
+        System.out.println("  BRIBE_GHOUL item_name    - Gives selected item to ghoul.");
+        //System.out.println("  GIVE_GHOUL object   - Gives object to ghoul in current room");
         System.out.println("  WHISPER player message   - Whispers 'message' to 'player'");
         System.out.println("  IGNORE player            - Ignore messages from from 'player'");
         System.out.println("  UNIGNORE player          - Remove 'player' from ignore list");
@@ -64,6 +71,7 @@ public class GameClient {
         System.out.println("  SHOUT message            - Shouts 'message' to any other players currently online.");
         System.out.println("  JOKE          - Tells a joke to everyone in the room.");
         System.out.println();
+        System.out.println("  QUIT          - Quits the game.");
 
 
         // Set up for keyboard input for local commands.
@@ -120,7 +128,7 @@ public class GameClient {
                     System.err.println("[CRITICAL ERROR] Error at reading any input properly.  Terminating the client now.");
                     System.exit(-1);
                 }
-            }
+            }                
         } catch (NotBoundException ex) {
             Logger.getLogger(GameClient.class.getName()).log(Level.SEVERE, null, ex);
         } catch (MalformedURLException ex) {
@@ -129,7 +137,7 @@ public class GameClient {
             System.err.println("[CRITICAL ERROR] There was a severe error with the RMI mechanism.");
             System.err.println("[CRITICAL ERROR] Code: " + re);
             System.exit(-1);
-        }
+        }        
     }
 
     // Helper for Features 4XX - Chat System
@@ -153,11 +161,11 @@ public class GameClient {
 
     /**
      * Simple method to parse the local input and remotely execute the RMI commands.
-     * @param input
+     * @param input 
      */
     private void parseInput(String input) {
         boolean reply;
-
+        
         // First, tokenize the raw input.
         StringTokenizer commandTokens = new StringTokenizer(input);
         ArrayList<String> tokens = new ArrayList<>();
@@ -169,7 +177,7 @@ public class GameClient {
             System.out.println("The keyboard input had no commands.");
             return;
         }
-
+        
         String message = "";
 
         try {
@@ -194,7 +202,7 @@ public class GameClient {
                             if(tokens.isEmpty() == false) {
                                 message += " ";
                             }
-                        }
+                        }                        
                         System.out.println(remoteGameInterface.say(this.playerName, message));
                     }
                     break;
@@ -263,6 +271,16 @@ public class GameClient {
                 case "INVENTORY":
                     System.out.println(remoteGameInterface.inventory(this.playerName));
                     break;
+                case "POKE_GHOUL":
+                    System.out.println(remoteGameInterface.pokeGhoul(this.playerName));
+                    break;
+                case "BRIBE_GHOUL":
+                    if(tokens.isEmpty()){
+                        System.err.println("You need to provide an item to give Ghoul.");
+                    }else{
+                        System.out.println(remoteGameInterface.bribeGhoul(this.playerName, tokens.remove(0)));
+                    }
+                    break;
                 case "QUIT":
                     remoteGameInterface.leave(this.playerName);
                     runListener = false;
@@ -282,47 +300,50 @@ public class GameClient {
                         System.out.println(remoteGameInterface.shout(this.playerName, message));
                     }
                     break;
+                default:
+                    System.out.println("Invalid Command, Enter \"help\" to get help");
+                    break;
             }
         } catch (RemoteException ex) {
             Logger.getLogger(GameClient.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
+    
     public static void main(String[] args) {
-        if(args.length < 1) {
-            System.out.println("[SHUTDOWN] .. This program requires one argument. Run as java -Djava.security.policy=game.policy GameClient hostname");
-            System.exit(-1);
-        }
-
+		if(args.length < 1) {
+			System.out.println("[SHUTDOWN] .. This program requires one argument. Run as java -Djava.security.policy=game.policy GameClient hostname");
+			System.exit(-1);
+		}
+		
         System.out.println("[STARTUP] Game Client Now Starting...");
         new GameClient(args[0]);
     }
 
     /**
-     * Inner class to handle remote message input to this program.
+     * Inner class to handle remote message input to this program.  
      *  - Runs as a separate thread.  Interrupt it to kill it.
      *  - Spawns multiple threads, one for each remote connection.
      */
     public class ReplyRemote implements Runnable {
-        private String host;
-
-        public ReplyRemote(String host) {
-            this.host = host;
-        }
-
+		private String host;
+		
+		public ReplyRemote(String host) {
+			this.host = host;
+		}
+		
         @Override
         public void run() {
             // This thread is interruptable, which will allow it to clean up before
-
+            
             // Attempt communcations with the server.
             try (Socket remoteMessageSocket = new Socket(host, 13500)) {
-
-                // Get stream reader and writer.
+                
+                // Get stream reader and writer. 
                 //  Writer is only used once, to register this socket with a player.
                 //  Otherwise, this is read only to receive non-locally generated event notifications.
                 BufferedReader remoteReader = new BufferedReader(new InputStreamReader(remoteMessageSocket.getInputStream()));
                 PrintWriter remoteWriter = new PrintWriter(remoteMessageSocket.getOutputStream(), true);
-
+                
                 // Register the socket with the player.
                 remoteWriter.println(GameClient.this.playerName);
                 remoteReader.readLine();
@@ -336,8 +357,8 @@ public class GameClient {
                         System.exit(-1);
                     }
                     System.out.println(message);
-                }
-
+                }                
+            
                 // Close the socket
                 remoteMessageSocket.close();
             } catch(ConnectException ex) {
@@ -346,7 +367,7 @@ public class GameClient {
                 System.exit(-1);
             } catch (IOException ex) {
                 Logger.getLogger(GameClient.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            }            
         }
     }
 
