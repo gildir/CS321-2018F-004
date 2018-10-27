@@ -6,7 +6,7 @@
  */
 public interface GameCoreInterface {
 
-	/**
+    /**
 	 * Makes the ghoul walk to an adjacent room
 	 * @param g Ghoul that is being moved
 	 * @param room Room the ghoul is currently in

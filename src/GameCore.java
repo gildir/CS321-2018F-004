@@ -1,4 +1,5 @@
 
+
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -6,6 +7,8 @@ import java.util.HashSet;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.LinkedList;
+import java.io.IOException;
 import java.lang.StringBuilder;
 import java.util.Scanner;
 import java.io.File;
@@ -19,43 +22,45 @@ import java.io.IOException;
  * @author Kevin
  */
 public class GameCore implements GameCoreInterface {
-    private final PlayerList playerList;
-    private final Map map;
-    private Ghoul ghoul;
+	private final PlayerList playerList;
+	private final Map map;
+	private Ghoul ghoul;
     private PrintWriter pw;
 
-    /**
-     * Creates a new GameCoreObject.  Namely, creates the map for the rooms in the game,
-     *  and establishes a new, empty, player list.
-     *
-     * This is the main core that both the RMI and non-RMI based servers will interface with.
-     */
-    public GameCore() throws IOException {
+	/**
+	 * Creates a new GameCoreObject. Namely, creates the map for the rooms in the
+	 * game, and establishes a new, empty, player list.
+	 *
+	 * This is the main core that both the RMI and non-RMI based servers will
+	 * interface with.
+	 */
+	public GameCore() throws IOException {
 
-        // Generate the game map.
-        map = new Map();
+		// Generate the game map.
+		map = new Map();
 
-        playerList = new PlayerList();
+		playerList = new PlayerList();
 
         pw = new PrintWriter(new FileWriter("chatlog.txt"));
         pw.flush();
         pw.close();
 
-        Thread objectThread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                Random rand = new Random();
-                Room room;
-                String object;
-                String[] objects = {"Flower", "Textbook", "Phone", "Newspaper"};
-                while(true) {
-                    try {
-                        Thread.sleep(rand.nextInt(60000));
-                        object = objects[rand.nextInt(objects.length)];
-                        room = map.randomRoom();
-                        room.addObject(object);
+		Thread objectThread = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				Random rand = new Random();
+				Room room;
+				String object;
+				String[] objects = { "Flower", "Textbook", "Phone", "Newspaper" };
+				while (true) {
+					try {
+						Thread.sleep(rand.nextInt(60000));
+						object = objects[rand.nextInt(objects.length)];
+						room = map.randomRoom();
+						room.addObject(object);
 
-                        GameCore.this.broadcast(room, "You see a student rush past and drop a " + object + " on the ground.");
+						GameCore.this.broadcast(room,
+								"You see a student rush past and drop a " + object + " on the ground.");
 
 					} catch (InterruptedException ex) {
 						Logger.getLogger(GameObject.class.getName()).log(Level.SEVERE, null, ex);
@@ -645,24 +650,24 @@ public class GameCore implements GameCoreInterface {
 		}
 	}
 
-	/**
-	 * Leaves the game.
-	 *
-	 * @param name Name of the player to leave
-	 * @return Player that was just removed.
-	 */
-	@Override
-	public Player leave(String name) {
-		Player player = this.playerList.findPlayer(name);
-		if (player != null) {
-			this.broadcast(player, "You see " + player.getName() + " heading off to class.");
-			this.playerList.removePlayer(name);
-			return player;
-		}
-		return null;
-	}
+     /**
+     * Leaves the game.
+      *
+     * @param name Name of the player to leave
+     * @return Player that was just removed.
+     */
+    @Override
+    public Player leave(String name) {
+        Player player = this.playerList.findPlayer(name);
+        if(player != null) {
+            this.broadcast(player, "You see " + player.getName() + " heading off to class.");
+            this.playerList.removePlayer(name);
+            return player;
+        }
+        return null;
+    }
 
-	//Feature 411. Shout
+    //Feature 411. Shout
     /**
      * Shouts "message" to everyone in the current area.
      * @param name Name of the player to speak

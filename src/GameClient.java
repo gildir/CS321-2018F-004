@@ -29,16 +29,16 @@ public class GameClient {
 
     // Remote object for RMI server access
     protected GameObjectInterface remoteGameInterface;
-
+    
     // Members for running the remote receive connection (for non-managed events)
     private boolean runListener;
     protected ServerSocket remoteListener;
-    private Thread remoteOutputThread;
-
+    private Thread remoteOutputThread;  
+    
     // Members related to the player in the game.
     protected String playerName;
-
-    /**
+    
+    /** 
      * Main class for running the game client.
      */
     public GameClient(String host) {
@@ -70,9 +70,9 @@ public class GameClient {
         System.out.println("  REPLY message   - Reply 'message' to last whisper");
         System.out.println("  SHOUT message            - Shouts 'message' to any other players currently online.");
         System.out.println("  JOKE          - Tells a joke to everyone in the room.");
-        System.out.println();
         System.out.println("  QUIT          - Quits the game.");
-
+        System.out.println();
+        
 
         // Set up for keyboard input for local commands.
         InputStreamReader keyboardReader = new InputStreamReader(System.in);
