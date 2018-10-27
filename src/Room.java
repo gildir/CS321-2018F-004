@@ -114,6 +114,9 @@ public class Room {
         if(this.objects.size() < 5) {
             this.objects.add(obj);
         }
+        else{
+            throw new IndexOutOfBoundsException("Can not add more objects, objects is at capacity");
+        }
     }
     
     public String removeObject(String target) {

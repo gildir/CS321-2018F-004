@@ -41,10 +41,14 @@ public class GameCore implements GameCoreInterface {
 						Thread.sleep(rand.nextInt(60000));
 						object = objects[rand.nextInt(objects.length)];
 						room = map.randomRoom();
-						room.addObject(object);
-
-						GameCore.this.broadcast(room,
-								"You see a student rush past and drop a " + object + " on the ground.");
+            
+            try{
+						  room.addObject(object);
+              GameCore.this.broadcast(room, "You see a student rush past and drop a " + object + " on the ground.");
+            }
+            catch (IndexOutOfBoundsException e) {
+              GameCore.this.broadcast(room, "You see a student rush past.");
+            }
 
 					} catch (InterruptedException ex) {
 						Logger.getLogger(GameObject.class.getName()).log(Level.SEVERE, null, ex);
@@ -76,6 +80,7 @@ public class GameCore implements GameCoreInterface {
 						room = map.findRoom(ghoul.getRoom());
 						room.hasGhoul = true;
 						GameCore.this.broadcast(room, "You see a Ghoul enter this room");
+
 
                     } catch (InterruptedException ex) {
                         Logger.getLogger(GameObject.class.getName()).log(Level.SEVERE, null, ex);
