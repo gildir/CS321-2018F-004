@@ -11,84 +11,86 @@ import java.util.Scanner;
 /**
  * @author Kevin
  */
-public class Map {
-    private final LinkedList<Room> map;
 
-    public Map() {
-        map = new LinkedList<>();
-        try {
-            File mapFile = new File("./rooms.csv");
-            Scanner mapIn = new Scanner(mapFile).useDelimiter(",|\\n|\\r\\n");
+public class Map{   
+        private final LinkedList<Room> map;
 
-            int numRooms, numExits;
+        public Map() {
+                map = new LinkedList<>();
+                try {
+                        File mapFile = new File("./rooms.csv");
+                        Scanner mapIn = new Scanner(mapFile).useDelimiter(",|\\n|\\r\\n");
 
-            String title, description;
-            String message;
-            int id, link;
+                        int numRooms, numExits;
 
-            Direction exitId;
+                        String title, description, room_type;
+                        String message;
+                        int id, link;
 
-            Room newRoom;
-            Exit newExit;
+                        Direction exitId;
 
-            numRooms = Integer.parseInt(mapIn.nextLine());
-            numExits = 4;
+                        Room newRoom;
+                        Exit newExit;
 
-            for (int i = 0; i < numRooms; i++) {
+                        numRooms = Integer.parseInt(mapIn.nextLine());
+                        numExits = 4;
 
-                mapIn.useDelimiter(",|\\n|\\r\\n");
-                id = Integer.parseInt(mapIn.next());
-                title = mapIn.next();
-                mapIn.useDelimiter("\\S|\\s");
-                mapIn.next();
-                mapIn.useDelimiter("\\n|\\r\\n");
-                description = mapIn.next();
+                        for(int i = 0; i < numRooms; i++) {
 
-//                System.out.println("Adding Room " + id + " with Title " + title + ": " + description);
+                                mapIn.useDelimiter(",|\\n|\\r\\n"); 
+                                id = Integer.parseInt(mapIn.next());
+                                room_type = mapIn.next();
+                                title = mapIn.next();
+                                mapIn.useDelimiter("\\S|\\s");
+                                mapIn.next();
+                                mapIn.useDelimiter("\\n|\\r\\n");
+                                description = mapIn.next();
+
+                                //                System.out.println("Adding Room " + id + " with Title " + title + ": " + description);
 
 
-                if(id == 1){
-                    LinkedList<String> quests = new LinkedList<>(Arrays.asList("quest1", "quest2", "quest3"));
-                    newRoom = new Room(id, title, description, new LinkedList<>(Arrays.asList(
-                            new NPC("questNPC", 1, quests))));
+                                if(id == 1){
+                                        LinkedList<String> quests = new LinkedList<>(Arrays.asList("quest1", "quest2", "quest3"));
+                                        newRoom = new Room(id, room_type, title, description, new LinkedList<>(Arrays.asList(
+                                                            new NPC("questNPC", 1, quests))));
+                                }
+                                else {
+                                        newRoom = new Room(id, room_type, title, description);
+                                }
+
+                                for(int j = 0; j < numExits; j++) {
+
+                                        mapIn.useDelimiter(",|\\n|\\r\\n");
+                                        exitId = Direction.valueOf(mapIn.next());
+                                        link = Integer.parseInt(mapIn.next());
+                                        mapIn.useDelimiter("\\S|\\s");
+                                        mapIn.next();
+                                        mapIn.useDelimiter("\\n|\\r\\n");
+                                        message = mapIn.next();
+
+                                        //                    System.out.println("... Adding Exit " + exitId + " to " + link + ": " + message);
+                                        newRoom.addExit(exitId, link, message);
+                                }                
+
+                                map.add(newRoom);
+                        }
+                        mapIn.close();
+                } catch (IOException ex) {
+                        Logger.getLogger(Map.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                else {
-                    newRoom = new Room(id, title, description);
-                }
-
-                for (int j = 0; j < numExits; j++) {
-
-                    mapIn.useDelimiter(",|\\n|\\r\\n");
-                    exitId = Direction.valueOf(mapIn.next());
-                    link = Integer.parseInt(mapIn.next());
-                    mapIn.useDelimiter("\\S|\\s");
-                    mapIn.next();
-                    mapIn.useDelimiter("\\n|\\r\\n");
-                    message = mapIn.next();
-
-//                    System.out.println("... Adding Exit " + exitId + " to " + link + ": " + message);
-                    newRoom.addExit(exitId, link, message);
-                }
-
-                map.add(newRoom);
-            }
-            mapIn.close();
-        } catch (IOException ex) {
-            Logger.getLogger(Map.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }
 
-    public Room findRoom(int roomId) {
-        for (Room room : this.map) {
-            if (room.getId() == roomId) {
-                return room;
-            }
+        public Room findRoom(int roomId) {
+                for(Room room : this.map) {
+                        if(room.getId() == roomId) {
+                                return room;
+                        }
+                }
+                return null;
         }
-        return null;
-    }
 
-    public Room randomRoom() {
-        Random rand = new Random();
-        return map.get(rand.nextInt(map.size()));
-    }
+        public Room randomRoom() {
+                Random rand = new Random();
+                return map.get(rand.nextInt(map.size()));
+        }
 }

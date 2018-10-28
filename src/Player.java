@@ -11,13 +11,13 @@ public class Player {
     private LinkedList<String> currentInventory;
     private String name;
     private int currentRoom;
-    private Direction currentDirection;
     private PrintWriter replyWriter = null;
     private DataOutputStream outputWriter = null;
+    private boolean hasChallenge = false;
+    private String challenger = " ";
 
     public Player(String name) {
         this.currentRoom = 1;
-        this.currentDirection = Direction.NORTH;
         this.name = name;
         this.currentInventory = new LinkedList<>();
     }
@@ -54,6 +54,21 @@ public class Player {
                 this.currentDirection = Direction.NORTH;
                 break;                
         }
+    }
+    public String getChallenger(){
+        return challenger;
+    }
+
+    public void setChallenger(String name){
+        challenger = name;
+    }
+
+    public boolean getHasChallenge(){
+        return hasChallenge;
+    }
+
+    public void setHasChallenge(boolean challenged){
+        hasChallenge = challenged;
     }
     
     public String getName() {
@@ -99,15 +114,7 @@ public class Player {
     public void setCurrentRoom(int room) {
         this.currentRoom = room;
     }
-    
-    public String getCurrentDirection() {
-        return this.currentDirection.name();
-    }
-    
-    public Direction getDirection() {
-        return this.currentDirection;
-    }
-    
+     
     public String viewInventory() {
         String result = "";
         if(this.currentInventory.isEmpty() == true) {
@@ -124,6 +131,6 @@ public class Player {
 
     @Override
     public String toString() {
-        return "Player " + this.name + ": " + currentDirection.toString();
+        return "Player " + this.name;
     }
 }
