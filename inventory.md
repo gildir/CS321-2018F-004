@@ -19,4 +19,16 @@ The items for the game drop table are listed in the .CSV file above.  The items 
 
 Item reading can be found in 
 [Item reading](./src/GameCore.java) starting in line .  
-This code is written to read the Item name, weight, and value (String/double/double).  This then constructs a new item object and adds it to the overall game drop table arraylist. 
+This code is written to read the Item name, weight, and value (String/double/double).  This then constructs a new item object and adds it to the overall game drop table arraylist.
+
+## Dropping items - Feature 505 - Jae-Moon Hwang
+### User
+In order to use the drop feature, it is very similar to the pickup feature. The keyword `drop` must be followed by an item name (e.g. `drop flower`). If there are multiple items of the same name, then only the first instance of the item is dropped.
+### Developer
+The code for the drop feature is very close to the code for the pickup feature. When a player initiates a drop, the name of the player and the name of the item are used as parameters. The parameters are passed through the drop method in GameCore. The method looks up which room the player is in and then tries to remove the named item from the player's inventory. If the named item is not found, it simply tells the player that they do not have any number of the named item. If an instance of the named item is found, then it removes the first instance of the named item from the player's inventory and tries to add it to the room's inventory.
+
+## Sorting player's inventory - Feature F03 - Jae-Moon Hwang
+### User
+In order to intiate a sort on a player's inventory, use the keyword `sort`. Once initiated, the player will have the option to sort by three categories: name, weight, and price. After selecting the category, the player is then asked if they want to sort in an ascending order or descending order.
+### Developer
+The sort feature has a few pieces to its code. When the player initiates a sort, the player will be prompted on their client to sort by categories and ascending or descending order. The input it then concatenated into one string of two letters as both the category and order are indicated by one letter each. This string represents the mode of the sort and passes the string through the client to the sort method found in the Player class. If the user does not provide the correct format for sorting, the game will keep asking until it obtains valid inputs from the user. Name, price, and weight are sorted using their own comparator and can be found in the Player class. Name is sorted in lexicographical order based on java's String compareTo method. Both price and weight are sorted using normal means which are comparing the actual numerical values and using operators for comparison.
