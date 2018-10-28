@@ -50,22 +50,6 @@ public interface GameObjectInterface extends Remote {
      * @throws RemoteException 
      */
     public String look(String name) throws RemoteException;
-    
-    /**
-     * Turns the player left.
-     * @param name Player Name
-     * @return String message of the player turning left.
-     * @throws RemoteException 
-     */
-    public String left(String name) throws RemoteException;
-    
-     /**
-     * Turns the player right.
-     * @param name Player Name
-     * @return String message of the player turning right.
-     * @throws RemoteException 
-     */
-    public String right(String name) throws RemoteException;
    
     /**
      * Says "message" to everyone in the current area.
@@ -84,7 +68,7 @@ public interface GameObjectInterface extends Remote {
      * @return Message showing success.
      * @throws RemoteException 
      */
-    public String move(String name, int distance) throws RemoteException;
+    public String move(String name, Direction direction) throws RemoteException;
 
     /**
      * Attempts to pick up an object < object >. Will return a message on any success or failure.
@@ -110,6 +94,24 @@ public interface GameObjectInterface extends Remote {
      */    
     public String inventory(String name) throws RemoteException;   
     
+    /**
+    * Prompts a message that someone is challenging them to a R-P-S
+    * @param challenger is the name of the player challenging someone in the area
+    * @param challenge is the name of the player being challenge
+    * @return Message showing success
+    * @throws RemoteException
+    */
+    public String challenge(String challenger, String challengee) throws RemoteException;
+     
+    /**
+    * Prompts a message that they are accepting a challnge from someone to a R-P-S
+    * @param challenger is the name of the player challenging someone in the area
+    * @param challenge is the name of the player accepting
+    * @return Message showing success
+    * @throws RemoteException
+    */
+    public String accept(String challenger, String challengee) throws RemoteException;
+
      /**
      * Leaves the game.
      * @param name Name of the player to leave
