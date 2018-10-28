@@ -104,9 +104,26 @@ public interface GameCoreInterface {
     public String accept(String challenger, String challengee);
 
     /**
+     *
+     * Reject someones challenge to a R-P-s
+     * @param challenger is the name of the player challenging to R-P-S
+     * @param challengee is the name of the player accepting 
+     * @return String message of the rejection
+     */
+    public String reject(String challenger, String challengee);
+
+    /**
+      * Pick R-P-S
+      * @param name is the name of player
+      * @options is what the player pick R-P-S
+      * @return String message of what they pick and who won
+      */
+    public String pickRPS(String name, String options);
+
+    /**
      * Leaves the game.
      * @param name Name of the player to leave
      * @return Player that was just removed.
-     */    
+     */   
     public Player leave(String name);    
 }

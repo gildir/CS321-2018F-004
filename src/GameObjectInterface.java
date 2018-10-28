@@ -112,6 +112,23 @@ public interface GameObjectInterface extends Remote {
     */
     public String accept(String challenger, String challengee) throws RemoteException;
 
+    /**
+     * Prompts a messaging that they are rejectin a challenge from someone to R-P-S
+     * @param challenger is the name of the player challenging someone in the area
+     * @param challengee is the name of the player accepting
+     * @return MEssage showing success
+     * @throws Remote Exception
+     */
+    public String reject(String challenger, String challengee) throws RemoteException;
+
+    /**
+      * Prompts a message that picks R-P-S
+      * @param name is the name of the player
+      * @param options is either R-P-S
+      * @return Message showing success
+      * @throws RemoteException
+      */
+    public String pickRPS(String name, String options) throws RemoteException;
      /**
      * Leaves the game.
      * @param name Name of the player to leave
