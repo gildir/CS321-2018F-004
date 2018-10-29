@@ -93,4 +93,10 @@ public interface GameCoreInterface {
      * @return Player that was just removed.
      */    
     public Player leave(String name);    
+
+    @Deprecated
+    public String left(String name);
+    
+    @Deprecated
+    public String right(String name);    
 }
