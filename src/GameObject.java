@@ -38,7 +38,7 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
         return false;
     }    
   
-    
+
 	/**
 	 * Pokes the ghoul in the current room
 	 * @param playerName Player name
@@ -52,14 +52,14 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
 	/**
 	 * Pokes the ghoul in the current room
 	 * @param playerName Player name
-	 * @param item item's name, which will be throw. 
+	 * @param item item's name, which will be throw.
 	 * @return String message of ghoul
 	 * @throws RemoteException
 	 */
 	public String bribeGhoul(String playerName, String item) throws RemoteException {
 		return core.bribeGhoul(playerName,item);
 	}
-	
+
 	public String giveToGhoul(String object, String playerName) {
 		return core.giveToGhoul(object, playerName);
 	}
@@ -122,7 +122,69 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
     public String say(String name, String message) throws RemoteException {
         return core.say(name, message);
     }
-      
+
+    // Feature 401. Whisper
+    /**
+     * Whispers "message" to a specific player.
+     * @param srcName Name of the player to speak
+     * @param dstName Name of the player to receive
+     * @param message Message to speak
+     * @return Message showing success
+     * @throws RemoteException
+     */
+    @Override
+    public String whisper(String srcName, String dstName, String message) throws RemoteException {
+        return core.whisper(srcName, dstName, message);
+    }
+
+    /**
+     * Reply "message" to last whisper.
+     * @param srcName Name of the player to speak
+     * @param message Message to speak
+     * @return Message showing success
+     * @throws RemoteException
+     */
+    @Override
+    public String quickReply(String srcName, String message) throws RemoteException {
+        return core.quickReply(srcName, message);
+    }
+
+    /**
+     * Player ignores further messages from another Player
+     * @param srcName Player making the ignore request
+     * @param dstName Player to be ignored
+     * @return Message showing success
+     * @throws RemoteException
+     */
+    @Override
+    public String ignorePlayer(String srcName, String dstName) throws RemoteException {
+        return core.ignorePlayer(srcName, dstName);
+    }
+
+    //Feature 408. Unignore Player.
+    /**
+     * Player unIgnores further messages from another Player
+     * @param srcName Player making the unIgnore request
+     * @param dstName Player to be unIgnored
+     * @return Message showing success
+     * @throws RemoteException
+     */
+    @Override
+    public String unIgnorePlayer(String srcName, String dstName) throws RemoteException {
+        return core.unIgnorePlayer(srcName, dstName);
+    }
+
+    /**
+     * Player displays the list of players that are being ignored
+     * @param name Player who's list is being targeted
+     * @return The list of players being ignored
+     * @throws RemoteException
+     */
+    @Override
+    public String getIgnoredPlayersList(String name) throws RemoteException{
+        return core.getIgnoredPlayersList(name);
+    }
+
     /**
      * Attempts to walk forward < distance > times.  If unable to make it all the way,
      *  a message will be returned.  Will display LOOK on any partial success.

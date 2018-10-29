@@ -1,4 +1,4 @@
- 
+
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -26,22 +26,22 @@ public class GameClient {
 
     // Remote object for RMI server access
     protected GameObjectInterface remoteGameInterface;
-    
+
     // Members for running the remote receive connection (for non-managed events)
     private boolean runListener;
     protected ServerSocket remoteListener;
-    private Thread remoteOutputThread;  
-    
+    private Thread remoteOutputThread;
+
     // Members related to the player in the game.
     protected String playerName;
-    
-    /** 
+
+    /**
      * Main class for running the game client.
      */
     public GameClient(String host) {
         this.runGame = true;
         boolean nameSat = false;
-        
+
         System.out.println("Welcome to the client for an RMI based online game.\n");
         System.out.println("This game allows you to connect to a server an walk around a virtual,");
         System.out.println(" text-based version of the George Mason University campus.\n");
@@ -60,9 +60,14 @@ public class GameClient {
         System.out.println("  POKE_GHOUL    - Pokes the ghoul in the current room.");
         System.out.println("  BRIBE_GHOUL item_name    - Gives selected item to ghoul.");
         //System.out.println("  GIVE_GHOUL object   - Gives object to ghoul in current room");
+        System.out.println("  WHISPER player message   - Whispers 'message' to 'player'");
+        System.out.println("  IGNORE player            - Ignore messages from from 'player'");
+        System.out.println("  UNIGNORE player          - Remove 'player' from ignore list");
+        System.out.println("  IGNORELIST               - Displays a list of players you are ignoring");
+        System.out.println("  REPLY message   - Reply 'message' to last whisper");
         System.out.println("  QUIT          - Quits the game.");
         System.out.println();
-        
+
 
         // Set up for keyboard input for local commands.
         InputStreamReader keyboardReader = new InputStreamReader(System.in);
@@ -115,7 +120,7 @@ public class GameClient {
                     System.err.println("[CRITICAL ERROR] Error at reading any input properly.  Terminating the client now.");
                     System.exit(-1);
                 }
-            }                
+            }
         } catch (NotBoundException ex) {
             Logger.getLogger(GameClient.class.getName()).log(Level.SEVERE, null, ex);
         } catch (MalformedURLException ex) {
@@ -124,16 +129,35 @@ public class GameClient {
             System.err.println("[CRITICAL ERROR] There was a severe error with the RMI mechanism.");
             System.err.println("[CRITICAL ERROR] Code: " + re);
             System.exit(-1);
-        }        
+        }
     }
-    
-    /** 
+
+    // Helper for Features 4XX - Chat System
+    /**
+     * Method to decorate messages intended for use with the chat system.
+     * @param msgTokens User input words to decorate into a "message".
+     * @return "message" to be sent by the user
+     */
+    private String parseMessage(ArrayList<String> msgTokens) {
+        //TODO: Note - Tokenizer currently trims out multiple spaces - bug or feature?
+        StringBuilder msgBuilder = new StringBuilder();
+        msgBuilder.append("\"");
+        while (!msgTokens.isEmpty()) {
+            msgBuilder.append(msgTokens.remove(0));
+            if (!msgTokens.isEmpty())
+                msgBuilder.append(" ");
+        }
+        msgBuilder.append("\"");
+        return msgBuilder.toString();
+    }
+
+    /**
      * Simple method to parse the local input and remotely execute the RMI commands.
-     * @param input 
+     * @param input
      */
     private void parseInput(String input) {
         boolean reply;
-        
+
         // First, tokenize the raw input.
         StringTokenizer commandTokens = new StringTokenizer(input);
         ArrayList<String> tokens = new ArrayList<>();
@@ -145,7 +169,7 @@ public class GameClient {
             System.out.println("The keyboard input had no commands.");
             return;
         }
-        
+
         String message = "";
 
         try {
@@ -170,8 +194,51 @@ public class GameClient {
                             if(tokens.isEmpty() == false) {
                                 message += " ";
                             }
-                        }                        
+                        }
                         System.out.println(remoteGameInterface.say(this.playerName, message));
+                    }
+                    break;
+                case "W":
+                case "WHISPER":
+                    if (tokens.isEmpty()) {
+                        System.err.println("You need to provide a player to whisper.");
+                    }
+                    else if (tokens.size() < 2) {
+                        System.err.println("You need to provide a message to whisper.");
+                    }
+                    else {
+                        String dstPlayerName = tokens.remove(0).toLowerCase();
+                        message = parseMessage(tokens);
+                        System.out.println(remoteGameInterface.whisper(this.playerName, dstPlayerName, message));
+                    }
+                    break;
+                case "R":
+                case "REPLY":
+                    if (tokens.isEmpty()) {
+                        System.err.println("You need to provide a message.");
+                    }
+                    else {
+                        message = parseMessage(tokens);
+                        System.out.println(remoteGameInterface.quickReply(this.playerName, message));
+                    }
+                    break;
+                case "IGNORE":
+                    if(tokens.isEmpty()) {
+                        System.err.println("You need to provide a player to ignore");
+                    }
+                    else {
+                        System.out.println(remoteGameInterface.ignorePlayer(this.playerName, tokens.remove(0)));
+                    }
+                    break;
+                case "IGNORELIST":
+                    System.out.println(remoteGameInterface.getIgnoredPlayersList(this.playerName));
+                    break;
+                case "UNIGNORE":
+                    if(tokens.isEmpty()) {
+                        System.err.println("You need to provide a player to unignore");
+                    }
+                    else {
+                        System.out.println(remoteGameInterface.unIgnorePlayer(this.playerName, tokens.remove(0)));
                     }
                     break;
                 case "MOVE":

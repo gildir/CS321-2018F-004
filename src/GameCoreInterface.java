@@ -5,34 +5,34 @@
  * @author Kevin
  */
 public interface GameCoreInterface {
-	
+
 	/**
 	 * Makes the ghoul walk to an adjacent room
 	 * @param g Ghoul that is being moved
 	 * @param room Room the ghoul is currently in
 	 */
 	public void ghoulWander(Ghoul g,Room room);
-	
+
 	/**
 	 * Pokes the ghoul in the current room
 	 * @param playerName Player name
 	 * @return String message of ghoul
 	 */
 	public String pokeGhoul(String playerName);
-	
+
 
 	/**
 	 * Bribe the ghoul in the current room
 	 * @param playerName Player name
-	 * @param item item's name, which will be throw. 
+	 * @param item item's name, which will be throw.
 	 * @return String message of ghoul
 	 */
 	public String bribeGhoul(String playerName,String item);
 
-	
+
 	public String giveToGhoul(String object, String playerName);
 
-    
+
     /**
      * Broadcasts a message to all other players in the same room as player.
      * @param player Player initiating the action.
@@ -93,7 +93,48 @@ public interface GameCoreInterface {
      * @return Message showing success.
      */
     public String say(String name, String message);
-    
+
+    /**
+     * Whispers "message" to a specific player.
+     * @param srcName Name of the player to speak
+     * @param dstName Name of the player to receive
+     * @param message Message to speak
+     * @return Message showing success
+     */
+    public String whisper(String srcName, String dstName, String message);
+
+    /**
+     * Player ignores further messages from another Player
+     * @param srcName Player making the ignore request
+     * @param dstName Player to be ignored
+     * @return Message showing success
+     */
+    public String ignorePlayer(String srcName, String dstName);
+
+    /**
+     * Player unIgnores further messages from another Player
+     * @param srcName Player making the unIgnore request
+     * @param dstName Player to be unIgnored
+     * @return Message showing success
+     */
+    public String unIgnorePlayer(String srcName, String dstName);
+
+    /**
+     * Player displays the list of players that are being ignored
+     * @param name Player who's list is being targeted
+     * @return The list of players being ignored
+     */
+    public String getIgnoredPlayersList(String name);
+
+    // Feature 404. Quick Reply
+    /**
+     * Reply "message" to last whisper.
+     * @param srcName Name of the player to speak
+     * @param message Message to speak
+     * @return Message showing success
+     */
+    public String quickReply(String srcName, String message);
+    // End 404.
     /**
      * Returns a string representation of all objects you are carrying.
      * @param name Name of the player to move

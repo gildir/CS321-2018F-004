@@ -18,7 +18,7 @@ public class GameCore implements GameCoreInterface {
 	/**
 	 * Creates a new GameCoreObject. Namely, creates the map for the rooms in the
 	 * game, and establishes a new, empty, player list.
-	 * 
+	 *
 	 * This is the main core that both the RMI and non-RMI based servers will
 	 * interface with.
 	 */
@@ -41,7 +41,7 @@ public class GameCore implements GameCoreInterface {
 						Thread.sleep(rand.nextInt(60000));
 						object = objects[rand.nextInt(objects.length)];
 						room = map.randomRoom();
-            
+
             try{
 						  room.addObject(object);
               GameCore.this.broadcast(room, "You see a student rush past and drop a " + object + " on the ground.");
@@ -88,13 +88,13 @@ public class GameCore implements GameCoreInterface {
                 }
             }
         });
-		
+
         objectThread.setDaemon(true);
         awakeDayGhoul.setDaemon(true);
         objectThread.start();
         awakeDayGhoul.start();
     }
-	
+
 
 	public void ghoulWander(Ghoul g, Room room) {
 		Random rand = new Random();
@@ -129,7 +129,7 @@ public class GameCore implements GameCoreInterface {
 			for (String thing : itemList){
 				if(thing.equalsIgnoreCase(item)){
 					giveAble = itemList.remove(thing);
-					break;			
+					break;
 				}
 			}
 
@@ -140,7 +140,7 @@ public class GameCore implements GameCoreInterface {
 				} catch (Exception e){
 					e.printStackTrace();
 				}
-				
+
 				ghoul.modifyAngryLevel(-1);
 				int angryLv = ghoul.getAngryLevel();
 				String message = "Ghoul gets " + item + ", " + "and its anger level decreases to " + angryLv + ".";
@@ -151,7 +151,7 @@ public class GameCore implements GameCoreInterface {
 		}else{
 			return "No Ghoul in this room";
 		}
-		
+
 	}
 
 	public String pokeGhoul(String playerName) {
@@ -169,7 +169,7 @@ public class GameCore implements GameCoreInterface {
 			} catch (Exception e){
 				e.printStackTrace();
 			}
-			
+
 			ghoul.modifyAngryLevel(1);
 			int angerLvl = ghoul.getAngryLevel();
 			if (angerLvl >= 7) {
@@ -187,7 +187,7 @@ public class GameCore implements GameCoreInterface {
 		Player player = playerList.findPlayer(playerName);
 		Room room = this.map.findRoom(player.getCurrentRoom());
 		boolean isItem = false;
-		
+
 		if (player != null) {
 			if (!room.hasGhoul) {
 				return "There is no ghoul in this room.";
@@ -196,7 +196,7 @@ public class GameCore implements GameCoreInterface {
 				for (String s : player.getCurrentInventory()) {
 					if (s.equals(object)) {
 						isItem = true;
-					} 
+					}
 				}
 				if (! isItem) {
 					return "you don't have" + object + "!";
@@ -213,14 +213,14 @@ public class GameCore implements GameCoreInterface {
 
 	/**
 	 * Broadcasts a message to all other players in the same room as player.
-	 * 
+	 *
 	 * @param player  Player initiating the action.
 	 * @param message Message to broadcast.
 	 */
 	@Override
 	public void broadcast(Player player, String message) {
 		for (Player otherPlayer : this.playerList) {
-			if (otherPlayer != player && otherPlayer.getCurrentRoom() == player.getCurrentRoom()) {
+			if(otherPlayer != player && !otherPlayer.isIgnoring(player) && otherPlayer.getCurrentRoom() == player.getCurrentRoom()) {
 				otherPlayer.getReplyWriter().println(message);
 			}
 		}
@@ -228,7 +228,7 @@ public class GameCore implements GameCoreInterface {
 
 	/**
 	 * Broadcasts a message to all players in the specified room.
-	 * 
+	 *
 	 * @param room    Room to broadcast the message to.
 	 * @param message Message to broadcast.
 	 */
@@ -243,7 +243,7 @@ public class GameCore implements GameCoreInterface {
 
 	/**
 	 * Returns the player with the given name or null if no such player.
-	 * 
+	 *
 	 * @param name Name of the player to find.
 	 * @return Player found or null if none.
 	 */
@@ -263,7 +263,7 @@ public class GameCore implements GameCoreInterface {
 	 * Otherwise, adds a new player of that name to the game. The next step is
 	 * non-coordinated, waiting for the player to open a socket for message events
 	 * not initiated by the player (ie. other player actions)
-	 * 
+	 *
 	 * @param name
 	 * @return Player is player is added, null if player name is already registered
 	 *         to someone else
@@ -288,7 +288,7 @@ public class GameCore implements GameCoreInterface {
 
 	/**
 	 * Returns a look at the area of the specified player.
-	 * 
+	 *
 	 * @param playerName Player Name
 	 * @return String representation of the current area the player is in.
 	 */
@@ -322,7 +322,7 @@ public class GameCore implements GameCoreInterface {
 
 	/**
 	 * Turns the player left.
-	 * 
+	 *
 	 * @param name Player Name
 	 * @return String message of the player turning left.
 	 */
@@ -346,7 +346,7 @@ public class GameCore implements GameCoreInterface {
 
 	/**
 	 * Turns the player right.
-	 * 
+	 *
 	 * @param name Player Name
 	 * @return String message of the player turning right.
 	 */
@@ -370,7 +370,7 @@ public class GameCore implements GameCoreInterface {
 
 	/**
 	 * Says "message" to everyone in the current area.
-	 * 
+	 *
 	 * @param name    Name of the player to speak
 	 * @param message Message to speak
 	 * @return Message showing success.
@@ -405,7 +405,7 @@ public class GameCore implements GameCoreInterface {
 	/**
 	 * Attempts to walk forward < distance > times. If unable to make it all the
 	 * way, a message will be returned. Will display LOOK on any partial success.
-	 * 
+	 *
 	 * @param name     Name of the player to move
 	 * @param distance Number of rooms to move forward through.
 	 * @return Message showing success.
@@ -438,7 +438,7 @@ public class GameCore implements GameCoreInterface {
 	/**
 	 * Attempts to pick up an object < target >. Will return a message on any
 	 * success or failure.
-	 * 
+	 *
 	 * @param name   Name of the player to move
 	 * @param target The case-insensitive name of the object to pickup.
 	 * @return Message showing success.
@@ -465,7 +465,7 @@ public class GameCore implements GameCoreInterface {
 
 	/**
 	 * Returns a string representation of all objects you are carrying.
-	 * 
+	 *
 	 * @param name Name of the player to move
 	 * @return Message showing success.
 	 */
@@ -482,7 +482,7 @@ public class GameCore implements GameCoreInterface {
 
 	/**
 	 * Leaves the game.
-	 * 
+	 *
 	 * @param name Name of the player to leave
 	 * @return Player that was just removed.
 	 */
@@ -496,4 +496,115 @@ public class GameCore implements GameCoreInterface {
 		}
 		return null;
 	}
+
+	/**
+     * Whispers "message" to a specific player.
+     * @param srcName Name of the player to speak
+     * @param dstName Name of the player to receive
+     * @param message Message to speak
+     * @return Message showing success
+     */
+    public String whisper(String srcName, String dstName, String message){
+        Player srcPlayer = this.playerList.findPlayer(srcName);
+        Player dstPlayer = this.playerList.findPlayer(dstName);
+        String returnMessage;
+        if (dstPlayer == null)
+            returnMessage = "Player " + dstName + " not found.";
+        else if (srcPlayer == null)
+            returnMessage = "Message failed, check connection to server.";
+        else if (dstPlayer.isIgnoring(srcPlayer))
+            returnMessage = "Player " + dstPlayer.getName() + " is ignoring you.";
+        else {
+            dstPlayer.setLastPlayer(srcName);
+            dstPlayer.getReplyWriter().println(srcPlayer.getName() + " whispers you, " + message);
+            returnMessage = "You whisper to " + dstPlayer.getName() + ", " + message;
+        }
+        return returnMessage;
+    }
+
+    /**
+     * Reply "message" to last whisper.
+     * @param srcName Name of the player to speak
+     * @param message Message to speak
+     * @return Message showing success
+     */
+    public String quickReply(String srcName, String message) {
+        Player srcPlayer = this.playerList.findPlayer(srcName);
+        Player dstPlayer = this.playerList.findPlayer(srcPlayer.getLastPlayer());
+        String returnMessage;
+        if (dstPlayer == null)
+            returnMessage = "No whisper to reply to.";
+        else if (srcPlayer == null)
+            returnMessage = "Message failed, check connection to server.";
+        else {
+        	returnMessage = this.whisper(srcName,dstPlayer.getName(),message);
+        }
+        return returnMessage;
+    }
+
+   /**
+     * Player ignores further messages from another Player
+     * @param srcName Player making the ignore request
+     * @param dstName Player to be ignored
+     * @return Message showing success
+     */
+    public String ignorePlayer(String srcName, String dstName) {
+        Player srcPlayer = this.playerList.findPlayer(srcName);
+        Player dstPLayer = this.playerList.findPlayer(dstName);
+        String returnMessage;
+        if (dstPLayer == null)
+            returnMessage = "Player " + dstName + " not found.";
+        else if (srcPlayer == null)
+            returnMessage = "Ignore failed, check connection to server.";
+        else if (srcPlayer.getName() == dstPLayer.getName())
+            returnMessage = "You cannot ignore yourself! <no matter how hard you try>";
+        else if (srcPlayer.isIgnoring(dstPLayer))
+            returnMessage = "You're already ignoring " + dstPLayer.getName() + "!";
+        else {
+            srcPlayer.ignorePlayer(dstPLayer);
+            returnMessage = "You're now ignoring " + dstPLayer.getName() + ".";
+        }
+        return returnMessage;
+    }
+
+    /**
+     * Player unIgnores further messages from another Player
+     * @param srcName Player making the unIgnore request
+     * @param dstName Player to be unIgnored
+     * @return Message showing success
+     */
+    public String unIgnorePlayer(String srcName, String dstName) {
+        Player srcPlayer = this.playerList.findPlayer(srcName);
+        Player dstPLayer = this.playerList.findPlayer(dstName);
+        String returnMessage;
+        if (dstPLayer == null)
+            returnMessage = "Player " + dstName + " not found.";
+        else if (srcPlayer == null)
+            returnMessage = "Unignore failed, check connection to server.";
+        else if (srcPlayer.getName() == dstPLayer.getName())
+            returnMessage = "You never ignored yourself in the first place";
+        else if (!srcPlayer.isIgnoring(dstPLayer))
+            returnMessage = "You aren't ignoring " + dstPLayer.getName() + "!";
+        else {
+            srcPlayer.unIgnorePlayer(dstPLayer);
+            returnMessage = "You're no longer ignoring " + dstPLayer.getName() + ".";
+        }
+        return returnMessage;
+    }
+
+    /**
+     * Player displays the list of players that are being ignored
+     * @param name Player who's list is being targeted
+     * @return The list of players being ignored
+     */
+    public String getIgnoredPlayersList(String name) {
+        Player player = this.playerList.findPlayer(name);
+        String returnMessage;
+        if(player != null){
+            returnMessage = player.getIgnoredPlayersList();
+        }else{
+            returnMessage = "Error: Could not find player. Check server connection status";
+        }
+        return returnMessage;
+    }
 }
