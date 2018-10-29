@@ -449,7 +449,14 @@ public class GameCore implements GameCoreInterface {
 
     @Override
      public String teach(String player){
-         String message = "Here is the Heirarchy of power in R-P-S:\n\tRock beats Scissors\n\tScissors beats Paper\n\tPaper beats Rock\n\nCHALLENGE <name>: \tIf you challenge someone, you must wait for them to accept or reject\nACCEPT/REJECT <name>: \tIf you have been challenge, you must accept or reject the challenge\nYou may not be challenged while in a R-P-S battle\n";
+         Player players = this.playerList.findPlayer(player);
+         String message;
+         if(players.getCurrentRoom() == 1){
+            message = "Here is the Heirarchy of power in R-P-S:\n\tRock beats Scissors\n\tScissors beats Paper\n\tPaper beats Rock\n\nCHALLENGE <name>: \tIf you challenge someone, you must wait for them to accept or reject\nACCEPT/REJECT <name>: \tIf you have been challenge, you must accept or reject the challenge\nYou may not be challenged while in a R-P-S battle\n";
+         }
+         else{
+            message = "You are not in the Clock in the Main Quad where the teacher is located\n";
+         }
          return message;
      }
 
