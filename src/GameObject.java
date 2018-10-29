@@ -123,7 +123,19 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
     public String pickup(String name, String target) throws RemoteException {
         return core.pickup(name, target);
     }    
-    
+ 
+    /**
+     * Attempts to pick up an object < target >. Will return a message on any success or failure.
+     * @param name Name of the player to move
+     * @param target The case-insensitive name of the object to pickup.
+     * @return Message showing success.
+     * @throws RemoteException 
+     */    
+    @Override
+    public String drop(String name, String target) throws RemoteException {
+        return core.drop(name, target);
+    }    
+
     /**
      * Returns a string representation of all objects you are carrying.
      * @param name Name of the player to move
@@ -134,7 +146,49 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
     public String inventory(String name) throws RemoteException {
         return core.inventory(name);
     }    
-    
+ 
+    /**
+     * Sorts the given player's inventory
+     * @param name Name of the player
+     * @return Message showing success.
+     * @throws RemoteException 
+     */    
+    @Override
+    public String sort(String name, String modes) throws RemoteException {
+        return core.sort(name, modes);
+    } 
+
+    /**
+     * Offers item from one player to another
+     * @param srcName Name player offer item
+     * @param dstName Name player being offered item
+     * @param message String name of item being offered
+     */
+    @Override
+    public String offer (String srcName, String dstName, String message) throws RemoteException{
+	    return core.offer(srcName, dstName, message);
+    }
+        
+    /**
+     * Prints message to player if request can processed, contacts other player about their request
+     * @param requestingTrader Name of the player who has requested the trade
+     * @param traderToRequest Name of the player whom the first player has requested to trade with
+     */ 
+    public void requestPlayer(String requestingTrader, String traderToRequest) throws RemoteException{
+        core.requestPlayer(requestingTrader, traderToRequest);
+
+    }
+
+    /**
+     * Return string representation of trade acceptance
+     * @param acceptingTrader Name of the player who is accepting the trade
+     * @param traderToAccept Name of the player who has requested a trade
+     * @return Message of success or fail
+     */ 
+    public String playerResponse(String acceptingTrader, String traderToAccept) throws RemoteException{
+        return core.playerResponse(acceptingTrader, traderToAccept);
+    }
+
      /**
      * Leaves the game.
      * @param name Name of the player to leave

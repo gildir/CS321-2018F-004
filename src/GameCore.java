@@ -4,6 +4,10 @@
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.ArrayList;
+import java.util.Scanner;
+import java.io.File;
+import java.io.IOException;
 
 /**
  *
@@ -31,12 +35,38 @@ public class GameCore implements GameCoreInterface {
             public void run() {
                 Random rand = new Random();
                 Room room;
-                String object;
-                String[] objects = {"Flower", "Textbook", "Phone", "Newspaper"};
+                Item object;
+		ArrayList<Item> objects = new ArrayList<Item>();
+		try
+		{
+			double inWeight = 0;
+			double inValue = 0;
+			String inName = "";
+			Scanner scanner = new Scanner(new File("./items.csv"));
+			scanner.nextLine();
+			scanner.useDelimiter(",|\\r\\n|\\n|\\r");
+
+			while(scanner.hasNext())
+			{
+				inName = scanner.next();
+				inWeight = Double.parseDouble(scanner.next().replace(",", ""));
+				inValue = Double.parseDouble(scanner.next().replace("\\r\\n|\\r|\\n", ""));
+				Item newItem = new Item(inName, inWeight, inValue);
+				objects.add(newItem);
+				
+			}
+		}
+		catch(IOException e)
+		{
+			objects.add(new Item("Flower", 1.0, 0.0));
+			objects.add(new Item("Textbook", 10.3, 5.2));
+			objects.add(new Item("Phone", 2.9, 1.0));
+			objects.add(new Item("Newspaper", 10.0, 9.0));
+		}
                 while(true) {
                     try {
                         Thread.sleep(rand.nextInt(60000));
-                        object = objects[rand.nextInt(objects.length)];
+                        object = objects.get(rand.nextInt(objects.size()));
                         room = map.randomRoom();
                         room.addObject(object);
                         
@@ -248,24 +278,89 @@ public class GameCore implements GameCoreInterface {
      */    
     public String pickup(String name, String target) {
         Player player = this.playerList.findPlayer(name);
+        if(player != null)  {
+	    if (player.currentInventory.size() <10){
+                Room room = map.findRoom(player.getCurrentRoom());
+                Item object = room.removeObject(target);
+                if(object != null) {
+                    player.addObjectToInventory(object);
+                    this.broadcast(player, player.getName() + " bends over to pick up a " + target + " that was on the ground.");
+                    return "You bend over and pick up a " + target + ".";
+                }
+                else {
+                    this.broadcast(player, player.getName() + " bends over to pick up something, but doesn't seem to find what they were looking for.");
+                    return "You look around for a " + target + ", but can't find one.";
+                }
+	    }
+            else {
+	        return " your inventory is full.";
+	    }
+	}
+        
+        else {
+            return null;
+        }
+    }       
+
+    /**
+     * Attempts to drops an object < target >. Will return a message on any success or failure.
+     * @param name Name of the player to move
+     * @param target The case-insensitive name of the object to drop.
+     * @return Message showing success. 
+     */    
+    public String drop(String name, String target) {
+        Player player = this.playerList.findPlayer(name);
         if(player != null) {
             Room room = map.findRoom(player.getCurrentRoom());
-            String object = room.removeObject(target);
+            Item object = player.removeObjectFromInventory(target);
             if(object != null) {
-                player.addObjectToInventory(object);
-                this.broadcast(player, player.getName() + " bends over to pick up a " + target + " that was on the ground.");
-                return "You bend over and pick up a " + target + ".";
+                room.addObject(object);
+                this.broadcast(player, player.getName() + " rummages their inventory to find a " + target);
+                return "You drop a " + target + " into the room.";
             }
             else {
-                this.broadcast(player, player.getName() + " bends over to pick up something, but doesn't seem to find what they were looking for.");
-                return "You look around for a " + target + ", but can't find one.";
+                this.broadcast(player, player.getName() + " tries to drop something, but doesn't seem to find what they were looking for.");
+                return "You look around for a " + target + " in your pockets, but can't find one.";
             }
         }
         else {
             return null;
         }
-    }       
-    
+    } 
+
+    /**
+     * Returns a string of what and who you plan to offer an item to
+     * @param srcName Name of player making offer
+     * @param dstName Name of player receiving offer
+     * @param message Object item being offered
+     * @return Message showing status of offer
+     */
+    public String offer(String srcName, String dstName, String message){
+	Player srcPlayer = this.playerList.findPlayer(srcName);
+	Player dstPlayer = this.playerList.findPlayer(dstName);
+	Room room = map.findRoom(srcPlayer.getCurrentRoom());
+	String returnMessage;
+	Item object = srcPlayer.removeObjectFromInventory(message);
+	if (srcPlayer == dstPlayer)
+		returnMessage = "So now we talking to ourselves? Is that what's hot?";
+	else if (dstPlayer != null && (dstPlayer.getCurrentRoom() != srcPlayer.getCurrentRoom()))
+	    returnMessage = "Player ain't in your room, or your life";
+	else if (object == null)
+	    returnMessage = "You ain't got that fool: " + message;
+	else if (dstPlayer == null)
+	    returnMessage = "Player " + dstName + " not found.";
+	else if (srcPlayer == null)
+	    returnMessage = "Messge failed, check connection to server.";
+	else {
+	    dstPlayer.getReplyWriter().println(srcPlayer.getName() + " offers you an item: " + message);
+	    returnMessage = "You offer to " + dstPlayer.getName() + " an item: " + message;
+	}
+	if (object != null)
+	    srcPlayer.addObjectToInventory(object);
+	return returnMessage;
+    }
+
+
     /**
      * Returns a string representation of all objects you are carrying.
      * @param name Name of the player to move
@@ -282,6 +377,84 @@ public class GameCore implements GameCoreInterface {
             return null;
         }
     }    
+
+    /**
+     * Returns a string representation of all objects you are carrying.
+     * @param name Name of the player to move
+     * @return Message showing success.
+     */    
+    public String sort(String name, String modes) {
+        Player player = this.playerList.findPlayer(name);
+        if(player != null) {
+	    player.sortCurrentInventory(modes);
+            return "You sort the items in your inventory";
+        }
+        else {
+            return null;
+        }
+    } 
+
+     /**
+     * Prints message to player if request can processed, contacts other player about their request
+     * @param requestingTrader Name of the player who has requested the trade
+     * @param traderToRequest Name of the player whom the first player has requested to trade with
+     */ 
+    public void requestPlayer(String requestingTrader, String traderToRequest){
+        Player playerToRequest = this.playerList.findPlayer(traderToRequest);
+        Player requestingPlayer = this.playerList.findPlayer(requestingTrader);
+        if(requestingTrader.equals(traderToRequest)){
+            requestingPlayer.getReplyWriter().println("You cannot trade with yourself.");
+            return;
+        }
+        else if(playerToRequest == null){
+            requestingPlayer.getReplyWriter().println("This player does not exist, choose an existing trade partner");
+            return;
+        }
+
+        boolean tradeInProgress = false;
+        for(Player player : this.playerList) {
+            if(player.isInTrade()) {
+                tradeInProgress = true;
+            }
+        }
+
+        if(tradeInProgress){
+            requestingPlayer.getReplyWriter().println("There is already a trade in progress. ");
+            return; 
+        }
+
+        playerToRequest.setTradeRequest(true);
+        playerToRequest.getReplyWriter().println(requestingTrader + " has requested a trade. You may ignore this request or type: A_TRADE " +requestingTrader+" to proceed. ");
+        requestingPlayer.getReplyWriter().println("Player has been contacted. You will receive a notification when they accept. ");
+    }
+
+    /**
+     * Return string representation of trade acceptance
+     * @param acceptingTrader Name of the player who is accepting the trade
+     * @param traderToAccept Name of the player who has requested a trade
+     * @return Message of success or fail
+     */ 
+    public String playerResponse(String acceptingTrader, String traderToAccept){
+
+        Player playerToAccept = this.playerList.findPlayer(traderToAccept);
+        Player acceptingPlayer = this.playerList.findPlayer(acceptingTrader); 
+        if(playerToAccept == null){
+            return "This player does not exist. ";
+        }
+        if(!acceptingPlayer.hasTradeRequest()){
+            return "You cannot accept a trade because you have not been asked to enter a trade by " + traderToAccept;
+        }
+
+        acceptingPlayer.setInTrade(true);
+        acceptingPlayer.setTradeRequest(false);
+
+        acceptingPlayer.setTradePartner(traderToAccept);
+        playerToAccept.setTradePartner(acceptingTrader);
+
+        playerToAccept.getReplyWriter().println(playerToAccept.getTradePartner() + " has accepted your request.");
+
+        return "You have accepted to enter a trade with " + acceptingPlayer.getTradePartner();
+    }
 
      /**
      * Leaves the game.
