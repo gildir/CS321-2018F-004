@@ -5,7 +5,9 @@ import java.util.LinkedList;
 /**
  *
  * @author Kevin
+ * @author Kevin
  */
+
 public class PlayerList implements Iterable<Player> {
     private final LinkedList<Player> playerList;
     

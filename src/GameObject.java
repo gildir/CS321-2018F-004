@@ -232,5 +232,18 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
         if(player != null) {
             player.getReplyWriter().close();
         }
-    }    
+    }
+
+    //Feature 411. Shout
+    /**
+     *Shouts "message" to everyone that is online
+     *@param name Name of the player speaking
+     *@param message Meesage to be spoken
+     *@return Message showing success.
+     *@throws RemoteException
+     */
+    @Override
+    public String shout(String name, String message) throws RemoteException {
+        return core.shout(name, message);
+    }
 }

@@ -8,7 +8,7 @@ import java.rmi.RemoteException;
  * @author Kevin
  */
 public interface GameObjectInterface extends Remote {
-	
+
 	/**
 	 * Pokes the ghoul in the current room
 	 * @param playerName Player name
@@ -21,7 +21,7 @@ public interface GameObjectInterface extends Remote {
 	/**
 	 * Pokes the ghoul in the current room
 	 * @param playerName Player name
-	 * @param item item's name, which will be throw. 
+	 * @param item item's name, which will be throw.
 	 * @return String message of ghoul
 	 * @throws RemoteException
 	 */
@@ -30,7 +30,7 @@ public interface GameObjectInterface extends Remote {
 
 	//Same functionality as bribeGhoul. Not currently used.
 	public String giveToGhoul(String object, String playerName) throws RemoteException;
-	
+
 
     /**
      * Sends a request to join the game.  
@@ -155,4 +155,15 @@ public interface GameObjectInterface extends Remote {
      * @throws RemoteException
      */
     public void leave(String name) throws RemoteException;
+
+    //Feature 411. Shout
+    /**
+     *Shouts "message" to everyone that is online
+     *@param name Name of the player speaking
+     *@param message Meesage to be spoken
+     *@return Message showing success.
+     *@throws RemoteException
+     */
+    public String shout(String name, String message) throws RemoteException;
+
 }

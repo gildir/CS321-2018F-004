@@ -147,5 +147,14 @@ public interface GameCoreInterface {
      * @param name Name of the player to leave
      * @return Player that was just removed.
      */    
-    public Player leave(String name);    
+    public Player leave(String name);
+
+    //Feature 411. Shout
+    /**
+     *Shouts "message" to everyone that is online
+     *@param name Name of the player speaking
+     *@param message Meesage to be spoken
+     *@return Message showing success.
+     */
+    public String shout(String name, String message);
 }

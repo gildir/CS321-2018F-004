@@ -65,6 +65,7 @@ public class GameClient {
         System.out.println("  UNIGNORE player          - Remove 'player' from ignore list");
         System.out.println("  IGNORELIST               - Displays a list of players you are ignoring");
         System.out.println("  REPLY message   - Reply 'message' to last whisper");
+        System.out.println("  SHOUT message            - Shouts 'message' to any other players currently online.");
         System.out.println("  QUIT          - Quits the game.");
         System.out.println();
 
@@ -196,6 +197,20 @@ public class GameClient {
                             }
                         }
                         System.out.println(remoteGameInterface.say(this.playerName, message));
+                    }
+                    break;
+                case "SHOUT":
+                    if(tokens.isEmpty()) {
+                        System.err.println("You need to say something in order to SHOUT.");
+                    }
+                    else {
+                        while(tokens.isEmpty() == false) {
+                            message += tokens.remove(0);
+                            if(tokens.isEmpty() == false) {
+                                message += " ";
+                            }
+                        }
+                        System.out.println(remoteGameInterface.shout(this.playerName, message));
                     }
                     break;
                 case "W":
