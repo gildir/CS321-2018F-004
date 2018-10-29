@@ -31,7 +31,7 @@ public class GameServer {
      * @param rmi
      * @throws RemoteException 
      */
-    public GameServer(String host) throws RemoteException {           
+    public GameServer(String host) throws RemoteException, IOException {           
 	   try {
 		   System.out.println("host:" + host);
 			// Step 1: Create the remote listener thread.  This thread is used
@@ -55,7 +55,7 @@ public class GameServer {
 		}
 	}
     
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
 		if(args.length < 1) {
 			System.out.println("[SHUTDOWN] .. This program requires one argument. Run as java -Djava.security.policy=game.policy GameServer hostname");
 			System.exit(-1);

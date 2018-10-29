@@ -33,18 +33,18 @@ public class GameClient {
     // Members for running the remote receive connection (for non-managed events)
     private boolean runListener;
     protected ServerSocket remoteListener;
-    private Thread remoteOutputThread;
-
+    private Thread remoteOutputThread;  
+    
     // Members related to the player in the game.
     protected String playerName;
-
-    /**
+    
+    /** 
      * Main class for running the game client.
      */
     public GameClient(String host) {
         this.runGame = true;
         boolean nameSat = false;
-
+        
         System.out.println("Welcome to the client for an RMI based online game.\n");
         System.out.println("This game allows you to connect to a server an walk around a virtual,");
         System.out.println(" text-based version of the George Mason University campus.\n");
@@ -128,7 +128,7 @@ public class GameClient {
                     System.err.println("[CRITICAL ERROR] Error at reading any input properly.  Terminating the client now.");
                     System.exit(-1);
                 }
-            }
+            }                
         } catch (NotBoundException ex) {
             Logger.getLogger(GameClient.class.getName()).log(Level.SEVERE, null, ex);
         } catch (MalformedURLException ex) {
