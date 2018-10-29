@@ -5,7 +5,6 @@ import java.util.logging.Logger;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.io.IOException;
 
 /**
  *
@@ -15,7 +14,6 @@ public class GameCore implements GameCoreInterface {
     private final PlayerList playerList;
     private final Map map;
     private HashMap<Integer,Shop> shoplist;
-    private Venmo venmo; // Team 4: Aalaqeel
     private Ghoul ghoul;
     
     /**
@@ -33,11 +31,6 @@ public class GameCore implements GameCoreInterface {
         // Builds a list of shops mapped to their map id (can be expanded as needed)
         shoplist = new HashMap<Integer,Shop>();
         shoplist.put(new Integer(1), new Shop("Clocktower shop", "The shopping destination for all of your gaming needs."));
-        
-        // Initializes the Venmo core. Team 4: Alaqeel
-        venmo = new Venmo();
-        
-        
 
 		Thread objectThread = new Thread(new Runnable() {
 			@Override
@@ -242,7 +235,7 @@ public class GameCore implements GameCoreInterface {
 				} catch (NumberFormatException e) {
 					return "Please enter a valid number.";
 				}
-				return venmo.send(player1, player2, amount);
+				return Venmo.send(player1, player2, amount);
 			case "HELP": // prints the help menu
 				return "This is how you can use Venmo:\n" + Venmo.instructions();
 			case "DEMO": // helpful for demo purposes

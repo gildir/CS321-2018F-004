@@ -8,30 +8,34 @@ public class Venmo {
 	
 	/**
 	 * Creates a new transaction and informs the recipient of it.
+	 * The amount is rounded to the nearest two decimal places.
+	 * If the transaction is successful, a message is sent to the recipient.
+	 * A transaction summary (or error message) is returned to the sender.
 	 * 
-	 * @param from The sender
-	 * @param to The recipient
-	 * @param amount The amount to be sent
+	 * @param from The sender. Must be non null.
+	 * @param to The recipient. Must be non null.
+	 * @param amount The amount to be sent.
 	 * @return A transaction summary if it was valid. An error message otherwise.
 	 */
-	public String send(Player from, Player to, float amount) {
-		// Checks the following errors:
-		// 1- if the player is sending to themselves
-		// 2- if the amount is negative
-		// 3- if the player is poor 
+	public static String send(Player from, Player to, float amount) {
+		// Checks if the player is trying to send to themselves
 		if (from.getName() == to.getName()) return "You can't Venmo yourself";
-		if (amount <= 0) return "Please enter a number that is higher that 0";
-		if (from.getMoney() < amount) return "You don't have enough money to complete the transaction.";
-
-		// Rounds the amount to two decimal places
+		
+		// Rounds the amount to the nearest two decimal places
 		float rounded = (float) (Math.round(amount * 100.0) /100.0);
+		
+		// Checks the following errors:
+		// 1- if the amount is negative
+		// 2- if the player is poor 
+		if (rounded <= 0) return "Please enter a number that is higher that 0";
+		if (from.getMoney() < rounded) return "You don't have enough money to complete the transaction.";
 
 		// Takes the amount out of the sender's wallet.
 		from.changeMoney(-rounded);
 		// Adds the amount to the receipient's wallet.
 		to.changeMoney(rounded);
 		
-		// Displays a message to the user
+		// Displays a message to the recipient
 		to.getReplyWriter().println(String.format("Hooray! %s sent you $%.2f.\n", from.getName(), rounded));
 		
 		// logging the transaction
