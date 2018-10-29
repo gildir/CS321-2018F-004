@@ -78,7 +78,7 @@ public class GameCore implements GameCoreInterface {
             public void run() {
                 while(true) {
                     try {
-                        Thread.sleep(5000);
+                        Thread.sleep(1000);
                         List<String> expiredPlayers  = playerList.getExpiredPlayers();
                         expiredPlayers.forEach(s -> {
                             leave(s);
