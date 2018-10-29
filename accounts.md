@@ -56,5 +56,25 @@ The user can create a friends list by adding and removing users to their friends
 Join Game System (Logging in, list of online, loading files)
 --Dylan
 
-Leave Game System (Logging out, remove from online, heartbeat)
---Quinten
+# Leave Game System (Logging out, remove from online, heartbeat)
+--Quinten Holmes
+
+## Users
+After tireless hours of playing, it might finally be time to get some food. When ready to leave one only needs to type “QUIT”.  If one is too tired to type “QUIT” they are able to click the ‘X’ button to close the console; however, they will not be able to log back in until the system officially recognizes they logged out. 
+
+## Developers
+When a player finally enters the “QUIT” command the game client will call 
+
+###### Method
+	public Player leave(String name) 
+	
+by the client’s GameObject which in turn will call the GameCore on the server.
+
+Leave will find the player by the given name. Once the player is found, a message will be broadcasted to all players; notifying everyone the player has left the game. Once the message is broadcasted, the player is removed from the list of online users, logged, then forcibly saves the player’s data. 
+
+A heartbeat protocol is being used to ensure a client is properly logged out in the event the client crashes or is forcibly closed.  The client sends a pulse every 2 seconds once the player logs-in. The server will call leave on any player that has not checked in within the past 30 seconds.  
+
+The time the last pulse was received is stored in the PlayerList, which in turn can return the list of exired players upon request. The PlayerList will not remove any expired clients, leaving that task to the GameCore. 
+
+
+
