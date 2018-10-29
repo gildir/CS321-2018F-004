@@ -110,13 +110,6 @@ public interface GameCoreInterface {
    
     
     /**
-     * Takes the player into venmo. The new and improved way to exchange money with other players.
-     * @param name Name of the player enter the bank
-     * @throws RemoteException 
-     */    
-    public String venmo(String name);
-    
-    /**
      * Returns a reference to a shop 
      * @param id
      * @return the shop or null
@@ -132,10 +125,4 @@ public interface GameCoreInterface {
      */
     public int sellItem(String name, int shopId, String item);
     
-    /**
-     * Returns a Shop's inventory as a formatted string
-     * @param id The shop ID
-     * @return A formatted string representing the Shop's inventory
-     */
-    public String getShopInv(int id);
 }
