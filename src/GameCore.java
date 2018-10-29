@@ -5,6 +5,11 @@ import java.util.logging.Logger;
 import java.util.LinkedList;
 import java.io.IOException;
 import java.lang.StringBuilder;
+import java.util.Scanner;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Random;
+import java.io.FileNotFoundException;
 
 /**
  *
@@ -607,5 +612,34 @@ public class GameCore implements GameCoreInterface {
             returnMessage = "Error: Could not find player. Check server connection status";
         }
         return returnMessage;
+    }
+
+    // Feature 410: Joke
+    /**
+     * Tells a joke to the room. Reads local "chat config" file
+     * that keeps a list of jokes, one per line. The command
+     * chooses a random joke.
+     * NOTE: Importing Scanners, File, ArrayList, Random, and
+     * FileNotFoundException for this method.
+     * @param filename the "chat config" file to read the joke from.
+     * */
+    public String joke(String filename){
+      File file = new File(filename);
+      try{
+      Scanner sc = new Scanner(file);
+      // using ArrayList to store jokes in file for randomization.
+      ArrayList<String> joke = new ArrayList<String>();
+
+      while (sc.hasNextLine()){
+        joke.add(sc.nextLine());
+      }
+
+      sc.close();
+      Random r = new Random();
+      return joke.get(r.nextInt(joke.size()));
+      }
+      catch (FileNotFoundException e){
+        return ("File not found. Please add a joke.");
+      }
     }
 }

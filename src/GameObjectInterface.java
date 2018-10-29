@@ -122,6 +122,17 @@ public interface GameObjectInterface extends Remote {
      */
     public String getIgnoredPlayersList(String name) throws RemoteException;
 
+
+
+    // Feature 410: Joke
+    /**
+     * Tells a joke to the room. Reads local "chat config" file
+     * that keeps a list of jokes, one per line. The command
+     * chooses a random joke.
+     * @param filename the "chat config" file to read the joke from.
+     * */
+    public String joke(String filename) throws RemoteException;
+
     /**
      * Attempts to walk forward < distance > times.  If unable to make it all the way,
      *  a message will be returned.  Will display LOOK on any partial success.

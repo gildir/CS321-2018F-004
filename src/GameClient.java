@@ -66,6 +66,7 @@ public class GameClient {
         System.out.println("  IGNORELIST               - Displays a list of players you are ignoring");
         System.out.println("  REPLY message   - Reply 'message' to last whisper");
         System.out.println("  SHOUT message            - Shouts 'message' to any other players currently online.");
+        System.out.println("  JOKE          - Tells a joke to everyone in the room.");
         System.out.println("  QUIT          - Quits the game.");
         System.out.println();
 
@@ -256,6 +257,9 @@ public class GameClient {
                         System.out.println(remoteGameInterface.unIgnorePlayer(this.playerName, tokens.remove(0)));
                     }
                     break;
+		 case "JOKE":
+			 System.out.println((remoteGameInterface.say(this.playerName, ("Here's a joke for you: " + remoteGameInterface.joke("jokes.txt")))));
+			 break;
                 case "MOVE":
                     if(tokens.isEmpty()) {
                         System.err.println("You need to provide a distance in order to move.");
