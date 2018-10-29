@@ -87,29 +87,7 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
     @Override
     public String look(String playerName) throws RemoteException {
         return core.look(playerName);
-    }        
-     
-    /**
-     * Turns the player left.
-     * @param name Player Name
-     * @return String message of the player turning left.
-     * @throws RemoteException 
-     */
-    @Override
-    public String left(String name) throws RemoteException {
-        return core.left(name);
-    }
-       
-    /**
-     * Turns the player right.
-     * @param name Player Name
-     * @return String message of the player turning right.
-     * @throws RemoteException 
-     */
-    @Override
-    public String right(String name) throws RemoteException {
-        return core.right(name);
-    }    
+    }            
        
     /**
      * Says "message" to everyone in the current area.
@@ -124,15 +102,15 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
     }
       
     /**
-     * Attempts to walk forward < distance > times.  If unable to make it all the way,
+     * Attempts to walk in < direction > 1  time.  If unable to,
      *  a message will be returned.  Will display LOOK on any partial success.
      * @param name Name of the player to move
-     * @param distance Number of rooms to move forward through.
+     * @param direction which direction to move forward through.
      * @return Message showing success.
      * @throws RemoteException 
      */
     @Override
-    public String move(String name, int distance) throws RemoteException {
+    public String move(String name, Direction distance) throws RemoteException {
         return core.move(name, distance);
     }
       
@@ -149,6 +127,15 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
     }    
     
     /**
+     * Attempts to pick up all objects in the room. Will return a message on any success or failure.
+     * @param name Name of the player to move
+     * @return Message showing success. 
+     */    
+    public String pickupAll(String name) throws RemoteException {
+        return core.pickupAll(name);
+    }
+
+    /**
      * Returns a string representation of all objects you are carrying.
      * @param name Name of the player to move
      * @return Message showing success.
@@ -158,7 +145,26 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
     public String inventory(String name) throws RemoteException {
         return core.inventory(name);
     }    
-    
+    /**Prompts a message that someone is challenging them to a R-P-S
+      * @param challenger is the name of the player challenging someone in the area
+      * @param challenge is the name of the player being challenge
+      * @return Message showing success
+      * @throws RemoteException
+    */
+    public String challenge(String challenger, String challengee) throws RemoteException{
+        return core.challenge(challenger, challengee);
+    }
+
+    /**Prompts a message that someone is accepting a challenge to a R-P-S
+      * @param challenger is the name of the player challenging someone in the area
+      * @param challenge is the name of the player accepting
+      * @return Message showing success
+      * @throws RemoteException
+    */
+    public String accept(String challenger, String challengee) throws RemoteException{
+        return core.accept(challenger, challengee);
+    }
+
      /**
      * Leaves the game.
      * @param name Name of the player to leave

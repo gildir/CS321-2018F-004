@@ -5,6 +5,7 @@ import java.util.logging.Logger;
 import java.util.LinkedList
 import java.io.IOException;
 
+
 /**
  *
  * @author Kevin
@@ -46,9 +47,8 @@ public class GameCore implements GameCoreInterface{
                         }
                         catch (IndexOutOfBoundsException e) {
                             GameCore.this.broadcast(room, "You see a student rush past.");
-                     
-	private final PlayerList playerList;
-	private final Map map;
+                     }
+
 	private Ghoul ghoul;
 
 	/**
@@ -74,13 +74,17 @@ public class GameCore implements GameCoreInterface{
 				String[] objects = { "Flower", "Textbook", "Phone", "Newspaper" };
 				while (true) {
 					try {
-						Thread.sleep(rand.nextInt(60000));
+						Thread.sleep(rand.nextInt(90000));
 						object = objects[rand.nextInt(objects.length)];
 						room = map.randomRoom();
-						room.addObject(object);
-
-						GameCore.this.broadcast(room,
-								"You see a student rush past and drop a " + object + " on the ground.");
+            
+            try{
+						  room.addObject(object);
+              GameCore.this.broadcast(room, "You see a student rush past and drop a " + object + " on the ground.");
+            }
+            catch (IndexOutOfBoundsException e) {
+              GameCore.this.broadcast(room, "You see a student rush past.");
+            }
 
 					} catch (InterruptedException ex) {
 						Logger.getLogger(GameObject.class.getName()).log(Level.SEVERE, null, ex);
@@ -113,6 +117,7 @@ public class GameCore implements GameCoreInterface{
 						room.hasGhoul = true;
 						GameCore.this.broadcast(room, "You see a Ghoul enter this room")
 
+
                     } catch (InterruptedException ex) {
                         Logger.getLogger(GameObject.class.getName()).log(Level.SEVERE, null, ex);
                     }
@@ -125,8 +130,120 @@ public class GameCore implements GameCoreInterface{
         objectThread.start();
         awakeDayGhoul.start();
     }
+
+ 
+    
+    /**
+     * Attempts to walk towards <direction> 1 time.  If unable to make it all the way,
+     *  a message will be returned.  Will display LOOK on any partial success.
+     * @param name Name of the player to move
+     * @param distance Number of rooms to move forward through.
+     * @return Message showing success.
+     */
+    public String move(String name, Direction direction) {
+        Player player = this.playerList.findPlayer(name);
+        if(player == null) {
+            return null;
+        }
+        Room room = map.findRoom(player.getCurrentRoom());
+        if(room.canExit(direction)) {
+            this.broadcast(player, player.getName() + " has walked off to the " + direction);
+            player.getReplyWriter().println(room.exitMessage(direction));
+            player.setCurrentRoom(room.getLink(direction));
+            this.broadcast(player, player.getName() + " just walked into the area.");
+            Ghost g = new Ghost(player);
+			    	g.start();
+            player.getReplyWriter().println(this.map.findRoom(player.getCurrentRoom()).toString(playerList, player));
+        } else {
+            player.getReplyWriter().println(room.exitMessage(direction));
+            return "You grumble a little and stop moving.";
+        }
+        return "You stop moving and begin to stand around again.";
+    }
+    
+
+    /**
+     * Attempts to pick up all objects in the room. Will return a message on any success or failure.
+     * @param name Name of the player to move
+     * @return Message showing success. 
+     */    
+    public String pickupAll(String name) {
+        Player player = this.playerList.findPlayer(name);
+        if(player != null) {
+            Room room = map.findRoom(player.getCurrentRoom());
+            LinkedList<String> objects = room.removeAllObjects();
+            if(objects != null && objects.size() > 0) {
+                for (String object : objects)
+                {
+                    player.addObjectToInventory(object);
+                }
+                this.broadcast(player, player.getName() + " bends over to pick up all objects that were on the ground.");
+                return "You bend over and pick up all objects on the ground.";
+            }
+            else {
+                this.broadcast(player, player.getName() + " bends over to pick up something, but doesn't find anything.");
+                return "You look around for objects but can't find any.";
+            }
+        }
+        else {
+            return null;
+        }
+    }       
 	
 
+    @Override
+    public String challenge(String challenger, String challengee){
+        Player playerChallenger = this.playerList.findPlayer(challenger);
+        Player playerChallengee = this.playerList.findPlayer(challengee);
+        playerChallengee.setChallenger(challenger);
+        playerChallengee.setHasChallenge(true);
+        if(playerChallenger != null && playerChallengee != null && playerChallenger != playerChallengee && playerChallenger.getCurrentRoom() == playerChallengee.getCurrentRoom()) {
+             playerChallengee.getReplyWriter().println(playerChallenger.getName() + " challenges you to a R-P-S");
+             return "You challenged " + playerChallengee.getName() + " to a R-P-S.";
+         }
+        else if(playerChallenger == playerChallengee)
+            return "You can't challenge yourself to R-P-S.";
+         else {
+             return "This person is not in the same room as you or doesn't exist in the game.";
+         }
+    }
+
+    @Override
+    public String accept(String challengee, String challenger){
+        Player playerChallenger = this.playerList.findPlayer(challenger);
+        Player playerChallengee = this.playerList.findPlayer(challengee);
+        if(playerChallengee.getChallenger() != " " && playerChallengee.getHasChallenge() == true){
+            playerChallengee.setChallenger(" ");
+            playerChallengee.setHasChallenge(false); 
+            if(playerChallenger != null && playerChallengee != null && playerChallenger != playerChallengee && playerChallenger.getCurrentRoom() == playerChallengee.getCurrentRoom()) {
+                playerChallenger.getReplyWriter().println(playerChallengee.getName() + " accepts your challenge to a R-P-S");
+                return "You accept " + playerChallenger.getName() + "\'s challenge to a R-P-S.";
+            }
+            else if(playerChallenger == playerChallengee)
+                return "You can't challenge yourself to R-P-S.";
+            else {
+                return "This person is not in the same room as you or doesn't exist in the game.";
+            }
+        }
+        return "You have not been challenged by " + playerChallenger.getName();
+    }
+
+
+     /**
+     * Leaves the game.
+     * @param name Name of the player to leave
+     * @return Player that was just removed.
+     */    
+    @Override
+    public Player leave(String name) {
+        Player player = this.playerList.findPlayer(name);
+        if(player != null) {
+            this.broadcast(player, "You see " + player.getName() + " heading off to class.");
+            this.playerList.removePlayer(name);
+            return player;
+        }
+        return null;
+    }       
 	public void ghoulWander(Ghoul g, Room room) {
 		Random rand = new Random();
 		int[] candinateRoom = new int[4];
@@ -357,6 +474,7 @@ public class GameCore implements GameCoreInterface{
 	 * @param name Player Name
 	 * @return String message of the player turning left.
 	 */
+  @Deprecated
 	@Override
 	public String left(String name) {
 		Player player = this.playerList.findPlayer(name);
@@ -381,6 +499,7 @@ public class GameCore implements GameCoreInterface{
 	 * @param name Player Name
 	 * @return String message of the player turning right.
 	 */
+  @Deprecated
 	@Override
 	public String right(String name) {
 		Player player = this.playerList.findPlayer(name);
@@ -441,6 +560,7 @@ public class GameCore implements GameCoreInterface{
 	 * @param distance Number of rooms to move forward through.
 	 * @return Message showing success.
 	 */
+  @Deprecated
 	public String move(String name, int distance) {
 		Player player = this.playerList.findPlayer(name);
 		if (player == null || distance <= 0) {

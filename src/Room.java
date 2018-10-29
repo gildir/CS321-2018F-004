@@ -38,7 +38,11 @@ public class Room {
 	this.room_type = room_type;
         this.description = description;
 
+
         this.npcs = npcs;
+
+        this.room_type = room_type;
+
     }
     
     public String toString(PlayerList playerList, Player player) {
@@ -52,7 +56,6 @@ public class Room {
         result += "Players in the area: " + this.getPlayers(playerList) + "\n";
         result += "You see paths in these directions: " + this.getExits() + "\n";
         result += "...................\n";
-        result += "You are facing: " + player.getCurrentDirection() + "\n";
         return result;
     }
     
@@ -152,6 +155,19 @@ public class Room {
             }
         }
         return null;
+    }
+
+    /**
+     *  This method removes all objects from the room and returns a linked list of all objects removed from the room.
+     *   
+     *  @return LinkedList containing all objects removed from the room
+     * 
+     */
+    public LinkedList<String> removeAllObjects()
+    {
+        LinkedList<String> removedObjects = new LinkedList<>(this.objects);
+        this.objects.clear();
+        return removedObjects;
     }
     
     public String getPlayers(PlayerList players) {
