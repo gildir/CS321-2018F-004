@@ -1,6 +1,8 @@
 
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
@@ -15,6 +17,7 @@ import java.util.ArrayList;
 import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.HashSet;
 
 /**
  *
@@ -26,7 +29,7 @@ public class GameClient {
 
     // Remote object for RMI server access
     protected GameObjectInterface remoteGameInterface;
-
+    
     // Members for running the remote receive connection (for non-managed events)
     private boolean runListener;
     protected ServerSocket remoteListener;
@@ -113,6 +116,9 @@ public class GameClient {
             remoteOutputThread.setDaemon(true);
             remoteOutputThread.start();
 
+            // 409 Word Filter
+            readWordFilterFile();
+
             // Collect input for the game.
             while(runGame) {
                 try {
@@ -171,7 +177,7 @@ public class GameClient {
             System.out.println("The keyboard input had no commands.");
             return;
         }
-
+        
         String message = "";
 
         try {
@@ -196,7 +202,7 @@ public class GameClient {
                             if(tokens.isEmpty() == false) {
                                 message += " ";
                             }
-                        }
+                        }                        
                         System.out.println(remoteGameInterface.say(this.playerName, message));
                     }
                     break;
@@ -363,5 +369,42 @@ public class GameClient {
             }            
         }
     }    
-    
+
+
+
+    // Begin Feature 409 Word Filter
+
+    /**
+     * Reads a list of words from file, adds them to this player's list of words filtered from chat.
+     *
+     */
+    private void readWordFilterFile() {
+
+        HashSet<String> words = new HashSet<String>();
+        String filename = "FilteredWordsList-" + playerName + ".txt";
+
+        try {
+            File filteredWordsFile = new File(filename);
+            if(!filteredWordsFile.exists()) { filteredWordsFile.createNewFile(); }
+            BufferedReader br = new BufferedReader(new FileReader(filename));
+            String line = br.readLine();
+
+            while (line != null) {
+                String word = line.toLowerCase();
+                words.add(word);
+                words.add("\"" + word + "\"");
+                words.add("\"" + word);
+                words.add(word + "\"");
+                line = br.readLine();
+            }
+
+            remoteGameInterface.setPlayerFilteredWords(this.playerName, words);
+            br.close();
+
+        } catch(IOException i) {
+            System.err.print("\nI/O Exception thrown while attempting to read from filtered words File!\n");
+        }
+    }
+
+    //End Feature 409 Word Filter
 }

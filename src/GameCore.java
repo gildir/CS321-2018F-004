@@ -1,4 +1,5 @@
 
+import java.util.HashSet;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -227,7 +228,8 @@ public class GameCore implements GameCoreInterface {
 	public void broadcast(Player player, String message) {
 		for (Player otherPlayer : this.playerList) {
 			if(otherPlayer != player && !otherPlayer.isIgnoring(player) && otherPlayer.getCurrentRoom() == player.getCurrentRoom()) {
-				otherPlayer.getReplyWriter().println(message);
+			    String newMessage = otherPlayer.filterMessage(message);
+				otherPlayer.getReplyWriter().println(newMessage);
 			}
 		}
 	}
@@ -242,7 +244,8 @@ public class GameCore implements GameCoreInterface {
 	public void broadcast(Room room, String message) {
 		for (Player player : this.playerList) {
 			if (player.getCurrentRoom() == room.getId()) {
-				player.getReplyWriter().println(message);
+			    String newMessage = player.filterMessage(message);
+				player.getReplyWriter().println(newMessage);
 			}
 		}
 	}
@@ -385,8 +388,11 @@ public class GameCore implements GameCoreInterface {
 	public String say(String name, String message) {
 		Player player = this.playerList.findPlayer(name);
 		if (player != null) {
-			this.broadcast(player, player.getName() + " says, \"" + message + "\"");
-			return "You say, \"" + message + "\"";
+//			this.broadcast(player, player.getName() + " says, \"" + message + "\"");
+            this.sayToAll(message, player);
+            String newMessage = player.filterMessage(message);
+            return "You say, \"" + newMessage + "\"";
+
 		} else {
 			return null;
 		}
@@ -522,7 +528,8 @@ public class GameCore implements GameCoreInterface {
             returnMessage = "Player " + dstPlayer.getName() + " is ignoring you.";
         else {
             dstPlayer.setLastPlayer(srcName);
-            dstPlayer.getReplyWriter().println(srcPlayer.getName() + " whispers you, " + message);
+            String newMessage = dstPlayer.filterMessage(message);
+            dstPlayer.getReplyWriter().println(srcPlayer.getName() + " whispers you, " + newMessage);
             returnMessage = "You whisper to " + dstPlayer.getName() + ", " + message;
         }
         return returnMessage;
@@ -656,12 +663,26 @@ public class GameCore implements GameCoreInterface {
         if(player != null){
             for(Player otherPlayer : this.playerList) {
                 if(otherPlayer != player && !otherPlayer.isIgnoring(player)) {
-                    otherPlayer.getReplyWriter().println(player.getName() + " shouts, \"" + message + "\"");
+                    String newMessage = otherPlayer.filterMessage(message);
+                    otherPlayer.getReplyWriter().println(player.getName() + " shouts, \"" + newMessage + "\"");
                 }
             }
             return "You shout, \"" + message + "\"";
         } else {
             return null;
+        }
+    }
+
+    /**
+     * 'player' says 'message' to all other players in the same room
+     * @param message message to deliver
+     * @param player speaker of the message
+     */
+    public void sayToAll(String message, Player player) {
+        for(Player otherPlayer : this.playerList) {
+            if(otherPlayer != player && !otherPlayer.isIgnoring(player) && otherPlayer.getCurrentRoom() == player.getCurrentRoom()) {
+                otherPlayer.printMessage(player, message, "says");
+            }
         }
     }
 }

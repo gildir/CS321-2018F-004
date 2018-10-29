@@ -2,6 +2,7 @@
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.util.HashSet;
 
 /**
  *
@@ -39,23 +40,23 @@ public interface GameObjectInterface extends Remote {
      *  String transfer mechanism.
      * @param name Player Name. 
      * @return true if name is available and join is successful, false otherwise.
-     * @throws RemoteException
+     * @throws RemoteException 
      */
     public boolean joinGame(String name) throws RemoteException;
-
+    
     /**
      * Returns a look at the area of the specified player.
      * @param name Player Name
      * @return String representation of the current area the player is in.
-     * @throws RemoteException
+     * @throws RemoteException 
      */
     public String look(String name) throws RemoteException;
-
+    
     /**
      * Turns the player left.
      * @param name Player Name
      * @return String message of the player turning left.
-     * @throws RemoteException
+     * @throws RemoteException 
      */
     public String left(String name) throws RemoteException;
 
@@ -177,4 +178,10 @@ public interface GameObjectInterface extends Remote {
      */
     public String shout(String name, String message) throws RemoteException;
 
+    /**
+     * Returns a player reference from the game core, from the player's name.
+     * @param playerName the name of the player you're lookng for
+     * @return the player (if found) from the game core
+     */
+    public void setPlayerFilteredWords(String playerName, HashSet<String> newFilteredWords) throws RemoteException;
 }

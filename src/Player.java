@@ -27,6 +27,86 @@ public class Player {
     // missed Messages - not yet in uses
     private HashSet<Message> missedMessages = new HashSet<Message>();
 
+    //Feature 409 WordFilter
+
+    /**
+     * Prints a chat statemnet from another player.
+     * @param playerName - name of player making the statement
+     * @param action - whether the player is saying or whispering the statement
+     * @param message - the statement the other player is making
+     */
+    public void say(String playerName, String action, String message) {
+        String filteredMessage = filterMessage(message);
+        String statement = playerName + " " + action + " " + "\"" + filteredMessage + "\"" + ".";
+        getReplyWriter().println(statement);
+    }
+
+    //Collection of words to be filtered from game chat
+    private HashSet<String> filteredWords = new HashSet<String>();
+
+    /**
+     * Sets the words filtered from this player's chat.
+     * @param newFilteredWords - collection of words to be filtered from this player's chat
+     */
+    public void setFilteredWords(HashSet<String> newFilteredWords) {
+        for(String word : newFilteredWords) {
+            filteredWords.add(word.toLowerCase());
+        }
+    }
+
+    public HashSet<String> getFilteredWords() {
+        return filteredWords;
+    }
+
+    /**
+     * Adds a new word to the list of words filtered from this player's chat.
+     * @param wordToAdd - word to be added to the filter list.
+     * @return - whether the word was successfully added.
+     */
+    public boolean addFilteredWord(String wordToAdd) {
+        boolean ret = filteredWords.add(wordToAdd);
+        return ret;
+    }
+
+    /**
+     * Checks whether this player is actively filtering a given word from chat.
+     * @param word - word to check
+     * @return - whether the givin word is being filtered.
+     */
+
+    public boolean isFiltering(String word) {
+        return filteredWords.contains(word);
+    }
+
+    /**
+     * Parses a message, replacing filtered words with "[BLEEEEP]"
+     * @param message - message being filtered.
+     * @return - new filtered message.
+     */
+
+    public String filterMessage(String message) {
+        String newMessage = "";
+        String bleep = "[BLEEEEP]";
+
+        for(String word : message.split("\\s+")) {
+            boolean match = false;
+
+            if(filteredWords.contains(word.toLowerCase())) {
+                newMessage += bleep + " ";
+            } else {
+                newMessage += word + " ";
+            }
+        }
+
+        newMessage = newMessage.substring(0, (newMessage.length()-1));
+
+        return newMessage;
+    }
+
+    public void printMessage(Player speaker, String message, String action) {
+        String newMessage = filterMessage(message);
+        this.getReplyWriter().println(speaker.getName() + " " + action + " \"" + newMessage + "\"");
+    }
 
     /**
      * Adds a player's reference to set ignoredPlayers.

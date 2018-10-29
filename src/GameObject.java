@@ -4,6 +4,7 @@
 import java.io.PrintWriter;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.HashSet;
 
 /**
  *
@@ -258,5 +259,12 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
     @Override
     public String shout(String name, String message) throws RemoteException {
         return core.shout(name, message);
+    }
+
+    //Begin 409 Word Filter.
+    @Override
+    public void setPlayerFilteredWords(String playerName, HashSet<String> filteredWords) {
+        Player player = core.findPlayer(playerName);
+        player.setFilteredWords(filteredWords);
     }
 }
