@@ -156,59 +156,6 @@ public class GameCore implements GameCoreInterface {
     }       
 	
 
-    @Override
-    public String challenge(String challenger, String challengee){
-        Player playerChallenger = this.playerList.findPlayer(challenger);
-        Player playerChallengee = this.playerList.findPlayer(challengee);
-        playerChallengee.setChallenger(challenger);
-        playerChallengee.setHasChallenge(true);
-        if(playerChallenger != null && playerChallengee != null && playerChallenger != playerChallengee && playerChallenger.getCurrentRoom() == playerChallengee.getCurrentRoom()) {
-             playerChallengee.getReplyWriter().println(playerChallenger.getName() + " challenges you to a R-P-S");
-             return "You challenged " + playerChallengee.getName() + " to a R-P-S.";
-         }
-        else if(playerChallenger == playerChallengee)
-            return "You can't challenge yourself to R-P-S.";
-         else {
-             return "This person is not in the same room as you or doesn't exist in the game.";
-         }
-    }
-
-    @Override
-    public String accept(String challengee, String challenger){
-        Player playerChallenger = this.playerList.findPlayer(challenger);
-        Player playerChallengee = this.playerList.findPlayer(challengee);
-        if(playerChallengee.getChallenger() != " " && playerChallengee.getHasChallenge() == true){
-            playerChallengee.setChallenger(" ");
-            playerChallengee.setHasChallenge(false); 
-            if(playerChallenger != null && playerChallengee != null && playerChallenger != playerChallengee && playerChallenger.getCurrentRoom() == playerChallengee.getCurrentRoom()) {
-                playerChallenger.getReplyWriter().println(playerChallengee.getName() + " accepts your challenge to a R-P-S");
-                return "You accept " + playerChallenger.getName() + "\'s challenge to a R-P-S.";
-            }
-            else if(playerChallenger == playerChallengee)
-                return "You can't challenge yourself to R-P-S.";
-            else {
-                return "This person is not in the same room as you or doesn't exist in the game.";
-            }
-        }
-        return "You have not been challenged by " + playerChallenger.getName();
-    }
-
-
-     /**
-     * Leaves the game.
-     * @param name Name of the player to leave
-     * @return Player that was just removed.
-     */    
-    @Override
-    public Player leave(String name) {
-        Player player = this.playerList.findPlayer(name);
-        if(player != null) {
-            this.broadcast(player, "You see " + player.getName() + " heading off to class.");
-            this.playerList.removePlayer(name);
-            return player;
-        }
-        return null;
-    }       
 	public void ghoulWander(Ghoul g, Room room) {
 		Random rand = new Random();
 		int[] candinateRoom = new int[4];
