@@ -194,21 +194,6 @@ public class GameCore implements GameCoreInterface {
     }
 
 
-     /**
-     * Leaves the game.
-     * @param name Name of the player to leave
-     * @return Player that was just removed.
-     */    
-    @Override
-    public Player leave(String name) {
-        Player player = this.playerList.findPlayer(name);
-        if(player != null) {
-            this.broadcast(player, "You see " + player.getName() + " heading off to class.");
-            this.playerList.removePlayer(name);
-            return player;
-        }
-        return null;
-    }       
 	public void ghoulWander(Ghoul g, Room room) {
 		Random rand = new Random();
 		int[] candinateRoom = new int[4];
@@ -229,63 +214,8 @@ public class GameCore implements GameCoreInterface {
 		}
     }
 
-    
-    /**
-     * Attempts to pick up an object < target >. Will return a message on any success or failure.
-     * @param name Name of the player to move
-     * @param target The case-insensitive name of the object to pickup.
-     * @return Message showing success. 
-     */    
-    public String pickup(String name, String target) {
-        Player player = this.playerList.findPlayer(name);
-        if(player != null) {
-            Room room = map.findRoom(player.getCurrentRoom());
-            String object = room.removeObject(target);
-            if(object != null) {
-                player.addObjectToInventory(object);
-                this.broadcast(player, player.getName() + " bends over to pick up a " + target + " that was on the ground.");
-                return "You bend over and pick up a " + target + ".";
-            }
-            else {
-                this.broadcast(player, player.getName() + " bends over to pick up something, but doesn't seem to find what they were looking for.");
-                return "You look around for a " + target + ", but can't find one.";
-            }
-        }
-        else {
-            return null;
-        }
-    }       
 
-    /**
-     * Attempts to pick up all objects in the room. Will return a message on any success or failure.
-     * @param name Name of the player to move
-     * @return Message showing success. 
-     */    
-    public String pickupAll(String name) {
-        Player player = this.playerList.findPlayer(name);
-        if(player != null) {
-            Room room = map.findRoom(player.getCurrentRoom());
-            LinkedList<String> objects = room.removeAllObjects();
-            if(objects != null && objects.size() > 0) {
-                for (String object : objects)
-                {
-                    player.addObjectToInventory(object);
-                }
-                this.broadcast(player, player.getName() + " bends over to pick up all objects that were on the ground.");
-                return "You bend over and pick up all objects on the ground.";
-            }
-            else {
-                this.broadcast(player, player.getName() + " bends over to pick up something, but doesn't find anything.");
-                return "You look around for objects but can't find any.";
-            }
-        }
-        else {
-            return null;
-        }
-    }       
-    
  
-
 
 	public String bribeGhoul(String playerName, String item){
 		item = item.toLowerCase();

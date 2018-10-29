@@ -53,11 +53,10 @@ public class GameClient {
         this.runGame = true;
         boolean nameSat = false;
 
+        //these replaces the commands strings by loading them from an xml file, therefore if you want to add another command, add it in help.xml
         showIntroduction();
 
         showCommand();
-        System.out.println("  POKE_GHOUL    - Pokes the ghoul in the current room.");
-        System.out.println("  BRIBE_GHOUL item_name    - Gives selected item to ghoul.");
         //System.out.println("  GIVE_GHOUL object   - Gives object to ghoul in current room");
  
        
@@ -209,6 +208,7 @@ public class GameClient {
                     }
                     else{
                         System.out.println(remoteGameInterface.accept(this.playerName, tokens.remove(0)));
+                    }
                     break;
                 case "POKE_GHOUL":
                     System.out.println(remoteGameInterface.pokeGhoul(this.playerName));

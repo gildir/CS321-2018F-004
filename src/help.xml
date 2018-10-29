@@ -43,6 +43,15 @@ object are on the ground and what direction you are facing.
     <help command = "INVENTORY">
         <description>  INVENTORY     - Shows you what objects you have collected.</description>
     </help>
+    <help command = "POKE_GHOUL">
+        <description>  POKE_GHOUL    - Pokes the ghoul in the current room.</description>
+    </help>
+    <help command = "BRIBE_GHOUL item_name">
+        <description>  BRIBE_GHOUL item_name    - Gives selected item to ghoul.</description>
+    </help>
+    <help command = "GIVE_GHOUL object">
+        <description>  GIVE_GHOUL object   - Gives object to ghoul in current room</description>
+    </help>
     <help command = "QUIT">
         <description>  QUIT          - Quits the game.</description>
     </help>
