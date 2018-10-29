@@ -18,27 +18,20 @@ public class GameCore implements GameCoreInterface {
     private Venmo venmo; // Team 4: Aalaqeel
     private Ghoul ghoul;
     
-    /**
-     * Creates a new GameCoreObject.  Namely, creates the map for the rooms in the game,
-     *  and establishes a new, empty, player list.
-     * 
-     * This is the main core that both the RMI and non-RMI based servers will interface with.
-     */
-    public GameCore() {
-        
-        // Generate the game map.
-        map = new Map();
-        playerList = new PlayerList(); 
-        
-        // Builds a list of shops mapped to their map id (can be expanded as needed)
-        shoplist = new HashMap<Integer,Shop>();
-        shoplist.put(new Integer(1), new Shop("Clocktower shop", "The shopping destination for all of your gaming needs."));
-        
-        // Initializes the Venmo core. Team 4: Alaqeel
-        venmo = new Venmo();
-        
-        
 
+	/**
+	 * Creates a new GameCoreObject. Namely, creates the map for the rooms in the
+	 * game, and establishes a new, empty, player list.
+	 * 
+	 * This is the main core that both the RMI and non-RMI based servers will
+	 * interface with.
+	 */
+	public GameCore() {
+
+		// Generate the game map.
+		map = new Map();
+		playerList = new PlayerList();
+		
 		Thread objectThread = new Thread(new Runnable() {
 			@Override
 			public void run() {
@@ -51,10 +44,14 @@ public class GameCore implements GameCoreInterface {
 						Thread.sleep(rand.nextInt(60000));
 						object = objects[rand.nextInt(objects.length)];
 						room = map.randomRoom();
-						room.addObject(object);
-
-						GameCore.this.broadcast(room,
-								"You see a student rush past and drop a " + object + " on the ground.");
+            
+            try{
+						  room.addObject(object);
+              GameCore.this.broadcast(room, "You see a student rush past and drop a " + object + " on the ground.");
+            }
+            catch (IndexOutOfBoundsException e) {
+              GameCore.this.broadcast(room, "You see a student rush past.");
+            }
 
 					} catch (InterruptedException ex) {
 						Logger.getLogger(GameObject.class.getName()).log(Level.SEVERE, null, ex);
@@ -86,6 +83,7 @@ public class GameCore implements GameCoreInterface {
 						room = map.findRoom(ghoul.getRoom());
 						room.hasGhoul = true;
 						GameCore.this.broadcast(room, "You see a Ghoul enter this room");
+
 
                     } catch (InterruptedException ex) {
                         Logger.getLogger(GameObject.class.getName()).log(Level.SEVERE, null, ex);
