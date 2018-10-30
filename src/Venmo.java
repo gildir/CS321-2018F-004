@@ -52,5 +52,4 @@ public class Venmo {
 	public static String instructions() {
 		return "To send money, type: venmo send [recepient] [amount]\n";
 	}
-
 }
