@@ -4,6 +4,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.ArrayList;
+import java.util.Scanner;
+import java.io.File;
 import java.io.IOException;
 
 /**
@@ -14,87 +17,102 @@ public class GameCore implements GameCoreInterface {
     private final PlayerList playerList;
     private final Map map;
     private HashMap<Integer,Shop> shoplist;
-	private Ghoul ghoul;
+    private Ghoul ghoul;
+    
+    /**
+     * Creates a new GameCoreObject.  Namely, creates the map for the rooms in the game,
+     *  and establishes a new, empty, player list.
+     * 
+     * This is the main core that both the RMI and non-RMI based servers will interface with.
+     */
+    public GameCore() {
+        
+        // Generate the game map.
+        map = new Map();
+        
+        playerList = new PlayerList();
+        
+        Thread objectThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Random rand = new Random();
+                Room room;
+                Item object;
+                ArrayList<Item> objects = new ArrayList<Item>();
+                try
+                {
+                    double inWeight = 0;
+                    double inValue = 0;
+                    String inName = "";
+                    Scanner scanner = new Scanner(new File("./items.csv"));
+                    scanner.nextLine();
+                    scanner.useDelimiter(",|\\r\\n|\\n|\\r");
 
-	/**
-	 * Creates a new GameCoreObject. Namely, creates the map for the rooms in the
-	 * game, and establishes a new, empty, player list.
-	 * 
-	 * This is the main core that both the RMI and non-RMI based servers will
-	 * interface with.
-	 */
-	public GameCore() {
-
-		// Generate the game map.
-		map = new Map();
-
-		playerList = new PlayerList();
-
-		Thread objectThread = new Thread(new Runnable() {
-			@Override
-			public void run() {
-				Random rand = new Random();
-				Room room;
-				String object;
-				String[] objects = { "Flower", "Textbook", "Phone", "Newspaper" };
-				while (true) {
-					try {
-						Thread.sleep(rand.nextInt(60000));
-						object = objects[rand.nextInt(objects.length)];
-						room = map.randomRoom();
-            
-            try{
-						  room.addObject(object);
-              GameCore.this.broadcast(room, "You see a student rush past and drop a " + object + " on the ground.");
-            }
-            catch (IndexOutOfBoundsException e) {
-              GameCore.this.broadcast(room, "You see a student rush past.");
-            }
-
-					} catch (InterruptedException ex) {
-						Logger.getLogger(GameObject.class.getName()).log(Level.SEVERE, null, ex);
-					}
-				}
-			}
-		});
-
-		// new thread awake and control the action of Ghoul.
-		// team5 added in 10/13/2018
-		Thread awakeDayGhoul = new Thread(new Runnable() {
-			@Override
-			public void run() {
-				Random rand = new Random();
-				Room room = map.randomRoom();
-				ghoul = new Ghoul(room.getId());
-				room.hasGhoul = true;
-				GameCore.this.broadcast(room, "You see a Ghoul appear in this room");
-
-				while (true) {
-					try {
-						// Ghoul move in each 10-15 seconds.
-						Thread.sleep(12000 + rand.nextInt(5000));
-
-						// make Ghoul walk to other room;
-						GameCore.this.ghoulWander(ghoul, room);
-						room.hasGhoul = false;
-						GameCore.this.broadcast(room, "You see a Ghoul leave this room");
-						room = map.findRoom(ghoul.getRoom());
-						room.hasGhoul = true;
-						GameCore.this.broadcast(room, "You see a Ghoul enter this room");
-
-
-                    } catch (InterruptedException ex) {
-                        Logger.getLogger(GameObject.class.getName()).log(Level.SEVERE, null, ex);
+                    while(scanner.hasNext())
+                    {
+                        inName = scanner.next();
+                        inWeight = Double.parseDouble(scanner.next().replace(",", ""));
+                        inValue = Double.parseDouble(scanner.next().replace("\\r\\n|\\r|\\n", ""));
+                        Item newItem = new Item(inName, inWeight, inValue);
+                        objects.add(newItem);
                     }
                 }
+                catch(IOException e)
+                {
+                    objects.add(new Item("Flower", 1.0, 0.0));
+                    objects.add(new Item("Textbook", 10.3, 5.2));
+                    objects.add(new Item("Phone", 2.9, 1.0));
+                    objects.add(new Item("Newspaper", 10.0, 9.0));
+                }
+                while(true) {
+                    try {
+                        Thread.sleep(rand.nextInt(60000));
+                        object = objects.get(rand.nextInt(objects.size()));
+                        room = map.randomRoom();
+                        room.addObject(object);
+
+                        GameCore.this.broadcast(room, "You see a student rush past and drop a " + object + " on the ground.");
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(GameObject.class.getName()).log(Level.SEVERE, null, ex);}
+                }}});
+
+                // new thread awake and control the action of Ghoul.
+                // team5 added in 10/13/2018
+                Thread awakeDayGhoul = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Random rand = new Random();
+                        Room room = map.randomRoom();
+                        ghoul = new Ghoul(room.getId());
+                        room.hasGhoul = true;
+                        GameCore.this.broadcast(room, "You see a Ghoul appear in this room");
+
+                        while (true) {
+                            try {
+                                // Ghoul move in each 10-15 seconds.
+                                Thread.sleep(12000 + rand.nextInt(5000));
+
+                                // make Ghoul walk to other room;
+                                GameCore.this.ghoulWander(ghoul, room);
+                                room.hasGhoul = false;
+                                GameCore.this.broadcast(room, "You see a Ghoul leave this room");
+                                room = map.findRoom(ghoul.getRoom());
+                                room.hasGhoul = true;
+                                GameCore.this.broadcast(room, "You see a Ghoul enter this room");
+
+
+                            } catch (InterruptedException ex) {
+                                Logger.getLogger(GameObject.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        }
+                    }
+                });
+
+                objectThread.setDaemon(true);
+                awakeDayGhoul.setDaemon(true);
+                objectThread.start();
+                awakeDayGhoul.start();
             }
-        });
-		
-        objectThread.setDaemon(true);
-        awakeDayGhoul.setDaemon(true);
-        objectThread.start();
-        awakeDayGhoul.start();
-    }
 	
 
 	public void ghoulWander(Ghoul g, Room room) {
@@ -118,32 +136,6 @@ public class GameCore implements GameCoreInterface {
     }
     
     /**
-     * Attempts to pick up an object < target >. Will return a message on any success or failure.
-     * @param name Name of the player to move
-     * @param target The case-insensitive name of the object to pickup.
-     * @return Message showing success. 
-     */    
-    public String pickup(String name, String target) {
-        Player player = this.playerList.findPlayer(name);
-        if(player != null) {
-            Room room = map.findRoom(player.getCurrentRoom());
-            String object = room.removeObject(target);
-            if(object != null) {
-                player.addObjectToInventory(object);
-                this.broadcast(player, player.getName() + " bends over to pick up a " + target + " that was on the ground.");
-                return "You bend over and pick up a " + target + ".";
-            }
-            else {
-                this.broadcast(player, player.getName() + " bends over to pick up something, but doesn't seem to find what they were looking for.");
-                return "You look around for a " + target + ", but can't find one.";
-            }
-        }
-        else {
-            return null;
-        }
-    }  
-    
-    /**
      * @author Group 4: King
      * Adds the player to list of players in store, and returns shop they just entered
      * @param name Name of the player to add to shop
@@ -158,39 +150,6 @@ public class GameCore implements GameCoreInterface {
     		return room.getId();
     	}
     	return -1;
-    }
-    
-    /**
-     * Returns a string representation of all objects you are carrying.
-     * @param name Name of the player to move
-     * @return Message showing success.
-     */    
-    @Override
-    public String inventory(String name) {
-        Player player = this.playerList.findPlayer(name);
-        if(player != null) {
-            this.broadcast(player, "You see " + player.getName() + " looking through their pockets.");
-            return "You look through your pockets and see" + player.viewInventory();
-        }
-        else {
-            return null;
-        }
-    }    
-
-     /**
-     * Leaves the game.
-     * @param name Name of the player to leave
-     * @return Player that was just removed.
-     */    
-    @Override
-    public Player leave(String name) {
-        Player player = this.playerList.findPlayer(name);
-        if(player != null) {
-            this.broadcast(player, "You see " + player.getName() + " heading off to class.");
-            this.playerList.removePlayer(name);
-            return player;
-        }
-        return null;
     }
 
     /**
@@ -209,27 +168,21 @@ public class GameCore implements GameCoreInterface {
      * @param shopId The ID of the shop the player is selling an item to
      * @param item The item the player is selling (eventually will be an Item obj)
      */
-    public int sellItem(String name, int shopId, String item) {
+    public float sellItem(String name, int shopId, String item) {
     	Player player = this.playerList.findPlayer(name);
     	Shop s = shoplist.get(shopId);
-    	int value = 0;
+    	float value = 0;
     	
-    	String removed = player.removeObjectFromInventory(item);
+    	Item removed = player.removeObjectFromInventory(item);
     	if (removed != null) {
     		s.add(removed);
-    		value = 10;
+    		value = (float) removed.getPrice();
         	player.setMoney(player.getMoney() + value);
     	}
     	
     	//int value = removed.getValue();
     	return value;
-    }
-    
-	@Override
-	public String venmo(String name) {
-		// TODO Auto-generated method stub
-		return null;
-	}      
+    }    
 	
 	/**
 	 * Shows player how much money they have
@@ -252,23 +205,33 @@ public class GameCore implements GameCoreInterface {
 		item = item.toLowerCase();
 		Player player = playerList.findPlayer(playerName);
 		Room room = this.map.findRoom(player.getCurrentRoom());
+		Item object = player.removeObjectFromInventory(item);
 		if(player == null){
 			return null;
 		}
 		if(room.hasGhoul){
-			LinkedList<String> itemList = player.getCurrentInventory();
-			boolean giveAble = false;
-			for (String thing : itemList){
-				if(thing.equalsIgnoreCase(item)){
-					giveAble = itemList.remove(thing);
-					break;			
-				}
-			}
+			//LinkedList<Item> itemList = player.getCurrentInventory();
+			//boolean giveAble = false;
+			//if (player.currentyInventory.size() > 0){
+			//    giveAble = true;
+			//    break;
+            //}
+			//for (String thing : itemList){
+				//if(thing.equalsIgnoreCase(item)){
+				//	giveAble = itemList.remove(thing);
+				//	break;
+				//}
+            boolean giveAble = false;
+            if (object != null){
+                giveAble = true;
+            }
+
+
 
 			if(giveAble){
 				try {
 					GhoulLog myLog = new GhoulLog();
-					myLog.glLog("GameCore","bribeGhoul", "Player" + " " + playerName + " has just given a " + item + " to the Ghoul");
+					myLog.glLog("GameCore","bribeGhoul", "Player" + " " + playerName + " has just given a " + object + " to the Ghoul");
 				} catch (Exception e){
 					e.printStackTrace();
 				}
@@ -311,37 +274,67 @@ public class GameCore implements GameCoreInterface {
 			return ("Ghoul anger level has increased to " + angerLvl);
 		} else {
 			return null;
-		}
+		}}
+    /**
+     * Returns a string of what and who you plan to offer an item to
+     * @param srcName Name of player making offer
+     * @param dstName Name of player receiving offer
+     * @param message Object item being offered
+     * @return Message showing status of offer
+     */
+    public String offer(String srcName, String dstName, String message){
+	Player srcPlayer = this.playerList.findPlayer(srcName);
+	Player dstPlayer = this.playerList.findPlayer(dstName);
+	Room room = map.findRoom(srcPlayer.getCurrentRoom());
+	String returnMessage;
+	Item object = srcPlayer.removeObjectFromInventory(message);
+	if (srcPlayer == dstPlayer)
+		returnMessage = "So now we talking to ourselves? Is that what's hot?";
+	else if (dstPlayer != null && (dstPlayer.getCurrentRoom() != srcPlayer.getCurrentRoom()))
+	    returnMessage = "Player ain't in your room, or your life";
+	else if (object == null)
+	    returnMessage = "You ain't got that fool: " + message;
+	else if (dstPlayer == null)
+	    returnMessage = "Player " + dstName + " not found.";
+	else if (srcPlayer == null)
+	    returnMessage = "Messge failed, check connection to server.";
+	else {
+	    dstPlayer.getReplyWriter().println(srcPlayer.getName() + " offers you an item: " + message);
+	    returnMessage = "You offer to " + dstPlayer.getName() + " an item: " + message;
 	}
+	if (object != null)
+	    srcPlayer.addObjectToInventory(object);
+	return returnMessage;
+    }
 
 	//Same functionality as bribe_ghoul, not currently used
-	public String giveToGhoul(String object, String playerName) {
-		Player player = playerList.findPlayer(playerName);
-		Room room = this.map.findRoom(player.getCurrentRoom());
-		boolean isItem = false;
+	//public String giveToGhoul(String object, String playerName) {
+	//	Player player = playerList.findPlayer(playerName);
+	//	Room room = this.map.findRoom(player.getCurrentRoom());
+	//	boolean isItem = false;
 		
-		if (player != null) {
-			if (!room.hasGhoul) {
-				return "There is no ghoul in this room.";
-			}
-			else {
-				for (String s : player.getCurrentInventory()) {
-					if (s.equals(object)) {
-						isItem = true;
-					} 
-				}
-				if (! isItem) {
-					return "you don't have" + object + "!";
-				}
-				player.getCurrentInventory().remove(object);
-				ghoul.modifyAngryLevel(-1);
-				return("the ghoul is a little more calm");
-			}
-		}
-		else {
-			return "failed to give ghoul item.";
-		}
-	}
+	//	if (player != null) {
+	//		if (!room.hasGhoul) {
+	//			return "There is no ghoul in this room.";
+	//		}
+	//		else {
+	//			for (String s : player.getCurrentInventory()) {
+	//				if (s.equals(object)) {
+	//					isItem = true;
+	//				}
+	//			}
+	//			if (! isItem) {
+	//				return "you don't have" + object + "!";
+	//			}
+	//			player.getCurrentInventory().remove(object);
+	//			ghoul.modifyAngryLevel(-1);
+	//			return("the ghoul is a little more calm");
+	//		}
+	//	}
+	//	else {
+	//		return "failed to give ghoul item.";
+	//	}
+	//}
 
 	/**
 	 * Broadcasts a message to all other players in the same room as player.
@@ -388,6 +381,41 @@ public class GameCore implements GameCoreInterface {
 		}
 		return null;
 	}
+     /**
+     * Prints message to player if request can processed, contacts other player about their request
+     * @param requestingTrader Name of the player who has requested the trade
+     * @param traderToRequest Name of the player whom the first player has requested to trade with
+     */ 
+    public void requestPlayer(String requestingTrader, String traderToRequest){
+        Player playerToRequest = this.playerList.findPlayer(traderToRequest);
+        Player requestingPlayer = this.playerList.findPlayer(requestingTrader);
+        if(requestingTrader.equals(traderToRequest)){
+            requestingPlayer.getReplyWriter().println("You cannot trade with yourself.");
+            return;
+        }
+        else if(playerToRequest == null){
+            requestingPlayer.getReplyWriter().println("This player does not exist, choose an existing trade partner");
+            return;
+        }
+
+        boolean tradeInProgress = false;
+        for(Player player : this.playerList) {
+            if(player.isInTrade()) {
+                tradeInProgress = true;
+            }
+        }
+	 if(tradeInProgress){
+            requestingPlayer.getReplyWriter().println("There is already a trade in progress. ");
+            return;
+        
+        }
+
+        playerToRequest.setTradeRequest(true);
+        playerToRequest.getReplyWriter().println(requestingTrader + " has requested a trade. You may ignore this request or type: A_TRADE " +requestingTrader+" to proceed. ");
+        requestingPlayer.getReplyWriter().println("Player has been contacted. You will receive a notification when they accept. ");
+    }
+
+
 
 	/**
 	 * Allows a player to join the game. If a player with the same name
@@ -409,18 +437,18 @@ public class GameCore implements GameCoreInterface {
 			newPlayer = new Player(name);
 			this.playerList.addPlayer(newPlayer);
 
-			// New player starts in a room. Send a message to everyone else in that room,
-			// that the player has arrived.
-			this.broadcast(newPlayer, newPlayer.getName() + " has arrived.");
-			return newPlayer;
-		}
-		// A player of that name already exists.
-		return null;
+                        // New player starts in a room. Send a message to everyone else in that room,
+                        // that the player has arrived.
+                        this.broadcast(newPlayer, newPlayer.getName() + " has arrived.");
+                        return newPlayer;
+                }
+                // A player of that name already exists.
+                return null;
 	}
 
-	/**
+       	/**
 	 * Returns a look at the area of the specified player.
-	 * 
+ * 
 	 * @param playerName Player Name
 	 * @return String representation of the current area the player is in.
 	 */
@@ -565,5 +593,146 @@ public class GameCore implements GameCoreInterface {
 			}
 		}
 		return "You stop moving and begin to stand around again.";
+	}
+
+	/**
+	 * Attempts to pick up an object < target >. Will return a message on any
+	 * success or failure.
+	 * 
+	 * @param name   Name of the player to move
+	 * @param target The case-insensitive name of the object to pickup.
+	 * @return Message showing success.
+	 */
+    /**
+     * Attempts to pick up an object < target >. Will return a message on any success or failure.
+     * @param name Name of the player to move
+     * @param target The case-insensitive name of the object to pickup.
+     * @return Message showing success.
+     */
+    public String pickup(String name, String target) {
+        Player player = this.playerList.findPlayer(name);
+        if(player != null)  {
+            if (player.currentInventory.size() <10){
+                Room room = map.findRoom(player.getCurrentRoom());
+                Item object = room.removeObject(target);
+                if(object != null) {
+                    player.addObjectToInventory(object);
+                    this.broadcast(player, player.getName() + " bends over to pick up a " + target + " that was on the ground.");
+                    return "You bend over and pick up a " + target + ".";
+                }
+                else {
+                    this.broadcast(player, player.getName() + " bends over to pick up something, but doesn't seem to find what they were looking for.");
+                    return "You look around for a " + target + ", but can't find one.";
+                }
+            }
+            else {
+                return " your inventory is full.";
+            }
+        }
+        else {
+            return null;
+        }
+    }
+
+    /**
+     * Attempts to drops an object < target >. Will return a message on any success or failure.
+     * @param name Name of the player to move
+     * @param target The case-insensitive name of the object to drop.
+     * @return Message showing success.
+     */
+    public String drop(String name, String target) {
+        Player player = this.playerList.findPlayer(name);
+        if(player != null) {
+            Room room = map.findRoom(player.getCurrentRoom());
+            Item object = player.removeObjectFromInventory(target);
+            if(object != null) {
+                room.addObject(object);
+                this.broadcast(player, player.getName() + " rummages their inventory to find a " + target);
+                return "You drop a " + target + " into the room.";
+            }
+            else {
+                this.broadcast(player, player.getName() + " tries to drop something, but doesn't seem to find what they were looking for.");
+                return "You look around for a " + target + " in your pockets, but can't find one.";
+            }
+        }
+        else {
+            return null;
+        }
+    }
+
+    /**
+	 * Returns a string representation of all objects you are carrying.
+	 * 
+	 * @param name Name of the player to move
+	 * @return Message showing success.
+	 */
+	@Override
+	public String inventory(String name) {
+		Player player = this.playerList.findPlayer(name);
+		if (player != null) {
+			this.broadcast(player, "You see " + player.getName() + " looking through their pockets.");
+			return "You look through your pockets and see" + player.viewInventory();
+		} else {
+			return null;
+		}
+	}
+    /**
+     * Returns a string representation of all objects you are carrying.
+     * @param name Name of the player to move
+     * @return Message showing success.
+     */
+    public String sort(String name, String modes) {
+        Player player = this.playerList.findPlayer(name);
+        if(player != null) {
+            player.sortCurrentInventory(modes);
+            return "You sort the items in your inventory";
+        }
+        else {
+            return null;
+        }
+    }
+    /**
+     * Return string representation of trade acceptance
+     * @param acceptingTrader Name of the player who is accepting the trade
+     * @param traderToAccept Name of the player who has requested a trade
+     * @return Message of success or fail
+     */ 
+    public String playerResponse(String acceptingTrader, String traderToAccept){
+
+        Player playerToAccept = this.playerList.findPlayer(traderToAccept);
+        Player acceptingPlayer = this.playerList.findPlayer(acceptingTrader); 
+        if(playerToAccept == null){
+            return "This player does not exist. ";
+        }
+        if(!acceptingPlayer.hasTradeRequest()){
+            return "You cannot accept a trade because you have not been asked to enter a trade by " + traderToAccept;
+        }
+
+        acceptingPlayer.setInTrade(true);
+        acceptingPlayer.setTradeRequest(false);
+
+        acceptingPlayer.setTradePartner(traderToAccept);
+        playerToAccept.setTradePartner(acceptingTrader);
+
+        playerToAccept.getReplyWriter().println(playerToAccept.getTradePartner() + " has accepted your request.");
+
+        return "You have accepted to enter a trade with " + acceptingPlayer.getTradePartner();
+    }
+
+	/**
+	 * Leaves the game.
+	 * 
+	 * @param name Name of the player to leave
+	 * @return Player that was just removed.
+	 */
+	@Override
+	public Player leave(String name) {
+		Player player = this.playerList.findPlayer(name);
+		if (player != null) {
+			this.broadcast(player, "You see " + player.getName() + " heading off to class.");
+			this.playerList.removePlayer(name);
+			return player;
+		}
+		return null;
 	}
 }

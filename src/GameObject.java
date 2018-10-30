@@ -60,9 +60,9 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
 		return core.bribeGhoul(playerName,item);
 	}
 	
-	public String giveToGhoul(String object, String playerName) {
-		return core.giveToGhoul(object, playerName);
-	}
+	//public String giveToGhoul(String object, String playerName) {
+	//	return core.giveToGhoul(object, playerName);
+	//}
     /**
      * Allows a player to join the game.  If a player with the same name (case-insensitive)
      *  is already in the game, then this returns false.  Otherwise, adds a new player of 
@@ -146,8 +146,20 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
     @Override
     public String pickup(String name, String target) throws RemoteException {
         return core.pickup(name, target);
-    }    
-    
+    }
+
+    /**
+     * Attempts to drop  an object < target >. Will return a message on any success or failure.
+     * @param name Name of the player to move
+     * @param target The case-insensitive name of the object to pickup.
+     * @return Message showing success.
+     * @throws RemoteException
+     */
+    @Override
+    public String drop(String name, String target) throws RemoteException {
+        return core.drop(name, target);
+    }
+
     /**
      * Returns a string representation of all objects you are carrying.
      * @param name Name of the player to move
@@ -170,17 +182,48 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
     	return core.shop(name);
     }
    
-    
     /**
-     * @author Group 4: King
-     * Returns the Player object from the name
-     * @param name The player's name
-     * @return A reference to the Player object
+     * Sorts the given player's inventory
+     * @param name Name of the player
+     * @return Message showing success.
+     * @throws RemoteException 
+     */    
+    @Override
+    public String sort(String name, String modes) throws RemoteException {
+        return core.sort(name, modes);
+    } 
+
+    /**
+     * Offers item from one player to another
+     * @param srcName Name player offer item
+     * @param dstName Name player being offered item
+     * @param message String name of item being offered
      */
-    public Player getPlayer(String name) throws RemoteException{
-    	return core.findPlayer(name);
+    @Override
+    public String offer (String srcName, String dstName, String message) throws RemoteException{
+	    return core.offer(srcName, dstName, message);
     }
-    
+        
+    /**
+     * Prints message to player if request can processed, contacts other player about their request
+     * @param requestingTrader Name of the player who has requested the trade
+     * @param traderToRequest Name of the player whom the first player has requested to trade with
+     */ 
+    public void requestPlayer(String requestingTrader, String traderToRequest) throws RemoteException{
+        core.requestPlayer(requestingTrader, traderToRequest);
+
+    }
+
+    /**
+     * Return string representation of trade acceptance
+     * @param acceptingTrader Name of the player who is accepting the trade
+     * @param traderToAccept Name of the player who has requested a trade
+     * @return Message of success or fail
+     */ 
+    public String playerResponse(String acceptingTrader, String traderToAccept) throws RemoteException{
+        return core.playerResponse(acceptingTrader, traderToAccept);
+    }
+
      /**
      * Leaves the game.
      * @param name Name of the player to leave
@@ -192,14 +235,7 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
         if(player != null) {
             player.getReplyWriter().close();
         }
-    }
-
-	@Override
-	public String venmo(String name) throws RemoteException {
-		// TODO Auto-generated method stub
-		return core.venmo(name);
-		
-	}    
+    }  
 	
 	/**
 	 * @author Team 4: King
@@ -220,7 +256,7 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
      * @param shopId The ID of the shop the player is selling an item to
      * @param item The item the player is selling (eventually will be an Item obj)
      */
-    public int sellItem(String name, int shopId, String item) throws RemoteException{
+    public float sellItem(String name, int shopId, String item) throws RemoteException{
     	return core.sellItem(name, shopId, item);
     }
 
