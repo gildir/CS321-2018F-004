@@ -29,6 +29,15 @@ See chatlog.jpeg for an example chat log.
 ### Dev:
 > The chat log functionality is handled within the GameCore class. The constructor creates a PrintWriter object with a new file called chatlog.txt and closes the PrintWriter. Every time a message is logged, the chatlog.txt file is opened with a new PrintWriter object, written to, and closed. This process is handled within the chatLog(Player player, int chatType, String message, String target) method in GameCore and ensures that the file is updated properly while the game server is running. The chatLog(Player player, int chatType, String message, String target) method in GameCore is called in the say(String name, String message), whisper(String srcName, String dstName, String message), and shout(String name, String message) methods in GameCore.
 
+## Ignore
+
+### Users:
+> If a user wishes to ignore all messages from another player, they can do so via the "Ignore" command. Issuing the "Ignore" command, followed by another player's username, will block all messages sent to the user from that given other player. Other players will be notified that their messages to the ignoring user have been ignored.
+
+### Developers:
+> Ignore features work via a HashSet of Player class instance references (the Ignore list) the user has elected to ignore. The user gives the name of a player they wish to ignore via the Ignore command, and the system takes that String representing the name of the player the user wishes to ignore and uses it to get a reference to a Player instance from the GameCore. That reference is then inserted into a HashSet which is contained by the Player class instance associated with the user. The sender (Player instance) of each message recieved by the user is then checked against the Ignore List HashSet. If a match is found, the message is ignored. 
+
+
 ## Ignore List
 
 ### Users:
