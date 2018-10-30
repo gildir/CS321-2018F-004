@@ -5,20 +5,14 @@ import java.util.LinkedList;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.w3c.dom.Document;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
+import java.util.Scanner;
 
 
 /**
  *
  * @author Kevin
  */
-public class Map {      
+public class Map{   
         private final LinkedList<Room> map;
 
         public Map() {
