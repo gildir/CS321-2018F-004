@@ -180,15 +180,15 @@ public class GameCore implements GameCoreInterface {
      * @param shopId The ID of the shop the player is selling an item to
      * @param item The item the player is selling (eventually will be an Item obj)
      */
-    public int sellItem(String name, int shopId, String item) {
+    public float sellItem(String name, int shopId, String item) {
     	Player player = this.playerList.findPlayer(name);
     	Shop s = shoplist.get(shopId);
-    	int value = 0;
+    	float value = 0;
     	
-    	String removed = player.removeObjectFromInventory(item);
+    	Item removed = player.removeObjectFromInventory(item);
     	if (removed != null) {
     		s.add(removed);
-    		value = 10;
+    		value = (float) removed.getPrice();
         	player.setMoney(player.getMoney() + value);
     	}
     	

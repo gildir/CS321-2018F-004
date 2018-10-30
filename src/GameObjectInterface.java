@@ -202,7 +202,7 @@ public interface GameObjectInterface extends Remote {
      * @param shopId The ID of the shop the player is selling an item to
      * @param item The item the player is selling (eventually will be an Item obj)
      */
-    public int sellItem(String name, int shopId, String item) throws RemoteException;
+    public float sellItem(String name, int shopId, String item) throws RemoteException;
     
     /**
      * Returns a Shop's inventory as a formatted string
