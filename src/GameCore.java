@@ -5,7 +5,6 @@ import java.util.logging.Logger;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.io.IOException;
 
 /**
  *
@@ -15,7 +14,6 @@ public class GameCore implements GameCoreInterface {
     private final PlayerList playerList;
     private final Map map;
     private HashMap<Integer,Shop> shoplist;
-    private Venmo venmo; // Team 4: Aalaqeel
     private Ghoul ghoul;
     
     /**
