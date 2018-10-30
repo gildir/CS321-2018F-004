@@ -31,6 +31,8 @@ Command: IgnoreList
 
 >The only argument needed for this command to function properly is, the current players name so that the list of ignored players can be displayed. This list of ignored players is located in the Player class.
 
+![](images/ignorelist.png)
+
 ## Unignore
 
 ### Users:
