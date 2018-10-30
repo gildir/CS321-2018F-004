@@ -214,11 +214,6 @@ public class GameClient {
                         System.out.println(remoteGameInterface.pickup(this.playerName, tokens.remove(0)));
                     }
                     break;
-<<<<<<< HEAD
-                case "INVENTORY":
-                    System.out.println(remoteGameInterface.inventory(this.playerName));
-
-                    break; 
                 case "VENMO":
                     System.out.println(remoteGameInterface.venmo(this.playerName));
                     break;   
@@ -228,7 +223,6 @@ public class GameClient {
                 case "WALLET":
                 	System.out.println(remoteGameInterface.wallet(this.playerName));
                 	break;
-=======
                
         case "R_TRADE":
                     if(tokens.isEmpty()) {
@@ -247,7 +241,6 @@ public class GameClient {
                         System.out.println(remoteGameInterface.playerResponse(this.playerName, tokens.remove(0)));
                     }
 		    break;
->>>>>>> upstream/dev
                 case "POKE_GHOUL":
                     System.out.println(remoteGameInterface.pokeGhoul(this.playerName));
                     break;
