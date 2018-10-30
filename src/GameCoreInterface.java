@@ -30,7 +30,7 @@ public interface GameCoreInterface {
 	public String bribeGhoul(String playerName,String item);
 
 	
-	public String giveToGhoul(String object, String playerName);
+	//public String giveToGhoul(String object, String playerName);
 
     
     /**
@@ -107,15 +107,6 @@ public interface GameCoreInterface {
      * @return Player that was just removed.
      */    
     public Player leave(String name);
-   
-    
-    /**
-     * Takes the player into venmo. The new and improved way to exchange money with other players.
-     * 
-     * @author Team 4: Alaqeel
-     * @param name Name of the player enter the bank
-     */    
-    public String venmo(String name, ArrayList<String> tokens);
     
     /**
      * Returns a reference to a shop 
@@ -132,16 +123,7 @@ public interface GameCoreInterface {
      * @param item The item the player is selling (eventually will be an Item obj)
      */
     public int sellItem(String name, int shopId, String item);
-    
-    /**
-     * 605B_buy_method
-     * Allows player to sell an item to a shop, and increases their money
-     * @author Team 4: Mistry
-     * @param name Name of the player
-     * @param shopId The ID of the shop the player is selling an item to
-     * @param item The item the player is buying (eventually will be an Item obj)
-     */
-    public String buyItem(String name, int shopId, String item);
+
   
     /**
      * Returns a Shop's inventory as a formatted string
@@ -149,4 +131,29 @@ public interface GameCoreInterface {
      * @return A formatted string representing the Shop's inventory
      */
     public String getShopInv(int id);
+
+    /**
+     * Returns a string representation of the offer statement.
+     * @param srcName Name of player making offer
+     * @param dstName Name of player receiving offer
+     * @param message Message item offered
+     * @return Message showing offer
+     * @throws RemoteException.
+     */
+    public String offer(String srcName, String dstName, String message); 
+
+    /**
+     * Prints message to player if request can processed, contacts other player about their request
+     * @param requestingTrader Name of the player who has requested the trade
+     * @param traderToRequest Name of the player whom the first player has requested to trade with
+     */ 
+    public void requestPlayer(String requestingTrader, String traderToRequest);
+
+    /**
+     * Return string representation of trade acceptance
+     * @param acceptingTrader Name of the player who is accepting the trade
+     * @param traderToAccept Name of the player who has requested a trade
+     * @return Message of success or fail
+     */ 
+    public String playerResponse(String acceptingTrader, String traderToAccept);
 }
