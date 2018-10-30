@@ -30,7 +30,7 @@ public interface GameCoreInterface {
 	public String bribeGhoul(String playerName,String item);
 
 	
-	public String giveToGhoul(String object, String playerName);
+	//public String giveToGhoul(String object, String playerName);
 
     
     /**
@@ -70,8 +70,7 @@ public interface GameCoreInterface {
      * @param playerName Player Name
      * @return String representation of the current area the player is in.
      */
-    public String look(String playerName); 
-    
+    public String look(String playerName);
     /**
      * Says "message" to everyone in the current area.
      * @param name Name of the player to speak
@@ -99,4 +98,30 @@ public interface GameCoreInterface {
     
     @Deprecated
     public String right(String name);    
+
+    /**
+     * Returns a string representation of the offer statement.
+     * @param srcName Name of player making offer
+     * @param dstName Name of player receiving offer
+     * @param message Message item offered
+     * @return Message showing offer
+     * @throws RemoteException.
+     */
+    public String offer(String srcName, String dstName, String message); 
+
+    /**
+     * Prints message to player if request can processed, contacts other player about their request
+     * @param requestingTrader Name of the player who has requested the trade
+     * @param traderToRequest Name of the player whom the first player has requested to trade with
+     */ 
+    public void requestPlayer(String requestingTrader, String traderToRequest);
+
+    /**
+     * Return string representation of trade acceptance
+     * @param acceptingTrader Name of the player who is accepting the trade
+     * @param traderToAccept Name of the player who has requested a trade
+     * @return Message of success or fail
+     */ 
+    public String playerResponse(String acceptingTrader, String traderToAccept);
+
 }
