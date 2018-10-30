@@ -122,10 +122,10 @@ public class Room {
             throw new IndexOutOfBoundsException("Can not add more objects, objects is at capacity");
         }
     }
-    
+
     public Item removeObject(String target) {
         for(Item obj : this.objects) {
-		String nameToRemove = obj.name;
+            String nameToRemove = obj.name;
             if(nameToRemove.equalsIgnoreCase(target)) {
                 this.objects.remove(obj);
                 return obj;
@@ -133,7 +133,8 @@ public class Room {
         }
         return null;
     }
-    
+
+
     public String getPlayers(PlayerList players) {
         String localPlayers = "";
         for(Player player : players) {

@@ -29,7 +29,7 @@ public interface GameObjectInterface extends Remote {
 
 
 	//Same functionality as bribeGhoul. Not currently used.
-	public String giveToGhoul(String object, String playerName) throws RemoteException;
+	//public String giveToGhoul(String object, String playerName) throws RemoteException;
 	
 
     /**

@@ -30,7 +30,7 @@ public interface GameCoreInterface {
 	public String bribeGhoul(String playerName,String item);
 
 	
-	public String giveToGhoul(String object, String playerName);
+	//public String giveToGhoul(String object, String playerName);
 
     
     /**

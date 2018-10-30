@@ -60,9 +60,9 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
 		return core.bribeGhoul(playerName,item);
 	}
 	
-	public String giveToGhoul(String object, String playerName) {
-		return core.giveToGhoul(object, playerName);
-	}
+	//public String giveToGhoul(String object, String playerName) {
+	//	return core.giveToGhoul(object, playerName);
+	//}
     /**
      * Allows a player to join the game.  If a player with the same name (case-insensitive)
      *  is already in the game, then this returns false.  Otherwise, adds a new player of 
@@ -146,19 +146,19 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
     @Override
     public String pickup(String name, String target) throws RemoteException {
         return core.pickup(name, target);
-    }    
- 
+    }
+
     /**
-     * Attempts to pick up an object < target >. Will return a message on any success or failure.
+     * Attempts to drop  an object < target >. Will return a message on any success or failure.
      * @param name Name of the player to move
      * @param target The case-insensitive name of the object to pickup.
      * @return Message showing success.
-     * @throws RemoteException 
-     */    
+     * @throws RemoteException
+     */
     @Override
     public String drop(String name, String target) throws RemoteException {
         return core.drop(name, target);
-    }    
+    }
 
     /**
      * Returns a string representation of all objects you are carrying.
