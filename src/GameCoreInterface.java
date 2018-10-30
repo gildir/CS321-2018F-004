@@ -70,7 +70,21 @@ public interface GameCoreInterface {
      * @param playerName Player Name
      * @return String representation of the current area the player is in.
      */
-    public String look(String playerName); 
+    public String look(String playerName);
+    
+    /**
+     * Turns the player left.
+     * @param name Player Name
+     * @return String message of the player turning left.
+     */
+    public String left(String name);
+    
+    /**
+     * Turns the player right.
+     * @param name Player Name
+     * @return String message of the player turning right.
+     */
+    public String right(String name);    
     
     /**
      * Says "message" to everyone in the current area.
@@ -87,22 +101,6 @@ public interface GameCoreInterface {
      */    
     public String inventory(String name);
     
-    /**
-      * Challenge someone to R-P-S
-      * @param challenger is the name of the player challenging to R-P-S
-      * @param challenge is the name of the player being challenge
-      * @return String message of the challenge 
-      */
-    public String challenge(String challenger, String challengee);
-
-    /**
-      * Accept someones challenge to R-P-S
-      * @param challenger is the name of the player challenging to R-P-S
-      * @param challenge is the name of the player accepting
-      * @return String message of the acceptence
-      */
-    public String accept(String challenger, String challengee);
-
     /**
      * Leaves the game.
      * @param name Name of the player to leave
