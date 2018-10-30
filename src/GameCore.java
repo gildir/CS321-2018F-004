@@ -96,7 +96,6 @@ public class GameCore implements GameCoreInterface {
     }
 	
 
-<<<<<<< HEAD
     @Override
     public String challenge(String challenger, String challengee){
         Player playerChallenger = this.playerList.findPlayer(challenger);
@@ -135,8 +134,6 @@ public class GameCore implements GameCoreInterface {
     }
 
 
-=======
->>>>>>> e0d42afa1afb847ad2a60ab54621da4e2b63f3ac
 	public void ghoulWander(Ghoul g, Room room) {
 		Random rand = new Random();
 		int[] candinateRoom = new int[4];
