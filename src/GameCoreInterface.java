@@ -5,34 +5,34 @@
  * @author Kevin
  */
 public interface GameCoreInterface {
-
+	
 	/**
 	 * Makes the ghoul walk to an adjacent room
 	 * @param g Ghoul that is being moved
 	 * @param room Room the ghoul is currently in
 	 */
 	public void ghoulWander(Ghoul g,Room room);
-
+	
 	/**
 	 * Pokes the ghoul in the current room
 	 * @param playerName Player name
 	 * @return String message of ghoul
 	 */
 	public String pokeGhoul(String playerName);
-
+	
 
 	/**
 	 * Bribe the ghoul in the current room
 	 * @param playerName Player name
-	 * @param item item's name, which will be throw.
+	 * @param item item's name, which will be throw. 
 	 * @return String message of ghoul
 	 */
 	public String bribeGhoul(String playerName,String item);
 
+	
+	//public String giveToGhoul(String object, String playerName);
 
-	public String giveToGhoul(String object, String playerName);
-
-
+    
     /**
      * Broadcasts a message to all other players in the same room as player.
      * @param player Player initiating the action.
@@ -158,6 +158,30 @@ public interface GameCoreInterface {
      * @return Player that was just removed.
      */    
     public Player leave(String name);
+
+    /**
+     * Returns a string representation of the offer statement.
+     * @param srcName Name of player making offer
+     * @param dstName Name of player receiving offer
+     * @param message Message item offered
+     * @return Message showing offer
+     */
+    public String offer(String srcName, String dstName, String message);
+
+    /**
+     * Prints message to player if request can processed, contacts other player about their request
+     * @param requestingTrader Name of the player who has requested the trade
+     * @param traderToRequest Name of the player whom the first player has requested to trade with
+     */
+    public void requestPlayer(String requestingTrader, String traderToRequest);
+
+    /**
+     * Return string representation of trade acceptance
+     * @param acceptingTrader Name of the player who is accepting the trade
+     * @param traderToAccept Name of the player who has requested a trade
+     * @return Message of success or fail
+     */
+    public String playerResponse(String acceptingTrader, String traderToAccept);
 
     //Feature 411. Shout
     /**
