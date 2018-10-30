@@ -10,7 +10,16 @@ REPLY hello world!
 R hello world!
 ```
 ### Dev:
-> The reply command is handled in the switch statement in GameClient and follows a structure similar to the whisper command. The switch statement calls the quickReply(String srcName, String message) method in GameObject, which returns the quickReply(String srcName, String message) method in GameCore. The quickReply(String srcName, String message) method in GameCore calls the whisper(String srcName, String dstName, String message) method in GameCore with the dstName parameter set to the lastPlayer field of the srcName parameter. lastPlayer is stored in the Player class and is set in the whisper(String srcName, String dstName, String message) method in GameCore. GameObject and GameCore have accompanying interfaces for their respective methods.   
+> The reply command is handled in the switch statement in GameClient and follows a structure similar to the whisper command. The switch statement calls the quickReply(String srcName, String message) method in GameObject, which returns the quickReply(String srcName, String message) method in GameCore. The quickReply(String srcName, String message) method in GameCore calls the whisper(String srcName, String dstName, String message) method in GameCore with the dstName parameter set to the lastPlayer field of the srcName parameter. lastPlayer is stored in the Player class and is set in the whisper(String srcName, String dstName, String message) method in GameCore. GameObject and GameCore have accompanying interfaces for their respective methods.  
+
+## Player List
+### User:
+> The show players command allows the user to generate a list of players in the world who are currently online. The command is executed by typing "ONLINE," and then pressing the return key. Upon entering the command, the list of online players is generated on the user's screen, with one player name per line.
+
+### Dev:
+> The show players command is called from the GameCore.java file, using remoteGameInterface in the GameClient.java file. The code uses a StringBuilder object to generate the list of online players, appending a new line after each player name. It is called within the switch case for ONLINE within the GameClient.java file and access the PlayerList class within GameCore.java to access the name of each player. The method showPlayers() has no parameters, but the StringBuilder within the showPlayers() method can be edited by anyone to format the list of players in a better fashion (for example, alphabetizing or creating a more organized list), at the developer's discretion.
+
+![](images/showplayers.png)
 
 ## Chat Log
 ### User:
@@ -43,6 +52,15 @@ Command: Unignore [player to unignore]
 > Unignore checks to see if the source or destination player is null and if you are trying to unignore yourself. If none of these conditions are true, then the unignore player method will be called from the player class. The unignore player method, will check to see if the ignore list contains that player. If it does, then that player is removed. If not, then the player will be notified that they can not unignore the other player.
 
 >The argument needed for this command to function properly is, the name of the player doing the unignoring and the name of the player being unignored. Unignore is located within the player class.
+
+## Joke
+### User:
+> The joke command accesses a local text file stored in the user's game files (in this case, "jokes.txt") and randomly selects from it one of up to ten available jokes, separated by a new line. After selecting the joke, it then sends out a message to everyone in the room: "Here's a joke for you:" followed by the random joke selected. Due to the random nature of the command, the same joke can be told twice or more times using this command.
+
+### Dev:
+> The joke command is called from the GameCore.java file, using remoteGameInterface in the GameClient.java file. The code uses the File, ArrayList, Random, and Scanner objects in order to read in the text file of jokes. The file is read using the Scanner, and after each new line, the jokes are placed into an ArrayList<String> named joke. From there, the Scanner closes and the Random object randomly selects a joke from the ArrayList<String> joke. Finally, in the GameClient.java file, the method joke(String filename) is called through the RemoteGameInterface.say() method, using remoteGameInterface.joke("jokes.txt") as a parameter for the message to be said by the user inputting the joke command. This call to remoteGameInterface.say() is carried out in a switch statement case for "JOKE" within the GameClient.java switch statement.
+  
+![](images/joke.png)
 
 ## Shout
 
