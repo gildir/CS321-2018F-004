@@ -1,6 +1,6 @@
 # Items and Inventory
 
-##Items in CSV - Feature 501
+## Items in CSV - Feature 501
 ### User
 All the items available in the game can be accessed by the following .CSV file:
 [Items in .CSV file](./src/items.csv).
