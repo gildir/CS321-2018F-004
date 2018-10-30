@@ -9,7 +9,7 @@ public class Room {
     private final String title;
     private final String room_type;
     private final String description;
-    private final LinkedList<String> objects;
+    private final LinkedList<Item> objects;
     private final LinkedList<Exit> exits;
 
 
@@ -36,6 +36,7 @@ public class Room {
         result += "Players in the area: " + this.getPlayers(playerList) + "\n";
         result += "You see paths in these directions: " + this.getExits() + "\n";
         result += "...................\n";
+        result += "You are facing: " + player.getCurrentDirection() + "\n";
         return result;
     }
     
@@ -105,11 +106,15 @@ public class Room {
             return "None.";
         }
         else {
-            return this.objects.toString();
+		String ret = "";
+		for(Item obj : this.objects) {
+			ret += " " + obj.toString();
+		}
+		return ret;
         }
     }
     
-    public void addObject(String obj) {
+    public void addObject(Item obj) {
         if(this.objects.size() < 5) {
             this.objects.add(obj);
         }
@@ -117,10 +122,11 @@ public class Room {
             throw new IndexOutOfBoundsException("Can not add more objects, objects is at capacity");
         }
     }
-    
-    public String removeObject(String target) {
-        for(String obj : this.objects) {
-            if(obj.equalsIgnoreCase(target)) {
+
+    public Item removeObject(String target) {
+        for(Item obj : this.objects) {
+            String nameToRemove = obj.name;
+            if(nameToRemove.equalsIgnoreCase(target)) {
                 this.objects.remove(obj);
                 return obj;
             }
@@ -128,19 +134,18 @@ public class Room {
         return null;
     }
 
-    /**
-     *  This method removes all objects from the room and returns a linked list of all objects removed from the room.
-     *   
-     *  @return LinkedList containing all objects removed from the room
-     * 
-     */
-    public LinkedList<String> removeAllObjects()
+    public LinkedList<Item> removeAllObjects()
     {
-        LinkedList<String> removedObjects = new LinkedList<>(this.objects);
-        this.objects.clear();
-        return removedObjects;
+        LinkedList<Item> newList = new LinkedList<Item>();
+        while(!this.objects.isEmpty())
+        {
+            newList.add(objects.get(0));
+            this.objects.remove(0);
+        }  
+        return newList; 
     }
-    
+
+
     public String getPlayers(PlayerList players) {
         String localPlayers = "";
         for(Player player : players) {
