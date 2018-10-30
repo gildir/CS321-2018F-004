@@ -73,3 +73,13 @@ Command: Shout [message]
 
 >The arguments needed for this command to function properly are, the shouting player's name and the message to be shouted.
 
+
+## Word Filter
+### User:
+> The word filter is a list of words a given user has chosen to filter from their game's chat. In a file named "FilteredWords-[USERNAME].txt, users can enter a list of words (one per line) they wish to have filtered from chat. On every startup, the game will read these words from the file. From that point on, every time one of these words read from the file is detected in a chat scenario within the game, it will be replaced with "[BLEEEP]".
+
+### Dev:
+> Words are read from a file for each user by the GameClient class, and added to a HashSet of String objects contained within the Player class instance associated with that user. The user's player instance then parses each message (say, whisper, shout, etc) word by word. If one of the words in a message being parsed is found to also be contained in the Filtered Words Hashset, that word is replaced with a bleep string ("[BLEEEP]") in a new message that is presented to the user instead of the original. 
+  
+![](images/gitpic.jpg)
+
