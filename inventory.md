@@ -1,6 +1,6 @@
-# Items and Inventory
+# Items and Inventory - Team 1
 
-## Items in CSV - Feature 501
+## Items in CSV - Feature 501 - Saru
 ### User
 All the items available in the game can be accessed by the following .CSV file:
 [Items in .CSV file](./src/items.csv).
@@ -10,10 +10,6 @@ Each item is denoted on the file with its name, followed by the associated weigh
 The .CSV file from above is utilized in 
 [Item reading](./src/GameCore.java).
 A .CSV file (comma-separated values) is a file structured in a way such that values are delimited with commas and line breaks. This helps when reading input from the file. Each line will represent another item, and the line can be tokenized into separate values per item by taking advantage of the commas. If more items are desired, the .CSV file can be edited by by adding a new line and entering the information of the item in the name,weight,price order (without spaces in between the commas).
-
-
-## Item Object - Feature 502
-=======
 
 ## Item Object - Feature 502 - shull4
 ### User
@@ -38,7 +34,7 @@ Item reading can be found in
 This code is written to read the Item name, weight, and value (String/double/double).  This then constructs a new item object and adds it to the overall game drop table arraylist.
 
 
-## Item Weights - Feature 503
+## Item Weights - Feature 503 - Saru
 ### User
 The weights associated with each item is located in
 [Items in .CSV file](./src/items.csv)
@@ -59,12 +55,32 @@ Reading the .CSV uses java.util scanner, java.io exceptions, and java.io file. j
 
 NOTE:  If there is any IO error, the default item list will be loaded into the game drop table. This is found in the catch of the .CSV reading.Reading of the .CSV was a deviation to the original game code.  The original item table is loaded in the case of a .io error. Additionally, the games drop table was changed from a static array to a arraylist. 
 
+## Inventory Size Limit - Feature 504 - Mike
+## User
+Players inventory has been decreased from infinity to 10.
+### Developer
+The code for the inventory is located in [GameCore](./src/GameCore.java) under the String pickup method. An if statement restricts pickup to the inventory being less than 10, once 10 items in the inventory is reached, the pickup feature defaults to failure.
+
 
 ## Dropping items - Feature 505 - Jae-Moon Hwang
 ### User
 In order to use the drop feature, it is very similar to the pickup feature. The keyword `drop` must be followed by an item name (e.g. `drop flower`). If there are multiple items of the same name, then only the first instance of the item is dropped.
 ### Developer
 The code for the drop feature is very close to the code for the pickup feature. When a player initiates a drop, the name of the player and the name of the item are used as parameters. The parameters are passed through the drop method in GameCore. The method looks up which room the player is in and then tries to remove the named item from the player's inventory. If the named item is not found, it simply tells the player that they do not have any number of the named item. If an instance of the named item is found, then it removes the first instance of the named item from the player's inventory and tries to add it to the room's inventory.
+
+## Offering an Item - Feature 506 - Mike
+### User
+Users are not able to offer an item to other players. Simply type `O` or `Offer`, target player's name, and name of item to offer (e.g. `Offer Player1 Sword`) and request will be made. The item is removed from your inventory until player either accpets or rejects your offer.
+
+Players are not able to offer to someone not in your room, yourself, or players not in the game. Also you are unable to offer items not currently held in your inventory.
+### Developer
+The code for the offer feature is located in GameCore and has many checks for validity. Checks for valid offer target, target player be co-located as offer initiator, and item being currently held by initiator. If any checks fail, the item is returned to the players inventory and the offer is cancelled.
+
+## Trade Feature, Single Instance - Feature 509 - Mike
+### User
+A new trade feature is put into the game allow players to be engaged in one trade at a time. Trades are initiated and accepted/declined in real time and while in a trade, no other offers or requests can get through. To initiate a trade, follow directions in the menu or simply type `R_Trade Playerx`. Players will be prompted to accept or decline a trade and upon completion, can engage in new trades or gameplay.
+### Developer
+Code is implemented to request and accept/reject trade request within game. The methods used are `requestPlayer` and `playerResponse`. Requests and responses are issued by players to initiate trades. Players will have their `setInTrade` flag tripped while in a trade and it will be reset once trades are finished. Use of `getReplyWriter` to get responses from other players is used. Trade flags will be shell and logic code for the offer/accept/reject methods further in the game.
 
 ## Sorting player's inventory - Feature F03 - Jae-Moon Hwang
 ### User
