@@ -1,13 +1,12 @@
 # Items and Inventory
 
-<<<<<<< HEAD
 ##Items in CSV - Feature 501
 ### User
 All the items available in the game can be accessed by the following .CSV file:
 [Items in .CSV file](./src/items.csv).
 Each item is denoted on the file with its name, followed by the associated weight and price. The values represented in the .CSV reflect exactly the object properties of that item in the game. 
 
-### Programmer
+### Developer
 The .CSV file from above is utilized in 
 [Item reading](./src/GameCore.java).
 A .CSV file (comma-separated values) is a file structured in a way such that values are delimited with commas and line breaks. This helps when reading input from the file. Each line will represent another item, and the line can be tokenized into separate values per item by taking advantage of the commas. If more items are desired, the .CSV file can be edited by by adding a new line and entering the information of the item in the name,weight,price order (without spaces in between the commas).
@@ -17,7 +16,6 @@ A .CSV file (comma-separated values) is a file structured in a way such that val
 =======
 
 ## Item Object - Feature 502 - shull4
->>>>>>> 534c7f5afafcc0947bcd81d8651d388127d4178a
 ### User
 Items in the game are bundled together to hold the item name, the item weight, and the item price.
 
@@ -28,12 +26,7 @@ The items are custructed as a basic java object holding a string and two double 
 
 NOTE:  This is a deviation from the original core of the game, where items were labled as Strings only.  The Strings for items were changed to Item objects for the game inventory, the player inventory, and all assosiated calls to player functions that search for and returned Item Strings. This includes:  Pickup, Look, Inventory, and the random student drop.
 
-<<<<<<< HEAD
-
-## Item Drop Table and Master List - Feature 502
-=======
 ## Item Drop Table and Master List - Feature 502 - shull4
->>>>>>> 534c7f5afafcc0947bcd81d8651d388127d4178a
 ### User
 - This section is not required to be altered by the user.
 ### Developer
@@ -41,12 +34,11 @@ NOTE:  This is a deviation from the original core of the game, where items were 
 The items for the game drop table are listed in the .CSV file above.  The items can be expanded on or subtracted from in .CSV form.  The .CSV file starts with the first row being a heading for the colloums.  The first colloum is the item name in the form of a String, the second colloum is the item weight (pounds) represented as a double, and the final colloum is the item price (for the store) as a double. The items must be written in this order, as it is hardcoded into the item read. Additional items may be added or current items may be removed, as long as all the fields for each item or added completely or removed completely. No blank lines are permitted in the .CSV.
 
 Item reading can be found in 
-<<<<<<< HEAD
 [Item reading](./src/GameCore.java) starting in line .  
 This code is written to read the Item name, weight, and value (String/double/double).  This then constructs a new item object and adds it to the overall game drop table arraylist.
 
 
-##Item Weights - Feature 503
+## Item Weights - Feature 503
 ### User
 The weights associated with each item is located in
 [Items in .CSV file](./src/items.csv)
@@ -54,7 +46,7 @@ The weights for an item are determined by a generic category of light, medium, o
 
 [Example of inventory with weights](./Weights.png)
 
-### Programmer
+### Developer
 To edit the weights, the developer only needs to change the first value after the comma following the relevant object's name. To change/manipulate the weight property of the object, first study the item object class.
 [item](./src/items.java)
 The weight is read from the .CSV and represented as a double. It can be accessed by the getWeight() function, which returns the double value of weight. A changeWeight(double weight) method can be used to set the weight.
@@ -79,4 +71,3 @@ The code for the drop feature is very close to the code for the pickup feature. 
 In order to intiate a sort on a player's inventory, use the keyword `sort`. Once initiated, the player will have the option to sort by three categories: name, weight, and price. After selecting the category, the player is then asked if they want to sort in an ascending order or descending order.
 ### Developer
 The sort feature has a few pieces to its code. When the player initiates a sort, the player will be prompted on their client to sort by categories and ascending or descending order. The input it then concatenated into one string of two letters as both the category and order are indicated by one letter each. This string represents the mode of the sort and passes the string through the client to the sort method found in the Player class. If the user does not provide the correct format for sorting, the game will keep asking until it obtains valid inputs from the user. Name, price, and weight are sorted using their own comparator and can be found in the Player class. Name is sorted in lexicographical order based on java's String compareTo method. Both price and weight are sorted using normal means which are comparing the actual numerical values and using operators for comparison.
->>>>>>> 534c7f5afafcc0947bcd81d8651d388127d4178a
