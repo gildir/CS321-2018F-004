@@ -1,4 +1,4 @@
-import java.rmi.RemoteException;
+import java.util.ArrayList;
 
 /**
  *
@@ -107,12 +107,46 @@ public interface GameCoreInterface {
      * @return Player that was just removed.
      */    
     public Player leave(String name);
+   
     
     /**
      * Takes the player into venmo. The new and improved way to exchange money with other players.
+     * 
+     * @author Team 4: Alaqeel
      * @param name Name of the player enter the bank
-     * @throws RemoteException 
      */    
-    public String venmo(String name);
+    public String venmo(String name, ArrayList<String> tokens);
     
+    /**
+     * Returns a reference to a shop 
+     * @param id
+     * @return the shop or null
+     */
+    public String getShopStr(int id);
+    
+    /**
+     * Allows player to sell an item to a shop, and increases their money
+     * @author Team 4: King
+     * @param name Name of the player
+     * @param shopId The ID of the shop the player is selling an item to
+     * @param item The item the player is selling (eventually will be an Item obj)
+     */
+    public int sellItem(String name, int shopId, String item);
+    
+    /**
+     * 605B_buy_method
+     * Allows player to sell an item to a shop, and increases their money
+     * @author Team 4: Mistry
+     * @param name Name of the player
+     * @param shopId The ID of the shop the player is selling an item to
+     * @param item The item the player is buying (eventually will be an Item obj)
+     */
+    public String buyItem(String name, int shopId, String item);
+  
+    /**
+     * Returns a Shop's inventory as a formatted string
+     * @param id The shop ID
+     * @return A formatted string representing the Shop's inventory
+     */
+    public String getShopInv(int id);
 }

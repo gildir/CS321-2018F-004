@@ -2,6 +2,7 @@
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 
 /**
  *
@@ -112,19 +113,22 @@ public interface GameObjectInterface extends Remote {
     
     /**
      * Takes the player into venmo. The new and improved way to exchange money with other players.
+     * 
+     * @author Team 4: Alaqeel
      * @param name Name of the player enter the bank
+     * @param tokens 
      * @throws RemoteException 
      */    
-    public String venmo(String name) throws RemoteException;
+    public String venmo(String name, ArrayList<String> tokens) throws RemoteException;
 
     /**
      * @author Team 4: King
      * Lets player shop if in a shoppable area
      * @param name Name of the player
-     * @return Returns the shop the player just entered or Null if they can't shop
+     * @return Returns the id of the shop the player just entered or -1 if they can't shop
      * @throws RemoteException
      */
-    public Shop shop(String name) throws RemoteException;
+    public int shop(String name) throws RemoteException;
     
     /**
      * Returns a player object when given the player's name
@@ -141,4 +145,38 @@ public interface GameObjectInterface extends Remote {
      * @throws RemoteException
      */
     public String wallet(String name) throws RemoteException;
+    
+    /**
+     * Returns a reference to a shop 
+     * @param id
+     * @return the shop or null
+     * @throws RemoteException 
+     */
+    public String getShopStr(int id) throws RemoteException;
+    
+    /**
+     * Allows player to sell an item to a shop, and increases their money
+     * @author Team 4: King
+     * @param name Name of the player
+     * @param shopId The ID of the shop the player is selling an item to
+     * @param item The item the player is selling (eventually will be an Item obj)
+     */
+    public int sellItem(String name, int shopId, String item) throws RemoteException;
+    
+    /**
+     * 605B_buy_method
+     * Allows player to sell an item to a shop, and increases their money
+     * @author Team 4: Mistry
+     * @param name Name of the player
+     * @param shopId The ID of the shop the player is selling an item to
+     * @param item The item the player is selling (eventually will be an Item obj)
+     */
+    public String buyItem(String name, int shopId, String item) throws RemoteException;
+
+    /**
+     * Returns a Shop's inventory as a formatted string
+     * @param id The shop ID
+     * @return A formatted string representing the Shop's inventory
+     */
+    public String getShopInv(int id) throws RemoteException;
 }

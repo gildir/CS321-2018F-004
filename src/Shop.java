@@ -20,39 +20,47 @@ public class Shop
 	private String title;
 	
 	
-	public Shop()
+	public Shop(String name, String desc)
 	{
 		this.inventory = new LinkedList<Object>();
 		this.inDemand = new LinkedList<Object>();
 		this.playerlist = new PlayerList();
-		this.description = "The shopping destination for all of your gaming needs.";
-		this.title = "The Shop";
+		this.description = desc;
+		this.title = name;
 	}
 	
-	//In terms of the player buying items
-	public void buy(Object k) {}
-	
-	//In terms of the player selling items
-	public void sell(Object k) {}
-	
+	//get method to get inventory linkedlist
+	public LinkedList<Object> getInven()
+	{
+		return this.inventory;
+	}
 	//used to add methods to the linked list
-	public void add(Object k) {}
+	public void add(Object k) {
+		this.inventory.add(k);
+	}
 	
+	//used to remove items form the linked list
+	public void remove(Object k)
+	{
+		this.inventory.remove(k);
+	}
 	//prints the inventory of the shop class
 	public void printInv() {}
 	
 	//Prints the list of object in demand
 	public void printDem() {}
 	
-	//Menu for the player to be interacting with the shop 
-	//use something like a switch statement
-	public void printMenu() {}
-	
 	public void addPlayer(Player p) {
 		playerlist.addPlayer(p);
 	}	
+	
+	public void removePlayer(Player p) {
+		// Why does add take a player object and remove take a name?? --IK
+		playerlist.removePlayer(p.getName()); 
+	}
 
 	/**
+	 * @author Team 4: Alaqeel
 	 * @return The tag line of the shop
 	 */
 	public String getDescription() {
@@ -60,37 +68,43 @@ public class Shop
 	}
 	
 	/**
+	 * @author Team 4: Alaqeel
 	 * @return The shop name
 	 */
 	public String getTitle() {
         return this.title;
     }
 	
-	public String toString(PlayerList playerList, Player player) {
+	public String toString() {
         
 		// white spaces around the billboard
-		String billboard = "Welcome to " + this.getTitle();
-        // spaces before
-        int i = 25 - billboard.length() / 2;
-        for (; i > 0; i--) billboard = " " + billboard;
-        // spaces after
-        i = 25 - billboard.length();
-        for (; i > 0; i--) billboard = billboard + " ";
-        
+		String billboard = "Welcome to " + this.getTitle(); 
 		
 		// shop header
-		String result = ".-------------------------.\n";
-        result += 		"|"+ billboard + "|\n";
-        result += 		".-------------------------.\n";
-        result += this.getDescription() + "\n";
+		String result = ".-----------------------------------.\n";
+        result += 		"|"+ strCenter(billboard, 35) + "|\n";
+        result += 		".-----------------------------------.\n";
+        result += strCenter(this.getDescription(), 37) + "\n";
         
         result += "\n";
         
         // catalog
-        result += "We sell:";
-        result += "...................\n";
         result += this.getObjects();
         
+<<<<<<< HEAD
+        // players names
+//        String players = this.getPlayers();
+//        if (players.length() > 1) result += "You are here by yourself.\n";
+//        else {
+//        	result += "You are here along with:\n";
+//        	result += players;
+//        }
+//        result += players;
+        
+        result += "\n";
+        result += "Players in the area: " + this.getPlayers() + "\n";
+
+=======
         String players = this.getPlayers(playerList);
         if (players.length() == 0) result += "You are here by yourself.\n";
         else {
@@ -98,17 +112,20 @@ public class Shop
         	result += players;
         }
         
+>>>>>>> 601a_shop_at_clocktower
         result += "How can we help you?\n";
         return result;
     }
 	
 	/**
+	 * @author Team 4: Alaqeel
+	 * 
 	 * returns a list of the players, separated by comma and using the Oxford comma.
 	 * 
 	 * @param players
 	 * @return list of players
 	 */
-	public String getPlayers(PlayerList players) {
+	public String getPlayers() {
 		String result = "";
 		
 		int i = 0;
@@ -131,26 +148,39 @@ public class Shop
 		
 	}
 	
+<<<<<<< HEAD
+	
+=======
+>>>>>>> 601a_shop_at_clocktower
 	/**
+	 * @author Team 4: Alaqeel
+	 * 
 	 * Iterates through the list of the objects and creates a table populated with object names and prices.
 	 * @return table of the objects
 	 */
-	private String getObjects() {
+	public String getObjects() {
+		
+		if (inventory.size() == 0) {
+			return "We usually have a huge catalog.\n"
+					+ "Unfortunately, we are currently out of stock.\n"
+					+ "Please come again soon!";
+		}
 		
 		int itemLen = 15, countLen = 2, f1 = 3, f2 = 2, priceField = f1 + f2 + 2;
 		int menuWidth = itemLen + countLen + f1 + f2 + 6 + 2; // 6 = column padding, 2 = currency + decimal point
 		
 		// String formats for consistency
-		String format = "%" + countLen +"s | %" + itemLen + "s | $%" + f1 + "." + f2 + "f\n";
-		String headerFormat = "%" + countLen +"s | %" + itemLen + "s | $%" + priceField + "f\n";
+		String format = "%-" + countLen +"s | %-" + itemLen + "s | $%-" + f1 + "." + f2 + "f\n";
+		String headerFormat = "%-" + countLen +"s | %-" + itemLen + "s | %-" + priceField + "s\n";
 		
 		// generates menu separator
 		String separator = "";
 		for (int s = 0; s < menuWidth; s++) separator += "-";
 		
-		String menu = "";
 		
 		// menu header
+		String menu = "We sell:\n";
+		menu += "...................\n";
 		menu += String.format(headerFormat, "#", "Item", "Price");
 		
 		menu += separator + "\n";
@@ -158,7 +188,7 @@ public class Shop
 		// adding menu items
 		int i = 1;
 		for (Object obj : inventory) {
-			float price = 0; // TODO: replace with price getter
+			float price = 12; // TODO: replace with price getter
 			
 			if (this.inDemand.contains(obj)) price *= 1.2; // change price according to demand list
 			String item = obj.toString();
@@ -177,5 +207,24 @@ public class Shop
 		menu += separator + "\n";
 		
 		return menu;
+	}
+	
+	/**
+	 * @author Team 4: Alaqeel
+	 * Centers a string of text in a provided column length
+	 * @param str String to be centered
+	 * @param len Column length
+	 * @return A string of width len with str centered in it
+	 */
+	private String strCenter(String str, int len) {
+		String result = str;
+		// spaces before
+        int i = (len - result.length()) / 2;
+        for (; i > 0; i--) result = " " + result;
+        // spaces after
+        i = len - result.length();
+        for (; i > 0; i--) result = result + " ";
+        
+        return result;
 	}
 }

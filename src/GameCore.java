@@ -2,6 +2,9 @@
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.io.IOException;
@@ -14,6 +17,7 @@ public class GameCore implements GameCoreInterface {
     private final PlayerList playerList;
     private final Map map;
     private HashMap<Integer,Shop> shoplist;
+    private Venmo venmo; // Team 4: Aalaqeel
 	private Ghoul ghoul;
 
 	/**
@@ -27,7 +31,6 @@ public class GameCore implements GameCoreInterface {
 
 		// Generate the game map.
 		map = new Map();
-
 		playerList = new PlayerList();
 
 		Thread objectThread = new Thread(new Runnable() {
@@ -119,28 +122,144 @@ public class GameCore implements GameCoreInterface {
      * @author Group 4: King
      * Adds the player to list of players in store, and returns shop they just entered
      * @param name Name of the player to add to shop
-     * @return The shop the player entered if possible, null otherwise
+     * @return The id of the shop the player will enter, -1 otherwise
      */
-    public Shop shop(String name) {
+    public int shop(String name) {
     	Player player = this.playerList.findPlayer(name);
     	Room room = map.findRoom(player.getCurrentRoom());
     	
     	// Add player to shop in room if applicable
     	if (map.isShoppable(room)) {
-    		Shop shop = shoplist.get(room.getId());
-    		shop.addPlayer(player);
-    		return shop;
+    		return room.getId();
     	}
-    	return null;
+    	return -1;
+    }
+
+
+    /**
+     * Returns Shop.tostring
+     * @param id The shop's id in the hashmap
+     * @return a reference to the shop
+     */
+    public String getShopStr(int id) {
+    	return this.shoplist.get(id).toString();
     }
     
+    /**
+     * Allows player to sell an item to a shop, and increases their money
+     * @author Team 4: King
+     * @param name Name of the player
+     * @param shopId The ID of the shop the player is selling an item to
+     * @param item The item the player is selling (eventually will be an Item obj)
+     */
+    public int sellItem(String name, int shopId, String item) {
+    	Player player = this.playerList.findPlayer(name);
+    	Shop s = shoplist.get(shopId);
+    	
+    	String removed = player.removeObjectFromInventory(item);
+    	if (removed != null) {
+    		s.add(removed);
+    	}
+    	
+    	//int value = removed.getValue();
+    	int value = 10;
+    	player.setMoney(player.getMoney() + value);
+    	return value;
+    }
+    
+    /**
+     * 605B_buy_method
+     * Allows player to sell an item to a shop, and increases their money
+     * @author Team 4: Mistry
+     * @param name Name of the player
+     * @param shopId The ID of the shop the player is selling an item to
+     * @param item The item the player is buying (eventually will be an Item obj)
+     */
+    public String buyItem(String name, int shopId, String item)
+    {
+    	int val = 0;
+    	Player player = this.playerList.findPlayer(name);
+    	Shop s = shoplist.get(shopId);
 
-	@Override
-	public String venmo(String name) {
-		// TODO Auto-generated method stub
-		return null;
-	}       
+    	
+    	if(s.getInven().contains(item))
+    	{
+    		if (player.getMoney() > 12) {
+    			s.remove(item);
+    		}
+    		else {
+    			return "Not enough money!!!";
+    		}
+    	}
+    	else
+    	{
+    		return "Item not in stock!!!";
+    	}
+    	
+    	player.addObjectToInventory(item);
+    
+    	//val = removed.getValue() * 1.2;
+    	val = 12;
+    	player.setMoney(player.getMoney() - val);
+    	return "Thank you, that will be $" + val + ".";
+    }
 
+    /**
+     * Takes the player into venmo. The new and improved way to exchange money with other players.
+     * 
+     * @author Team 4: Alaqeel
+     * @param name Name of the player enter the bank
+     */	
+    @Override
+	public String venmo(String name, ArrayList<String> tokens) {
+		// checks if the player forgot to enter enough commands
+		if (tokens.isEmpty()) return "You need to provide more arguments.\n" + Venmo.instructions();
+		
+		// Gets the object of the caller player
+		Player player1 = this.playerList.findPlayer(name);
+			
+		// Executes the relevant commands
+		switch(tokens.remove(0).toUpperCase()) {
+			case "SEND": // sending a transaction
+				if (tokens.isEmpty()) return "Specify recipient and amount.";
+				// gets the object of the receiving player
+				Player player2 = this.playerList.findPlayer(tokens.remove(0));
+				// checks that the name is correct
+				if (player2 == null) return "Incorrect player name."; 
+				// checks if user entered a transaction amount
+				if (tokens.isEmpty()) return "Specify transaction amount";
+				
+				float amount;
+				// checks if the player entered a valid number
+				try {
+					amount = Float.parseFloat(tokens.remove(0));
+				} catch (NumberFormatException e) {
+					return "Please enter a valid number.";
+				}
+				return venmo.send(player1, player2, amount);
+			case "HELP": // prints the help menu
+				return "This is how you can use Venmo:\n" + Venmo.instructions();
+			case "DEMO": // helpful for demo purposes
+				if (!tokens.isEmpty() && tokens.remove(0).equalsIgnoreCase("********")) {
+					player1.changeMoney(10);
+					System.out.printf("[Venmo] %s excuted the demo command\n", player1.getName());
+					return "Shush! Don't tell anyone that I added $10.00 to your wallet.";
+				}
+			default:
+				return "Unknown argument.\n" + Venmo.instructions();
+		}		
+	}      
+
+	/**
+     * Returns a Shop's inventory as a formatted string
+     * @param id The shop ID
+     * @return A formatted string representing the Shop's inventory
+     */
+    public String getShopInv(int id) {
+		Shop s = this.shoplist.get(new Integer(id));
+		return s.getObjects();
+    }
+    
 	public String bribeGhoul(String playerName, String item){
 		item = item.toLowerCase();
 		Player player = playerList.findPlayer(playerName);
@@ -459,35 +578,32 @@ public class GameCore implements GameCoreInterface {
 		}
 		return "You stop moving and begin to stand around again.";
 	}
-
+	
 	/**
-	 * Attempts to pick up an object < target >. Will return a message on any
-	 * success or failure.
-	 * 
-	 * @param name   Name of the player to move
-	 * @param target The case-insensitive name of the object to pickup.
-	 * @return Message showing success.
-	 */
-	public String pickup(String name, String target) {
-		Player player = this.playerList.findPlayer(name);
-		if (player != null) {
-			Room room = map.findRoom(player.getCurrentRoom());
-			String object = room.removeObject(target);
-			if (object != null) {
-				player.addObjectToInventory(object);
-				this.broadcast(player,
-						player.getName() + " bends over to pick up a " + target + " that was on the ground.");
-				return "You bend over and pick up a " + target + ".";
-			} else {
-				this.broadcast(player, player.getName()
-						+ " bends over to pick up something, but doesn't seem to find what they were looking for.");
-				return "You look around for a " + target + ", but can't find one.";
-			}
-		} else {
-			return null;
-		}
-	}
-
+     * Attempts to pick up an object < target >. Will return a message on any success or failure.
+     * @param name Name of the player to move
+     * @param target The case-insensitive name of the object to pickup.
+     * @return Message showing success. 
+     */    
+    public String pickup(String name, String target) {
+        Player player = this.playerList.findPlayer(name);
+        if(player != null) {
+            Room room = map.findRoom(player.getCurrentRoom());
+            String object = room.removeObject(target);
+            if(object != null) {
+                player.addObjectToInventory(object);
+                this.broadcast(player, player.getName() + " bends over to pick up a " + target + " that was on the ground.");
+                return "You bend over and pick up a " + target + ".";
+            }
+            else {
+                this.broadcast(player, player.getName() + " bends over to pick up something, but doesn't seem to find what they were looking for.");
+                return "You look around for a " + target + ", but can't find one.";
+            }
+        }
+        else {
+            return null;
+        }
+    }
 	/**
 	 * Returns a string representation of all objects you are carrying.
 	 * 
