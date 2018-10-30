@@ -1,14 +1,18 @@
 
 import java.io.DataOutputStream;
+import java.io.DataInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.LinkedList;
+import java.util.*;
 
 /**
  *
  * @author Kevin
  */
 public class Player {
-    private LinkedList<String> currentInventory;
+    public LinkedList<Item> currentInventory;
     private String name;
     private int currentRoom;
     private Direction currentDirection;
@@ -16,6 +20,10 @@ public class Player {
     private DataOutputStream outputWriter = null;
     private boolean hasChallenge = false;
     private String challenger = " ";
+    private DataInputStream inputWriter = null;
+    private boolean inTrade = false;
+    private boolean tradeRequested = false;
+    private String tradePartner = "";
 
     public Player(String name) {
         this.currentRoom = 1;
@@ -66,18 +74,83 @@ public class Player {
         this.name = name;
     }
 
-    public LinkedList<String> getCurrentInventory() {
+    public LinkedList<Item> getCurrentInventory() {
         return currentInventory;
     }
 
-    public void setCurrentInventory(LinkedList<String> currentInventory) {
+    public void setCurrentInventory(LinkedList<Item> currentInventory) {
         this.currentInventory = currentInventory;
     }
     
-    public void addObjectToInventory(String object) {
+    public void addObjectToInventory(Item object) {
         this.currentInventory.add(object);
     }
+   
+    //removes the first instance 
+    public Item removeObjectFromInventory(String target) {
+        for(Item o : this.currentInventory) {
+                String nameToRemove = o.getName();
+            if(nameToRemove.equalsIgnoreCase(target)) {
+		Item temp = o;
+                this.currentInventory.remove(o);
+                return temp;
+            }
+        }
+        return null;
+    }
+
+    public void sortCurrentInventory(String modes) {
+	switch(modes) {
+		case "ni":
+			Collections.sort(currentInventory, new ItemNameComparator());	
+			break;
+		case "nd":
+			Collections.sort(currentInventory, new ItemNameComparator());
+			Collections.reverse(currentInventory);
+			break;
+		case "wi":
+			Collections.sort(currentInventory, new ItemWeightComparator());
+			break;
+		case "wd":
+			Collections.sort(currentInventory, new ItemWeightComparator());
+			Collections.reverse(currentInventory);
+			break;
+		case "pi":
+			Collections.sort(currentInventory, new ItemPriceComparator());
+			break;
+		case "pd":
+			Collections.sort(currentInventory, new ItemWeightComparator());
+			Collections.reverse(currentInventory);
+			break;	
+		default:
+			System.out.println("Please enter in valid input or use the correct format (n/w/p) -> (i/d)");
+	}
+    }
     
+    public boolean hasTradeRequest(){
+        return tradeRequested;
+    }
+
+    public void setTradeRequest(boolean val){
+        tradeRequested = val;
+    }
+
+    public boolean isInTrade(){
+        return inTrade;
+    }
+    public void setInTrade(boolean val){
+        inTrade = val;
+    }
+
+    public String getTradePartner(){
+        return tradePartner;
+    }
+    public void setTradePartner(String s){
+        tradePartner = s;
+    }
+
+
+
     public void setReplyWriter(PrintWriter writer) {
         this.replyWriter = writer;
     }
@@ -116,8 +189,9 @@ public class Player {
             return "nothing.";
         }
         else {
-            for(String obj : this.currentInventory) {
-                result += " " + obj;
+            for(Item obj : this.currentInventory) {
+                result += " " + obj.name;
+		result += (" (" + obj.weight + ") ");
             }
             result += ".";
         }
@@ -143,5 +217,42 @@ public class Player {
     @Override
     public String toString() {
         return "Player " + this.name + ": " + currentDirection.toString();
+    }
+
+    private static class ItemNameComparator implements Comparator<Item> {
+	@Override
+	public int compare(Item ItemA, Item ItemB) {
+		return ItemA.getName().compareTo(ItemB.getName());
+	}
+    }
+
+    private static class ItemWeightComparator implements Comparator<Item> {
+	@Override
+	public int compare(Item ItemA, Item ItemB) {
+		if(ItemA.getWeight() > ItemB.getWeight()) {
+			return 1;
+		}
+		else if(ItemA.getWeight() < ItemB.getWeight()) {
+			return -1;
+		}
+		else {
+			return 0;
+		}
+	}
+    }
+
+    private static class ItemPriceComparator implements Comparator<Item> {
+	@Override
+	public int compare(Item ItemA, Item ItemB) {
+		if(ItemA.getPrice() > ItemB.getPrice()) {
+			return 1;
+		}
+		else if(ItemA.getPrice() < ItemB.getPrice()) {
+			return -1;
+		}
+		else {
+			return 0;
+		}
+	}
     }
 }
