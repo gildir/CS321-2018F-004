@@ -14,6 +14,8 @@ public class Player {
     private Direction currentDirection;
     private PrintWriter replyWriter = null;
     private DataOutputStream outputWriter = null;
+    private boolean hasChallenge = false;
+    private String challenger = " ";
 
     public Player(String name) {
         this.currentRoom = 1;
@@ -120,6 +122,22 @@ public class Player {
             result += ".";
         }
         return result;
+    }
+
+    public String getChallenger(){
+      return challenger;
+    }
+
+    public void setChallenger(String name){
+      challenger = name;
+    }
+
+    public boolean getHasChallenge(){
+      return hasChallenge;
+    }
+
+    public void setHasChallenge(boolean challenged){
+      hasChallenge = challenged;
     }
 
     @Override

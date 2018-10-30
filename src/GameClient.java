@@ -60,6 +60,8 @@ public class GameClient {
         System.out.println("  POKE_GHOUL    - Pokes the ghoul in the current room.");
         System.out.println("  BRIBE_GHOUL item_name    - Gives selected item to ghoul.");
         //System.out.println("  GIVE_GHOUL object   - Gives object to ghoul in current room");
+        System.out.println("  CHALLENGE     - Challenge a player to a R-P-S in the same area.");
+        System.out.println("  ACCEPT        - Accept a challenge from a player to a R-P-S in the same area.");
         System.out.println("  QUIT          - Quits the game.");
         System.out.println();
         
@@ -198,9 +200,25 @@ public class GameClient {
                     break;
                 case "BRIBE_GHOUL":
                     if(tokens.isEmpty()){
-                        System.err.println("You need to provide an item to give Ghoul.");
+                      System.err.println("You need to provide an item to give Ghoul.");
                     }else{
-                        System.out.println(remoteGameInterface.bribeGhoul(this.playerName, tokens.remove(0)));
+                      System.out.println(remoteGameInterface.bribeGhoul(this.playerName, tokens.remove(0)));
+                    }
+                    break;
+                case "CHALLENGE":
+                    if(tokens.isEmpty()){
+                      System.err.println("You need to provide a name.");
+                    }
+                    else{
+                      System.out.println(remoteGameInterface.challenge(this.playerName, tokens.remove(0)));
+                    }
+                    break;
+                case "ACCEPT":
+                    if(tokens.isEmpty()){
+                      System.err.println("You need to provide a name.");
+                    }
+                    else{
+                      System.out.println(remoteGameInterface.accept(this.playerName, tokens.remove(0)));
                     }
                     break;
                 case "QUIT":
