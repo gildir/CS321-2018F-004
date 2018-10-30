@@ -5,6 +5,33 @@
  * @author Kevin
  */
 public interface GameCoreInterface {
+	
+	/**
+	 * Makes the ghoul walk to an adjacent room
+	 * @param g Ghoul that is being moved
+	 * @param room Room the ghoul is currently in
+	 */
+	public void ghoulWander(Ghoul g,Room room);
+	
+	/**
+	 * Pokes the ghoul in the current room
+	 * @param playerName Player name
+	 * @return String message of ghoul
+	 */
+	public String pokeGhoul(String playerName);
+	
+
+	/**
+	 * Bribe the ghoul in the current room
+	 * @param playerName Player name
+	 * @param item item's name, which will be throw. 
+	 * @return String message of ghoul
+	 */
+	public String bribeGhoul(String playerName,String item);
+
+	
+	//public String giveToGhoul(String object, String playerName);
+
     
     /**
      * Broadcasts a message to all other players in the same room as player.
@@ -43,7 +70,21 @@ public interface GameCoreInterface {
      * @param playerName Player Name
      * @return String representation of the current area the player is in.
      */
-    public String look(String playerName); 
+    public String look(String playerName);
+    
+    /**
+     * Turns the player left.
+     * @param name Player Name
+     * @return String message of the player turning left.
+     */
+    public String left(String name);
+    
+    /**
+     * Turns the player right.
+     * @param name Player Name
+     * @return String message of the player turning right.
+     */
+    public String right(String name);    
     
     /**
      * Says "message" to everyone in the current area.
@@ -65,5 +106,30 @@ public interface GameCoreInterface {
      * @param name Name of the player to leave
      * @return Player that was just removed.
      */    
-    public Player leave(String name);    
+    public Player leave(String name);  
+
+    /**
+     * Returns a string representation of the offer statement.
+     * @param srcName Name of player making offer
+     * @param dstName Name of player receiving offer
+     * @param message Message item offered
+     * @return Message showing offer
+     * @throws RemoteException.
+     */
+    public String offer(String srcName, String dstName, String message); 
+
+    /**
+     * Prints message to player if request can processed, contacts other player about their request
+     * @param requestingTrader Name of the player who has requested the trade
+     * @param traderToRequest Name of the player whom the first player has requested to trade with
+     */ 
+    public void requestPlayer(String requestingTrader, String traderToRequest);
+
+    /**
+     * Return string representation of trade acceptance
+     * @param acceptingTrader Name of the player who is accepting the trade
+     * @param traderToAccept Name of the player who has requested a trade
+     * @return Message of success or fail
+     */ 
+    public String playerResponse(String acceptingTrader, String traderToAccept);
 }

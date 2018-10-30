@@ -1,4 +1,4 @@
-
+ 
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -58,10 +58,11 @@ public class GameClient {
     public GameClient(String host) {
         this.runGame = true;
         boolean nameSat = false;
-
+        
+        //please modify the xml to add more commands
         showIntroduction();
-
         showCommand();
+        
 
         // Set up for keyboard input for local commands.
         InputStreamReader keyboardReader = new InputStreamReader(System.in);
@@ -154,6 +155,12 @@ public class GameClient {
                 case "LOOK":
                     System.out.println(remoteGameInterface.look(this.playerName));
                     break;
+                case "LEFT":
+                    System.out.println(remoteGameInterface.left(this.playerName));
+                    break;
+                case "RIGHT":
+                    System.out.println(remoteGameInterface.right(this.playerName));
+                    break;
                 case "SAY":
                     if(tokens.isEmpty()) {
                         System.err.println("You need to say something in order to SAY.");
@@ -170,14 +177,29 @@ public class GameClient {
                     break;
                 case "MOVE":
                     if(tokens.isEmpty()) {
-                        System.err.println("You need to provide a direction to move.");
-                    } else {
-                        Direction dir = Direction.toValue(tokens.remove(0));
-                        if(dir!=null) {
-                            System.out.println(remoteGameInterface.move(this.playerName, dir));
-                        }                    
+                        System.err.println("You need to provide a distance in order to move.");
+                    }
+                    else {
+                        System.out.println(remoteGameInterface.move(this.playerName, Integer.parseInt(tokens.remove(0))));
                     }
                     break;
+		
+		case "O":
+		    
+		case "OFFER":
+
+		    if (tokens.isEmpty()){
+			System.err.println("You need to provide a player to offer.");
+		    }
+		    else if (tokens.size() < 2) { 
+			System.err.println("You need to provide an item to offer.");
+		    }
+		    else {
+			String dstPlayerName = tokens.remove(0).toLowerCase();
+			System.out.println(remoteGameInterface.offer(this.playerName, dstPlayerName, tokens.remove(0)));
+		    }
+		    break;
+
                 case "PICKUP":
                     if(tokens.isEmpty()) {
                         System.err.println("You need to provide an object to pickup.");
@@ -186,12 +208,92 @@ public class GameClient {
                         System.out.println(remoteGameInterface.pickup(this.playerName, tokens.remove(0)));
                     }
                     break;
-                case "PICKUPALL":
-                    System.out.println(remoteGameInterface.pickupAll(this.playerName));
+               
+        case "R_TRADE":
+                    if(tokens.isEmpty()) {
+                            System.err.println("You need to provide the name of the player that you want to trade with");
+                    }
+                    else{
+                        remoteGameInterface.requestPlayer(this.playerName, tokens.remove(0));
+                    }
+                    break;
+
+        case "A_TRADE":
+                    if(tokens.isEmpty()) {
+                            System.err.println("You need to provide the name of the player you are accepting");
+                    }
+                    else{
+                        System.out.println(remoteGameInterface.playerResponse(this.playerName, tokens.remove(0)));
+                    }
+		    break;
+                case "POKE_GHOUL":
+                    System.out.println(remoteGameInterface.pokeGhoul(this.playerName));
+                    break;
+                case "BRIBE_GHOUL":
+                    if(tokens.isEmpty()){
+                        System.err.println("You need to provide an item to give Ghoul.");
+                    }else{
+                        System.out.println(remoteGameInterface.bribeGhoul(this.playerName, tokens.remove(0)));
+		    }
+		break;
+		case "DROP":
+                    if(tokens.isEmpty()) {
+                        System.err.println("You need to provide an object to drop.");
+                    }
+                    else {
+                        System.out.println(remoteGameInterface.drop(this.playerName, tokens.remove(0)));
+                    }
                     break;
                 case "INVENTORY":
                     System.out.println(remoteGameInterface.inventory(this.playerName));
-                    break;                                                            
+                    break;
+		case "SORT":
+	            InputStreamReader keyReader = new InputStreamReader(System.in);
+        	    BufferedReader keyInput = new BufferedReader(keyReader);
+		    boolean validInput = true;
+		    String mode = "";
+		    try {
+		    	while(validInput) {
+				System.out.println("Sort by name, weight, or price? (n/w/p)");
+	                	String option1 = keyInput.readLine();
+        	        	System.out.println("Increasing or decreasing order? (i/d)");
+                		String option2 = keyInput.readLine();
+
+                		option1.toLowerCase();
+                		option2.toLowerCase();
+
+        	        	mode = option1 + option2;
+	
+                		switch(mode) {
+                        		case "ni":
+                                		validInput = false;
+                                		break;
+                        		case "nd":
+                                		validInput = false;
+                                		break;
+                        		case "wi":
+                                		validInput = false;
+                                		break;
+                        		case "wd":
+                                		validInput = false;
+                                		break;
+                        		case "pi":
+                                		validInput = false;
+                                		break;
+                        		case "pd":
+                                		validInput = false;
+                                		break;
+                        		default:
+                	                	System.out.println("Please enter in valid input or use the correct format (n/w/p) -> (i/d)");	
+			    		}
+			    	}
+	    	    }
+		    catch(IOException e) {
+ 	                   System.err.println("[CRITICAL ERROR] Error at reading any input properly.  Terminating the client now.");
+       	 	           System.exit(-1);		
+		    }	    
+		    System.out.println(remoteGameInterface.sort(this.playerName, mode));
+		    break;		    
                 case "QUIT":
                     remoteGameInterface.leave(this.playerName);
                     runListener = false;
@@ -511,6 +613,7 @@ public class GameClient {
         return true;
     }
 
+
     /**
      * Inner class to handle remote message input to this program.  
      *  - Runs as a separate thread.  Interrupt it to kill it.
@@ -561,5 +664,6 @@ public class GameClient {
                 Logger.getLogger(GameClient.class.getName()).log(Level.SEVERE, null, ex);
             }            
         }
-    }
+    }    
+    
 }
