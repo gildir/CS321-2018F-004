@@ -1,7 +1,5 @@
 
 import java.util.HashSet;
-
-
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -9,6 +7,10 @@ import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.LinkedList;
+import java.util.ArrayList;
+import java.util.Scanner;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.io.File;

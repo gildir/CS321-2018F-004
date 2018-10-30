@@ -65,6 +65,7 @@ public class GameClient {
         System.out.println("  BRIBE_GHOUL item_name    - Gives selected item to ghoul.");
         //System.out.println("  GIVE_GHOUL object   - Gives object to ghoul in current room");
 	System.out.println("  SORT          - Sorts your inventory");
+	System.out.println("  SORT          - Sorts your inventory");
         System.out.println("  WHISPER player message   - Whispers 'message' to 'player'");
         System.out.println("  IGNORE player            - Ignore messages from from 'player'");
         System.out.println("  UNIGNORE player          - Remove 'player' from ignore list");

@@ -165,6 +165,7 @@ public interface GameCoreInterface {
      * @param dstName Name of player receiving offer
      * @param message Message item offered
      * @return Message showing offer
+     * @throws RemoteException.
      */
     public String offer(String srcName, String dstName, String message);
 
@@ -183,7 +184,6 @@ public interface GameCoreInterface {
      */
     public String playerResponse(String acceptingTrader, String traderToAccept);
 
-    //Feature 411. Shout
     /**
      *Shouts "message" to everyone that is online
      *@param name Name of the player speaking
