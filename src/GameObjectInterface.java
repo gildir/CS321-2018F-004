@@ -84,10 +84,7 @@ public interface GameObjectInterface extends Remote {
      * @return Message showing success.
      * @throws RemoteException 
      */
-    @Deprecated
     public String move(String name, int distance) throws RemoteException;
-
-    public String move(String name, Direction direction)throws RemoteException;
 
     /**
      * Attempts to pick up an object < object >. Will return a message on any success or failure.
