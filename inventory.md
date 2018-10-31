@@ -9,18 +9,18 @@ Each item is denoted on the file with its name, followed by the associated weigh
 ### Developer
 The .CSV file from above is utilized in 
 [Item reading](./src/GameCore.java).
-A .CSV file (comma-separated values) is a file structured in a way such that values are delimited with commas and line breaks. This helps when reading input from the file. Each line will represent another item, and the line can be tokenized into separate values per item by taking advantage of the commas. If more items are desired, the .CSV file can be edited by by adding a new line and entering the information of the item in the name,weight,price order (without spaces in between the commas).
+A .CSV file (comma-separated values) is a file structured in a way such that values are delimited with commas and line breaks. This helps when reading input from the file. Each line will represent another item, and the line can be tokenized into separate values per item by taking advantage of the commas. If more items are desired, thn thee .CSV file can be edited by adding a new line and entering the information of the item in the name, weight, price order (without spaces in between the commas).
 
 ## Item Object - Feature 502 - shull4
 ### User
-Items in the game are bundled together to hold the item name, the item weight, and the item price.
+Items in the game are bundled together to hold the item's name, weight, and price.
 
 ### Developer
 The overall item object is located at
 [item](./src/items.java)
-The items are custructed as a basic java object holding a string and two double values.  The constructor takes the values of these variables as parameters to create the object.  Functions avalible to the item object are to set and get all three variables, and a toString to print the item out (name and weight). Items can easily be expanded to hold other values. 
+The items are custructed as a basic java object holding a string and two double values.  The constructor takes the values of these variables as parameters to create the object.  Functions avalible to the item object are to set and get all three variables and a toString to print the item out (name and weight). Items can easily be expanded to hold other values. 
 
-NOTE:  This is a deviation from the original core of the game, where items were labled as Strings only.  The Strings for items were changed to Item objects for the game inventory, the player inventory, and all assosiated calls to player functions that search for and returned Item Strings. This includes:  Pickup, Look, Inventory, and the random student drop.
+NOTE:  This is a deviation from the original core of the game, where items were labeled as Strings only.  The Strings representing items were changed to Item objects for the game inventory, the player inventory, and all assosiated calls to player functions that search for and returned Item Strings. This includes:  Pickup, Look, Inventory, and the random student drop.
 
 ## Item Drop Table and Master List - Feature 502 - shull4
 ### User
@@ -38,7 +38,7 @@ This code is written to read the Item name, weight, and value (String/double/dou
 ### User
 The weights associated with each item is located in
 [Items in .CSV file](./src/items.csv)
-The weights for an item are determined by a generic category of light, medium, or heavy. Liight items all have the weight of 0.5. (for example, Gum and Phone would have the same weight of 0.5). Medium items like a Textbook or a Backpack are given weights of 5 or 10. A much heavier item like a Dog or a Human may have weights of 100 or 200. While the unit for weights are not pounds, the value of weight for an object indicates the general category the object would fall into for light, medium or heavy. Items can be sorted by weight during the game, if the user wishes to arrange their inventory from heaviest to lightest or lightest to heaviest is also available.
+The weights for an item are determined by a generic category of light, medium, or heavy. Light items all have the weight of 0.5. (for example, Gum and Phone would have the same weight of 0.5). Medium items like a Textbook or a Backpack are given weights of 5 or 10. A much heavier item like a Dog or a Human may have weights of 100 or 200. While the unit for weights are not pounds, the value of weight for an object indicates the general category the object would fall into for light, medium or heavy. Items can be sorted by weight during the game, if the user wishes to arrange their inventory from heaviest to lightest or lightest to heaviest is also available.
 
 [Example of inventory with weights](./Weights.png)
 
@@ -47,13 +47,12 @@ To edit the weights, the developer only needs to change the first value after th
 [item](./src/items.java)
 The weight is read from the .CSV and represented as a double. It can be accessed by the getWeight() function, which returns the double value of weight. A changeWeight(double weight) method can be used to set the weight.
 
-=======
 [Item reading](./src/GameCore.java) 
-This code is written to read the Item name, weight, and price (String/double/double).  This then constructs a new item object and adds it to the overall game drop table arraylist.  The heading row of the .CSV file is consumed and discarded. Any deviation to the item attributes (either adding or removing attributes) must be accounted for in the hard coding of reading the .CSV. 
+This code is written to read the Item's name, weight, and price (String/double/double).  This then constructs a new item object and adds it to the overall game drop table arraylist.  The heading row of the .CSV file is consumed and discarded. Any deviation to the item attributes (either adding or removing attributes) must be accounted for in the hard coding of reading the .CSV. 
 
 Reading the .CSV uses java.util scanner, java.io exceptions, and java.io file. java.util arraylist was used to store the items into the game item drop table.  These were imported into [GameCore](./src/GameCore.java)
 
-NOTE:  If there is any IO error, the default item list will be loaded into the game drop table. This is found in the catch of the .CSV reading.Reading of the .CSV was a deviation to the original game code.  The original item table is loaded in the case of a .io error. Additionally, the games drop table was changed from a static array to a arraylist. 
+NOTE:  If there is any IO error, the default item list will be loaded into the game drop table. This is found in the catch of the .CSV reading. Reading of the .CSV was a deviation to the original game code. The original item table is loaded in the case of an IO error. Additionally, the games drop table was changed from a static array to a arraylist. 
 
 ## Inventory Size Limit - Feature 504 - Mike
 ## User
@@ -72,7 +71,7 @@ The code for the drop feature is very close to the code for the pickup feature. 
 ### User
 Users are not able to offer an item to other players. Simply type `O` or `Offer`, target player's name, and name of item to offer (e.g. `Offer Player1 Sword`) and request will be made. The item is removed from your inventory until player either accpets or rejects your offer.
 
-Players are not able to offer to someone not in your room, yourself, or players not in the game. Also you are unable to offer items not currently held in your inventory.
+Players are not able to offer to someone not in your room, yourself, or players not in the game. Also, you are unable to offer items not currently held in your inventory.
 ### Developer
 The code for the offer feature is located in GameCore and has many checks for validity. Checks for valid offer target, target player be co-located as offer initiator, and item being currently held by initiator. If any checks fail, the item is returned to the players inventory and the offer is cancelled.
 
