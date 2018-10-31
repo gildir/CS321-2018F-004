@@ -6,6 +6,7 @@ import java.io.PrintWriter;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
+import java.util.ArrayList;
 import java.util.HashSet;
 
 /**
@@ -26,7 +27,6 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
         super();
         
         core = new GameCore();
-
     }
 
     /**
