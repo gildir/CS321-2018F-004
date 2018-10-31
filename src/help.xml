@@ -48,4 +48,7 @@ object are on the ground and what direction you are facing.
     <help command = "CUSTOMHELP">
         <description>  CUSTOMHELP     - Show every configured custom commands.</description>
     </help>
+    <help command = "REDO">
+        <description>  REDO          - Repeats the last command you entered.</description>
+    </help>
 </helps>
