@@ -74,6 +74,13 @@ public class GameCore implements GameCoreInterface {
                     } catch (InterruptedException ex) {
                         Logger.getLogger(GameObject.class.getName()).log(Level.SEVERE, null, ex);}
                 }}});
+	    
+	        objectThread.setDaemon(true);
+                awakeDayGhoul.setDaemon(true);
+                objectThread.start();
+                awakeDayGhoul.start();
+            }
+	
 
                 // new thread awake and control the action of Ghoul.
                 // team5 added in 10/13/2018
