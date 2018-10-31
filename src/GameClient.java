@@ -61,7 +61,7 @@ public class GameClient {
         this.runGame = true;
         boolean nameSat = false;
 
-        
+        //to add more commands go to the help.xml file
         showIntroduction();
         showCommand();
         
@@ -356,7 +356,6 @@ public class GameClient {
         System.out.println("[STARTUP] Game Client Now Starting...");
         new GameClient(args[0]);
     }
-
 
     /*If no parameter has been given for showCommand, pass in null to showCommand.
      *This will cause showCommand to print every commands available in game

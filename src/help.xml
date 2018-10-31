@@ -30,6 +30,24 @@ object are on the ground and what direction you are facing.
     <help command = "PICKUPALL">
         <description>  PICKUPALL      - Tries to pick up all objects in the same area.</description>
     </help>
+     <help command = "POKE_GHOUL">
+        <description>  POKE_GHOUL    - Pokes the ghoul in the current room.</description>
+    </help>
+    <help command = "BRIBE_GHOUL item_name">
+        <description>  BRIBE_GHOUL item_name    - Gives selected item to ghoul.</description>
+    </help>
+    <help command = "GIVE_GHOUL object">
+        <description>  GIVE_GHOUL object   - Gives object to ghoul in current room</description>
+    </help>
+    <help command = "R_TRADE player">
+        <description>   R_TRADE player  - Set up a trade with another player</description>
+    </help>
+    <help command = " A_TRADE player">
+        <description>  A_TRADE player  - Accept a trade with another player</description>
+    </help>
+    <help command = "O or OFFER player object">
+        <description>  O or OFFER player object - Offer player an item</description>
+    </help>
     <help command = "INVENTORY">
         <description>  INVENTORY      - Shows you what objects you have collected.</description>
     </help>
