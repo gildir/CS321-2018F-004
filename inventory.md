@@ -55,7 +55,7 @@ Reading the .CSV uses java.util scanner, java.io exceptions, and java.io file. j
 NOTE:  If there is any IO error, the default item list will be loaded into the game drop table. This is found in the catch of the .CSV reading. Reading of the .CSV was a deviation to the original game code. The original item table is loaded in the case of an IO error. Additionally, the games drop table was changed from a static array to a arraylist. 
 
 ## Inventory Size Limit - Feature 504 - Mike
-## User
+### User
 Players inventory has been decreased from infinity to 10.
 ### Developer
 The code for the inventory is located in [GameCore](./src/GameCore.java) under the String pickup method. An if statement restricts pickup to the inventory being less than 10, once 10 items in the inventory is reached, the pickup feature defaults to failure.
