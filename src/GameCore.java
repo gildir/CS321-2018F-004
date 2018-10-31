@@ -74,12 +74,6 @@ public class GameCore implements GameCoreInterface {
                     } catch (InterruptedException ex) {
                         Logger.getLogger(GameObject.class.getName()).log(Level.SEVERE, null, ex);}
                 }}});
-	    
-	        objectThread.setDaemon(true);
-                awakeDayGhoul.setDaemon(true);
-                objectThread.start();
-                awakeDayGhoul.start();
-            }
 	
 
                 // new thread awake and control the action of Ghoul.
@@ -113,6 +107,13 @@ public class GameCore implements GameCoreInterface {
                         }
                     }
                 });
+	    
+	    
+	        objectThread.setDaemon(true);
+                awakeDayGhoul.setDaemon(true);
+                objectThread.start();
+                awakeDayGhoul.start();
+            }
 
 
 
