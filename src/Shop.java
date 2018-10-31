@@ -7,10 +7,10 @@ import java.util.LinkedList;
 public class Shop
 {
 	//Max of 10 items in this list
-	private LinkedList<Object> inventory;
+	private LinkedList<Item> inventory;
 	
 	//List of objects that want to be indemand for the shop
-	private LinkedList<Object> inDemand;
+	private LinkedList<Item> inDemand;
 	
 	// List of players in this shop
 	private PlayerList playerlist;
@@ -22,20 +22,20 @@ public class Shop
 	
 	public Shop(String name, String desc)
 	{
-		this.inventory = new LinkedList<Object>();
-		this.inDemand = new LinkedList<Object>();
+		this.inventory = new LinkedList<Item>();
+		this.inDemand = new LinkedList<Item>();
 		this.playerlist = new PlayerList();
 		this.description = desc;
 		this.title = name;
 	}
 	
 	//get method to get inventory linkedlist
-	public LinkedList<Object> getInven()
+	public LinkedList<Item> getInven()
 	{
 		return this.inventory;
 	}
 	//used to add methods to the linked list
-	public void add(Object k) {
+	public void add(Item k) {
 		this.inventory.add(k);
 	}
 	

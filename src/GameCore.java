@@ -200,26 +200,33 @@ public class GameCore implements GameCoreInterface {
      * @param shopId The ID of the shop the player is selling an item to
      * @param item The item the player is buying (eventually will be an Item obj)
      */
-    public String buyItem(String name, int shopId, Item item)
+    public String buyItem(String name, int shopId, String itemName)
     {
     	int val = 0;
     	Player player = this.playerList.findPlayer(name);
     	Shop s = shoplist.get(shopId);
-
+    	
+    	Item item = null;
+    	
+    	for (Item ii : s.getInven()) 
+    		if (ii.name == itemName) 
+    			item = ii;
+    			
+    	
+    	if (item == null)  return "Item not in stock!!!";
+    	
+    	
     	
     	if(s.getInven().contains(item))
     	{
-    		if (player.getMoney() > 12) {
+    		if (player.getMoney() > item.price) {
     			s.remove(item);
     		}
     		else {
     			return "Not enough money!!!";
     		}
     	}
-    	else
-    	{
-    		return "Item not in stock!!!";
-    	}
+    	
     	
     	player.addObjectToInventory(item);
     
