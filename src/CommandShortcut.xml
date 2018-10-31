@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<CustomCommand>
+    <Command name="SHREK">
+        <CommandToExecute>move 2</CommandToExecute>
+    </Command>
+<Command name="HELP">
+        <CommandToExecute>move</CommandToExecute>
+    </Command>
+</CustomCommand>

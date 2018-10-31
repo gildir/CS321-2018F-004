@@ -87,4 +87,7 @@ object are on the ground and what direction you are facing.
         <help command = "POKE_GHOUL">
         <description>  POKE_GHOUL    - Pokes the ghoul in the current room.</description>
     </help>
+    <help command = "REDO">
+        <description>  REDO          - Repeats the last command you entered.</description>
+    </help>
 </helps>
