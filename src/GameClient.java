@@ -30,8 +30,8 @@ import org.w3c.dom.Attr;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
+
 
 /**
  *
@@ -65,6 +65,7 @@ public class GameClient {
         showIntroduction();
         showCommand();
         
+
 
         // Set up for keyboard input for local commands.
         InputStreamReader keyboardReader = new InputStreamReader(System.in);
@@ -158,7 +159,7 @@ public class GameClient {
             switch(command) {
 
                 case "LOOK":
-                    System.out.println(remoteGameInterface.look(this.playerName));
+                    System.out.println(remoteGameInterface.look(this.playerName));   
                     break;
                 case "LEFT":
                     System.out.println(remoteGameInterface.left(this.playerName));
@@ -185,10 +186,12 @@ public class GameClient {
                     break;
                 case "MOVE":
                     if(tokens.isEmpty()) {
-                        System.err.println("You need to provide a distance in order to move.");
-                    }
-                    else {
-                        System.out.println(remoteGameInterface.move(this.playerName, Integer.parseInt(tokens.remove(0))));
+                        System.err.println("You need to provide a direction to move.");
+                    } else {
+                        Direction dir = Direction.toValue(tokens.remove(0));
+                        if(dir!=null) {
+                            System.out.println(remoteGameInterface.move(this.playerName, dir));
+                        }                    
                     }
                     break;
                 case "REDO":
@@ -279,6 +282,32 @@ public class GameClient {
                         System.out.println(remoteGameInterface.drop(this.playerName, tokens.remove(0)));
                     }
                     break;
+                case "WHITEBOARD":
+                    if(tokens.isEmpty()) {
+                        System.err.println("You need to provide an argument to the WHITEBOARD command.");
+                    }
+                    else {
+                        switch(tokens.remove(0).toUpperCase()) {
+                            case "ERASE":
+                                System.out.println(remoteGameInterface.whiteboardErase(this.playerName));
+                                break;
+                            case "READ":
+                                System.out.println(remoteGameInterface.whiteboardRead(this.playerName));
+                                break;
+                            case "WRITE":
+                                if (tokens.isEmpty()) { 
+                                    System.err.println("You need to provide an argument to the WHITEBOARD WRITE command");
+                                }
+                                else {
+                                    System.out.println(remoteGameInterface.whiteboardWrite(this.playerName, tokens.remove(0)));
+                                }
+                                break;
+                            default:
+                                System.err.println("Invalid argument provided to WHITEBOARD command.");
+                                break;
+                        }
+                    }
+                    break;        
 		case "SORT":
 	            InputStreamReader keyReader = new InputStreamReader(System.in);
         	    BufferedReader keyInput = new BufferedReader(keyReader);
