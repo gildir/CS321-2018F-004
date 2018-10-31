@@ -83,6 +83,8 @@ A heartbeat protocol is being used to ensure a client is properly logged out in 
 
 The time the last pulse was received is stored in the PlayerList, which in turn can return the list of exired players upon request. The PlayerList will not remove any expired clients, leaving that task to the GameCore. 
 
+![IDE lib](accounts-leave-01.png)
+
 # Join Game System (Logging in, list of online, loading files)
 --Dylan
 
