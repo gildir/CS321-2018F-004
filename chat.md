@@ -94,3 +94,35 @@ Command: Shout [message]
   
 ![](images/gitpic.jpg)
 
+
+
+## Whisper - Patrick
+### User:
+> A whisper is a private message between two players. To whisper another player, use the WHISPER or W command. You must provide the name of the player you want to whisper followed by your message.
+
+To whisper "Hello!" to player Foo:
+> WHISPER Foo Hello!
+> 
+or
+>
+> W Foo Hello!
+
+
+### Dev:
+> The WHISPER feature is handled in GameCore by the method String whisper(String, String, String). The Whisperer and the Recipient are searched among GameCore.playerList which keeps Player objects of all online players. If one is not found, the operation ends and an appropriate error message is returned. The ignore list in Player.java for Recipient is accessed. If Whisperer is being ignored, the operation ends and Whisperer is notified appropriately. If all previous conditions pass, the whisper operation will be successful. The event is passed to GameCore.chatLog(Player, int, String, String) for administrative logging. The word filter in Player.java is accessed for the Recipient and the message is filtered. The filtered message is sent to the Recipient and the original message is sent to the Whisperer.
+
+
+## Ignored Me - Patrick
+### User:
+> If you attempt to whisper a player that is ignoring you, the whisper will not be delivered and you will be notified that this player is ignoring you.
+
+
+Example of ignored me:
+
+![](images/WORDUP.png)
+
+### Dev:
+> The Ignored Me feature is checked in GameCore.whisper. When it is found that a player is ignoring the whisperer, the whisper operation ends and returns an appropriate message to the whisperer.
+
+
+
