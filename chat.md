@@ -119,7 +119,7 @@ or
 
 Example of ignored me:
 
-![](images/WORDUP.png)
+![](images/IgnoredMe.png)
 
 ### Dev:
 > The Ignored Me feature is checked in GameCore.whisper. When it is found that a player is ignoring the whisperer, the whisper operation ends and returns an appropriate message to the whisperer.
