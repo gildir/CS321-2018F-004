@@ -54,10 +54,8 @@ public class GameClient {
         this.runGame = true;
         boolean nameSat = false;
 
-        
         showIntroduction();
         showCommand();
-        
 
 
         // Set up for keyboard input for local commands.
@@ -219,7 +217,25 @@ public class GameClient {
                         System.out.println(remoteGameInterface.pickup(this.playerName, tokens.remove(0)));
                     }
                     break;
-               
+                case "INVENTORY":
+                    System.out.println(remoteGameInterface.inventory(this.playerName));
+                    break; 
+                case "VENMO": // Team 4: Alaqeel
+                	System.out.println(remoteGameInterface.venmo(this.playerName, tokens));
+                    break;   
+                case "SHOP":
+                	int shopId = remoteGameInterface.shop(this.playerName); // Need to make this a serializable type
+                	if (shopId != -1) {
+                		System.out.println("You enter the shop");
+                		new ShopClient(this.playerName, shopId, remoteGameInterface);
+                	}
+                	else {
+                		System.out.println("There is no shop here");
+                	}
+                	break;
+                case "WALLET":
+                	System.out.println(remoteGameInterface.wallet(this.playerName));
+                	break;               
         case "R_TRADE":
                     if(tokens.isEmpty()) {
                             System.err.println("You need to provide the name of the player that you want to trade with");
@@ -280,10 +296,7 @@ public class GameClient {
                                 break;
                         }
                     }
-                    break;
-                case "INVENTORY":
-                    System.out.println(remoteGameInterface.inventory(this.playerName));
-                    break;
+                    break;        
 		case "SORT":
 	            InputStreamReader keyReader = new InputStreamReader(System.in);
         	    BufferedReader keyInput = new BufferedReader(keyReader);
