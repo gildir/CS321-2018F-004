@@ -18,7 +18,7 @@ public class Player {
     private Direction currentDirection;
     private PrintWriter replyWriter = null;
     private DataOutputStream outputWriter = null;
-    private float money;
+    private double money;
     private DataInputStream inputWriter = null;
     private boolean inTrade = false;
     private boolean tradeRequested = false;
@@ -181,11 +181,11 @@ public class Player {
         return this.currentDirection;
     }
     
-    public float getMoney() {
+    public double getMoney() {
         return this.money;
     }
     
-    public void setMoney(float m){
+    public void setMoney(double m){
         this.money = m;
     }
     
@@ -195,7 +195,7 @@ public class Player {
      * @author Team 4: Alaqeel
      * @param m Amount to be added/taken.
      */
-    public void changeMoney(float m){
+    public void changeMoney(double m){
         this.money += m;
     }
     

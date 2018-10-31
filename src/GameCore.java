@@ -176,16 +176,16 @@ public class GameCore implements GameCoreInterface {
      * @param shopId The ID of the shop the player is selling an item to
      * @param item The item the player is selling (eventually will be an Item obj)
      */
-    public int sellItem(String name, int shopId, String item) {
+    public double sellItem(String name, int shopId, String item) {
     	Player player = this.playerList.findPlayer(name);
     	Shop s = shoplist.get(shopId);
-    	int value = 0;
+    	double value = 0;
     	
     	Item removed = player.removeObjectFromInventory(item);
     	if (removed != null) {
     		s.add(removed);
-    		value = 10;
-        	player.setMoney(player.getMoney() + value);
+    		value = removed.price;
+        	player.changeMoney(value);
     	}
     	
     	//int value = removed.getValue();
@@ -202,20 +202,17 @@ public class GameCore implements GameCoreInterface {
      */
     public String buyItem(String name, int shopId, String itemName)
     {
-    	int val = 0;
+    	double val = 0;
     	Player player = this.playerList.findPlayer(name);
     	Shop s = shoplist.get(shopId);
     	
     	Item item = null;
     	
     	for (Item ii : s.getInven()) 
-    		if (ii.name == itemName) 
+    		if (ii.name.compareToIgnoreCase(itemName) == 0) 
     			item = ii;
-    			
-    	
-    	if (item == null)  return "Item not in stock!!!";
-    	
-    	
+
+    	if (item == null)  return "Item not in stock!!!";    	
     	
     	if(s.getInven().contains(item))
     	{
@@ -231,8 +228,8 @@ public class GameCore implements GameCoreInterface {
     	player.addObjectToInventory(item);
     
     	//val = removed.getValue() * 1.2;
-    	val = 12;
-    	player.setMoney(player.getMoney() - val);
+    	val = item.price;
+    	player.changeMoney(-val);
     	return "Thank you, that will be $" + val + ".";
     }
 
@@ -288,7 +285,7 @@ public class GameCore implements GameCoreInterface {
 	 */
 	public String wallet(String name) {
 		Player player = this.playerList.findPlayer(name);
-		float m = player.getMoney();
+		double m = player.getMoney();
 		
 		return "$" + String.format("%.02f", m);
 	}

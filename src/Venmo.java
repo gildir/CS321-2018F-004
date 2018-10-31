@@ -22,7 +22,7 @@ public class Venmo {
 		if (from.getName() == to.getName()) return "You can't Venmo yourself";
 		
 		// Rounds the amount to the nearest two decimal places
-		float rounded = (float) (Math.round(amount * 100.0) /100.0);
+		double rounded = Math.round(amount * 100.0) /100.0;
 		
 		// Checks the following errors:
 		// 1- if the amount is negative

@@ -174,8 +174,8 @@ public class Shop
 		
 		// adding menu items
 		int i = 1;
-		for (Object obj : inventory) {
-			float price = 12; // TODO: replace with price getter
+		for (Item obj : inventory) {
+			double price = obj.price; // TODO: replace with price getter
 			
 			if (this.inDemand.contains(obj)) price *= 1.2; // change price according to demand list
 			String item = obj.toString();

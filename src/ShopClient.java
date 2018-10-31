@@ -133,9 +133,9 @@ public class ShopClient {
 	
 	//In terms of the player selling items
 	public void sell(String item) throws RemoteException{
-		int val = remote.sellItem(this.player, this.id, item);
+		double val = remote.sellItem(this.player, this.id, item);
 		if (val != 0) {
-			System.out.println("You have sold " + item + " for $" + val + ".00.");
+			System.out.println("You have sold " + item + " for $" + val + ".");
 		}
 		else {
 			System.out.println("You must have a " + item + " in your inventory to sell one.");
