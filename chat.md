@@ -31,7 +31,7 @@ R hello world!
 
 ![](images/showplayers.png)
 
-## Ignore
+## Ignore 
 
 ### Users:
 > If a user wishes to ignore all messages from another player, they can do so via the "Ignore" command. Issuing the "Ignore" command, followed by another player's username, will block all messages sent to the user from that given other player. Other players will be notified that their messages to the ignoring user have been ignored.
@@ -40,7 +40,7 @@ R hello world!
 > Ignore features work via a HashSet of Player class instance references (the Ignore list) the user has elected to ignore. The user gives the name of a player they wish to ignore via the Ignore command, and the system takes that String representing the name of the player the user wishes to ignore and uses it to get a reference to a Player instance from the GameCore. That reference is then inserted into a HashSet which is contained by the Player class instance associated with the user. The sender (Player instance) of each message recieved by the user is then checked against the Ignore List HashSet. If a match is found, the message is ignored. 
 
 
-## Ignore List
+## Ignore List - Carl
 
 ### Users:
 > Use the ignore list command in order to view the players that you are currently ignoring. When you ignore a player their name will be added to this list and when you unignore a player, their name will be removed from this list. If a player's name is displayed in this list, you will not receive any messages from them via say, shout, whisper, or reply.  
@@ -53,7 +53,7 @@ Command: IgnoreList
 
 ![](images/ignorelist.png)
 
-## Unignore
+## Unignore - Carl
 
 ### Users:
 > Use the unignore command to stop ignoring a player that you have previously ignored. After using this command, you will be able to receive messages from this player. If you are not ignoring the player, they can not be unignored.  
@@ -73,7 +73,7 @@ Command: Unignore [player to unignore]
   
 ![](images/joke.png)
 
-## Shout
+## Shout - Carl
 
 ### Users:
 > Use the shout command when you want to broadcast a message to all online players. This command differs from "say" in the way that players in different rooms can hear what you are saying. 
