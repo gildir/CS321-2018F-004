@@ -11,6 +11,7 @@ import java.util.Scanner;
 /**
  * @author Kevin
  */
+
 public class Map{   
         private final LinkedList<Room> map;
 
