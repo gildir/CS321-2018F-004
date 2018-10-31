@@ -31,7 +31,7 @@ R hello world!
 
 ![](images/showplayers.png)
 
-## Ignore 
+## Ignore - Reed
 
 ### Users:
 > If a user wishes to ignore all messages from another player, they can do so via the "Ignore" command. Issuing the "Ignore" command, followed by another player's username, will block all messages sent to the user from that given other player. Other players will be notified that their messages to the ignoring user have been ignored.
@@ -85,7 +85,7 @@ Command: Shout [message]
 >The arguments needed for this command to function properly are, the shouting player's name and the message to be shouted.
 
 
-## Word Filter
+## Word Filter - Reed
 ### User:
 > The word filter is a list of words a given user has chosen to filter from their game's chat. In a file named "FilteredWords-[USERNAME].txt, users can enter a list of words (one per line) they wish to have filtered from chat. On every startup, the game will read these words from the file. From that point on, every time one of these words read from the file is detected in a chat scenario within the game, it will be replaced with "[BLEEEP]".
 
