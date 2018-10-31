@@ -724,6 +724,37 @@ public class GameCore implements GameCoreInterface {
 		return "You stop moving and begin to stand around again.";
 	}
 	
+
+	/**
+     * Attempts to walk towards <direction> 1 time.  If unable to make it all the way,
+     *  a message will be returned.  Will display LOOK on any partial success.
+     * @param name Name of the player to move
+     * @param distance Number of rooms to move forward through.
+     * @return Message showing success.
+     */
+    public String move(String name, Direction direction) {
+        Player player = this.playerList.findPlayer(name);
+        if(player == null) {
+            return null;
+        }
+        Room room = map.findRoom(player.getCurrentRoom());
+        if(room.canExit(direction)) {
+            this.broadcast(player, player.getName() + " has walked off to the " + direction);
+            player.getReplyWriter().println(room.exitMessage(direction));
+            player.setCurrentRoom(room.getLink(direction));
+            String logMessage = String.format("%s used command MOVE %s [moved from %s to %s]", player.getName(), direction.toString(), room.getTitle(), map.findRoom(player.getCurrentRoom()).getTitle());
+			this.broadcast(player, player.getName() + " just walked into the area.");
+			Ghost g = new Ghost(player);
+				g.start();
+            player.getReplyWriter().println(this.map.findRoom(player.getCurrentRoom()).toString(playerList, player));
+        } else {
+            String logMessage  = String.format("%s used command MOVE %s [unable to move in direction]", player.getName(), direction.toString());
+            player.getReplyWriter().println(room.exitMessage(direction));
+            return "You grumble a little and stop moving.";
+        }
+        return "You stop moving and begin to stand around again.";
+	}
+	
 	/**
 	 * Attempts to pick up an object < target >. Will return a message on any
 	 * success or failure.
