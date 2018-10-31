@@ -2,6 +2,7 @@
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 
 /**
  *
@@ -29,7 +30,7 @@ public interface GameObjectInterface extends Remote {
 
 
 	//Same functionality as bribeGhoul. Not currently used.
-	public String giveToGhoul(String object, String playerName) throws RemoteException;
+	//public String giveToGhoul(String object, String playerName) throws RemoteException;
 	
 
     /**
@@ -50,6 +51,22 @@ public interface GameObjectInterface extends Remote {
      * @throws RemoteException 
      */
     public String look(String name) throws RemoteException;
+    
+    /**
+     * Turns the player left.
+     * @param name Player Name
+     * @return String message of the player turning left.
+     * @throws RemoteException 
+     */
+    public String left(String name) throws RemoteException;
+    
+     /**
+     * Turns the player right.
+     * @param name Player Name
+     * @return String message of the player turning right.
+     * @throws RemoteException 
+     */
+    public String right(String name) throws RemoteException;
    
     /**
      * Says "message" to everyone in the current area.
@@ -68,7 +85,7 @@ public interface GameObjectInterface extends Remote {
      * @return Message showing success.
      * @throws RemoteException 
      */
-    public String move(String name, Direction direction) throws RemoteException;
+    public String move(String name, int distance) throws RemoteException;
 
     /**
      * Attempts to pick up an object < object >. Will return a message on any success or failure.
@@ -78,13 +95,49 @@ public interface GameObjectInterface extends Remote {
      * @throws RemoteException 
      */    
     public String pickup(String name, String object) throws RemoteException;
-    
+
+    public String pickupAll(String name)throws RemoteException;
+ 
     /**
-     * Attempts to pick up all objects in the room. Will return a message on any success or failure.
-     * @param name Name of the player to move
-     * @return Message showing success. 
-     */    
-    public String pickupAll(String name) throws RemoteException;
+     * Attempts to drop an object < object >. Will return a message on any success or failure.
+     * @param name Name of the player to drop an object
+     * @param object The case-insensitive name of the object to drop.
+     * @return Message showing success.
+     * @throws RemoteException 
+     */ 
+    public String drop(String name, String object) throws RemoteException;
+   
+    /**
+     * Attempts to sort the player's inventory. Will return a message on any success or failure.
+     * @param name Name of the player
+     * @return Message showing success.
+     * @throws RemoteException 
+     */ 
+    public String sort(String name, String modes) throws RemoteException; 
+
+    /**
+     * Prints message to player if request can processed, contacts other player about their request
+     * @param requestingTrader Name of the player who has requested the trade
+     * @param traderToRequest Name of the player whom the first player has requested to trade with
+     */ 
+    public void requestPlayer(String requestingTrader, String traderToRequest) throws RemoteException;
+
+    /**
+     * Attempts to offer a player an object
+     * @param srcName Name of the player making offer
+     * @param dstName Name of player receiving offer
+     * @param object String item beig offered
+     * @throws RemoteException
+     */
+    public String offer (String srcName, String dstName, String object) throws RemoteException;
+
+    /**
+     * Return string representation of trade acceptance
+     * @param acceptingTrader Name of the player who is accepting the trade
+     * @param traderToAccept Name of the player who has requested a trade
+     * @return Message of success or fail
+     */ 
+    public String playerResponse(String acceptingTrader, String traderToAccept) throws RemoteException;
 
      /**
      * Returns a string representation of all objects you are carrying.
@@ -99,5 +152,74 @@ public interface GameObjectInterface extends Remote {
      * @param name Name of the player to leave
      * @throws RemoteException 
      */    
-    public void leave(String name) throws RemoteException;       
+    public void leave(String name) throws RemoteException;
+    
+    /**
+     * Takes the player into venmo. The new and improved way to exchange money with other players.
+     * 
+     * @author Team 4: Alaqeel
+     * @param name Name of the player enter the bank
+     * @param tokens 
+     * @throws RemoteException 
+     */    
+    public String venmo(String name, ArrayList<String> tokens) throws RemoteException;
+
+    /**
+     * @author Team 4: King
+     * Lets player shop if in a shoppable area
+     * @param name Name of the player
+     * @return Returns the id of the shop the player just entered or -1 if they can't shop
+     * @throws RemoteException
+     */
+    public int shop(String name) throws RemoteException;
+    
+    /**
+     * Returns a player object when given the player's name
+     * @param name The name of the player to find
+     * @return The player object or Null if not found
+     * @throws RemoteException
+     */
+    public Player getPlayer(String name) throws RemoteException;
+   
+    /**
+     * Returns the amount of money in a player's wallet
+     * @param name The name of the player
+     * @return The amount of money a player has formatted with 2 decimals
+     * @throws RemoteException
+     */
+    public String wallet(String name) throws RemoteException;
+    
+    /**
+     * Returns a reference to a shop 
+     * @param id
+     * @return the shop or null
+     * @throws RemoteException 
+     */
+    public String getShopStr(int id) throws RemoteException;
+    
+    /**
+     * Allows player to sell an item to a shop, and increases their money
+     * @author Team 4: King
+     * @param name Name of the player
+     * @param shopId The ID of the shop the player is selling an item to
+     * @param item The item the player is selling (eventually will be an Item obj)
+     */
+    public double sellItem(String name, int shopId, String item) throws RemoteException;
+    
+    /**
+     * 605B_buy_method
+     * Allows player to sell an item to a shop, and increases their money
+     * @author Team 4: Mistry
+     * @param name Name of the player
+     * @param shopId The ID of the shop the player is selling an item to
+     * @param item The item the player is selling (eventually will be an Item obj)
+     */
+    public String buyItem(String name, int shopId, String item) throws RemoteException;
+
+    /**
+     * Returns a Shop's inventory as a formatted string
+     * @param id The shop ID
+     * @return A formatted string representing the Shop's inventory
+     */
+    public String getShopInv(int id) throws RemoteException;
 }
