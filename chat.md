@@ -126,3 +126,5 @@ Example of ignored me:
 
 
 
+## Note to Devs
+> When adding a new feature, start at GameClient -> GameObjectInterface -> GameObject -> GameCoreInterface -> GameCore.
