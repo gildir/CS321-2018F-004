@@ -44,6 +44,8 @@ public class GameClient {
     
     // Members related to the player in the game.
     protected String playerName;
+
+    private String lastCommand;
     
     /** 
      * Main class for running the game client.
@@ -140,6 +142,8 @@ public class GameClient {
         }
         
         String message = "";
+        //for redo old messages
+        String command = input.toUpperCase();
 
         try {
             switch(tokens.remove(0).toUpperCase()) {
@@ -180,6 +184,15 @@ public class GameClient {
                         System.out.println(remoteGameInterface.move(this.playerName, Integer.parseInt(tokens.remove(0))));
                     }
                     break;
+                case "REDO":
+                    if(lastCommand==null)
+                    {
+                        System.out.println("No command to redo");
+                        break;
+                    }
+                    parseInput(lastCommand);
+                    break;
+
 		
 		case "O":
 		    
@@ -298,6 +311,9 @@ public class GameClient {
                 default:
                     System.out.println("Invalid Command, Enter \"help\" to get help");
                     break;
+            }
+            if(!command.equals("REDO")) {
+                this.lastCommand = command;
             }
         } catch (RemoteException ex) {
             Logger.getLogger(GameClient.class.getName()).log(Level.SEVERE, null, ex);
