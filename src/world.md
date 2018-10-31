@@ -27,6 +27,9 @@ The second part allows for the rapid generation of generic rooms in a connected 
 The last goal in the implementation of this update is to provide the interface for an algorithm to create much more interesting world file.  
 These changes are through a Java program called “addRooms.java”, this program can be easily modified and compled to perform different roles based on user requirements.  It has constructors t allow for user input and saving into a file, reading from a file and appending user input to the file, and auto generating an output file with no user input.  All of these are in the supported CSV format.
 
+![alt text](https://github.com/cwells21/CS321-2018F-004/blob/world_documentation/src/addRoom_UML.jpg)
+
+
 ### 104 Add Feature to Allow for Indoor and Outdoor Rooms (Christopher Wells)
 This update required the modification of the csv file to accomidate the addition of an outdoor value.  This then had to be incorporated into the GamcCore object. This addition was to allow for the map to have both indoor and outdoor rooms. This addition of indoor and outdoor rooms should make the game more interesting for the user.  The question then arose as to how we relay the type of room to the user. Is the user supposed to ask if the room was insde or outside. In the end the client decided on having the room declared as it was being entered. The final veriation of this is to represent the inside and utside of the buldings and campus of GMU.  
 
