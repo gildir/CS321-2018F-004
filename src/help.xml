@@ -1,15 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!--
-System.out.println("Welcome to the client for an RMI based online game.\n");
-        System.out.println("This game allows you to connect to a server an walk around a virtual,");
-        System.out.println(" text-based version of the George Mason University campus.\n");
-        System.out.println("You will be asked to create a character momentarily.");
-        System.out.println("When you do, you will join the game at the George Mason Clock, in the main quad.");
-        System.out.println("You will be able to see if any other players are in the same area as well as what");
-        System.out.println("objects are on the ground and what direction you are facing.\n");
-    -->
-
 <helps>
     <introduction>
         <description>
@@ -39,6 +29,9 @@ object are on the ground and what direction you are facing.
     </help>
     <help command = "PICKUPALL">
         <description>  PICKUPALL     - Tries to pick up all objects in the same area.</description>
+    </help>
+    <help command = "WHITEBOARD">
+        <description>  WHITEBOARD    - WRITE to write a supplied argument on the whiteboard (max 120 chars), READ to read the whiteboard, or ERASE to clear the whiteboard.</description>
     </help>
     <help command = "INVENTORY">
         <description>  INVENTORY     - Shows you what objects you have collected.</description>

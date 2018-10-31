@@ -9,6 +9,9 @@ import java.util.Scanner;
 import java.io.File;
 import java.io.IOException;
 
+
+
+
 /**
  *
  * @author Kevin
@@ -16,6 +19,7 @@ import java.io.IOException;
 public class GameCore implements GameCoreInterface {
     private final PlayerList playerList;
     private final Map map;
+    protected DailyLogger dailyLogger;
     private HashMap<Integer,Shop> shoplist;
     private Ghoul ghoul;
     
@@ -29,6 +33,8 @@ public class GameCore implements GameCoreInterface {
         
         // Generate the game map.
         map = new Map();
+        this.dailyLogger = new DailyLogger();
+        dailyLogger.write("SERVER STARTED");
         playerList = new PlayerList(); 
         
         // Builds a list of shops mapped to their map id (can be expanded as needed)
@@ -75,7 +81,8 @@ public class GameCore implements GameCoreInterface {
                         room = map.randomRoom();
                         room.addObject(object);
 
-                        GameCore.this.broadcast(room, "You see a student rush past and drop a " + object + " on the ground.");
+						GameCore.this.broadcast(room, "You see a student rush past and drop a " + object + " on the ground.");
+						
                     } catch (InterruptedException ex) {
                         Logger.getLogger(GameObject.class.getName()).log(Level.SEVERE, null, ex);}
                 }}});
@@ -434,7 +441,7 @@ public class GameCore implements GameCoreInterface {
 	if (object != null)
 	    srcPlayer.addObjectToInventory(object);
 	return returnMessage;
-    }
+	}
 
 	//Same functionality as bribe_ghoul, not currently used
 	//public String giveToGhoul(String object, String playerName) {
@@ -475,6 +482,7 @@ public class GameCore implements GameCoreInterface {
 	public void broadcast(Player player, String message) {
 		for (Player otherPlayer : this.playerList) {
 			if (otherPlayer != player && otherPlayer.getCurrentRoom() == player.getCurrentRoom()) {
+				dailyLogger.write(message);
 				otherPlayer.getReplyWriter().println(message);
 			}
 		}
@@ -490,6 +498,7 @@ public class GameCore implements GameCoreInterface {
 	public void broadcast(Room room, String message) {
 		for (Player player : this.playerList) {
 			if (player.getCurrentRoom() == room.getId()) {
+				dailyLogger.write(message);
 				player.getReplyWriter().println(message);
 			}
 		}
@@ -818,7 +827,82 @@ public class GameCore implements GameCoreInterface {
         else {
             return null;
         }
+    }       
+
+    /**
+     * Attempts to erase the whiteboard in the room. Will return a message on any success or failure.
+     * @param name Name of the player to erase the whiteboard
+     * @return Message showing success. 
+     */    
+    public String whiteboardErase(String name) {
+        Player player = this.playerList.findPlayer(name);
+        if(player != null) {
+            Room room = map.findRoom(player.getCurrentRoom());
+            room.whiteboardErase();
+            this.broadcast(player, player.getName() + " erases the text on the whiteboard.");
+            dailyLogger.write(player.getName(), "WHITEBOARD ERASE", room.getTitle());
+            return "You erase the text on the whiteboard.";
+        }
+        else {
+            return null;
+        }
     }
+
+    /**
+     * Attempts to read the whiteboard in the room. Will return a message on any success or failure.
+     * @param name Name of the player to erase the whiteboard
+     * @return Message showing success. 
+     */    
+    public String whiteboardRead(String name) {
+        Player player = this.playerList.findPlayer(name);
+        if(player != null) {
+            Room room = map.findRoom(player.getCurrentRoom());
+            String text = room.getWhiteboardText();
+            dailyLogger.write(player.getName(), "WHITEBOARD READ", room.getTitle());
+            this.broadcast(player, player.getName() + " reads the text on the whiteboard.");
+            if (text != null && !text.isEmpty()) {
+                return "The whiteboard says: \"" + text + "\".";
+            }
+            else {
+                return "The whiteboard is empty";
+            }
+
+        }
+        else {
+            return null;
+        }
+    }
+
+    /**
+     * Attempts to  the whiteboard in the room. Will return a message on any success or failure.
+     * @param name Name of the player to erase the whiteboard
+     * @param text Text to write on the whiteboard
+     * @return Message showing success. 
+     */    
+    public String whiteboardWrite(String name, String text) {
+        try {
+            Player player = this.playerList.findPlayer(name);
+            if(player != null) {
+                Room room = map.findRoom(player.getCurrentRoom());
+                boolean success = room.addWhiteboardText(text);
+                dailyLogger.write(player.getName(), "WHITEBOARD WRITE", text, room.getTitle());
+                if (success) { 
+                    this.broadcast(player, player.getName() + " writes on the whiteboard.");
+                    return "You write text on the whiteboard.";
+                }
+                else {
+                    this.broadcast(player, player.getName() + " tries to write on the whiteboard, but it's full.");
+                    return "You try to write text on the whiteboard, but there's not enough space.";
+                }
+            }
+            else {
+                return null;
+            }
+        } catch (IllegalArgumentException e) {
+            return null;
+        }
+    }
+    
 
     /**
 	 * Returns a string representation of all objects you are carrying.
