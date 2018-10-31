@@ -3,7 +3,6 @@
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
-import java.util.ArrayList;
 import java.util.HashSet;
 
 /**
@@ -284,7 +283,7 @@ public interface GameObjectInterface extends Remote {
      */
     public String getShopInv(int id) throws RemoteException;
 
-        //Feature 411. Shout
+    //Feature 411. Shout
     /**
      *Shouts "message" to everyone that is online
      *@param name Name of the player speaking
