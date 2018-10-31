@@ -74,7 +74,6 @@ public class GameCore implements GameCoreInterface {
                     } catch (InterruptedException ex) {
                         Logger.getLogger(GameObject.class.getName()).log(Level.SEVERE, null, ex);}
                 }}});
-	
 
                 // new thread awake and control the action of Ghoul.
                 // team5 added in 10/13/2018
@@ -108,13 +107,11 @@ public class GameCore implements GameCoreInterface {
                     }
                 });
 	    
-	    
-	        objectThread.setDaemon(true);
+                objectThread.setDaemon(true);
                 awakeDayGhoul.setDaemon(true);
                 objectThread.start();
                 awakeDayGhoul.start();
             }
-
 
 
 	public void ghoulWander(Ghoul g, Room room) {
