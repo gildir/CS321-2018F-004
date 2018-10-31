@@ -33,6 +33,7 @@ public class GameServer {
      */
     public GameServer(String host) throws RemoteException {           
 	   try {
+		   System.out.println("host:" + host);
 			// Step 1: Create the remote listener thread.  This thread is used
 			//          for asynchronous replies from the game for events the 
 			//          client has not generated. (ie. other players talking)
