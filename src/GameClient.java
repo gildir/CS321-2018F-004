@@ -51,6 +51,8 @@ public class GameClient {
     
     // Members related to the player in the game.
     protected String playerName;
+
+    private String lastCommand;
     
     /** 
      * Main class for running the game client.
@@ -147,7 +149,10 @@ public class GameClient {
         }
 
         String message = "";
+
         String command = tokens.remove(0).toUpperCase();
+        //for redo old messages
+        String commandCheck = input.toUpperCase();
 
         try {
             switch(command) {
@@ -160,6 +165,9 @@ public class GameClient {
                     break;
                 case "RIGHT":
                     System.out.println(remoteGameInterface.right(this.playerName));
+                    break;
+                case "PICKUPALL":
+                System.out.println(remoteGameInterface.pickupAll(this.playerName));
                     break;
                 case "SAY":
                     if(tokens.isEmpty()) {
@@ -183,6 +191,15 @@ public class GameClient {
                         System.out.println(remoteGameInterface.move(this.playerName, Integer.parseInt(tokens.remove(0))));
                     }
                     break;
+                case "REDO":
+                    if(lastCommand==null)
+                    {
+                        System.out.println("No command to redo");
+                        break;
+                    }
+                    parseInput(lastCommand);
+                    break;
+
 		
 		case "O":
 		    
@@ -208,7 +225,25 @@ public class GameClient {
                         System.out.println(remoteGameInterface.pickup(this.playerName, tokens.remove(0)));
                     }
                     break;
-               
+                case "INVENTORY":
+                    System.out.println(remoteGameInterface.inventory(this.playerName));
+                    break; 
+                case "VENMO": // Team 4: Alaqeel
+                	System.out.println(remoteGameInterface.venmo(this.playerName, tokens));
+                    break;   
+                case "SHOP":
+                	int shopId = remoteGameInterface.shop(this.playerName); // Need to make this a serializable type
+                	if (shopId != -1) {
+                		System.out.println("You enter the shop");
+                		new ShopClient(this.playerName, shopId, remoteGameInterface);
+                	}
+                	else {
+                		System.out.println("There is no shop here");
+                	}
+                	break;
+                case "WALLET":
+                	System.out.println(remoteGameInterface.wallet(this.playerName));
+                	break;               
         case "R_TRADE":
                     if(tokens.isEmpty()) {
                             System.err.println("You need to provide the name of the player that you want to trade with");
@@ -243,9 +278,6 @@ public class GameClient {
                     else {
                         System.out.println(remoteGameInterface.drop(this.playerName, tokens.remove(0)));
                     }
-                    break;
-                case "INVENTORY":
-                    System.out.println(remoteGameInterface.inventory(this.playerName));
                     break;
 		case "SORT":
 	            InputStreamReader keyReader = new InputStreamReader(System.in);
@@ -322,6 +354,9 @@ public class GameClient {
                     }
                     break;
             }
+            if(!commandCheck.equals("REDO")) {
+                this.lastCommand = commandCheck;
+            }
         } catch (RemoteException ex) {
             Logger.getLogger(GameClient.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -368,14 +403,12 @@ public class GameClient {
                 xmlElement = (Element) xmlCommands.item(i);
 
                 description = xmlElement.getElementsByTagName("description").item(0).getTextContent();
-
-                //If the commmand does not have description yet, do not show it.
                 if ( !description.equals("") ){
                     System.out.println(description);
                 }
             }
         } catch (ParserConfigurationException | SAXException | IOException ex) {
-            Logger.getLogger(GameClient.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Map.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -607,12 +640,11 @@ public class GameClient {
                 System.out.println(cCommand.getAttribute("name").toUpperCase() + " - " + cCommand.getElementsByTagName("CommandToExecute").item(0).getTextContent());
             }
         } catch (ParserConfigurationException | SAXException | IOException ex) {
-            Logger.getLogger(GameClient.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Map.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         return true;
     }
-
 
     /**
      * Inner class to handle remote message input to this program.  

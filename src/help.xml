@@ -16,48 +16,42 @@ object are on the ground and what direction you are facing.
     </introduction>
 
     <help command = "LOOK">
-        <description>  LOOK           - Shows you the area around you</description>
+        <description>  LOOK          - Shows you the area around you</description>
     </help>
     <help command = "SAY">
-        <description>  SAY message    - Says 'message' to any other players in the same area.</description>
+        <description>  SAY message   - Says 'message' to any other players in the same area.</description>
     </help>
     <help command = "MOVE">
-        <description>  MOVE direction - Tries to walk forward once toward &lt;direction&gt; times.</description>
+        <description>  MOVE direction- Tries to walk forward once toward &lt;direction&gt; times.</description>
     </help>
     <help command = "PICKUP">
-        <description>  PICKUP obect   - Tries to pick up an object in the same area.</description>
+        <description>  PICKUP obect  - Tries to pick up an object in the same area.</description>
     </help>
     <help command = "PICKUPALL">
-        <description>  PICKUPALL      - Tries to pick up all objects in the same area.</description>
-    </help>
-     <help command = "POKE_GHOUL">
-        <description>  POKE_GHOUL    - Pokes the ghoul in the current room.</description>
-    </help>
-    <help command = "BRIBE_GHOUL item_name">
-        <description>  BRIBE_GHOUL item_name    - Gives selected item to ghoul.</description>
-    </help>
-    <help command = "GIVE_GHOUL object">
-        <description>  GIVE_GHOUL object   - Gives object to ghoul in current room</description>
-    </help>
-    <help command = "R_TRADE player">
-        <description>   R_TRADE player  - Set up a trade with another player</description>
-    </help>
-    <help command = " A_TRADE player">
-        <description>  A_TRADE player  - Accept a trade with another player</description>
-    </help>
-    <help command = "O or OFFER player object">
-        <description>  O or OFFER player object - Offer player an item</description>
+        <description>  PICKUPALL     - Tries to pick up all objects in the same area.</description>
     </help>
     <help command = "INVENTORY">
-        <description>  INVENTORY      - Shows you what objects you have collected.</description>
+        <description>  INVENTORY     - Shows you what objects you have collected.</description>
     </help>
     <help command = "QUIT">
-        <description>  QUIT           - Quits the game.</description>
+        <description>  QUIT          - Quits the game.</description>
     </help>
     <help command = "HELP">
-        <description>  HELP           - Shows you all possible commands.</description>
+        <description>  HELP          - Shows you all possible commands.</description>
     </help>
-    <help command = "ADDCOMMAND">
+    <help command = "REDO">
+        <description>  REDO          - Repeats the last command you entered.</description>
+    </help>
+    <help command = "SHOP">
+        <description>  SHOP          - Tries to enter a shop if you are near one.</description>
+    </help>
+    <help command = "WALLET">
+        <description>  WALLET        - Shows you how much money you have.</description>
+    </help>
+    <help command = "VENMO">
+        <description>  VENMO         - Allows you to send money to people. Try: VENMO HELP</description>
+    </help>
+     <help command = "ADDCOMMAND">
         <description>  ADDCOMMAND name- Add a custom command.</description>
     </help>
     <help command = "REMOVECOMMAND">
@@ -65,5 +59,32 @@ object are on the ground and what direction you are facing.
     </help>
     <help command = "CUSTOMHELP">
         <description>  CUSTOMHELP     - Show every configured custom commands.</description>
+    </help>
+    <help command = "POKE_GHOUL">
+        <description>  POKE_GHOUL    - Pokes the ghoul in the current room.</description>
+    </help>
+        <help command = "BRIBE_GHOUL">
+        <description>  BRIBE_GHOUL item_name    - Gives selected item to ghoul.</description>
+    </help>
+        <help command = "SORT">
+        <description>  SORT          - Sorts your inventory</description>
+    </help>
+        <help command = "R_TRADE">
+        <description>  R_TRADE player  - Set up a trade with another player"</description>
+    </help>
+        <help command = "A_TRADE">
+        <description>  A_TRADE player  - Accept a trade with another player</description>
+    </help>
+        <help command = "OFFER">
+        <description>  O or OFFER player object - Offer player an item</description>
+    </help>
+        <help command = "DROP">
+        <description>  DROP object   - Tries to drop an object from your pockets in the same area</description>
+    </help>
+        <help command = "POKE_GHOUL">
+        <description>  POKE_GHOUL    - Pokes the ghoul in the current room.</description>
+    </help>
+        <help command = "POKE_GHOUL">
+        <description>  POKE_GHOUL    - Pokes the ghoul in the current room.</description>
     </help>
 </helps>
