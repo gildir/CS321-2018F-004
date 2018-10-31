@@ -6,8 +6,9 @@ import java.io.PrintWriter;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.LinkedList;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Scanner;
 import java.io.File;
 import java.io.IOException;
@@ -24,22 +25,26 @@ import java.io.FileNotFoundException;
 public class GameCore implements GameCoreInterface {
     private final PlayerList playerList;
     private final Map map;
+    private HashMap<Integer,Shop> shoplist;
     private Ghoul ghoul;
     private PrintWriter pw;
 
     /**
      * Creates a new GameCoreObject.  Namely, creates the map for the rooms in the game,
      *  and establishes a new, empty, player list.
-     *
+     * 
      * This is the main core that both the RMI and non-RMI based servers will interface with.
      */
     public GameCore() throws IOException {
 
         // Generate the game map.
         map = new Map();
-
         playerList = new PlayerList();
 
+        // Builds a list of shops mapped to their map id (can be expanded as needed)
+        shoplist = new HashMap<Integer,Shop>();
+        shoplist.put(new Integer(1), new Shop("Clocktower shop", "The shopping destination for all of your gaming needs."));
+        
         pw = new PrintWriter(new FileWriter("chatlog.txt"));
         pw.flush();
         pw.close();
@@ -149,6 +154,167 @@ public class GameCore implements GameCoreInterface {
     }
 
 
+
+    /**
+     * @author Group 4: King
+     * Adds the player to list of players in store, and returns shop they just entered
+     * @param name Name of the player to add to shop
+     * @return The id of the shop the player will enter, -1 otherwise
+     */
+    public int shop(String name) {
+    	Player player = this.playerList.findPlayer(name);
+    	Room room = map.findRoom(player.getCurrentRoom());
+
+    	// Add player to shop in room if applicable
+    	if (map.isShoppable(room)) {
+    		return room.getId();
+    	}
+    	return -1;
+    }
+
+
+
+    /**
+     * Returns Shop.tostring
+     * @param id The shop's id in the hashmap
+     * @return a reference to the shop
+     */
+    public String getShopStr(int id) {
+    	return this.shoplist.get(id).toString();
+    }
+
+    /**
+     * Allows player to sell an item to a shop, and increases their money
+     * @author Team 4: King
+     * @param name Name of the player
+     * @param shopId The ID of the shop the player is selling an item to
+     * @param item The item the player is selling (eventually will be an Item obj)
+     */
+    public double sellItem(String name, int shopId, String item) {
+    	Player player = this.playerList.findPlayer(name);
+    	Shop s = shoplist.get(shopId);
+    	double value = 0;
+
+    	Item removed = player.removeObjectFromInventory(item);
+    	if (removed != null) {
+    		s.add(removed);
+    		value = removed.price;
+        	player.changeMoney(value);
+    	}
+
+    	//int value = removed.getValue();
+    	return value;
+    }
+
+    /**
+     * 605B_buy_method
+     * Allows player to sell an item to a shop, and increases their money
+     * @author Team 4: Mistry
+     * @param name Name of the player
+     * @param shopId The ID of the shop the player is selling an item to
+     * @param item The item the player is buying (eventually will be an Item obj)
+     */
+    public String buyItem(String name, int shopId, String itemName)
+    {
+    	double val = 0;
+    	Player player = this.playerList.findPlayer(name);
+    	Shop s = shoplist.get(shopId);
+
+    	Item item = null;
+
+    	for (Item ii : s.getInven())
+    		if (ii.name.compareToIgnoreCase(itemName) == 0)
+    			item = ii;
+
+    	if (item == null)  return "Item not in stock!!!";
+
+    	if(s.getInven().contains(item))
+    	{
+    		if (player.getMoney() > item.price) {
+    			s.remove(item);
+    		}
+    		else {
+    			return "Not enough money!!!";
+    		}
+    	}
+
+
+    	player.addObjectToInventory(item);
+
+    	//val = removed.getValue() * 1.2;
+    	val = item.price;
+    	player.changeMoney(-val);
+    	return "Thank you, that will be $" + val + ".";
+    }
+
+    /**
+     * Takes the player into venmo. The new and improved way to exchange money with other players.
+     *
+     * @author Team 4: Alaqeel
+     * @param name Name of the player enter the bank
+     */	@Override
+	public String venmo(String name, ArrayList<String> tokens) {
+		// checks if the player forgot to enter enough commands
+		if (tokens.isEmpty()) return "You need to provide more arguments.\n" + Venmo.instructions();
+
+		// Gets the object of the caller player
+		Player player1 = this.playerList.findPlayer(name);
+
+		// Executes the relevant commands
+		switch(tokens.remove(0).toUpperCase()) {
+			case "SEND": // sending a transaction
+				if (tokens.isEmpty()) return "Specify recipient and amount.";
+				// gets the object of the receiving player
+				Player player2 = this.playerList.findPlayer(tokens.remove(0));
+				// checks that the name is correct
+				if (player2 == null) return "Incorrect player name.";
+				// checks if user entered a transaction amount
+				if (tokens.isEmpty()) return "Specify transaction amount";
+
+				float amount;
+				// checks if the player entered a valid number
+				try {
+					amount = Float.parseFloat(tokens.remove(0));
+				} catch (NumberFormatException e) {
+					return "Please enter a valid number.";
+				}
+				return Venmo.send(player1, player2, amount);
+			case "HELP": // prints the help menu
+				return "This is how you can use Venmo:\n" + Venmo.instructions();
+			case "DEMO": // helpful for demo purposes
+				if (!tokens.isEmpty() && tokens.remove(0).equalsIgnoreCase("********")) {
+					player1.changeMoney(10);
+					System.out.printf("[Venmo] %s excuted the demo command\n", player1.getName());
+					return "Shush! Don't tell anyone that I added $10.00 to your wallet.";
+				}
+			default:
+				return "Unknown argument.\n" + Venmo.instructions();
+		}
+	}
+
+	/**
+	 * Shows player how much money they have
+	 * @param name Name of the player
+	 * @return A string representation of the player's money
+	 */
+	public String wallet(String name) {
+		Player player = this.playerList.findPlayer(name);
+		double m = player.getMoney();
+
+		return "$" + String.format("%.02f", m);
+	}
+
+
+	/**
+     * Returns a Shop's inventory as a formatted string
+     * @param id The shop ID
+     * @return A formatted string representing the Shop's inventory
+     */
+    public String getShopInv(int id) {
+		Shop s = this.shoplist.get(new Integer(id));
+		return s.getObjects();
+    }
+
     /**
      * Attempts to pick up all objects in the room. Will return a message on any success or failure.
      * @param name Name of the player to move
@@ -177,8 +343,6 @@ public class GameCore implements GameCoreInterface {
         }
     }       
     
- 
-
 
 	public String bribeGhoul(String playerName, String item){
 		item = item.toLowerCase();
@@ -291,7 +455,7 @@ public class GameCore implements GameCoreInterface {
 	//	Player player = playerList.findPlayer(playerName);
 	//	Room room = this.map.findRoom(player.getCurrentRoom());
 	//	boolean isItem = false;
-
+		
 	//	if (player != null) {
 	//		if (!room.hasGhoul) {
 	//			return "There is no ghoul in this room.";
@@ -366,7 +530,7 @@ public class GameCore implements GameCoreInterface {
      * Prints message to player if request can processed, contacts other player about their request
      * @param requestingTrader Name of the player who has requested the trade
      * @param traderToRequest Name of the player whom the first player has requested to trade with
-     */
+     */ 
     public void requestPlayer(String requestingTrader, String traderToRequest){
         Player playerToRequest = this.playerList.findPlayer(traderToRequest);
         Player requestingPlayer = this.playerList.findPlayer(requestingTrader);
@@ -388,7 +552,7 @@ public class GameCore implements GameCoreInterface {
 	 if(tradeInProgress){
             requestingPlayer.getReplyWriter().println("There is already a trade in progress. ");
             return;
-
+        
         }
 
         playerToRequest.setTradeRequest(true);
@@ -429,7 +593,7 @@ public class GameCore implements GameCoreInterface {
 
        	/**
 	 * Returns a look at the area of the specified player.
- *
+ * 
 	 * @param playerName Player Name
 	 * @return String representation of the current area the player is in.
 	 */
@@ -685,11 +849,11 @@ public class GameCore implements GameCoreInterface {
      * @param acceptingTrader Name of the player who is accepting the trade
      * @param traderToAccept Name of the player who has requested a trade
      * @return Message of success or fail
-     */
+     */ 
     public String playerResponse(String acceptingTrader, String traderToAccept){
 
         Player playerToAccept = this.playerList.findPlayer(traderToAccept);
-        Player acceptingPlayer = this.playerList.findPlayer(acceptingTrader);
+        Player acceptingPlayer = this.playerList.findPlayer(acceptingTrader); 
         if(playerToAccept == null){
             return "This player does not exist. ";
         }
