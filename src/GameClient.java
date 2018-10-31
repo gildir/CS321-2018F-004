@@ -26,8 +26,8 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
+
 
 /**
  *
@@ -59,6 +59,7 @@ public class GameClient {
 
         showIntroduction();
         showCommand();
+
 
         // Set up for keyboard input for local commands.
         InputStreamReader keyboardReader = new InputStreamReader(System.in);
@@ -357,6 +358,32 @@ public class GameClient {
                         System.out.println(remoteGameInterface.drop(this.playerName, tokens.remove(0)));
                     }
                     break;
+                case "WHITEBOARD":
+                    if(tokens.isEmpty()) {
+                        System.err.println("You need to provide an argument to the WHITEBOARD command.");
+                    }
+                    else {
+                        switch(tokens.remove(0).toUpperCase()) {
+                            case "ERASE":
+                                System.out.println(remoteGameInterface.whiteboardErase(this.playerName));
+                                break;
+                            case "READ":
+                                System.out.println(remoteGameInterface.whiteboardRead(this.playerName));
+                                break;
+                            case "WRITE":
+                                if (tokens.isEmpty()) {
+                                    System.err.println("You need to provide an argument to the WHITEBOARD WRITE command");
+                                }
+                                else {
+                                    System.out.println(remoteGameInterface.whiteboardWrite(this.playerName, tokens.remove(0)));
+                                }
+                                break;
+                            default:
+                                System.err.println("Invalid argument provided to WHITEBOARD command.");
+                                break;
+                        }
+                    }
+                    break;
 		case "SORT":
 	            InputStreamReader keyReader = new InputStreamReader(System.in);
         	    BufferedReader keyInput = new BufferedReader(keyReader);
@@ -462,7 +489,6 @@ public class GameClient {
                 xmlElement = (Element) xmlCommands.item(i);
 
                 description = xmlElement.getElementsByTagName("description").item(0).getTextContent();
-
                 if ( !description.equals("") ){
                     System.out.println(description);
                 }

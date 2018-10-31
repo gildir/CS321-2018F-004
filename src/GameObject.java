@@ -14,7 +14,9 @@ import java.util.HashSet;
  */
 public class GameObject extends UnicastRemoteObject implements GameObjectInterface {
     private final GameCore core;
-    
+
+
+
     /**
      * Creates a new GameObject.  Namely, creates the map for the rooms in the game,
      *  and establishes a new, empty, player list.
@@ -24,6 +26,7 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
         super();
         
         core = new GameCore();
+
     }
 
     /**
@@ -256,6 +259,34 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
     @Override
     public String drop(String name, String target) throws RemoteException {
         return core.drop(name, target);
+    }
+
+    /**
+     * Attempts to erase the whiteboard in the room. Will return a message on any success or failure.
+     * @param name Name of the player to erase the whiteboard
+     * @return Message showing success.
+     */
+    public String whiteboardErase(String name) throws RemoteException {
+        return core.whiteboardErase(name);
+    }
+
+    /**
+     * Attempts to read the whiteboard in the room. Will return a message on any success or failure.
+     * @param name Name of the player to erase the whiteboard
+     * @return Message showing success.
+     */
+    public String whiteboardRead(String name) throws RemoteException {
+        return core.whiteboardRead(name);
+    }
+
+    /**
+     * Attempts to  the whiteboard in the room. Will return a message on any success or failure.
+     * @param name Name of the player to erase the whiteboard
+     * @param text Text to write on the whiteboard
+     * @return Message showing success.
+     */
+    public String whiteboardWrite(String name, String text) throws RemoteException {
+        return core.whiteboardWrite(name, text);
     }
 
     /**
