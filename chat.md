@@ -22,7 +22,7 @@ R hello world!
 ### Dev:
 > The reply command is handled in the switch statement in GameClient and follows a structure similar to the whisper command. The switch statement calls the quickReply(String srcName, String message) method in GameObject, which returns the quickReply(String srcName, String message) method in GameCore. The quickReply(String srcName, String message) method in GameCore calls the whisper(String srcName, String dstName, String message) method in GameCore with the dstName parameter set to the lastPlayer field of the srcName parameter. lastPlayer is stored in the Player class and is set in the whisper(String srcName, String dstName, String message) method in GameCore. GameObject and GameCore have accompanying interfaces for their respective methods.  
 
-## Player List
+## Player List - Schuyler
 ### User:
 > The show players command allows the user to generate a list of players in the world who are currently online. The command is executed by typing "ONLINE," and then pressing the return key. Upon entering the command, the list of online players is generated on the user's screen, with one player name per line.
 
@@ -64,7 +64,7 @@ Command: Unignore [player to unignore]
 
 >The argument needed for this command to function properly is, the name of the player doing the unignoring and the name of the player being unignored. Unignore is located within the player class.
 
-## Joke
+## Joke - Schuyler
 ### User:
 > The joke command accesses a local text file stored in the user's game files (in this case, "jokes.txt") and randomly selects from it one of up to ten available jokes, separated by a new line. After selecting the joke, it then sends out a message to everyone in the room: "Here's a joke for you:" followed by the random joke selected. Due to the random nature of the command, the same joke can be told twice or more times using this command.
 
