@@ -63,9 +63,6 @@ It should look something like this:
 
 The user can create a friends list by adding and removing users to their friends list with the "FRIENDS ADD [Name]" and "FRIENDS REMOVE [Name]" commands. They can also use the "FRIENDS ONLINE" command to see which of their friends are currently online. If the user needs to, they can use the "FRIENDS" command to view all currently implemented friend related subcommands. Friend information is stored in the format of a two hashmaps, stored as friends you've added (which uses a key of your name, and a value of a hashtable containing the name of your friends), and friends who have added you (Which also has a key of your name and a value of a hashtable containing the name of people who have added your account as a friend). This is important as it allows the users friends list to automatically update to remove obsolete friends when they delete their account.
 
-Join Game System (Logging in, list of online, loading files)
---Dylan
-
 # Leave Game System (Logging out, remove from online, heartbeat)
 --Quinten Holmes
 
@@ -86,5 +83,17 @@ A heartbeat protocol is being used to ensure a client is properly logged out in 
 
 The time the last pulse was received is stored in the PlayerList, which in turn can return the list of exired players upon request. The PlayerList will not remove any expired clients, leaving that task to the GameCore. 
 
+# Join Game System (Logging in, list of online, loading files)
+--Dylan
 
+## Users
+Once you have the game booted up, you will be given the option to log in or create an account. For logging in, you will need to have your username and password on hand and you’ll be able to join the game from wherever you were when you left. If you forgot your password, you would have created 3 recovery questions when first making your account. The game prompts a password reset if you get the username or password incorrect, if you accept and answer the questions correctly you’ll be able to reset your password. The answers are not case sensitive. 
+	
+## Devs
+When a player joins a game, their username and password are passed along through the joinGame method in GameObject. There the password is hashed and the same method is called in the GameCore. If the player isn’t already online, then the getAccount method is called on the PlayerAccountManagaer, passing in the username and hashed password. The manager tries to retrieve the players account if it exists and there are no errors. Assuming all else goes well, the method will return the player account or a Response based on what caused the player account to be found. From there, if an account was found and retrieved, GameCore adds them to the active player list and the player is let into the game server. If not account data was found, the player is told that the username and password combination was invalid, allowing them to try again or reset their password. 
 
+The GameCore keeps an iterable PlayerList of the currently online players at all times. As players join and leave, it gets updated. Within the class it uses a LinkedList to store the players, and supports adding, finding, and removing players from said list. 
+
+The file loading regarding accounts is done in the PlayerAccountManagar, mainly in the getAccount method. Besides the password, player data is stored in json format while the password is stored hashed in a txt file. PlayerAccountManager utilizes the JsonMarshaller class to actually retrieve the data. 
+	
+Here’s an example of what a players json file will look like. 
