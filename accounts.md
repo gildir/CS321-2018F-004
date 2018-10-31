@@ -66,7 +66,7 @@ The user can create a friends list by adding and removing users to their friends
 
 ![Friends](friends-004.png)
 
-# Developers
+## Developers
 Friend information is stored in the format of two hashmaps, stored as friends you've added (which uses a key of your name, and a value of a hashtable containing the name of your friends), and friends who have added you (Which also has a key of your name and a value of a hashtable containing the name of people who have added your account as a friend). This is important as it allows the users friends list to automatically update to remove obsolete friends when they delete their account.
 
 # Leave Game System (Logging out, remove from online, heartbeat)
@@ -89,7 +89,7 @@ A heartbeat protocol is being used to ensure a client is properly logged out in 
 
 The time the last pulse was received is stored in the PlayerList, which in turn can return the list of exired players upon request. The PlayerList will not remove any expired clients, leaving that task to the GameCore. 
 
-![IDE lib](accounts-leave-01.png)
+![Heartbeat UML](accounts-leave-01.png)
 
 # Join Game System (Logging in, list of online, loading files)
 --Dylan
@@ -105,3 +105,6 @@ The GameCore keeps an iterable PlayerList of the currently online players at all
 The file loading regarding accounts is done in the PlayerAccountManagar, mainly in the getAccount method. Besides the password, player data is stored in json format while the password is stored hashed in a txt file. PlayerAccountManager utilizes the JsonMarshaller class to actually retrieve the data. 
 	
 Here’s an example of what a players json file will look like. 
+
+![Player JSON](jsonPic.PNG)
+
