@@ -134,6 +134,17 @@ public class Room {
         return null;
     }
 
+    public LinkedList<Item> removeAllObjects()
+    {
+        LinkedList<Item> newList = new LinkedList<Item>();
+        while(!this.objects.isEmpty())
+        {
+            newList.add(objects.get(0));
+            this.objects.remove(0);
+        }  
+        return newList; 
+    }
+
 
     public String getPlayers(PlayerList players) {
         String localPlayers = "";
