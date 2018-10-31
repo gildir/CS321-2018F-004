@@ -12,9 +12,11 @@ public class Room {
     private final LinkedList<Item> objects;
     private final LinkedList<Exit> exits;
 
-
+    //list of NPCs in a room, list in case additional NPCs are added to the game
+    private final LinkedList<NPC> npcs;
     //add tem state check for ghoul
     public boolean hasGhoul = false;
+
     
     public Room(int id, String room_type, String title, String description) {
         this.objects = new LinkedList<>();
@@ -24,6 +26,18 @@ public class Room {
         this.title = title;
         this.description = description;
         this.room_type = room_type;
+        this.npcs = new LinkedList<>();
+    }
+
+    public Room(int id, String room_type, String title, String description, LinkedList<NPC> npcs) {
+        this.objects = new LinkedList<>();
+        this.exits = new LinkedList<>();
+
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.npcs = npcs;
+        this.room_type = room_type;
     }
     
     public String toString(PlayerList playerList, Player player) {
@@ -32,6 +46,7 @@ public class Room {
         result += ".-------------------------+----------------------\n";
         result += this.getDescription() + "\n";
         result += "...................\n";
+        result += "NPCs in the area: " + this.getNPCs() + "\n";
         result += "Objects in the area: " + this.getObjects() + "\n";
         result += "Players in the area: " + this.getPlayers(playerList) + "\n";
         result += "You see paths in these directions: " + this.getExits() + "\n";
@@ -111,6 +126,15 @@ public class Room {
 			ret += " " + obj.toString();
 		}
 		return ret;
+        }
+    }
+
+    public String getNPCs() {
+        if(this.npcs.isEmpty()) {
+            return "None.";
+        }
+        else {
+            return this.npcs.toString();
         }
     }
     
