@@ -30,7 +30,7 @@ NOTE:  This is a deviation from the original core of the game, where items were 
 The items for the game drop table are listed in the .CSV file above.  The items can be expanded on or subtracted from in .CSV form.  The .CSV file starts with the first row being a heading for the colloums.  The first colloum is the item name in the form of a String, the second colloum is the item weight (pounds) represented as a double, and the final colloum is the item price (for the store) as a double. The items must be written in this order, as it is hardcoded into the item read. Additional items may be added or current items may be removed, as long as all the fields for each item or added completely or removed completely. No blank lines are permitted in the .CSV.
 
 Item reading can be found in 
-[Item reading](./src/GameCore.java) starting in line 39.  
+[Item reading](./src/GameCore.java)
 This code is written to read the Item name, weight, and value (String/double/double).  This then constructs a new item object and adds it to the overall game drop table arraylist.
 
 
