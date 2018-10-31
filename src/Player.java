@@ -18,6 +18,7 @@ public class Player {
     private Direction currentDirection;
     private PrintWriter replyWriter = null;
     private DataOutputStream outputWriter = null;
+    private double money;
     private DataInputStream inputWriter = null;
     private boolean inTrade = false;
     private boolean tradeRequested = false;
@@ -28,6 +29,7 @@ public class Player {
         this.currentDirection = Direction.NORTH;
         this.name = name;
         this.currentInventory = new LinkedList<>();
+        this.money = 0;
     }
     
     public void turnLeft() {
@@ -147,8 +149,6 @@ public class Player {
         tradePartner = s;
     }
 
-
-
     public void setReplyWriter(PrintWriter writer) {
         this.replyWriter = writer;
     }
@@ -179,6 +179,24 @@ public class Player {
     
     public Direction getDirection() {
         return this.currentDirection;
+    }
+    
+    public double getMoney() {
+        return this.money;
+    }
+    
+    public void setMoney(double m){
+        this.money = m;
+    }
+    
+    /**
+     * Allows the caller to add/take money in user's wallet.
+     * 
+     * @author Team 4: Alaqeel
+     * @param m Amount to be added/taken.
+     */
+    public void changeMoney(double m){
+        this.money += m;
     }
     
     public String viewInventory() {
