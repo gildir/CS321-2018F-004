@@ -7,13 +7,13 @@
 
 This is the csv layout that was converted into a csv file format .
 
-FORMAT
-numRooms
-roomId,type,title,desc
-direction,exitId,desc
-direction,exitId,desc
-direction,exitId,desc
-direction,exitId,desc
+* FORMAT
+* numRooms
+* roomId,type,title,desc
+* direction,exitId,desc
+* direction,exitId,desc
+* direction,exitId,desc
+* direction,exitId,desc
 
 #### Specify World File in Command Line Argument
 When running the runServer script, you can specify which .csv file to open to generate the server world. Using the command “runServer.(sh/bat) (file name)”, the server will pass the open the file specified and begin parsing through to generate the world. If the file is not found or is invalid, the server will shutdown. You can run the server without any command line arguments, in which it will load the default world rooms.csv.
