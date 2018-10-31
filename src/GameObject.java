@@ -204,6 +204,26 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
      return core.joke(filename);
    }
 
+    //Feature 411. Shout
+    /**
+     *Shouts "message" to everyone that is online
+     *@param name Name of the player speaking
+     *@param message Meesage to be spoken
+     *@return Message showing success.
+     *@throws RemoteException
+     */
+    @Override
+    public String shout(String name, String message) throws RemoteException {
+        return core.shout(name, message);
+    }
+
+    //Begin 409 Word Filter.
+    @Override
+    public void setPlayerFilteredWords(String playerName, HashSet<String> filteredWords) {
+        Player player = core.findPlayer(playerName);
+        player.setFilteredWords(filteredWords);
+    }
+
     /**
      * Attempts to walk forward < distance > times.  If unable to make it all the way,
      *  a message will be returned.  Will display LOOK on any partial success.
@@ -435,25 +455,5 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
      */
     public String getShopInv(int id) throws RemoteException{
     	return core.getShopInv(id);
-    }
-
-    //Feature 411. Shout
-    /**
-     *Shouts "message" to everyone that is online
-     *@param name Name of the player speaking
-     *@param message Meesage to be spoken
-     *@return Message showing success.
-     *@throws RemoteException
-     */
-    @Override
-    public String shout(String name, String message) throws RemoteException {
-        return core.shout(name, message);
-    }
-
-    //Begin 409 Word Filter.
-    @Override
-    public void setPlayerFilteredWords(String playerName, HashSet<String> filteredWords) {
-        Player player = core.findPlayer(playerName);
-        player.setFilteredWords(filteredWords);
     }
 }

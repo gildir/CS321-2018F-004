@@ -124,8 +124,6 @@ public interface GameObjectInterface extends Remote {
      */
     public String getIgnoredPlayersList(String name) throws RemoteException;
 
-
-
     // Feature 410: Joke
     /**
      * Tells a joke to the room. Reads local "chat config" file
@@ -134,6 +132,24 @@ public interface GameObjectInterface extends Remote {
      * @param filename the "chat config" file to read the joke from.
      * */
     public String joke(String filename) throws RemoteException;
+
+
+//Feature 411. Shout
+    /**
+     *Shouts "message" to everyone that is online
+     *@param name Name of the player speaking
+     *@param message Meesage to be spoken
+     *@return Message showing success.
+     *@throws RemoteException
+     */
+    public String shout(String name, String message) throws RemoteException;
+
+    /**
+     * Returns a player reference from the game core, from the player's name.
+     * @param playerName the name of the player you're lookng for
+     * @return the player (if found) from the game core
+     */
+    public void setPlayerFilteredWords(String playerName, HashSet<String> newFilteredWords) throws RemoteException;
 
     /**
      * Attempts to walk forward < distance > times.  If unable to make it all the way,
@@ -305,21 +321,4 @@ public interface GameObjectInterface extends Remote {
      * @return A formatted string representing the Shop's inventory
      */
     public String getShopInv(int id) throws RemoteException;
-
-    //Feature 411. Shout
-    /**
-     *Shouts "message" to everyone that is online
-     *@param name Name of the player speaking
-     *@param message Meesage to be spoken
-     *@return Message showing success.
-     *@throws RemoteException
-     */
-    public String shout(String name, String message) throws RemoteException;
-
-    /**
-     * Returns a player reference from the game core, from the player's name.
-     * @param playerName the name of the player you're lookng for
-     * @return the player (if found) from the game core
-     */
-    public void setPlayerFilteredWords(String playerName, HashSet<String> newFilteredWords) throws RemoteException;
 }
