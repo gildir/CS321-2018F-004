@@ -17,7 +17,7 @@ Items in the game are bundled together to hold the item's name, weight, and pric
 
 ### Developer
 The overall item object is located at
-[item](./src/Items.java)
+[item](./src/Item.java)
 The items are custructed as a basic java object holding a string and two double values.  The constructor takes the values of these variables as parameters to create the object.  Functions avalible to the item object are to set and get all three variables and a toString to print the item out (name and weight). Items can easily be expanded to hold other values. 
 
 NOTE:  This is a deviation from the original core of the game, where items were labeled as Strings only.  The Strings representing items were changed to Item objects for the game inventory, the player inventory, and all assosiated calls to player functions that search for and returned Item Strings. This includes:  Pickup, Look, Inventory, and the random student drop.
