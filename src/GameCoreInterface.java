@@ -71,21 +71,6 @@ public interface GameCoreInterface {
      * @return String representation of the current area the player is in.
      */
     public String look(String playerName);
-    
-    /**
-     * Turns the player left.
-     * @param name Player Name
-     * @return String message of the player turning left.
-     */
-    public String left(String name);
-    
-    /**
-     * Turns the player right.
-     * @param name Player Name
-     * @return String message of the player turning right.
-     */
-    public String right(String name);    
-    
     /**
      * Says "message" to everyone in the current area.
      * @param name Name of the player to speak
@@ -106,7 +91,13 @@ public interface GameCoreInterface {
      * @param name Name of the player to leave
      * @return Player that was just removed.
      */    
-    public Player leave(String name);  
+    public Player leave(String name);    
+
+    @Deprecated
+    public String left(String name);
+    
+    @Deprecated
+    public String right(String name);    
 
     /**
      * Returns a string representation of the offer statement.
@@ -132,4 +123,5 @@ public interface GameCoreInterface {
      * @return Message of success or fail
      */ 
     public String playerResponse(String acceptingTrader, String traderToAccept);
+
 }
