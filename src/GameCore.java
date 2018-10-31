@@ -196,7 +196,35 @@ public class GameCore implements GameCoreInterface {
 		Shop s = this.shoplist.get(new Integer(id));
 		return s.getObjects();
     }
-    
+
+    /**
+     * Attempts to pick up all objects in the room. Will return a message on any success or failure.
+     * @param name Name of the player to move
+     * @return Message showing success. 
+     */    
+    public String pickupAll(String name) {
+        Player player = this.playerList.findPlayer(name);
+        if(player != null) {
+            Room room = map.findRoom(player.getCurrentRoom());
+            LinkedList<Item> objects = room.removeAllObjects();
+            if(objects != null && objects.size() > 0) {
+                for (Item object : objects)
+                {
+                    player.addObjectToInventory(object);
+                }
+                this.broadcast(player, player.getName() + " bends over to pick up all objects that were on the ground.");
+                return "You bend over and pick up all objects on the ground.";
+            }
+            else {
+                this.broadcast(player, player.getName() + " bends over to pick up something, but doesn't find anything.");
+                return "You look around for objects but can't find any.";
+            }
+        }
+        else {
+            return null;
+        }
+    }       
+
 	public String bribeGhoul(String playerName, String item){
 		item = item.toLowerCase();
 		Player player = playerList.findPlayer(playerName);

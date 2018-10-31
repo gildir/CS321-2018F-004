@@ -95,6 +95,8 @@ public interface GameObjectInterface extends Remote {
      * @throws RemoteException 
      */    
     public String pickup(String name, String object) throws RemoteException;
+
+    public String pickupAll(String name)throws RemoteException;
  
     /**
      * Attempts to drop an object < object >. Will return a message on any success or failure.
