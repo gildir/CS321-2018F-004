@@ -153,28 +153,30 @@ public interface GameObjectInterface extends Remote {
      */    
     public String pickup(String name, String object) throws RemoteException;
 
+    public String pickupAll(String name)throws RemoteException;
+
     /**
      * Attempts to drop an object < object >. Will return a message on any success or failure.
      * @param name Name of the player to drop an object
      * @param object The case-insensitive name of the object to drop.
      * @return Message showing success.
-     * @throws RemoteException
-     */
+     * @throws RemoteException 
+     */ 
     public String drop(String name, String object) throws RemoteException;
-
+   
     /**
      * Attempts to sort the player's inventory. Will return a message on any success or failure.
      * @param name Name of the player
      * @return Message showing success.
-     * @throws RemoteException
-     */
-    public String sort(String name, String modes) throws RemoteException;
+     * @throws RemoteException 
+     */ 
+    public String sort(String name, String modes) throws RemoteException; 
 
     /**
      * Prints message to player if request can processed, contacts other player about their request
      * @param requestingTrader Name of the player who has requested the trade
      * @param traderToRequest Name of the player whom the first player has requested to trade with
-     */
+     */ 
     public void requestPlayer(String requestingTrader, String traderToRequest) throws RemoteException;
 
     /**
@@ -191,7 +193,7 @@ public interface GameObjectInterface extends Remote {
      * @param acceptingTrader Name of the player who is accepting the trade
      * @param traderToAccept Name of the player who has requested a trade
      * @return Message of success or fail
-     */
+     */ 
     public String playerResponse(String acceptingTrader, String traderToAccept) throws RemoteException;
 
      /**
