@@ -122,7 +122,7 @@ public interface GameCoreInterface {
      * @param shopId The ID of the shop the player is selling an item to
      * @param item The item the player is selling (eventually will be an Item obj)
      */
-    public float sellItem(String name, int shopId, String item);
+    public double sellItem(String name, int shopId, String item);
     
 
     /**

@@ -148,6 +148,10 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
         return core.pickup(name, target);
     }
 
+    public String pickupAll(String name)throws RemoteException{
+        return core.pickupAll(name);
+    }
+
     /**
      * Attempts to drop  an object < target >. Will return a message on any success or failure.
      * @param name Name of the player to move
@@ -256,7 +260,7 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
      * @param shopId The ID of the shop the player is selling an item to
      * @param item The item the player is selling (eventually will be an Item obj)
      */
-    public float sellItem(String name, int shopId, String item) throws RemoteException{
+    public double sellItem(String name, int shopId, String item) throws RemoteException{
     	return core.sellItem(name, shopId, item);
     }
 

@@ -29,7 +29,7 @@ public class ShopClient {
 	
 	//In terms of the player selling items
 	public void sell(String item) throws RemoteException{
-		float val = remote.sellItem(this.player, this.id, item);
+		double val = remote.sellItem(this.player, this.id, item);
 		if (val != 0) {
 			System.out.printf("You have sold %s for $%.2f\n", item, val);
 		}

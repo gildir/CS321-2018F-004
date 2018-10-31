@@ -94,6 +94,8 @@ public interface GameObjectInterface extends Remote {
      * @throws RemoteException 
      */    
     public String pickup(String name, String object) throws RemoteException;
+
+    public String pickupAll(String name)throws RemoteException;
  
     /**
      * Attempts to drop an object < object >. Will return a message on any success or failure.
@@ -183,7 +185,7 @@ public interface GameObjectInterface extends Remote {
      * @param shopId The ID of the shop the player is selling an item to
      * @param item The item the player is selling (eventually will be an Item obj)
      */
-    public float sellItem(String name, int shopId, String item) throws RemoteException;
+    public double sellItem(String name, int shopId, String item) throws RemoteException;
 
 	String getShopInv(int id) throws RemoteException;
 }
