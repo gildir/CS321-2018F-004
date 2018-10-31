@@ -261,10 +261,12 @@ public class GameClient {
 			 break;
                 case "MOVE":
                     if(tokens.isEmpty()) {
-                        System.err.println("You need to provide a distance in order to move.");
-                    }
-                    else {
-                        System.out.println(remoteGameInterface.move(this.playerName, Integer.parseInt(tokens.remove(0))));
+                        System.err.println("You need to provide a direction to move.");
+                    } else {
+                        Direction dir = Direction.toValue(tokens.remove(0));
+                        if(dir!=null) {
+                            System.out.println(remoteGameInterface.move(this.playerName, dir));
+                        }
                     }
                     break;
                 case "REDO":

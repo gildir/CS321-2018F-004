@@ -213,7 +213,23 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
     public String move(String name, int distance) throws RemoteException {
         return core.move(name, distance);
     }
-      
+
+
+      /**
+     * Attempts to walk in < direction > 1  time.  If unable to,
+     *  a message will be returned.  Will display LOOK on any partial success.
+     * @param name Name of the player to move
+     * @param direction which direction to move forward through.
+     * @return Message showing success.
+     * @throws RemoteException
+     */
+    @Override
+    public String move(String name, Direction direction) throws RemoteException {
+        return core.move(name, direction);
+    }
+
+
+
     /**
      * Attempts to pick up an object < target >. Will return a message on any success or failure.
      * @param name Name of the player to move

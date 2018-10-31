@@ -3,6 +3,7 @@
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.ArrayList;
 import java.util.HashSet;
 
 /**
@@ -145,6 +146,8 @@ public interface GameObjectInterface extends Remote {
      */
     public String move(String name, int distance) throws RemoteException;
 
+    public String move(String name, Direction direction)throws RemoteException;
+
     /**
      * Attempts to pick up an object < object >. Will return a message on any success or failure.
      * @param name Name of the player to pickup an object
@@ -281,7 +284,7 @@ public interface GameObjectInterface extends Remote {
      */
     public String getShopInv(int id) throws RemoteException;
 
-    //Feature 411. Shout
+        //Feature 411. Shout
     /**
      *Shouts "message" to everyone that is online
      *@param name Name of the player speaking
