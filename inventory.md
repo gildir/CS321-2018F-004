@@ -40,11 +40,11 @@ The weights associated with each item is located in
 [Items in .CSV file](./src/items.csv)
 The weights for an item are determined by a generic category of light, medium, or heavy. Light items all have the weight of 0.5. (for example, Gum and Phone would have the same weight of 0.5). Medium items like a Textbook or a Backpack are given weights of 5 or 10. A much heavier item like a Dog or a Human may have weights of 100 or 200. While the unit for weights are not pounds, the value of weight for an object indicates the general category the object would fall into for light, medium or heavy. Items can be sorted by weight during the game, if the user wishes to arrange their inventory from heaviest to lightest or lightest to heaviest is also available.
 
-[Example of inventory with weights](./src/Weights.png)
+[Example of inventory with weights](./sprint_3_images/Weights.png)
 
 ### Developer
 To edit the weights, the developer only needs to change the first value after the comma following the relevant object's name. To change/manipulate the weight property of the object, first study the item object class.
-[item](./src/items.java)
+[item](./src/Item.java)
 The weight is read from the .CSV and represented as a double. It can be accessed by the getWeight() function, which returns the double value of weight. A changeWeight(double weight) method can be used to set the weight.
 
 [Item reading](./src/GameCore.java) 
