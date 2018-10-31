@@ -114,7 +114,7 @@ or
 
 ## Ignored Me - Patrick
 ### User:
-> If you attempt to whisper a player that is ignoring you, the whisper will not be delivered and you will be notified that this player is ignoring you.
+> If you attempt to whisper a player that is ignoring you, the whisper will not be delivered and you will be notified of this player ignoring you.
 
 
 Example of ignored me:
