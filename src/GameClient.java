@@ -55,6 +55,33 @@ public class GameClient {
         boolean nameSat = false;
 
         
+        System.out.println("Welcome to the client for an RMI based online game.\n");
+        System.out.println("This game allows you to connect to a server an walk around a virtual,");
+        System.out.println(" text-based version of the George Mason University campus.\n");
+        System.out.println("You will be asked to create a character momentarily.");
+        System.out.println("When you do, you will join the game at the George Mason Clock, in the main quad.");
+        System.out.println("You will be able to see if any other players are in the same area as well as what");
+        System.out.println("objects are on the ground and what direction you are facing.\n");
+        System.out.println("The game allows you to use the following commands:");
+        System.out.println("  LOOK          - Shows you the area around you");
+        System.out.println("  SAY message   - Says 'message' to any other players in the same area.");
+        System.out.println("  LEFT          - Turns your player left 90 degrees.");
+        System.out.println("  RIGHT         - Turns your player right 90 degrees.");
+        System.out.println("  MOVE distance - Tries to walk forward <distance> times.");
+        System.out.println("  PICKUP object - Tries to pick up an object in the same area.");
+	System.out.println("  DROP object   - Tries to drop an object from your pockets in the same area");
+        System.out.println("  INVENTORY     - Shows you what objects you have collected.");
+        System.out.println("  POKE_GHOUL    - Pokes the ghoul in the current room.");
+        System.out.println("  BRIBE_GHOUL item_name    - Gives selected item to ghoul.");
+        System.out.println("  GIVE_GHOUL object   - Gives object to ghoul in current room");
+        System.out.println("  CHALLENGE     - Challenge a player to a R-P-S in the same area.");
+        System.out.println("  ACCEPT        - Accept a challenge from a player to a R-P-S in the same area.");
+	System.out.println("  SORT          - Sorts your inventory");
+        System.out.println("  QUIT          - Quits the game.");
+    	System.out.println("  R_TRADE player  - Set up a trade with another player");
+    	System.out.println("  A_TRADE player  - Accept a trade with another player");
+	System.out.println("  O or OFFER player object - Offer player an item");
+        System.out.println();
         showIntroduction();
         showCommand();
         
@@ -241,11 +268,27 @@ public class GameClient {
                     break;
                 case "BRIBE_GHOUL":
                     if(tokens.isEmpty()){
-                        System.err.println("You need to provide an item to give Ghoul.");
+                      System.err.println("You need to provide an item to give Ghoul.");
                     }else{
-                        System.out.println(remoteGameInterface.bribeGhoul(this.playerName, tokens.remove(0)));
+                      System.out.println(remoteGameInterface.bribeGhoul(this.playerName, tokens.remove(0)));
+                    }
+                    break;
+                case "CHALLENGE":
+                    if(tokens.isEmpty()){
+                      System.err.println("You need to provide a name.");
+                    }
+                    else{
+                      System.out.println(remoteGameInterface.challenge(this.playerName, tokens.remove(0)));
+                    }
+                    break;
+                case "ACCEPT":
+                    if(tokens.isEmpty()){
+                      System.err.println("You need to provide a name.");
+                    }
+                    else{
+                      System.out.println(remoteGameInterface.accept(this.playerName, tokens.remove(0)));
 		    }
-		break;
+		    break;
 		case "DROP":
                     if(tokens.isEmpty()) {
                         System.err.println("You need to provide an object to drop.");
