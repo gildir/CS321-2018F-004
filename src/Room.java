@@ -9,12 +9,14 @@ public class Room {
     private final String title;
     private final String room_type;
     private final String description;
-    private final LinkedList<String> objects;
+    private final LinkedList<Item> objects;
     private final LinkedList<Exit> exits;
 
-
+    //list of NPCs in a room, list in case additional NPCs are added to the game
+    private final LinkedList<NPC> npcs;
     //add tem state check for ghoul
     public boolean hasGhoul = false;
+
     
     public Room(int id, String room_type, String title, String description) {
         this.objects = new LinkedList<>();
@@ -24,6 +26,18 @@ public class Room {
         this.title = title;
         this.description = description;
         this.room_type = room_type;
+        this.npcs = new LinkedList<>();
+    }
+
+    public Room(int id, String room_type, String title, String description, LinkedList<NPC> npcs) {
+        this.objects = new LinkedList<>();
+        this.exits = new LinkedList<>();
+
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.npcs = npcs;
+        this.room_type = room_type;
     }
     
     public String toString(PlayerList playerList, Player player) {
@@ -32,6 +46,7 @@ public class Room {
         result += ".-------------------------+----------------------\n";
         result += this.getDescription() + "\n";
         result += "...................\n";
+        result += "NPCs in the area: " + this.getNPCs() + "\n";
         result += "Objects in the area: " + this.getObjects() + "\n";
         result += "Players in the area: " + this.getPlayers(playerList) + "\n";
         result += "You see paths in these directions: " + this.getExits() + "\n";
@@ -106,11 +121,24 @@ public class Room {
             return "None.";
         }
         else {
-            return this.objects.toString();
+		String ret = "";
+		for(Item obj : this.objects) {
+			ret += " " + obj.toString();
+		}
+		return ret;
+        }
+    }
+
+    public String getNPCs() {
+        if(this.npcs.isEmpty()) {
+            return "None.";
+        }
+        else {
+            return this.npcs.toString();
         }
     }
     
-    public void addObject(String obj) {
+    public void addObject(Item obj) {
         if(this.objects.size() < 5) {
             this.objects.add(obj);
         }
@@ -118,17 +146,30 @@ public class Room {
             throw new IndexOutOfBoundsException("Can not add more objects, objects is at capacity");
         }
     }
-    
-    public String removeObject(String target) {
-        for(String obj : this.objects) {
-            if(obj.equalsIgnoreCase(target)) {
+
+    public Item removeObject(String target) {
+        for(Item obj : this.objects) {
+            String nameToRemove = obj.name;
+            if(nameToRemove.equalsIgnoreCase(target)) {
                 this.objects.remove(obj);
                 return obj;
             }
         }
         return null;
     }
-    
+
+    public LinkedList<Item> removeAllObjects()
+    {
+        LinkedList<Item> newList = new LinkedList<Item>();
+        while(!this.objects.isEmpty())
+        {
+            newList.add(objects.get(0));
+            this.objects.remove(0);
+        }  
+        return newList; 
+    }
+
+
     public String getPlayers(PlayerList players) {
         String localPlayers = "";
         for(Player player : players) {

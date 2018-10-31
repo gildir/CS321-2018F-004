@@ -16,6 +16,16 @@ import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.w3c.dom.Document;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
+import java.io.File;
+import java.io.IOException;
+
 /**
  *
  * @author Kevin
@@ -34,6 +44,8 @@ public class GameClient {
     
     // Members related to the player in the game.
     protected String playerName;
+
+    private String lastCommand;
     
     /** 
      * Main class for running the game client.
@@ -41,33 +53,9 @@ public class GameClient {
     public GameClient(String host) {
         this.runGame = true;
         boolean nameSat = false;
-        
-        System.out.println("Welcome to the client for an RMI based online game.\n");
-        System.out.println("This game allows you to connect to a server an walk around a virtual,");
-        System.out.println(" text-based version of the George Mason University campus.\n");
-        System.out.println("You will be asked to create a character momentarily.");
-        System.out.println("When you do, you will join the game at the George Mason Clock, in the main quad.");
-        System.out.println("You will be able to see if any other players are in the same area as well as what");
-        System.out.println("objects are on the ground and what direction you are facing.\n");
-        System.out.println("The game allows you to use the following commands:");
-        System.out.println("  LOOK          - Shows you the area around you");
-        System.out.println("  SAY message   - Says 'message' to any other players in the same area.");
-        System.out.println("  LEFT          - Turns your player left 90 degrees.");
-        System.out.println("  RIGHT         - Turns your player right 90 degrees.");
-        System.out.println("  MOVE distance - Tries to walk forward <distance> times.");
-        System.out.println("  PICKUP obect  - Tries to pick up an object in the same area.");
-        System.out.println("  SHOP          - Tries to enter a shop if you are near one.");
-        System.out.println("  INVENTORY     - Shows you what objects you have collected.");
-        System.out.println("  WALLET        - Shows you how much money you have.");
-        System.out.println("  VENMO         - Allows you to send money to people. Try: VENMO HELP"); // Team 4: Alaqeel
-        System.out.println("  PICKUP object  - Tries to pick up an object in the same area.");
-        System.out.println("  INVENTORY     - Shows you what objects you have collected.");
-        System.out.println("  POKE_GHOUL    - Pokes the ghoul in the current room.");
-        System.out.println("  BRIBE_GHOUL item_name    - Gives selected item to ghoul.");
-        //System.out.println("  GIVE_GHOUL object   - Gives object to ghoul in current room");
-        System.out.println("  QUIT          - Quits the game.");
-        System.out.println();
-        
+
+        showIntroduction();
+        showCommand();  
 
         // Set up for keyboard input for local commands.
         InputStreamReader keyboardReader = new InputStreamReader(System.in);
@@ -152,6 +140,8 @@ public class GameClient {
         }
         
         String message = "";
+        //for redo old messages
+        String command = input.toUpperCase();
 
         try {
             switch(tokens.remove(0).toUpperCase()) {
@@ -165,6 +155,11 @@ public class GameClient {
                 case "RIGHT":
                     System.out.println(remoteGameInterface.right(this.playerName));
                     break;
+                case "PICKUPALL":
+                System.out.println(remoteGameInterface.pickupAll(this.playerName));
+                    break;
+                case "HELP":
+                showCommand();
                 case "SAY":
                     if(tokens.isEmpty()) {
                         System.err.println("You need to say something in order to SAY.");
@@ -187,6 +182,32 @@ public class GameClient {
                         System.out.println(remoteGameInterface.move(this.playerName, Integer.parseInt(tokens.remove(0))));
                     }
                     break;
+                case "REDO":
+                    if(lastCommand==null)
+                    {
+                        System.out.println("No command to redo");
+                        break;
+                    }
+                    parseInput(lastCommand);
+                    break;
+
+		
+		case "O":
+		    
+		case "OFFER":
+
+		    if (tokens.isEmpty()){
+			System.err.println("You need to provide a player to offer.");
+		    }
+		    else if (tokens.size() < 2) { 
+			System.err.println("You need to provide an item to offer.");
+		    }
+		    else {
+			String dstPlayerName = tokens.remove(0).toLowerCase();
+			System.out.println(remoteGameInterface.offer(this.playerName, dstPlayerName, tokens.remove(0)));
+		    }
+		    break;
+
                 case "PICKUP":
                     if(tokens.isEmpty()) {
                         System.err.println("You need to provide an object to pickup.");
@@ -195,6 +216,7 @@ public class GameClient {
                         System.out.println(remoteGameInterface.pickup(this.playerName, tokens.remove(0)));
                     }
                     break;
+
                 case "INVENTORY":
                     System.out.println(remoteGameInterface.inventory(this.playerName));
                     break; 
@@ -213,7 +235,25 @@ public class GameClient {
                 	break;
                 case "WALLET":
                 	System.out.println(remoteGameInterface.wallet(this.playerName));
+               
+        case "R_TRADE":
+                    if(tokens.isEmpty()) {
+                            System.err.println("You need to provide the name of the player that you want to trade with");
+                    }
+                    else{
+                        remoteGameInterface.requestPlayer(this.playerName, tokens.remove(0));
+                    }
+
                     break;
+
+        case "A_TRADE":
+                    if(tokens.isEmpty()) {
+                            System.err.println("You need to provide the name of the player you are accepting");
+                    }
+                    else{
+                        System.out.println(remoteGameInterface.playerResponse(this.playerName, tokens.remove(0)));
+                    }
+		    break;
                 case "POKE_GHOUL":
                     System.out.println(remoteGameInterface.pokeGhoul(this.playerName));
                     break;
@@ -222,8 +262,63 @@ public class GameClient {
                         System.err.println("You need to provide an item to give Ghoul.");
                     }else{
                         System.out.println(remoteGameInterface.bribeGhoul(this.playerName, tokens.remove(0)));
+		    }
+		break;
+		case "DROP":
+                    if(tokens.isEmpty()) {
+                        System.err.println("You need to provide an object to drop.");
+                    }
+                    else {
+                        System.out.println(remoteGameInterface.drop(this.playerName, tokens.remove(0)));
                     }
                     break;
+		case "SORT":
+	            InputStreamReader keyReader = new InputStreamReader(System.in);
+        	    BufferedReader keyInput = new BufferedReader(keyReader);
+		    boolean validInput = true;
+		    String mode = "";
+		    try {
+		    	while(validInput) {
+				System.out.println("Sort by name, weight, or price? (n/w/p)");
+	                	String option1 = keyInput.readLine();
+        	        	System.out.println("Increasing or decreasing order? (i/d)");
+                		String option2 = keyInput.readLine();
+
+                		option1.toLowerCase();
+                		option2.toLowerCase();
+
+        	        	mode = option1 + option2;
+	
+                		switch(mode) {
+                        		case "ni":
+                                		validInput = false;
+                                		break;
+                        		case "nd":
+                                		validInput = false;
+                                		break;
+                        		case "wi":
+                                		validInput = false;
+                                		break;
+                        		case "wd":
+                                		validInput = false;
+                                		break;
+                        		case "pi":
+                                		validInput = false;
+                                		break;
+                        		case "pd":
+                                		validInput = false;
+                                		break;
+                        		default:
+                	                	System.out.println("Please enter in valid input or use the correct format (n/w/p) -> (i/d)");	
+			    		}
+			    	}
+	    	    }
+		    catch(IOException e) {
+ 	                   System.err.println("[CRITICAL ERROR] Error at reading any input properly.  Terminating the client now.");
+       	 	           System.exit(-1);		
+		    }	    
+		    System.out.println(remoteGameInterface.sort(this.playerName, mode));
+		    break;		    
                 case "QUIT":
                     remoteGameInterface.leave(this.playerName);
                     runListener = false;
@@ -231,6 +326,9 @@ public class GameClient {
                 default:
                     System.out.println("Invalid Command, Enter \"help\" to get help");
                     break;
+            }
+            if(!command.equals("REDO")) {
+                this.lastCommand = command;
             }
         } catch (RemoteException ex) {
             Logger.getLogger(GameClient.class.getName()).log(Level.SEVERE, null, ex);
@@ -247,6 +345,71 @@ public class GameClient {
         new GameClient(args[0]);
     }
 
+
+    /*If no parameter has been given for showCommand, pass in null to showCommand.
+     *This will cause showCommand to print every commands available in game
+     */
+    private void showCommand()
+    {
+        showCommand(null);
+    }
+
+    //Shows every command available in game
+    private void showCommand(String commandToShow)
+    {
+        try {
+            File commandFile = new File("./help.xml");
+            
+            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+            Document document = dBuilder.parse(commandFile);
+
+            document.getDocumentElement().normalize();
+            NodeList xmlCommands = document.getElementsByTagName("help");
+
+            String description;
+            Element xmlElement;
+
+            System.out.println("The game allows you to use the following commands:");
+
+            //Get every commands from xml file and print them
+            for (int i = 0; i < xmlCommands.getLength(); i++) {
+                xmlElement = (Element) xmlCommands.item(i);
+
+                description = xmlElement.getElementsByTagName("description").item(0).getTextContent();
+
+                if ( !description.equals("") ){
+                    System.out.println(description);
+                }
+            }
+        } catch (ParserConfigurationException | SAXException | IOException ex) {
+            Logger.getLogger(Map.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    //Shows the introduction of the game
+    private void showIntroduction()
+    {
+        try {
+            File commandFile = new File("./help.xml");
+            
+            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+            Document document = dBuilder.parse(commandFile);
+
+            document.getDocumentElement().normalize();
+            NodeList xmlCommands = document.getElementsByTagName("introduction");
+
+            String description;
+            Element xmlElement;
+
+            xmlElement = (Element) xmlCommands.item(0);
+            description = xmlElement.getElementsByTagName("description").item(0).getTextContent();
+            System.out.println(description);
+        } catch (ParserConfigurationException | SAXException | IOException ex) {
+            Logger.getLogger(Map.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
     /**
      * Inner class to handle remote message input to this program.  
      *  - Runs as a separate thread.  Interrupt it to kill it.
