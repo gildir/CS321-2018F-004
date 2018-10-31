@@ -45,11 +45,14 @@ The rate at which objects get dropped is controlled by a hardcoded value in Game
 ### 108 Create an in Game Map to Assist in Navigating the World
 In the near future, a feature to display an in game map of nearby rooms will be added. A player will be able to type the command “map”, and the game will generate a 3X5 map of nearby rooms and exits. The map show each room you can walk to, and displays exit possible exit out of the room. The actual game map is not guaranteed to be a linear grid, for example, moving east and then west does not guarantee you end up in the room you started in, so visible exits show only that an exit exists in that direction, not necessarily that it goes to the room displayed.
 
+![alt text](https://github.com/cwells21/CS321-2018F-004/blob/world_documentation/src/WorldFileReadMe.png)
+
 ### 109 Item Cap on the Number of Elements dropped in the Room (Shane)
 The number of items that could be dropped in a room was limited to 5, but NPCs that are passing by would continue to “drop items” in a room that is already filled to capacity, although no new items dropped while the room is full will appear in the room. This issue was addressed by throwing an index out of bounds exception when adding items to a room that is at capacity. This solution may be used by the team with the task of handling players dropping items to address the similar issue of players dropping items when the room is at capacity, as the out of bounds exception will be thrown if the players attempt to drop items in a room at its item capacity. Should the item capacity of rooms be adjusted in the future, this change should remain unaffected, as the exception is thrown if adding the object fails the check on the item capacity of the room in question.
 
 ### 110 Quest NPC in the clock tower room (Shane)
 There is a quest NPC in the clock tower room whose job is to give quests to the players, but since the quest system has not been implemented yet, the quest NPC serves no purpose other than its presence. In adding a quest NPC to the clock tower room, a NPC class was created which may be used by other teams in the creation of any NPCs they need to accomplish their goals, such as the pvp team for their rock, paper, scissors tutor NPC. Currently the NPC class only has a name, list of quests, and room they are located in. NPCs may be used as an intermediary between the players and the game system, or provide more interaction with the world through practice pvp, talking, quests and other potential methods of interaction. In the current implementation the quest NPC is placed in the room with an id of 1, as that is the clock tower room, but in later iterations of the game it may be desirable to have the quest NPC in other rooms or have multiple quest npcs for different areas/parts of the game.
 
+![alt text](https://github.com/cwells21/CS321-2018F-004/blob/world_documentation/src/NPC_UML.jpg)
 
 
