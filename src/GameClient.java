@@ -16,6 +16,16 @@ import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.w3c.dom.Document;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
+import java.io.File;
+import java.io.IOException;
+
 /**
  *
  * @author Kevin
@@ -41,6 +51,7 @@ public class GameClient {
     public GameClient(String host) {
         this.runGame = true;
         boolean nameSat = false;
+
         
         System.out.println("Welcome to the client for an RMI based online game.\n");
         System.out.println("This game allows you to connect to a server an walk around a virtual,");
@@ -69,6 +80,8 @@ public class GameClient {
     	System.out.println("  A_TRADE player  - Accept a trade with another player");
 	System.out.println("  O or OFFER player object - Offer player an item");
         System.out.println();
+        showIntroduction();
+        showCommand();
         
 
         // Set up for keyboard input for local commands.
@@ -167,6 +180,11 @@ public class GameClient {
                 case "RIGHT":
                     System.out.println(remoteGameInterface.right(this.playerName));
                     break;
+                case "PICKUPALL":
+                System.out.println(remoteGameInterface.pickupAll(this.playerName));
+                    break;
+                case "HELP":
+                showCommand();
                 case "SAY":
                     if(tokens.isEmpty()) {
                         System.err.println("You need to say something in order to SAY.");
@@ -339,6 +357,71 @@ public class GameClient {
         new GameClient(args[0]);
     }
 
+
+    /*If no parameter has been given for showCommand, pass in null to showCommand.
+     *This will cause showCommand to print every commands available in game
+     */
+    private void showCommand()
+    {
+        showCommand(null);
+    }
+
+    //Shows every command available in game
+    private void showCommand(String commandToShow)
+    {
+        try {
+            File commandFile = new File("./help.xml");
+            
+            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+            Document document = dBuilder.parse(commandFile);
+
+            document.getDocumentElement().normalize();
+            NodeList xmlCommands = document.getElementsByTagName("help");
+
+            String description;
+            Element xmlElement;
+
+            System.out.println("The game allows you to use the following commands:");
+
+            //Get every commands from xml file and print them
+            for (int i = 0; i < xmlCommands.getLength(); i++) {
+                xmlElement = (Element) xmlCommands.item(i);
+
+                description = xmlElement.getElementsByTagName("description").item(0).getTextContent();
+
+                if ( !description.equals("") ){
+                    System.out.println(description);
+                }
+            }
+        } catch (ParserConfigurationException | SAXException | IOException ex) {
+            Logger.getLogger(Map.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    //Shows the introduction of the game
+    private void showIntroduction()
+    {
+        try {
+            File commandFile = new File("./help.xml");
+            
+            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+            Document document = dBuilder.parse(commandFile);
+
+            document.getDocumentElement().normalize();
+            NodeList xmlCommands = document.getElementsByTagName("introduction");
+
+            String description;
+            Element xmlElement;
+
+            xmlElement = (Element) xmlCommands.item(0);
+            description = xmlElement.getElementsByTagName("description").item(0).getTextContent();
+            System.out.println(description);
+        } catch (ParserConfigurationException | SAXException | IOException ex) {
+            Logger.getLogger(Map.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
     /**
      * Inner class to handle remote message input to this program.  
      *  - Runs as a separate thread.  Interrupt it to kill it.
