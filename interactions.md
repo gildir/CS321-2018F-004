@@ -138,6 +138,6 @@ There are fixes that are made to the code base to improve the experience of the 
 
 ### Help command if wrong input and typo fixes
 
-The help command fixes the most important error which was whenever a wrong value is entered, the game crashes. It fixes it and gives the command for help command which prints all the commands. The typo fix is minor but still improves the experience for the players.
+The help command fixes the most important error which was whenever a wrong value is entered, the game crashes. It fixes it and gives the command for help command which prints all the commands. The typo fix is minor but still improves the experience for the players. The fix is done simply by adding a default case for the main switcher statement.
 
 ![Image](Team8_helpCommandSample.PNG)
