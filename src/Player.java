@@ -15,14 +15,13 @@ public class Player {
     public LinkedList<Item> currentInventory;
     private String name;
     private int currentRoom;
+    private Direction currentDirection;
     private PrintWriter replyWriter = null;
     private DataOutputStream outputWriter = null;
     private DataInputStream inputWriter = null;
     private boolean inTrade = false;
     private boolean tradeRequested = false;
     private String tradePartner = "";
-    @Deprecated
-    private Direction currentDirection;
 
     public Player(String name) {
         this.currentRoom = 1;
@@ -31,6 +30,39 @@ public class Player {
         this.currentInventory = new LinkedList<>();
     }
     
+    public void turnLeft() {
+        switch(this.currentDirection.toString()) {
+            case "North":
+                this.currentDirection = Direction.WEST;
+                break;
+            case "South":
+                this.currentDirection = Direction.EAST;
+                break;
+            case "East":
+                this.currentDirection = Direction.NORTH;
+                break;
+            case "West":
+                this.currentDirection = Direction.SOUTH;
+                break;                
+        }
+    }
+    
+    public void turnRight() {
+        switch(this.currentDirection.toString()) {
+            case "North":
+                this.currentDirection = Direction.EAST;
+                break;
+            case "South":
+                this.currentDirection = Direction.WEST;
+                break;
+            case "East":
+                this.currentDirection = Direction.SOUTH;
+                break;
+            case "West":
+                this.currentDirection = Direction.NORTH;
+                break;                
+        }
+    }
     
     public String getName() {
         return name;
@@ -141,6 +173,14 @@ public class Player {
         this.currentRoom = room;
     }
     
+    public String getCurrentDirection() {
+        return this.currentDirection.name();
+    }
+    
+    public Direction getDirection() {
+        return this.currentDirection;
+    }
+    
     public String viewInventory() {
         String result = "";
         if(this.currentInventory.isEmpty() == true) {
@@ -197,48 +237,4 @@ public class Player {
 		}
 	}
     }
-
-    @Deprecated
-    public void turnLeft() {
-        switch(this.currentDirection.toString()) {
-            case "North":
-                this.currentDirection = Direction.WEST;
-                break;
-            case "South":
-                this.currentDirection = Direction.EAST;
-                break;
-            case "East":
-                this.currentDirection = Direction.NORTH;
-                break;
-            case "West":
-                this.currentDirection = Direction.SOUTH;
-                break;                
-        }
-    }
-    @Deprecated
-    public void turnRight() {
-        switch(this.currentDirection.toString()) {
-            case "North":
-                this.currentDirection = Direction.EAST;
-                break;
-            case "South":
-                this.currentDirection = Direction.WEST;
-                break;
-            case "East":
-                this.currentDirection = Direction.SOUTH;
-                break;
-            case "West":
-                this.currentDirection = Direction.NORTH;
-                break;                
-        }
-    }
-    @Deprecated
-    public String getCurrentDirection() {
-        return this.currentDirection.name();
-    }
-    @Deprecated
-    public Direction getDirection() {
-        return this.currentDirection;
-    }
-    
 }

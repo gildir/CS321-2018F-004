@@ -135,11 +135,6 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
     public String move(String name, int distance) throws RemoteException {
         return core.move(name, distance);
     }
-
-    @Override
-    public String move(String name,Direction direction)throws RemoteException{
-        return core.move(name, direction);
-    }
       
     /**
      * Attempts to pick up an object < target >. Will return a message on any success or failure.
