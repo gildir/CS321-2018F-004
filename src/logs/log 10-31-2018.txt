@@ -1,9 +1,0 @@
-Daily Log for 10-31-2018
-[10-31-2018 06:56:08] - SERVER STARTED
-[10-31-2018 06:56:23] - You see a Ghoul enter this room
-[10-31-2018 06:56:36] - You see a Ghoul enter this room
-[10-31-2018 06:56:48] - You see a Ghoul leave this room
-[10-31-2018 06:57:00] - You see a Ghoul enter this room
-[10-31-2018 06:57:06] - You see a student rush past and drop a Flower99 (0.5)  on the ground.
-[10-31-2018 06:57:14] - You see a Ghoul leave this room
-[10-31-2018 06:57:17] - SERVER FORCIBLY TERMINATED
