@@ -27,6 +27,9 @@ import java.io.FileNotFoundException;
 
 
 
+
+
+
 /**
  *
  * @author Kevin
@@ -505,6 +508,11 @@ public class GameCore implements GameCoreInterface {
                 dailyLogger.write(message);
 			    String newMessage = otherPlayer.filterMessage(message);
 				otherPlayer.getReplyWriter().println(newMessage);
+				/* Can delete this. Was causing merge conflict. Functionality remains unchanged.
+			if (otherPlayer != player && otherPlayer.getCurrentRoom() == player.getCurrentRoom()) {
+				dailyLogger.write(message);
+				otherPlayer.getReplyWriter().println(message);
+				*/
 			}
 		}
 	}
@@ -522,6 +530,10 @@ public class GameCore implements GameCoreInterface {
 				dailyLogger.write(message);
 			    String newMessage = player.filterMessage(message);
 				player.getReplyWriter().println(newMessage);
+				/* Delete this, functionality remains unchanged
+				dailyLogger.write(message);
+				player.getReplyWriter().println(message);
+				*/
 			}
 		}
 	}
