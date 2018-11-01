@@ -2,11 +2,15 @@
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.LinkedList;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Scanner;
 import java.io.File;
 import java.io.IOException;
+
+
+
 
 /**
  *
@@ -15,6 +19,8 @@ import java.io.IOException;
 public class GameCore implements GameCoreInterface {
     private final PlayerList playerList;
     private final Map map;
+    protected DailyLogger dailyLogger;
+    private HashMap<Integer,Shop> shoplist;
     private Ghoul ghoul;
     
     /**
@@ -27,8 +33,13 @@ public class GameCore implements GameCoreInterface {
         
         // Generate the game map.
         map = new Map(worldFile);
+        this.dailyLogger = new DailyLogger();
+        dailyLogger.write("SERVER STARTED");
+        playerList = new PlayerList(); 
         
-        playerList = new PlayerList();
+        // Builds a list of shops mapped to their map id (can be expanded as needed)
+        shoplist = new HashMap<Integer,Shop>();
+        shoplist.put(new Integer(1), new Shop("Clocktower shop", "The shopping destination for all of your gaming needs."));
         
         Thread objectThread = new Thread(new Runnable() {
             @Override
@@ -70,7 +81,8 @@ public class GameCore implements GameCoreInterface {
                         room = map.randomRoom();
                         room.addObject(object);
 
-                        GameCore.this.broadcast(room, "You see a student rush past and drop a " + object + " on the ground.");
+						GameCore.this.broadcast(room, "You see a student rush past and drop a " + object + " on the ground.");
+						
                     } catch (InterruptedException ex) {
                         Logger.getLogger(GameObject.class.getName()).log(Level.SEVERE, null, ex);}
                 }}});
@@ -133,8 +145,169 @@ public class GameCore implements GameCoreInterface {
 			}
 		}
     }
+    
+      
+    
+    /**
+     * @author Group 4: King
+     * Adds the player to list of players in store, and returns shop they just entered
+     * @param name Name of the player to add to shop
+     * @return The id of the shop the player will enter, -1 otherwise
+     */
+    public int shop(String name) {
+    	Player player = this.playerList.findPlayer(name);
+    	Room room = map.findRoom(player.getCurrentRoom());
+    	
+    	// Add player to shop in room if applicable
+    	if (map.isShoppable(room)) {
+    		return room.getId();
+    	}
+    	return -1;
+    }
+    
 
 
+    /**
+     * Returns Shop.tostring
+     * @param id The shop's id in the hashmap
+     * @return a reference to the shop
+     */
+    public String getShopStr(int id) {
+    	return this.shoplist.get(id).toString();
+    }
+    
+    /**
+     * Allows player to sell an item to a shop, and increases their money
+     * @author Team 4: King
+     * @param name Name of the player
+     * @param shopId The ID of the shop the player is selling an item to
+     * @param item The item the player is selling (eventually will be an Item obj)
+     */
+    public double sellItem(String name, int shopId, String item) {
+    	Player player = this.playerList.findPlayer(name);
+    	Shop s = shoplist.get(shopId);
+    	double value = 0;
+    	
+    	Item removed = player.removeObjectFromInventory(item);
+    	if (removed != null) {
+    		s.add(removed);
+    		value = removed.price;
+        	player.changeMoney(value);
+    	}
+    	
+    	//int value = removed.getValue();
+    	return value;
+    }
+    
+    /**
+     * 605B_buy_method
+     * Allows player to sell an item to a shop, and increases their money
+     * @author Team 4: Mistry
+     * @param name Name of the player
+     * @param shopId The ID of the shop the player is selling an item to
+     * @param item The item the player is buying (eventually will be an Item obj)
+     */
+    public String buyItem(String name, int shopId, String itemName)
+    {
+    	double val = 0;
+    	Player player = this.playerList.findPlayer(name);
+    	Shop s = shoplist.get(shopId);
+    	
+    	Item item = null;
+    	
+    	for (Item ii : s.getInven()) 
+    		if (ii.name.compareToIgnoreCase(itemName) == 0) 
+    			item = ii;
+
+    	if (item == null)  return "Item not in stock!!!";    	
+    	
+    	if(s.getInven().contains(item))
+    	{
+    		if (player.getMoney() > item.price) {
+    			s.remove(item);
+    		}
+    		else {
+    			return "Not enough money!!!";
+    		}
+    	}
+    	
+    	
+    	player.addObjectToInventory(item);
+    
+    	//val = removed.getValue() * 1.2;
+    	val = item.price;
+    	player.changeMoney(-val);
+    	return "Thank you, that will be $" + val + ".";
+    }
+
+    /**
+     * Takes the player into venmo. The new and improved way to exchange money with other players.
+     * 
+     * @author Team 4: Alaqeel
+     * @param name Name of the player enter the bank
+     */	@Override
+	public String venmo(String name, ArrayList<String> tokens) {
+		// checks if the player forgot to enter enough commands
+		if (tokens.isEmpty()) return "You need to provide more arguments.\n" + Venmo.instructions();
+		
+		// Gets the object of the caller player
+		Player player1 = this.playerList.findPlayer(name);
+			
+		// Executes the relevant commands
+		switch(tokens.remove(0).toUpperCase()) {
+			case "SEND": // sending a transaction
+				if (tokens.isEmpty()) return "Specify recipient and amount.";
+				// gets the object of the receiving player
+				Player player2 = this.playerList.findPlayer(tokens.remove(0));
+				// checks that the name is correct
+				if (player2 == null) return "Incorrect player name."; 
+				// checks if user entered a transaction amount
+				if (tokens.isEmpty()) return "Specify transaction amount";
+				
+				float amount;
+				// checks if the player entered a valid number
+				try {
+					amount = Float.parseFloat(tokens.remove(0));
+				} catch (NumberFormatException e) {
+					return "Please enter a valid number.";
+				}
+				return Venmo.send(player1, player2, amount);
+			case "HELP": // prints the help menu
+				return "This is how you can use Venmo:\n" + Venmo.instructions();
+			case "DEMO": // helpful for demo purposes
+				if (!tokens.isEmpty() && tokens.remove(0).equalsIgnoreCase("********")) {
+					player1.changeMoney(10);
+					System.out.printf("[Venmo] %s excuted the demo command\n", player1.getName());
+					return "Shush! Don't tell anyone that I added $10.00 to your wallet.";
+				}
+			default:
+				return "Unknown argument.\n" + Venmo.instructions();
+		}		
+	}      
+	
+	/**
+	 * Shows player how much money they have
+	 * @param name Name of the player
+	 * @return A string representation of the player's money
+	 */
+	public String wallet(String name) {
+		Player player = this.playerList.findPlayer(name);
+		double m = player.getMoney();
+		
+		return "$" + String.format("%.02f", m);
+	}
+	
+
+	/**
+     * Returns a Shop's inventory as a formatted string
+     * @param id The shop ID
+     * @return A formatted string representing the Shop's inventory
+     */
+    public String getShopInv(int id) {
+		Shop s = this.shoplist.get(new Integer(id));
+		return s.getObjects();
+    }
+    
     /**
      * Attempts to pick up all objects in the room. Will return a message on any success or failure.
      * @param name Name of the player to move
@@ -164,8 +337,6 @@ public class GameCore implements GameCoreInterface {
     }       
     
  
-
-
 	public String bribeGhoul(String playerName, String item){
 		item = item.toLowerCase();
 		Player player = playerList.findPlayer(playerName);
@@ -270,7 +441,7 @@ public class GameCore implements GameCoreInterface {
 	if (object != null)
 	    srcPlayer.addObjectToInventory(object);
 	return returnMessage;
-    }
+	}
 
 	//Same functionality as bribe_ghoul, not currently used
 	//public String giveToGhoul(String object, String playerName) {
@@ -311,6 +482,7 @@ public class GameCore implements GameCoreInterface {
 	public void broadcast(Player player, String message) {
 		for (Player otherPlayer : this.playerList) {
 			if (otherPlayer != player && otherPlayer.getCurrentRoom() == player.getCurrentRoom()) {
+				dailyLogger.write(message);
 				otherPlayer.getReplyWriter().println(message);
 			}
 		}
@@ -326,6 +498,7 @@ public class GameCore implements GameCoreInterface {
 	public void broadcast(Room room, String message) {
 		for (Player player : this.playerList) {
 			if (player.getCurrentRoom() == room.getId()) {
+				dailyLogger.write(message);
 				player.getReplyWriter().println(message);
 			}
 		}
@@ -559,7 +732,38 @@ public class GameCore implements GameCoreInterface {
 		}
 		return "You stop moving and begin to stand around again.";
 	}
+	
 
+	/**
+     * Attempts to walk towards <direction> 1 time.  If unable to make it all the way,
+     *  a message will be returned.  Will display LOOK on any partial success.
+     * @param name Name of the player to move
+     * @param distance Number of rooms to move forward through.
+     * @return Message showing success.
+     */
+    public String move(String name, Direction direction) {
+        Player player = this.playerList.findPlayer(name);
+        if(player == null) {
+            return null;
+        }
+        Room room = map.findRoom(player.getCurrentRoom());
+        if(room.canExit(direction)) {
+            this.broadcast(player, player.getName() + " has walked off to the " + direction);
+            player.getReplyWriter().println(room.exitMessage(direction));
+            player.setCurrentRoom(room.getLink(direction));
+            String logMessage = String.format("%s used command MOVE %s [moved from %s to %s]", player.getName(), direction.toString(), room.getTitle(), map.findRoom(player.getCurrentRoom()).getTitle());
+			this.broadcast(player, player.getName() + " just walked into the area.");
+			Ghost g = new Ghost(player);
+				g.start();
+            player.getReplyWriter().println(this.map.findRoom(player.getCurrentRoom()).toString(playerList, player));
+        } else {
+            String logMessage  = String.format("%s used command MOVE %s [unable to move in direction]", player.getName(), direction.toString());
+            player.getReplyWriter().println(room.exitMessage(direction));
+            return "You grumble a little and stop moving.";
+        }
+        return "You stop moving and begin to stand around again.";
+	}
+	
 	/**
 	 * Attempts to pick up an object < target >. Will return a message on any
 	 * success or failure.
@@ -623,7 +827,82 @@ public class GameCore implements GameCoreInterface {
         else {
             return null;
         }
+    }       
+
+    /**
+     * Attempts to erase the whiteboard in the room. Will return a message on any success or failure.
+     * @param name Name of the player to erase the whiteboard
+     * @return Message showing success. 
+     */    
+    public String whiteboardErase(String name) {
+        Player player = this.playerList.findPlayer(name);
+        if(player != null) {
+            Room room = map.findRoom(player.getCurrentRoom());
+            room.whiteboardErase();
+            this.broadcast(player, player.getName() + " erases the text on the whiteboard.");
+            dailyLogger.write(player.getName(), "WHITEBOARD ERASE", room.getTitle());
+            return "You erase the text on the whiteboard.";
+        }
+        else {
+            return null;
+        }
     }
+
+    /**
+     * Attempts to read the whiteboard in the room. Will return a message on any success or failure.
+     * @param name Name of the player to erase the whiteboard
+     * @return Message showing success. 
+     */    
+    public String whiteboardRead(String name) {
+        Player player = this.playerList.findPlayer(name);
+        if(player != null) {
+            Room room = map.findRoom(player.getCurrentRoom());
+            String text = room.getWhiteboardText();
+            dailyLogger.write(player.getName(), "WHITEBOARD READ", room.getTitle());
+            this.broadcast(player, player.getName() + " reads the text on the whiteboard.");
+            if (text != null && !text.isEmpty()) {
+                return "The whiteboard says: \"" + text + "\".";
+            }
+            else {
+                return "The whiteboard is empty";
+            }
+
+        }
+        else {
+            return null;
+        }
+    }
+
+    /**
+     * Attempts to  the whiteboard in the room. Will return a message on any success or failure.
+     * @param name Name of the player to erase the whiteboard
+     * @param text Text to write on the whiteboard
+     * @return Message showing success. 
+     */    
+    public String whiteboardWrite(String name, String text) {
+        try {
+            Player player = this.playerList.findPlayer(name);
+            if(player != null) {
+                Room room = map.findRoom(player.getCurrentRoom());
+                boolean success = room.addWhiteboardText(text);
+                dailyLogger.write(player.getName(), "WHITEBOARD WRITE", text, room.getTitle());
+                if (success) { 
+                    this.broadcast(player, player.getName() + " writes on the whiteboard.");
+                    return "You write text on the whiteboard.";
+                }
+                else {
+                    this.broadcast(player, player.getName() + " tries to write on the whiteboard, but it's full.");
+                    return "You try to write text on the whiteboard, but there's not enough space.";
+                }
+            }
+            else {
+                return null;
+            }
+        } catch (IllegalArgumentException e) {
+            return null;
+        }
+    }
+    
 
     /**
 	 * Returns a string representation of all objects you are carrying.
