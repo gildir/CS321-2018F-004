@@ -15,10 +15,10 @@ import java.util.Scanner;
 public class Map{   
         private final LinkedList<Room> map;
 
-        public Map() {
+        public Map(String worldFile) {
                 map = new LinkedList<>();
                 try {
-                        File mapFile = new File("./rooms.csv");
+                        File mapFile = new File(worldFile);
                         Scanner mapIn = new Scanner(mapFile).useDelimiter(",|\\n|\\r\\n");
 
                         int numRooms, numExits;

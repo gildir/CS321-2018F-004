@@ -52,10 +52,10 @@ public class GameCore implements GameCoreInterface {
      * 
      * This is the main core that both the RMI and non-RMI based servers will interface with.
      */
-    public GameCore() throws IOException {
+    public GameCore(String worldFile) throws IOException {
 
         // Generate the game map.
-        map = new Map();
+        map = new Map(worldFile);
         this.dailyLogger = new DailyLogger();
         dailyLogger.write("SERVER STARTED");
         playerList = new PlayerList(); 
