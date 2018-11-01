@@ -62,11 +62,11 @@ public class GameCore implements GameCoreInterface {
         // Builds a list of shops mapped to their map id (can be expanded as needed)
         shoplist = new HashMap<Integer,Shop>();
         shoplist.put(new Integer(1), new Shop("Clocktower shop", "The shopping destination for all of your gaming needs."));
-        
+
         pw = new PrintWriter(new FileWriter("chatlog.txt"));
         pw.flush();
         pw.close();
-        
+
         initConnectionsLogger();
         
         accountManager = new PlayerAccountManager(playerAccountsLocation);
@@ -110,9 +110,9 @@ public class GameCore implements GameCoreInterface {
                         object = objects.get(rand.nextInt(objects.size()));
                         room = map.randomRoom();
                         room.addObject(object);
-                        
-                        GameCore.this.broadcast(room, "You see a student rush past and drop a " + object + " on the ground.");
 
+						GameCore.this.broadcast(room, "You see a student rush past and drop a " + object + " on the ground.");
+						
                     } catch (InterruptedException ex) {
                         Logger.getLogger(GameObject.class.getName()).log(Level.SEVERE, null, ex);}
                 }}});
@@ -143,14 +143,15 @@ public class GameCore implements GameCoreInterface {
 
 
                             } catch (InterruptedException ex) {
-                        Logger.getLogger(GameObject.class.getName()).log(Level.SEVERE, null, ex);
+                                Logger.getLogger(GameObject.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        }
                     }
-                }
-            }
-        });
-        objectThread.setDaemon(true);
+                });
+
+                objectThread.setDaemon(true);
                 awakeDayGhoul.setDaemon(true);
-        objectThread.start();
+                objectThread.start();
                 awakeDayGhoul.start();
             }
 	
@@ -204,7 +205,7 @@ public class GameCore implements GameCoreInterface {
     public String getShopStr(int id) {
     	return this.shoplist.get(id).toString();
     }
-
+    
     /**
      * Allows player to sell an item to a shop, and increases their money
      * @author Team 4: King
@@ -343,7 +344,7 @@ public class GameCore implements GameCoreInterface {
     	player.changeMoney(-val);
     	return "Thank you, that will be $" + val + ".";
     }
-    
+
     /**
      * Takes the player into venmo. The new and improved way to exchange money with other players.
      * 
@@ -503,63 +504,63 @@ public class GameCore implements GameCoreInterface {
 	//}
 
 	/**
-     * Broadcasts a message to all other players in the same room as player.
+	 * Broadcasts a message to all other players in the same room as player.
 	 * 
-     * @param player Player initiating the action.
-     * @param message Message to broadcast.
-     */   
-    @Override
-    public void broadcast(Player player, String message) {
-        for(Player otherPlayer : this.playerList) {
+	 * @param player  Player initiating the action.
+	 * @param message Message to broadcast.
+	 */
+	@Override
+	public void broadcast(Player player, String message) {
+		for (Player otherPlayer : this.playerList) {
 			if(otherPlayer != player && !otherPlayer.isIgnoring(player) && otherPlayer.getCurrentRoom() == player.getCurrentRoom()) {
                 dailyLogger.write(message);
 			    String newMessage = otherPlayer.filterMessage(message);
 				otherPlayer.getReplyWriter().println(newMessage);
 				/* Can delete this. Was causing merge conflict. Functionality remains unchanged.
-            if(otherPlayer != player && otherPlayer.getCurrentRoom() == player.getCurrentRoom()) {
+			if (otherPlayer != player && otherPlayer.getCurrentRoom() == player.getCurrentRoom()) {
 				dailyLogger.write(message);
-                otherPlayer.getReplyWriter().println(message);
+				otherPlayer.getReplyWriter().println(message);
 				*/
-            }
-        }
-    }
-  
-    /**
-     * Broadcasts a message to all players in the specified room.
+			}
+		}
+	}
+
+	/**
+	 * Broadcasts a message to all players in the specified room.
 	 * 
-     * @param room Room to broadcast the message to.
-     * @param message Message to broadcast.
-     */   
-    @Override
-    public void broadcast(Room room, String message) {
-        for(Player player : this.playerList) {
-            if(player.getCurrentRoom() == room.getId()) {
+	 * @param room    Room to broadcast the message to.
+	 * @param message Message to broadcast.
+	 */
+	@Override
+	public void broadcast(Room room, String message) {
+		for (Player player : this.playerList) {
+			if (player.getCurrentRoom() == room.getId()) {
 				dailyLogger.write(message);
 			    String newMessage = player.filterMessage(message);
 				player.getReplyWriter().println(newMessage);
 				/* Delete this, functionality remains unchanged
 				dailyLogger.write(message);
-                player.getReplyWriter().println(message);
+				player.getReplyWriter().println(message);
 				*/
-            }
-        }
-    }
-    
-    /**
-     * Returns the player with the given name or null if no such player.
+			}
+		}
+	}
+
+	/**
+	 * Returns the player with the given name or null if no such player.
 	 * 
-     * @param name Name of the player to find.
-     * @return Player found or null if none.
-     */
-    @Override
-    public Player findPlayer(String name) {
-        for(Player player : this.playerList) {
-            if(player.getName().equalsIgnoreCase(name)) {
-                return player;
-            }
-        }
-        return null;
-    }
+	 * @param name Name of the player to find.
+	 * @return Player found or null if none.
+	 */
+	@Override
+	public Player findPlayer(String name) {
+		for (Player player : this.playerList) {
+			if (player.getName().equalsIgnoreCase(name)) {
+				return player;
+			}
+		}
+		return null;
+	}
      /**
      * Prints message to player if request can processed, contacts other player about their request
      * @param requestingTrader Name of the player who has requested the trade
@@ -576,7 +577,7 @@ public class GameCore implements GameCoreInterface {
             requestingPlayer.getReplyWriter().println("This player does not exist, choose an existing trade partner");
             return;
         }
-    
+
         boolean tradeInProgress = false;
         for(Player player : this.playerList) {
             if(player.isInTrade()) {
@@ -596,7 +597,7 @@ public class GameCore implements GameCoreInterface {
 
 
 
-    /**
+	/**
 	 * Allows a player to join the game. If a player with the same name
 	 * (case-insensitive) is already in the game, then this returns false.
 	 * Otherwise, adds a new player of that name to the game. The next step is
@@ -650,99 +651,99 @@ public class GameCore implements GameCoreInterface {
 		}
 	}
 
-	    /**
-     * Returns a look at the area of the specified player.
+       	/**
+	 * Returns a look at the area of the specified player.
  * 
-     * @param playerName Player Name
-     * @return String representation of the current area the player is in.
-     */
-    @Override
-    public String look(String playerName) {
-        Player player = playerList.findPlayer(playerName);
+	 * @param playerName Player Name
+	 * @return String representation of the current area the player is in.
+	 */
+	@Override
+	public String look(String playerName) {
+		Player player = playerList.findPlayer(playerName);
 
-        if(player != null) {        
-            // Find the room the player is in.
-            Room room = this.map.findRoom(player.getCurrentRoom());
+		if (player != null) {
+			// Find the room the player is in.
+			Room room = this.map.findRoom(player.getCurrentRoom());
 
 			// Send a message to all other players in the room that this player is looking
 			// around.
-            this.broadcast(player, player.getName() + " takes a look around.");
+			this.broadcast(player, player.getName() + " takes a look around.");
 
-            // Return a string representation of the room state.
+			// Return a string representation of the room state.
 			// return room.toString(this.playerList, player);
 			// modified in 2018.10.17, which for player can look ghoul.
 			if (room.hasGhoul) {
 				String watchGhoul = "\n\nTHERE IS A GHOUL IN THE ROOM!!!!!!\n\n";
 				return room.toString(this.playerList, player) + watchGhoul;
 			} else {
-            return room.toString(this.playerList, player);
-        }
+				return room.toString(this.playerList, player);
+			}
 		}
-        // No such player exists
-        else {
-            return null;
-        }
-    }        
-   
-    /**
-     * Turns the player left.
+		// No such player exists
+		else {
+			return null;
+		}
+	}
+
+	/**
+	 * Turns the player left.
 	 * 
-     * @param name Player Name
-     * @return String message of the player turning left.
-     */
-    @Override
-    public String left(String name) {
-        Player player = this.playerList.findPlayer(name);
-        if(player != null) {
-            // Compel the player to turn left 90 degrees.
-            player.turnLeft();
-            
+	 * @param name Player Name
+	 * @return String message of the player turning left.
+	 */
+	@Override
+	public String left(String name) {
+		Player player = this.playerList.findPlayer(name);
+		if (player != null) {
+			// Compel the player to turn left 90 degrees.
+			player.turnLeft();
+
 			// Send a message to every other player in the room that the player has turned
 			// left.
-            this.broadcast(player, player.getName() + " turns to the left.");
-            
-            // Return a string back to the calling function with an update.
-            return "You turn to the left to face " + player.getCurrentDirection();
+			this.broadcast(player, player.getName() + " turns to the left.");
+
+			// Return a string back to the calling function with an update.
+			return "You turn to the left to face " + player.getCurrentDirection();
 		} else {
-            return null;
-        }
-    }
-    
-    /**
-     * Turns the player right.
+			return null;
+		}
+	}
+
+	/**
+	 * Turns the player right.
 	 * 
-     * @param name Player Name
-     * @return String message of the player turning right.
-     */
-    @Override
-    public String right(String name) {
-        Player player = this.playerList.findPlayer(name);
-        if(player != null) {
-            // Compel the player to turn left 90 degrees.
-            player.turnRight();
-            
+	 * @param name Player Name
+	 * @return String message of the player turning right.
+	 */
+	@Override
+	public String right(String name) {
+		Player player = this.playerList.findPlayer(name);
+		if (player != null) {
+			// Compel the player to turn left 90 degrees.
+			player.turnRight();
+
 			// Send a message to every other player in the room that the player has turned
 			// right.
-            this.broadcast(player, player.getName() + " turns to the right.");
-            
-            // Return a string back to the calling function with an update.
-            return "You turn to the right to face " + player.getCurrentDirection();
+			this.broadcast(player, player.getName() + " turns to the right.");
+
+			// Return a string back to the calling function with an update.
+			return "You turn to the right to face " + player.getCurrentDirection();
 		} else {
-            return null;
-        }
-    }    
-    
-    /**
-     * Says "message" to everyone in the current area.
+			return null;
+		}
+	}
+
+	/**
+	 * Says "message" to everyone in the current area.
 	 * 
-     * @param name Name of the player to speak
-     * @param message Message to speak
-     * @return Message showing success.
-     */
-    @Override
-    public String say(String name, String message) {
-        Player player = this.playerList.findPlayer(name);
-        if(player != null) {
+	 * @param name    Name of the player to speak
+	 * @param message Message to speak
+	 * @return Message showing success.
+	 */
+	@Override
+	public String say(String name, String message) {
+		Player player = this.playerList.findPlayer(name);
+		if (player != null) {
 //			this.broadcast(player, player.getName() + " says, \"" + message + "\"");
             this.sayToAll(message, player);
             String newMessage = player.filterMessage(message);
@@ -756,12 +757,12 @@ public class GameCore implements GameCoreInterface {
 		} else {
 			return null;
 		}
-        }
+	}
 
 	public String draggedToSpawn(Player player) {
 		if (player == null) {
-            return null;
-        }
+			return null;
+		}
 		this.broadcast(player, player.getName() + "has been knocked out by the ghoul!");
 		player.setCurrentRoom(1);
 		this.broadcast(player, player.getName() + " woke up in the area");
@@ -772,42 +773,44 @@ public class GameCore implements GameCoreInterface {
 			player.getCurrentInventory().remove(player.getCurrentInventory().get(rand));
 		}
 		return "You wake up and find yourself at the clock tower, with a lighter burden.";
-    }  
-    
-    /**
+	}
+
+	/**
 	 * Attempts to walk forward < distance > times. If unable to make it all the
 	 * way, a message will be returned. Will display LOOK on any partial success.
 	 * 
-     * @param name Name of the player to move
-     * @param distance Number of rooms to move forward through.
-     * @return Message showing success.
-     */
-    public String move(String name, int distance) {
-        Player player = this.playerList.findPlayer(name);
-        if(player == null || distance <= 0) {
-            return null;
-        }
-        Room room;
-        while(distance-- != 0) {
-            room = map.findRoom(player.getCurrentRoom());
-            if(room.canExit(player.getDirection())) {
-                this.broadcast(player, player.getName() + " has walked off to the " + player.getCurrentDirection());
-                player.getReplyWriter().println(room.exitMessage(player.getDirection()));
-                player.setCurrentRoom(room.getLink(player.getDirection()));
-                this.broadcast(player, player.getName() + " just walked into the area.");
+	 * @param name     Name of the player to move
+	 * @param distance Number of rooms to move forward through.
+	 * @return Message showing success.
+	 */
+	public String move(String name, int distance) {
+		Player player = this.playerList.findPlayer(name);
+		if (player == null || distance <= 0) {
+			return null;
+		}
+		Room room;
+		while (distance-- != 0) {
+			room = map.findRoom(player.getCurrentRoom());
+			if (room.canExit(player.getDirection())) {
+				this.broadcast(player, player.getName() + " has walked off to the " + player.getCurrentDirection());
+				player.getReplyWriter().println(room.exitMessage(player.getDirection()));
+				player.setCurrentRoom(room.getLink(player.getDirection()));
+				this.broadcast(player, player.getName() + " just walked into the area.");
 				Ghost g = new Ghost(player);
 				g.start();
 				player.getReplyWriter()
 						.println(this.map.findRoom(player.getCurrentRoom()).toString(playerList, player));
 			} else {
-                player.getReplyWriter().println(room.exitMessage(player.getDirection()));
-                return "You grumble a little and stop moving.";
-            }
-        }
-        return "You stop moving and begin to stand around again.";
-    }
-    
-    /**
+				player.getReplyWriter().println(room.exitMessage(player.getDirection()));
+				return "You grumble a little and stop moving.";
+			}
+		}
+		return "You stop moving and begin to stand around again.";
+	}
+	
+
+
+	/**
      * Attempts to walk towards <direction> 1 time.  If unable to make it all the way,
      *  a message will be returned.  Will display LOOK on any partial success.
      * @param name Name of the player to move
@@ -849,25 +852,25 @@ public class GameCore implements GameCoreInterface {
      * Attempts to pick up an object < target >. Will return a message on any success or failure.
      * @param name Name of the player to move
      * @param target The case-insensitive name of the object to pickup.
-     * @return Message showing success. 
-     */    
+     * @return Message showing success.
+     */
     public String pickup(String name, String target) {
         Player player = this.playerList.findPlayer(name);
-        if(player != null) {
+        if(player != null)  {
             if (player.currentInventory.size() <10){
-            Room room = map.findRoom(player.getCurrentRoom());
+                Room room = map.findRoom(player.getCurrentRoom());
                 Item object = room.removeObject(target);
-            if(object != null) {
-                player.addObjectToInventory(object);
-                this.broadcast(player, player.getName() + " bends over to pick up a " + target + " that was on the ground.");
-                return "You bend over and pick up a " + target + ".";
+                if(object != null) {
+                    player.addObjectToInventory(object);
+                    this.broadcast(player, player.getName() + " bends over to pick up a " + target + " that was on the ground.");
+                    return "You bend over and pick up a " + target + ".";
+                }
+                else {
+                    this.broadcast(player, player.getName() + " bends over to pick up something, but doesn't seem to find what they were looking for.");
+                    return "You look around for a " + target + ", but can't find one.";
+                }
             }
             else {
-                this.broadcast(player, player.getName() + " bends over to pick up something, but doesn't seem to find what they were looking for.");
-                return "You look around for a " + target + ", but can't find one.";
-            }
-        }
-        else {
                 return " your inventory is full.";
             }
         }
@@ -944,8 +947,8 @@ public class GameCore implements GameCoreInterface {
         else {
             return null;
         }
-    }       
-    
+    }
+
     /**
      * Attempts to  the whiteboard in the room. Will return a message on any success or failure.
      * @param name Name of the player to erase the whiteboard
@@ -977,21 +980,21 @@ public class GameCore implements GameCoreInterface {
     }
 
     /**
-     * Returns a string representation of all objects you are carrying.
+	 * Returns a string representation of all objects you are carrying.
 	 * 
-     * @param name Name of the player to move
-     * @return Message showing success.
-     */    
-    @Override
-    public String inventory(String name) {
-        Player player = this.playerList.findPlayer(name);
-        if(player != null) {
-            this.broadcast(player, "You see " + player.getName() + " looking through their pockets.");
-            return "You look through your pockets and see" + player.viewInventory();
+	 * @param name Name of the player to move
+	 * @return Message showing success.
+	 */
+	@Override
+	public String inventory(String name) {
+		Player player = this.playerList.findPlayer(name);
+		if (player != null) {
+			this.broadcast(player, "You see " + player.getName() + " looking through their pockets.");
+			return "You look through your pockets and see" + player.viewInventory();
 		} else {
 			return null;
 		}
-        }
+	}
     /**
      * Returns a string representation of all objects you are carrying.
      * @param name Name of the player to move
@@ -1006,7 +1009,7 @@ public class GameCore implements GameCoreInterface {
         else {
             return null;
         }
-    }    
+    }
     /**
      * Return string representation of trade acceptance
      * @param acceptingTrader Name of the player who is accepting the trade
@@ -1035,26 +1038,25 @@ public class GameCore implements GameCoreInterface {
         return "You have accepted to enter a trade with " + acceptingPlayer.getTradePartner();
     }
 
-     /**
-     * Leaves the game.
+	/**
+	 * Leaves the game.
 	 * 
-     * @param name Name of the player to leave
-     * @return Player that was just removed.
-     */    
-    @Override
-    public Player leave(String name) {
-        Player player = this.playerList.findPlayer(name);
-        if(player != null) {
-            this.broadcast(player, "You see " + player.getName() + " heading off to class.");
-            this.playerList.removePlayer(name);
+	 * @param name Name of the player to leave
+	 * @return Player that was just removed.
+	 */
+	@Override
+	public Player leave(String name) {
+		Player player = this.playerList.findPlayer(name);
+		if (player != null) {
+			this.broadcast(player, "You see " + player.getName() + " heading off to class.");
+			this.playerList.removePlayer(name);
             connectionLog(false, player.getName());
             this.accountManager.forceUpdateData(player);
-            return player;
-        }
-        return null;
-    }
-    
-    
+			return player;
+		}
+		return null;
+	}
+
 	/**
      * Whispers "message" to a specific player.
      * @param srcName Name of the player to speak

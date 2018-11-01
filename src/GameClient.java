@@ -475,10 +475,10 @@ public class GameClient {
                     remoteGameInterface.leave(this.playerName);
                     runListener = false;
                     break;
-			case "DELETE":
-				remoteGameInterface.deleteAccount(this.playerName);
-				runListener = false;
-				break;
+                case "DELETE":
+                     remoteGameInterface.deleteAccount(this.playerName);
+                     runListener = false;
+                     break;
                 case "HELP":
                     showCommand();
                     break;
