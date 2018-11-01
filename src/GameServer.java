@@ -33,6 +33,7 @@ public class GameServer {
      */
     public GameServer(String host) throws RemoteException {           
 	   try {
+		   System.out.println("host:" + host);
 			// Step 1: Create the remote listener thread.  This thread is used
 			//          for asynchronous replies from the game for events the 
 			//          client has not generated. (ie. other players talking)
@@ -51,10 +52,19 @@ public class GameServer {
 			Logger.getLogger(GameServer.class.getName()).log(Level.SEVERE, null, re);
 		} catch (MalformedURLException ex) {
 			Logger.getLogger(GameServer.class.getName()).log(Level.SEVERE, null, ex);
-		}
-	}
+		} catch (IOException e) {
+           e.printStackTrace();
+       }
+    }
     
     public static void main(String[] args) {
+        Runtime.getRuntime().addShutdownHook(new Thread(){ 
+            public void run(){ 
+                DailyLogger dailyLogger = new DailyLogger();
+                dailyLogger.write("SERVER FORCIBLY TERMINATED");
+                System.out.println("shutdown");
+            } 
+            });
 		if(args.length < 1) {
 			System.out.println("[SHUTDOWN] .. This program requires one argument. Run as java -Djava.security.policy=game.policy GameServer hostname");
 			System.exit(-1);
