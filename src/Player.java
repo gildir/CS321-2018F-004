@@ -1,17 +1,21 @@
 
-import java.io.DataOutputStream;
 import java.io.DataInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.DataOutputStream;
 import java.io.PrintWriter;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.LinkedList;
-import java.util.*;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  *
  * @author Kevin
  */
+@JsonIgnoreProperties({ "replyWriter", "outputWriter" })
 public class Player {
     public LinkedList<Item> currentInventory;
     private String name;
@@ -26,7 +30,7 @@ public class Player {
     private String tradePartner = "";
     private String lastPlayer = "";
 
-    public Player(String name) {
+	public Player(@JsonProperty("name") String name) {
         this.currentRoom = 1;
         this.currentDirection = Direction.NORTH;
         this.name = name;
@@ -219,6 +223,11 @@ public class Player {
 
     /**Reeds changes end here**/
 
+	@JsonProperty("direction")
+	public void setDirection(Direction d) {
+		this.currentDirection = d;
+	}
+
     public void turnLeft() {
         switch(this.currentDirection.toString()) {
             case "North":
@@ -265,6 +274,7 @@ public class Player {
         return name;
     }
 
+	@JsonProperty("name")
     public void setName(String name) {
         this.name = name;
     }
@@ -273,6 +283,7 @@ public class Player {
         return currentInventory;
     }
 
+	@JsonProperty("currentInventory")
     public void setCurrentInventory(LinkedList<Item> currentInventory) {
         this.currentInventory = currentInventory;
     }
@@ -364,10 +375,12 @@ public class Player {
         return this.currentRoom;
     }
     
+	@JsonProperty("currentRoom")
     public void setCurrentRoom(int room) {
         this.currentRoom = room;
     }
     
+	@JsonIgnore
     public String getCurrentDirection() {
         return this.currentDirection.name();
     }

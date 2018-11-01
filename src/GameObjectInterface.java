@@ -39,8 +39,21 @@ public interface GameObjectInterface extends Remote {
      * @return true if name is available and join is successful, false otherwise.
      * @throws RemoteException 
      */
-    public boolean joinGame(String name) throws RemoteException;
-    
+	public boolean joinGame(String name, String password) throws RemoteException;
+
+	/**
+	 * Allows a player to create an account. If the player name already exists this
+	 * returns the corresponding enum. If the players name is of an invalid format
+	 * this returns that corresponding emum. Otherwise this returns success and
+	 * calls joinGame.
+	 * 
+	 * @param name
+	 * @param password
+	 * @return an enumeration representing the creation status.
+	 * @throws RemoteException
+	 */
+	public Responses createAccountAndJoinGame(String name, String password) throws RemoteException;
+
     /**
      * Returns a look at the area of the specified player.
      * @param name Player Name
@@ -255,6 +268,15 @@ public interface GameObjectInterface extends Remote {
      * @throws RemoteException 
      */    
     public void leave(String name) throws RemoteException;
+
+	/**
+	 * Delete a player's account.
+	 * 
+	 * @param name Name of the player to be deleted
+	 * @throws RemoteException
+	 */
+	public void deleteAccount(String name) throws RemoteException;
+
     
     /**
      * Takes the player into venmo. The new and improved way to exchange money with other players.
