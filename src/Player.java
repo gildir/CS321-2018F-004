@@ -25,6 +25,8 @@ public class Player {
     private boolean tradeRequested = false;
     private String tradePartner = "";
     private String lastPlayer = "";
+    private boolean hasChallenge = false;
+    private String challenger = " ";
 
     public Player(String name) {
         this.currentRoom = 1;
@@ -382,6 +384,22 @@ public class Player {
     
     public void setMoney(double m){
         this.money = m;
+    }
+
+    public String getChallenger(){
+        return challenger;
+    }
+
+    public void setChallenger(String name){
+        challenger = name;
+    }
+
+    public boolean getHasChallenge(){
+        return hasChallenge;
+    }
+
+    public void setHasChallenge(boolean challenged){
+        hasChallenge = challenged;
     }
     
     /**

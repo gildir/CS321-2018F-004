@@ -464,6 +464,22 @@ public class GameClient {
                 case "CUSTOMHELP":
                     showCustomCommands();
                     break;
+                case "CHALLENGE":
+                    if(tokens.isEmpty()){
+                      System.err.println("You need to provide a name.");
+                    }
+                    else{
+                      System.out.println(remoteGameInterface.challenge(this.playerName, tokens.remove(0)));
+                    }
+                    break;
+                case "ACCEPT":
+                    if(tokens.isEmpty()){
+                      System.err.println("You need to provide a name.");
+                    }
+                    else{
+                      System.out.println(remoteGameInterface.accept(this.playerName, tokens.remove(0)));
+                    }
+                    break;
                 default:
                     //If command does not match with any, see if it is custom command
                     if (!executeCustomCommand(command, tokens)) {
