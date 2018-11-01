@@ -1,4 +1,4 @@
-
+ 
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -56,7 +56,7 @@ public class GameClient {
     protected String playerName;
 
     private String lastCommand;
-
+    
     /** 
      * Main class for running the game client.
      */
@@ -184,7 +184,7 @@ public class GameClient {
             switch(command) {
 
                 case "LOOK":
-                    System.out.println(remoteGameInterface.look(this.playerName));
+                    System.out.println(remoteGameInterface.look(this.playerName));   
                     break;
                 case "LEFT":
                     System.out.println(remoteGameInterface.left(this.playerName));
@@ -235,6 +235,7 @@ public class GameClient {
                     break;
                 case "ONLINE":
                     System.out.println(remoteGameInterface.showPlayers());
+					break;
                 case "W":
                 case "WHISPER":
                     if (tokens.isEmpty()) {
@@ -290,15 +291,15 @@ public class GameClient {
                     parseInput(lastCommand);
                     break;
 
-
+		
 		case "O":
-
+		    
 		case "OFFER":
 
 		    if (tokens.isEmpty()){
 			System.err.println("You need to provide a player to offer.");
 		    }
-		    else if (tokens.size() < 2) {
+		    else if (tokens.size() < 2) { 
 			System.err.println("You need to provide an item to offer.");
 		    }
 		    else {
@@ -317,10 +318,10 @@ public class GameClient {
                     break;
                 case "INVENTORY":
                     System.out.println(remoteGameInterface.inventory(this.playerName));
-                    break;
+                    break; 
                 case "VENMO": // Team 4: Alaqeel
                 	System.out.println(remoteGameInterface.venmo(this.playerName, tokens));
-                    break;
+                    break;   
                 case "SHOP":
                 	int shopId = remoteGameInterface.shop(this.playerName); // Need to make this a serializable type
                 	if (shopId != -1) {
@@ -333,7 +334,7 @@ public class GameClient {
                 	break;
                 case "WALLET":
                 	System.out.println(remoteGameInterface.wallet(this.playerName));
-                	break;
+                	break;               
         case "R_TRADE":
                     if(tokens.isEmpty()) {
                             System.err.println("You need to provide the name of the player that you want to trade with");
@@ -382,7 +383,7 @@ public class GameClient {
                                 System.out.println(remoteGameInterface.whiteboardRead(this.playerName));
                                 break;
                             case "WRITE":
-                                if (tokens.isEmpty()) {
+                                if (tokens.isEmpty()) { 
                                     System.err.println("You need to provide an argument to the WHITEBOARD WRITE command");
                                 }
                                 else {
@@ -394,7 +395,7 @@ public class GameClient {
                                 break;
                         }
                     }
-                    break;
+                    break;        
 		case "SORT":
 	            InputStreamReader keyReader = new InputStreamReader(System.in);
         	    BufferedReader keyInput = new BufferedReader(keyReader);
@@ -411,7 +412,7 @@ public class GameClient {
                 		option2.toLowerCase();
 
         	        	mode = option1 + option2;
-
+	
                 		switch(mode) {
                         		case "ni":
                                 		validInput = false;
@@ -432,16 +433,16 @@ public class GameClient {
                                 		validInput = false;
                                 		break;
                         		default:
-                	                	System.out.println("Please enter in valid input or use the correct format (n/w/p) -> (i/d)");
+                	                	System.out.println("Please enter in valid input or use the correct format (n/w/p) -> (i/d)");	
 			    		}
 			    	}
 	    	    }
 		    catch(IOException e) {
  	                   System.err.println("[CRITICAL ERROR] Error at reading any input properly.  Terminating the client now.");
-       	 	           System.exit(-1);
-		    }
+       	 	           System.exit(-1);		
+		    }	    
 		    System.out.println(remoteGameInterface.sort(this.playerName, mode));
-		    break;
+		    break;		    
                 case "QUIT":
                     remoteGameInterface.leave(this.playerName);
                     runListener = false;
@@ -501,7 +502,7 @@ public class GameClient {
     {
         try {
             File commandFile = new File("./help.xml");
-
+            
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
             Document document = dBuilder.parse(commandFile);
@@ -534,7 +535,7 @@ public class GameClient {
     {
         try {
             File commandFile = new File("./help.xml");
-
+            
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
             Document document = dBuilder.parse(commandFile);

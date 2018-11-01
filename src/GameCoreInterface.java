@@ -101,6 +101,15 @@ public interface GameCoreInterface {
     public String showPlayers();
 
     /**
+     * Whispers "message" to a specific player.
+     * @param srcName Name of the player to speak
+     * @param dstName Name of the player to receive
+     * @param message Message to speak
+     * @return Message showing success
+     */
+    public String whisper(String srcName, String dstName, String message);
+
+    /**
      * Player ignores further messages from another Player
      * @param srcName Player making the ignore request
      * @param dstName Player to be ignored
