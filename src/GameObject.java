@@ -22,10 +22,10 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
      *  and establishes a new, empty, player list.
      * @throws RemoteException 
      */
-    public GameObject() throws RemoteException, IOException {
+    public GameObject(String worldFile) throws RemoteException, IOException {
         super();
         
-        core = new GameCore();
+        core = new GameCore(worldFile);
 
     }
 
