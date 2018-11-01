@@ -47,10 +47,10 @@ public class GameCore implements GameCoreInterface {
 	 * @throws Exception
 	 * 
 	 */
-    public GameCore(String playerAccountsLocation) throws Exception {
+    public GameCore(String playerAccountsLocation, String worldFile) throws Exception {
 
         // Generate the game map.
-        map = new Map();
+        map = new Map(worldFile);
         this.dailyLogger = new DailyLogger();
         dailyLogger.write("SERVER STARTED");
         playerList = new PlayerList(); 
@@ -205,7 +205,7 @@ public class GameCore implements GameCoreInterface {
     public String getShopStr(int id) {
     	return this.shoplist.get(id).toString();
     }
-    
+
     /**
      * Allows player to sell an item to a shop, and increases their money
      * @author Team 4: King
