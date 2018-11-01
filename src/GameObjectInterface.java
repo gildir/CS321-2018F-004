@@ -87,6 +87,8 @@ public interface GameObjectInterface extends Remote {
      */
     public String move(String name, int distance) throws RemoteException;
 
+    public String move(String name, Direction direction)throws RemoteException;
+
     /**
      * Attempts to pick up an object < object >. Will return a message on any success or failure.
      * @param name Name of the player to pickup an object
@@ -138,6 +140,29 @@ public interface GameObjectInterface extends Remote {
      * @return Message of success or fail
      */ 
     public String playerResponse(String acceptingTrader, String traderToAccept) throws RemoteException;
+
+    /**
+     * Attempts to erase the whiteboard in the room. Will return a message on any success or failure.
+     * @param name Name of the player to erase the whiteboard
+     * @return Message showing success. 
+     */    
+    public String whiteboardErase(String name) throws RemoteException;
+
+    /**
+     * Attempts to read the whiteboard in the room. Will return a message on any success or failure.
+     * @param name Name of the player to erase the whiteboard
+     * @return Message showing success. 
+     */    
+    public String whiteboardRead(String name) throws RemoteException; 
+
+    /**
+     * Attempts to  the whiteboard in the room. Will return a message on any success or failure.
+     * @param name Name of the player to erase the whiteboard
+     * @param text Text to write on the whiteboard
+     * @return Message showing success. 
+     */    
+    public String whiteboardWrite(String name, String text) throws RemoteException;
+
 
      /**
      * Returns a string representation of all objects you are carrying.

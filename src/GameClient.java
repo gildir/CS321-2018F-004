@@ -20,11 +20,18 @@ import org.w3c.dom.Document;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.OutputKeys;
+import org.w3c.dom.Attr;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
+
 
 /**
  *
@@ -53,9 +60,12 @@ public class GameClient {
     public GameClient(String host) {
         this.runGame = true;
         boolean nameSat = false;
-
+        
+        //please modify the xml to add more commands
         showIntroduction();
         showCommand();
+        
+
 
         // Set up for keyboard input for local commands.
         InputStreamReader keyboardReader = new InputStreamReader(System.in);
@@ -122,7 +132,7 @@ public class GameClient {
     
     /** 
      * Simple method to parse the local input and remotely execute the RMI commands.
-     * @param input 
+     * @param input
      */
     private void parseInput(String input) {
         boolean reply;
@@ -138,16 +148,18 @@ public class GameClient {
             System.out.println("The keyboard input had no commands.");
             return;
         }
-        
+
         String message = "";
+
+        String command = tokens.remove(0).toUpperCase();
         //for redo old messages
-        String command = input.toUpperCase();
+        String commandCheck = input.toUpperCase();
 
         try {
-            switch(tokens.remove(0).toUpperCase()) {
+            switch(command) {
 
                 case "LOOK":
-                    System.out.println(remoteGameInterface.look(this.playerName));
+                    System.out.println(remoteGameInterface.look(this.playerName));   
                     break;
                 case "LEFT":
                     System.out.println(remoteGameInterface.left(this.playerName));
@@ -158,8 +170,6 @@ public class GameClient {
                 case "PICKUPALL":
                 System.out.println(remoteGameInterface.pickupAll(this.playerName));
                     break;
-                case "HELP":
-                showCommand();
                 case "SAY":
                     if(tokens.isEmpty()) {
                         System.err.println("You need to say something in order to SAY.");
@@ -176,10 +186,12 @@ public class GameClient {
                     break;
                 case "MOVE":
                     if(tokens.isEmpty()) {
-                        System.err.println("You need to provide a distance in order to move.");
-                    }
-                    else {
-                        System.out.println(remoteGameInterface.move(this.playerName, Integer.parseInt(tokens.remove(0))));
+                        System.err.println("You need to provide a direction to move.");
+                    } else {
+                        Direction dir = Direction.toValue(tokens.remove(0));
+                        if(dir!=null) {
+                            System.out.println(remoteGameInterface.move(this.playerName, dir));
+                        }                    
                     }
                     break;
                 case "REDO":
@@ -270,6 +282,32 @@ public class GameClient {
                         System.out.println(remoteGameInterface.drop(this.playerName, tokens.remove(0)));
                     }
                     break;
+                case "WHITEBOARD":
+                    if(tokens.isEmpty()) {
+                        System.err.println("You need to provide an argument to the WHITEBOARD command.");
+                    }
+                    else {
+                        switch(tokens.remove(0).toUpperCase()) {
+                            case "ERASE":
+                                System.out.println(remoteGameInterface.whiteboardErase(this.playerName));
+                                break;
+                            case "READ":
+                                System.out.println(remoteGameInterface.whiteboardRead(this.playerName));
+                                break;
+                            case "WRITE":
+                                if (tokens.isEmpty()) { 
+                                    System.err.println("You need to provide an argument to the WHITEBOARD WRITE command");
+                                }
+                                else {
+                                    System.out.println(remoteGameInterface.whiteboardWrite(this.playerName, tokens.remove(0)));
+                                }
+                                break;
+                            default:
+                                System.err.println("Invalid argument provided to WHITEBOARD command.");
+                                break;
+                        }
+                    }
+                    break;        
 		case "SORT":
 	            InputStreamReader keyReader = new InputStreamReader(System.in);
         	    BufferedReader keyInput = new BufferedReader(keyReader);
@@ -321,12 +359,32 @@ public class GameClient {
                     remoteGameInterface.leave(this.playerName);
                     runListener = false;
                     break;
+                case "HELP":
+                    showCommand();
+                    break;
+                case "ADDCOMMAND":
+                    if(tokens.isEmpty()) {
+                        System.err.println("You need to provide a custom command to add.");
+                    } else {
+                        String customCommand = tokens.remove(0).toUpperCase();
+                        addCustomCommand(customCommand);
+                    }
+                    break;
+                case "REMOVECOMMAND":
+                    removeCustomCommand();
+                    break;
+                case "CUSTOMHELP":
+                    showCustomCommands();
+                    break;
                 default:
-                    System.out.println("Invalid Command, Enter \"help\" to get help");
+                    //If command does not match with any, see if it is custom command
+                    if (!executeCustomCommand(command, tokens)) {
+                        System.out.println("Invalid Command, Enter \"help\" to get help");
+                    }
                     break;
             }
-            if(!command.equals("REDO")) {
-                this.lastCommand = command;
+            if(!commandCheck.equals("REDO")) {
+                this.lastCommand = commandCheck;
             }
         } catch (RemoteException ex) {
             Logger.getLogger(GameClient.class.getName()).log(Level.SEVERE, null, ex);
@@ -342,7 +400,6 @@ public class GameClient {
         System.out.println("[STARTUP] Game Client Now Starting...");
         new GameClient(args[0]);
     }
-
 
     /*If no parameter has been given for showCommand, pass in null to showCommand.
      *This will cause showCommand to print every commands available in game
@@ -375,7 +432,7 @@ public class GameClient {
                 xmlElement = (Element) xmlCommands.item(i);
 
                 description = xmlElement.getElementsByTagName("description").item(0).getTextContent();
-
+                //If the commmand does not have description yet, do not show it.
                 if ( !description.equals("") ){
                     System.out.println(description);
                 }
@@ -405,9 +462,220 @@ public class GameClient {
             description = xmlElement.getElementsByTagName("description").item(0).getTextContent();
             System.out.println(description);
         } catch (ParserConfigurationException | SAXException | IOException ex) {
-            Logger.getLogger(Map.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(GameClient.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
+    private void addCustomCommand(String customCommandName)
+    {
+        InputStreamReader keyboardReader = new InputStreamReader(System.in);
+        BufferedReader keyboardInput = new BufferedReader(keyboardReader);
+        String commandToExecute;
+
+        try {
+            File customCommandFile = new File("./CommandShortcut.xml");
+
+            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+            Document document;
+            Element root;
+
+            //If no xml file CommandShortcut exists, create one
+            if (!customCommandFile.exists())
+            {
+                document = dBuilder.newDocument();
+
+                root = document.createElement("CustomCommand");
+                document.appendChild(root);
+            //Else use already existing xml file CommandShortcut
+            } else {
+                document = dBuilder.parse(customCommandFile);
+
+                NodeList rootElements = document.getElementsByTagName("CustomCommand");
+                root = (Element) rootElements.item(0);
+            }
+
+            NodeList customCommands = document.getElementsByTagName("Command");
+
+            Element cCommand;
+
+            //Get every custom commands to check if user is trying to use already existing custom command name
+            for (int i = 0; i < customCommands.getLength(); i++) {
+                cCommand = (Element) customCommands.item(i);
+
+                if (customCommandName.equals(cCommand.getAttribute("name"))) {
+                    System.out.println("There already exists a custom command with a name " + customCommandName);
+                    return;
+                }
+            }
+
+            //Get command to bind to custom command
+            System.out.println("Enter the command you wish to bind to " + customCommandName + ":");
+            commandToExecute = keyboardInput.readLine();
+
+            //Add elements to xml file
+            Element command = document.createElement("Command");
+            root.appendChild(command);
+
+            Attr attr = document.createAttribute("name");
+            attr.setValue(customCommandName);
+            command.setAttributeNode(attr);
+
+            Element bindCommand = document.createElement("CommandToExecute");
+            bindCommand.appendChild(document.createTextNode(commandToExecute));
+            command.appendChild(bindCommand);
+
+            TransformerFactory tFactory = TransformerFactory.newInstance();
+            Transformer transformer = tFactory.newTransformer();
+            DOMSource domSource = new DOMSource(document);
+            StreamResult streamResult = new StreamResult(new File("./CommandShortcut.xml"));
+
+            //Add indentation to xml file for readability
+            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+            transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
+
+            transformer.transform(domSource, streamResult);
+
+            System.out.println("Command " + customCommandName + " has been added.");
+
+        } catch (ParserConfigurationException | TransformerException | SAXException | IOException ex) {
+            Logger.getLogger(GameClient.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private boolean executeCustomCommand(String commandName, ArrayList<String> parameters) {
+        try {
+            File customCommandFile = new File("./CommandShortcut.xml");
+
+            //If no custom command exists yet, return false
+            if (!customCommandFile.exists())
+            {
+                return false;
+            }
+
+            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+            Document document = dBuilder.parse(customCommandFile);
+
+            NodeList customCommands = document.getElementsByTagName("Command");
+
+            Element cCommand;
+
+            //Check if custom command with commandName exists
+            for (int i = 0; i < customCommands.getLength(); i++) {
+                cCommand = (Element) customCommands.item(i);
+
+                //If there is a custom command, use command binded to perform next aciton
+                if (commandName.equals(cCommand.getAttribute("name").toUpperCase())) {
+                    String bindCommand = cCommand.getElementsByTagName("CommandToExecute").item(0).getTextContent();
+                    for (int j = 0; j < parameters.size(); j++)
+                    {
+                        bindCommand += " " + parameters.get(j).toUpperCase();
+                    }
+
+                    parseInput(bindCommand);
+                    return true;
+                }
+            }
+        } catch (ParserConfigurationException | SAXException | IOException ex) {
+            Logger.getLogger(GameClient.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return false;
+    }
+
+    private void removeCustomCommand() {
+        try {
+            File customCommandFile = new File("./CommandShortcut.xml");
+
+            if (!showCustomCommands()) {
+                return;
+            }
+
+            InputStreamReader keyboardReader = new InputStreamReader(System.in);
+            BufferedReader keyboardInput = new BufferedReader(keyboardReader);
+            String commandName;
+
+            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+            Document document = dBuilder.parse(customCommandFile);
+
+            NodeList customCommands = document.getElementsByTagName("Command");
+
+            Element cCommand;
+
+            System.out.println("\nEnter the custom command to delete:");
+            commandName = keyboardInput.readLine().toUpperCase();
+
+            //Check if custom command with commandName exists
+            for (int i = 0; i < customCommands.getLength(); i++) {
+                cCommand = (Element) customCommands.item(i);
+
+                //If there is a custom command, remove that command
+                if (commandName.equals(cCommand.getAttribute("name").toUpperCase())) {
+                    cCommand.getParentNode().removeChild(cCommand);
+                    System.out.println("Custom command " + commandName + " has been deleted");
+                    break;
+                }
+
+                if (i == (customCommands.getLength() - 1)) {
+                    System.out.println("No custom command " + commandName + " was found");
+                }
+            }
+
+            TransformerFactory tFactory = TransformerFactory.newInstance();
+            Transformer transformer = tFactory.newTransformer();
+            DOMSource domSource = new DOMSource(document);
+            StreamResult streamResult = new StreamResult(new File("./CommandShortcut.xml"));
+
+            transformer.transform(domSource, streamResult);
+
+        } catch (ParserConfigurationException | SAXException | IOException | TransformerException ex) {
+            Logger.getLogger(GameClient.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private boolean showCustomCommands()
+    {
+        try {
+            File customCommandFile = new File("./CommandShortcut.xml");
+
+            //If no custom command exists yet, return false
+            if (!customCommandFile.exists())
+            {
+                System.out.println("There is no custom command configured");
+                return false;
+            }
+
+            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+            Document document = dBuilder.parse(customCommandFile);
+
+            NodeList customCommands = document.getElementsByTagName("Command");
+
+            if (customCommands.getLength() == 0)
+            {
+                System.out.println("There is no custom command configured");
+                return false;
+            }
+
+            System.out.println("Here are the list of custom commands currently available:");
+
+            Element cCommand;
+
+            //Show every custom commands
+            for (int i = 0; i < customCommands.getLength(); i++) {
+                cCommand = (Element) customCommands.item(i);
+
+                System.out.println(cCommand.getAttribute("name").toUpperCase() + " - " + cCommand.getElementsByTagName("CommandToExecute").item(0).getTextContent());
+            }
+        } catch (ParserConfigurationException | SAXException | IOException ex) {
+            Logger.getLogger(Map.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return true;
+    }
+
     /**
      * Inner class to handle remote message input to this program.  
      *  - Runs as a separate thread.  Interrupt it to kill it.
