@@ -31,7 +31,7 @@ public class GameServer {
      * @param rmi
      * @throws RemoteException 
      */
-    public GameServer(String host, String worldFile) throws RemoteException {           
+    public GameServer(String host) throws RemoteException {           
 	   try {
 		   System.out.println("host:" + host);
 			// Step 1: Create the remote listener thread.  This thread is used
@@ -44,7 +44,7 @@ public class GameServer {
 			//  a) Create the security manager.
 			System.setSecurityManager(new SecurityManager());
 			//  b) Create the RMI remote object.
-			remoteObject = new GameObject(worldFile);
+			remoteObject = new GameObject();
 			//  c) Bind the remote object to the rmi service (rmiregistry must be running)
 			Naming.rebind("rmi://"+host+"/GameService", remoteObject);
 			System.err.println("[RUN] Game Server is now running and accepting connections.");
@@ -52,8 +52,10 @@ public class GameServer {
 			Logger.getLogger(GameServer.class.getName()).log(Level.SEVERE, null, re);
 		} catch (MalformedURLException ex) {
 			Logger.getLogger(GameServer.class.getName()).log(Level.SEVERE, null, ex);
-		}
-	}
+		} catch (IOException e) {
+           e.printStackTrace();
+       }
+    }
     
     public static void main(String[] args) {
         Runtime.getRuntime().addShutdownHook(new Thread(){ 
@@ -69,17 +71,8 @@ public class GameServer {
 		}
 		
         try {
-		        System.out.println("[STARTUP] Game GameServer Now Starting...");
-			if(args.length < 2){
-		           System.out.println("[STARTUP] Game GameServer Now Starting...");
-			   System.out.println("[STARTUP] Loading Default World rooms.csv...");
-			   new GameServer(args[0], "rooms.csv");
-			}
-			else{
-			   System.out.println("[STARTUP] Loading World " + args[1] + "...");
-			   new GameServer(args[0], args[1]);
-			}
-
+			System.out.println("[STARTUP] Game GameServer Now Starting...");
+			new GameServer(args[0]);
         } catch (RemoteException ex) {
             Logger.getLogger(GameServer.class.getName()).log(Level.SEVERE, null, ex);
         }

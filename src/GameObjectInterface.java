@@ -3,6 +3,8 @@
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.ArrayList;
+import java.util.HashSet;
 
 /**
  *
@@ -27,11 +29,6 @@ public interface GameObjectInterface extends Remote {
 	 * @throws RemoteException
 	 */
 	public String bribeGhoul(String playerName, String item) throws RemoteException;
-
-
-	//Same functionality as bribeGhoul. Not currently used.
-	//public String giveToGhoul(String object, String playerName) throws RemoteException;
-	
 
     /**
      * Sends a request to join the game.  
@@ -76,7 +73,87 @@ public interface GameObjectInterface extends Remote {
      * @throws RemoteException 
      */
     public String say(String name, String message) throws RemoteException;
-    
+
+    /**
+     * Generates list of all online players.
+     * @return String of linked list PlayerList
+     * @throws RemoteException
+     */
+    public String showPlayers() throws RemoteException;
+
+    /**
+     * Whispers "message" to a specific player.
+     * @param srcName Name of the player to speak
+     * @param dstName Name of the player to receive
+     * @param message Message to speak
+     * @return Message showing success
+     * @throws RemoteException
+     */
+    public String whisper(String srcName, String dstName, String message) throws RemoteException;
+
+    /**
+     * Reply "message" to last whisper.
+     * @param srcName Name of the player to speak
+     * @param message Message to speak
+     * @return Message showing success
+     * @throws RemoteException
+     */
+    public String quickReply(String srcName, String message) throws RemoteException;
+
+    /**
+     * Player ignores further messages from another Player
+     * @param srcName Player making the ignore request
+     * @param dstName Player to be ignored
+     * @return Message showing success
+     * @throws RemoteException
+     */
+    public String ignorePlayer(String srcName, String dstName) throws RemoteException;
+
+    //Feature 408. Unignore player.
+    /**
+     * Player unIgnores further messages from another Player
+     * @param srcName Player making the unIgnore request
+     * @param dstName Player to be unIgnored
+     * @return Message showing success
+     * @throws RemoteException
+     */
+    public String unIgnorePlayer(String srcName, String dstName) throws RemoteException;
+
+    /**
+     * Player displays the list of players that are being ignored
+     * @param name Player who's list is being targeted
+     * @return The list of players being ignored
+     * @throws RemoteException
+     */
+    public String getIgnoredPlayersList(String name) throws RemoteException;
+
+    // Feature 410: Joke
+    /**
+     * Tells a joke to the room. Reads local "chat config" file
+     * that keeps a list of jokes, one per line. The command
+     * chooses a random joke.
+     * @param filename the "chat config" file to read the joke from.
+     * */
+    public String joke(String filename) throws RemoteException;
+
+
+//Feature 411. Shout
+    /**
+     *Shouts "message" to everyone that is online
+     *@param name Name of the player speaking
+     *@param message Meesage to be spoken
+     *@return Message showing success.
+     *@throws RemoteException
+     */
+    public String shout(String name, String message) throws RemoteException;
+
+    /**
+     * Returns a player reference from the game core, from the player's name.
+     * @param playerName the name of the player you're lookng for
+     * @return the player (if found) from the game core
+     */
+    public void setPlayerFilteredWords(String playerName, HashSet<String> newFilteredWords) throws RemoteException;
+
     /**
      * Attempts to walk forward < distance > times.  If unable to make it all the way,
      *  a message will be returned.  Will display LOOK on any partial success.
