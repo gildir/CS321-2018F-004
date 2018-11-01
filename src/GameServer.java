@@ -52,8 +52,10 @@ public class GameServer {
 			Logger.getLogger(GameServer.class.getName()).log(Level.SEVERE, null, re);
 		} catch (MalformedURLException ex) {
 			Logger.getLogger(GameServer.class.getName()).log(Level.SEVERE, null, ex);
-		}
-	}
+		} catch (IOException e) {
+           e.printStackTrace();
+       }
+    }
     
     public static void main(String[] args) {
         Runtime.getRuntime().addShutdownHook(new Thread(){ 

@@ -1,6 +1,8 @@
  
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
@@ -15,6 +17,7 @@ import java.util.ArrayList;
 import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.HashSet;
 
 import org.w3c.dom.Document;
 import javax.xml.parsers.DocumentBuilder;
@@ -109,6 +112,9 @@ public class GameClient {
             remoteOutputThread.setDaemon(true);
             remoteOutputThread.start();
 
+            // 409 Word Filter
+            readWordFilterFile();
+
             // Collect input for the game.
             while(runGame) {
                 try {
@@ -129,8 +135,27 @@ public class GameClient {
             System.exit(-1);
         }        
     }
-    
-    /** 
+
+    // Helper for Features 4XX - Chat System
+    /**
+     * Method to decorate messages intended for use with the chat system.
+     * @param msgTokens User input words to decorate into a "message".
+     * @return "message" to be sent by the user
+     */
+    private String parseMessage(ArrayList<String> msgTokens) {
+        //TODO: Note - Tokenizer currently trims out multiple spaces - bug or feature?
+        StringBuilder msgBuilder = new StringBuilder();
+        msgBuilder.append("\"");
+        while (!msgTokens.isEmpty()) {
+            msgBuilder.append(msgTokens.remove(0));
+            if (!msgTokens.isEmpty())
+                msgBuilder.append(" ");
+        }
+        msgBuilder.append("\"");
+        return msgBuilder.toString();
+    }
+
+    /**
      * Simple method to parse the local input and remotely execute the RMI commands.
      * @param input
      */
@@ -191,9 +216,69 @@ public class GameClient {
                         Direction dir = Direction.toValue(tokens.remove(0));
                         if(dir!=null) {
                             System.out.println(remoteGameInterface.move(this.playerName, dir));
-                        }                    
+                        }
                     }
                     break;
+                case "SHOUT":
+                    if(tokens.isEmpty()) {
+                        System.err.println("You need to say something in order to SHOUT.");
+                    }
+                    else {
+                        while(tokens.isEmpty() == false) {
+                            message += tokens.remove(0);
+                            if(tokens.isEmpty() == false) {
+                                message += " ";
+                            }
+                        }
+                        System.out.println(remoteGameInterface.shout(this.playerName, message));
+                    }
+                    break;
+                case "W":
+                case "WHISPER":
+                    if (tokens.isEmpty()) {
+                        System.err.println("You need to provide a player to whisper.");
+                    }
+                    else if (tokens.size() < 2) {
+                        System.err.println("You need to provide a message to whisper.");
+                    }
+                    else {
+                        String dstPlayerName = tokens.remove(0).toLowerCase();
+                        message = parseMessage(tokens);
+                        System.out.println(remoteGameInterface.whisper(this.playerName, dstPlayerName, message));
+                    }
+                    break;
+                case "R":
+                case "REPLY":
+                    if (tokens.isEmpty()) {
+                        System.err.println("You need to provide a message.");
+                    }
+                    else {
+                        message = parseMessage(tokens);
+                        System.out.println(remoteGameInterface.quickReply(this.playerName, message));
+                    }
+                    break;
+                case "IGNORE":
+                    if(tokens.isEmpty()) {
+                        System.err.println("You need to provide a player to ignore");
+                    }
+                    else {
+                        System.out.println(remoteGameInterface.ignorePlayer(this.playerName, tokens.remove(0)));
+                    }
+                    break;
+                case "IGNORELIST":
+                    System.out.println(remoteGameInterface.getIgnoredPlayersList(this.playerName));
+                    break;
+                case "UNIGNORE":
+                    if(tokens.isEmpty()) {
+                        System.err.println("You need to provide a player to unignore");
+                    }
+                    else {
+                        System.out.println(remoteGameInterface.unIgnorePlayer(this.playerName, tokens.remove(0)));
+                    }
+                    break;
+                 case "JOKE":
+                     System.out.println((remoteGameInterface.say(this.playerName, ("Here's a joke for you: " + remoteGameInterface.joke("jokes.txt")))));
+                     break;
                 case "REDO":
                     if(lastCommand==null)
                     {
@@ -727,5 +812,42 @@ public class GameClient {
             }            
         }
     }    
-    
+
+
+
+    // Begin Feature 409 Word Filter
+
+    /**
+     * Reads a list of words from file, adds them to this player's list of words filtered from chat.
+     *
+     */
+    private void readWordFilterFile() {
+
+        HashSet<String> words = new HashSet<String>();
+        String filename = "FilteredWordsList-" + playerName + ".txt";
+
+        try {
+            File filteredWordsFile = new File(filename);
+            if(!filteredWordsFile.exists()) { filteredWordsFile.createNewFile(); }
+            BufferedReader br = new BufferedReader(new FileReader(filename));
+            String line = br.readLine();
+
+            while (line != null) {
+                String word = line.toLowerCase();
+                words.add(word);
+                words.add("\"" + word + "\"");
+                words.add("\"" + word);
+                words.add(word + "\"");
+                line = br.readLine();
+            }
+
+            remoteGameInterface.setPlayerFilteredWords(this.playerName, words);
+            br.close();
+
+        } catch(IOException i) {
+            System.err.print("\nI/O Exception thrown while attempting to read from filtered words File!\n");
+        }
+    }
+
+    //End Feature 409 Word Filter
 }

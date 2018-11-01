@@ -93,4 +93,25 @@ object are on the ground and what direction you are facing.
     <help command = "REDO">
         <description>  REDO          - Repeats the last command you entered.</description>
     </help>
+    <help command = "WHISPER">
+        <description>  WHISPER player message   - Whispers 'message' to 'player'.</description>
+    </help>
+    <help command = "REPLY">
+        <description>  REPLY message            - Reply 'message' to last whisper.</description>
+    </help>
+    <help command = "IGNORE">
+        <description>  IGNORE player            - Ignore messages from 'player'.</description>
+    </help>
+    <help command = "UNIGNORE">
+        <description>  UNIGNORE player          - Remove 'player' from ignore list.</description>
+    </help>
+    <help command = "IGNORELIST">
+        <description>  IGNORELIST               - Display a list of players you are ignoring.</description>
+    </help>
+    <help command = "SHOUT">
+        <description>  SHOUT message            - Shout 'message' to all players currently online.</description>
+    </help>
+    <help command = "JOKE">
+        <description>  JOKE                     - Tells a joke to everyone in the room.</description>
+    </help>
 </helps>
