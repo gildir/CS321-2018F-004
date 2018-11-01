@@ -219,23 +219,23 @@ public interface GameObjectInterface extends Remote {
     /**
      * Attempts to erase the whiteboard in the room. Will return a message on any success or failure.
      * @param name Name of the player to erase the whiteboard
-     * @return Message showing success.
-     */
+     * @return Message showing success. 
+     */    
     public String whiteboardErase(String name) throws RemoteException;
 
     /**
      * Attempts to read the whiteboard in the room. Will return a message on any success or failure.
      * @param name Name of the player to erase the whiteboard
-     * @return Message showing success.
-     */
-    public String whiteboardRead(String name) throws RemoteException;
+     * @return Message showing success. 
+     */    
+    public String whiteboardRead(String name) throws RemoteException; 
 
     /**
      * Attempts to  the whiteboard in the room. Will return a message on any success or failure.
      * @param name Name of the player to erase the whiteboard
      * @param text Text to write on the whiteboard
-     * @return Message showing success.
-     */
+     * @return Message showing success. 
+     */    
     public String whiteboardWrite(String name, String text) throws RemoteException;
 
 
@@ -253,15 +253,15 @@ public interface GameObjectInterface extends Remote {
      * @throws RemoteException 
      */    
     public void leave(String name) throws RemoteException;
-
+    
     /**
      * Takes the player into venmo. The new and improved way to exchange money with other players.
-     *
+     * 
      * @author Team 4: Alaqeel
      * @param name Name of the player enter the bank
-     * @param tokens
-     * @throws RemoteException
-     */
+     * @param tokens 
+     * @throws RemoteException 
+     */    
     public String venmo(String name, ArrayList<String> tokens) throws RemoteException;
 
     /**
@@ -272,7 +272,7 @@ public interface GameObjectInterface extends Remote {
      * @throws RemoteException
      */
     public int shop(String name) throws RemoteException;
-
+    
     /**
      * Returns a player object when given the player's name
      * @param name The name of the player to find
@@ -280,7 +280,7 @@ public interface GameObjectInterface extends Remote {
      * @throws RemoteException
      */
     public Player getPlayer(String name) throws RemoteException;
-
+   
     /**
      * Returns the amount of money in a player's wallet
      * @param name The name of the player
@@ -288,15 +288,15 @@ public interface GameObjectInterface extends Remote {
      * @throws RemoteException
      */
     public String wallet(String name) throws RemoteException;
-
+    
     /**
-     * Returns a reference to a shop
+     * Returns a reference to a shop 
      * @param id
      * @return the shop or null
-     * @throws RemoteException
+     * @throws RemoteException 
      */
     public String getShopStr(int id) throws RemoteException;
-
+    
     /**
      * Allows player to sell an item to a shop, and increases their money
      * @author Team 4: King
@@ -305,7 +305,7 @@ public interface GameObjectInterface extends Remote {
      * @param item The item the player is selling (eventually will be an Item obj)
      */
     public double sellItem(String name, int shopId, String item) throws RemoteException;
-
+    
     /**
      * 605B_buy_method
      * Allows player to sell an item to a shop, and increases their money

@@ -6,8 +6,6 @@ import java.io.PrintWriter;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
-import java.util.ArrayList;
-import java.util.ArrayList;
 import java.util.HashSet;
 
 /**
@@ -18,7 +16,7 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
     private final GameCore core;
 
 
-
+    
     /**
      * Creates a new GameObject.  Namely, creates the map for the rooms in the game,
      *  and establishes a new, empty, player list.
@@ -246,15 +244,15 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
      * @param name Name of the player to move
      * @param direction which direction to move forward through.
      * @return Message showing success.
-     * @throws RemoteException
+     * @throws RemoteException 
      */
     @Override
     public String move(String name, Direction direction) throws RemoteException {
         return core.move(name, direction);
     }
 
-
-
+    
+      
     /**
      * Attempts to pick up an object < target >. Will return a message on any success or failure.
      * @param name Name of the player to move
@@ -286,8 +284,8 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
     /**
      * Attempts to erase the whiteboard in the room. Will return a message on any success or failure.
      * @param name Name of the player to erase the whiteboard
-     * @return Message showing success.
-     */
+     * @return Message showing success. 
+     */    
     public String whiteboardErase(String name) throws RemoteException {
         return core.whiteboardErase(name);
     }
@@ -295,8 +293,8 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
     /**
      * Attempts to read the whiteboard in the room. Will return a message on any success or failure.
      * @param name Name of the player to erase the whiteboard
-     * @return Message showing success.
-     */
+     * @return Message showing success. 
+     */    
     public String whiteboardRead(String name) throws RemoteException {
         return core.whiteboardRead(name);
     }
@@ -305,8 +303,8 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
      * Attempts to  the whiteboard in the room. Will return a message on any success or failure.
      * @param name Name of the player to erase the whiteboard
      * @param text Text to write on the whiteboard
-     * @return Message showing success.
-     */
+     * @return Message showing success. 
+     */    
     public String whiteboardWrite(String name, String text) throws RemoteException {
         return core.whiteboardWrite(name, text);
     }
@@ -321,7 +319,7 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
     public String inventory(String name) throws RemoteException {
         return core.inventory(name);
     }
-
+    
     /**
      * @author Group 4: King
      * Lets player shop if in a shoppable location
@@ -332,8 +330,8 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
     public int shop(String name) throws RemoteException{
     	return core.shop(name);
     }
-
-
+   
+    
     /**
      * @author Group 4: King
      * Returns the Player object from the name
@@ -399,22 +397,22 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
             player.getReplyWriter().close();
         }
     }
-
-
+    
+    
     /**
      * Takes the player into venmo. The new and improved way to exchange money with other players.
-     *
+     * 
      * @author Team 4: Alaqeel
      * @param name Name of the player enter the bank
-     * @param tokens
-     * @throws RemoteException
-     */
+     * @param tokens 
+     * @throws RemoteException 
+     */    
 	@Override
 	public String venmo(String name, ArrayList<String> tokens) throws RemoteException {
 		return core.venmo(name, tokens);
-
-	}
-
+		
+	}    
+	
 	/**
 	 * @author Team 4: King
 	 * Returns a string representation of how much money a player has
@@ -422,11 +420,11 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
 	public String wallet(String name) throws RemoteException {
 		return core.wallet(name);
 	}
-
+	
 	public String getShopStr(int id) throws RemoteException{
 		return core.getShopStr(id);
 	}
-
+	
 	/**
      * Allows player to sell an item to a shop, and increases their money
      * @author Team 4: King
@@ -449,7 +447,7 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
     public String buyItem(String name, int shopId, String item) throws RemoteException{
     	return core.buyItem(name, shopId, item);
     }
-
+    
     /**
      * Returns a Shop's inventory as a formatted string
      * @param id The shop ID

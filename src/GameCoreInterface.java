@@ -158,23 +158,23 @@ public interface GameCoreInterface {
      * @return Player that was just removed.
      */
     public Player leave(String name);
-
-
+   
+    
     /**
      * Takes the player into venmo. The new and improved way to exchange money with other players.
-     *
+     * 
      * @author Team 4: Alaqeel
      * @param name Name of the player enter the bank
-     */
+     */    
     public String venmo(String name, ArrayList<String> tokens);
-
+    
     /**
-     * Returns a reference to a shop
+     * Returns a reference to a shop 
      * @param id
      * @return the shop or null
      */
     public String getShopStr(int id);
-
+    
     /**
      * Allows player to sell an item to a shop, and increases their money
      * @author Team 4: King
@@ -183,7 +183,7 @@ public interface GameCoreInterface {
      * @param item The item the player is selling (eventually will be an Item obj)
      */
     public double sellItem(String name, int shopId, String item);
-
+    
     /**
      * 605B_buy_method
      * Allows player to sell an item to a shop, and increases their money
@@ -193,7 +193,7 @@ public interface GameCoreInterface {
      * @param item The item the player is buying (eventually will be an Item obj)
      */
     public String buyItem(String name, int shopId, String item);
-
+  
     /**
      * Returns a Shop's inventory as a formatted string
      * @param id The shop ID

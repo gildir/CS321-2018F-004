@@ -63,11 +63,12 @@ public class GameClient {
     public GameClient(String host) {
         this.runGame = true;
         boolean nameSat = false;
-
+        
         //please modify the xml to add more commands
         showIntroduction();
         showCommand();
         
+
 
         // Set up for keyboard input for local commands.
         InputStreamReader keyboardReader = new InputStreamReader(System.in);
@@ -183,7 +184,7 @@ public class GameClient {
             switch(command) {
 
                 case "LOOK":
-                    System.out.println(remoteGameInterface.look(this.playerName));
+                    System.out.println(remoteGameInterface.look(this.playerName));   
                     break;
                 case "LEFT":
                     System.out.println(remoteGameInterface.left(this.playerName));
@@ -314,10 +315,10 @@ public class GameClient {
                     break;
                 case "INVENTORY":
                     System.out.println(remoteGameInterface.inventory(this.playerName));
-                    break;
+                    break; 
                 case "VENMO": // Team 4: Alaqeel
                 	System.out.println(remoteGameInterface.venmo(this.playerName, tokens));
-                    break;
+                    break;   
                 case "SHOP":
                 	int shopId = remoteGameInterface.shop(this.playerName); // Need to make this a serializable type
                 	if (shopId != -1) {
@@ -330,7 +331,7 @@ public class GameClient {
                 	break;
                 case "WALLET":
                 	System.out.println(remoteGameInterface.wallet(this.playerName));
-                	break;
+                	break;               
         case "R_TRADE":
                     if(tokens.isEmpty()) {
                             System.err.println("You need to provide the name of the player that you want to trade with");
@@ -379,7 +380,7 @@ public class GameClient {
                                 System.out.println(remoteGameInterface.whiteboardRead(this.playerName));
                                 break;
                             case "WRITE":
-                                if (tokens.isEmpty()) {
+                                if (tokens.isEmpty()) { 
                                     System.err.println("You need to provide an argument to the WHITEBOARD WRITE command");
                                 }
                                 else {
@@ -391,7 +392,7 @@ public class GameClient {
                                 break;
                         }
                     }
-                    break;
+                    break;        
 		case "SORT":
 	            InputStreamReader keyReader = new InputStreamReader(System.in);
         	    BufferedReader keyInput = new BufferedReader(keyReader);
