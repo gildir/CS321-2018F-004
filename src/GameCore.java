@@ -29,10 +29,10 @@ public class GameCore implements GameCoreInterface {
      * 
      * This is the main core that both the RMI and non-RMI based servers will interface with.
      */
-    public GameCore() {
+    public GameCore(String worldFile) {
         
         // Generate the game map.
-        map = new Map();
+        map = new Map(worldFile);
         this.dailyLogger = new DailyLogger();
         dailyLogger.write("SERVER STARTED");
         playerList = new PlayerList(); 
@@ -118,13 +118,13 @@ public class GameCore implements GameCoreInterface {
                         }
                     }
                 });
-
+	    
                 objectThread.setDaemon(true);
                 awakeDayGhoul.setDaemon(true);
                 objectThread.start();
                 awakeDayGhoul.start();
             }
-	
+
 
 	public void ghoulWander(Ghoul g, Room room) {
 		Random rand = new Random();

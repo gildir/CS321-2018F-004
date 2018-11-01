@@ -12,16 +12,16 @@ import java.util.Scanner;
  * @author Kevin
  */
 
-public class Map{   
-        private final LinkedList<Room> map;
-
-        public Map() {
-                map = new LinkedList<>();
-                try {
-                        File mapFile = new File("./rooms.csv");
-                        Scanner mapIn = new Scanner(mapFile).useDelimiter(",|\\n|\\r\\n");
-
-                        int numRooms, numExits;
+public class Map{  
+    private final LinkedList<Room> map;
+    
+    public Map(String worldFile) {
+        map = new LinkedList<>();
+        try {
+            File mapFile = new File(worldFile);
+	    Scanner mapIn = new Scanner(mapFile).useDelimiter(",|\\n|\\r\\n");
+ 
+	                      int numRooms, numExits;
 
                         String title, description, room_type;
                         String message;
