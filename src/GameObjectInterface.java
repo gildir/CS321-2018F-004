@@ -30,11 +30,6 @@ public interface GameObjectInterface extends Remote {
 	 */
 	public String bribeGhoul(String playerName, String item) throws RemoteException;
 
-
-	//Same functionality as bribeGhoul. Not currently used.
-	//public String giveToGhoul(String object, String playerName) throws RemoteException;
-	
-
     /**
      * Sends a request to join the game.  
      * Returns with the status of the join.  On true, the server expects the client
@@ -78,6 +73,13 @@ public interface GameObjectInterface extends Remote {
      * @throws RemoteException 
      */
     public String say(String name, String message) throws RemoteException;
+
+    /**
+     * Generates list of all online players.
+     * @return String of linked list PlayerList
+     * @throws RemoteException
+     */
+    public String showPlayers() throws RemoteException;
 
     /**
      * Whispers "message" to a specific player.

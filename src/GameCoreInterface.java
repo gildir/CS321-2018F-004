@@ -95,6 +95,12 @@ public interface GameCoreInterface {
     public String say(String name, String message);
 
     /**
+     * Generates list of all online players.
+     * @return String of linked list PlayerList
+     */
+    public String showPlayers();
+
+    /**
      * Whispers "message" to a specific player.
      * @param srcName Name of the player to speak
      * @param dstName Name of the player to receive

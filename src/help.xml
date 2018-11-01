@@ -114,4 +114,7 @@ object are on the ground and what direction you are facing.
     <help command = "JOKE">
         <description>  JOKE                     - Tells a joke to everyone in the room.</description>
     </help>
+    <help command = "ONLINE">
+        <description>  ONLINE                   - Display a list of all online players.</description>
+    </help>
 </helps>

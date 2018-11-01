@@ -32,6 +32,7 @@ import java.io.FileNotFoundException;
 
 
 
+import java.lang.StringBuilder;
 
 /**
  *
@@ -205,7 +206,7 @@ public class GameCore implements GameCoreInterface {
     public String getShopStr(int id) {
     	return this.shoplist.get(id).toString();
     }
-    
+
     /**
      * Allows player to sell an item to a shop, and increases their money
      * @author Team 4: King
@@ -228,7 +229,82 @@ public class GameCore implements GameCoreInterface {
     	//int value = removed.getValue();
     	return value;
     }
-    
+
+
+	public String bribeGhoul(String playerName, String item){
+		item = item.toLowerCase();
+		Player player = playerList.findPlayer(playerName);
+		Room room = this.map.findRoom(player.getCurrentRoom());
+		Item object = player.removeObjectFromInventory(item);
+		if(player == null){
+			return null;
+		}
+		if(room.hasGhoul){
+			//LinkedList<Item> itemList = player.getCurrentInventory();
+			//boolean giveAble = false;
+			//if (player.currentyInventory.size() > 0){
+			//    giveAble = true;
+			//    break;
+            //}
+			//for (String thing : itemList){
+				//if(thing.equalsIgnoreCase(item)){
+				//	giveAble = itemList.remove(thing);
+				//	break;
+				//}
+            boolean giveAble = false;
+            if (object != null){
+                giveAble = true;
+            }
+
+
+
+			if(giveAble){
+				try {
+					GhoulLog myLog = new GhoulLog();
+					myLog.glLog("GameCore","bribeGhoul", "Player" + " " + playerName + " has just given a " + object + " to the Ghoul");
+				} catch (Exception e){
+					e.printStackTrace();
+				}
+
+				ghoul.modifyAngryLevel(-1);
+				int angryLv = ghoul.getAngryLevel();
+				String message = "Ghoul gets " + item + ", " + "and its anger level decreases to " + angryLv + ".";
+				return  message;
+			}else{
+				return "Do not have this item......";
+			}
+		}else{
+			return "No Ghoul in this room";
+		}
+
+	}
+
+	public String pokeGhoul(String playerName) {
+		Player player = playerList.findPlayer(playerName);
+		Room room = this.map.findRoom(player.getCurrentRoom());
+
+		if (player != null) {
+			if (!room.hasGhoul) {
+				return "There is no ghoul in this room.";
+			}
+
+			try {
+				GhoulLog myLog = new GhoulLog();
+				myLog.glLog("GameCore","pokeGhoul", "Player" + " " + playerName + " has just poked the Ghoul");
+			} catch (Exception e){
+				e.printStackTrace();
+			}
+
+			ghoul.modifyAngryLevel(1);
+			int angerLvl = ghoul.getAngryLevel();
+			if (angerLvl >= 7) {
+				ghoul.Drag(player);
+				draggedToSpawn(player);
+			}
+			return ("Ghoul anger level has increased to " + angerLvl);
+		} else {
+			return null;
+		}}
     /**
      * 605B_buy_method
      * Allows player to sell an item to a shop, and increases their money
@@ -367,81 +443,6 @@ public class GameCore implements GameCoreInterface {
         }
     }       
     
- 
-	public String bribeGhoul(String playerName, String item){
-		item = item.toLowerCase();
-		Player player = playerList.findPlayer(playerName);
-		Room room = this.map.findRoom(player.getCurrentRoom());
-		Item object = player.removeObjectFromInventory(item);
-		if(player == null){
-			return null;
-		}
-		if(room.hasGhoul){
-			//LinkedList<Item> itemList = player.getCurrentInventory();
-			//boolean giveAble = false;
-			//if (player.currentyInventory.size() > 0){
-			//    giveAble = true;
-			//    break;
-            //}
-			//for (String thing : itemList){
-				//if(thing.equalsIgnoreCase(item)){
-				//	giveAble = itemList.remove(thing);
-				//	break;
-				//}
-            boolean giveAble = false;
-            if (object != null){
-                giveAble = true;
-            }
-
-
-
-			if(giveAble){
-				try {
-					GhoulLog myLog = new GhoulLog();
-					myLog.glLog("GameCore","bribeGhoul", "Player" + " " + playerName + " has just given a " + object + " to the Ghoul");
-				} catch (Exception e){
-					e.printStackTrace();
-				}
-				
-				ghoul.modifyAngryLevel(-1);
-				int angryLv = ghoul.getAngryLevel();
-				String message = "Ghoul gets " + item + ", " + "and its anger level decreases to " + angryLv + ".";
-				return  message;
-			}else{
-				return "Do not have this item......";
-			}
-		}else{
-			return "No Ghoul in this room";
-		}
-		
-	}
-
-	public String pokeGhoul(String playerName) {
-		Player player = playerList.findPlayer(playerName);
-		Room room = this.map.findRoom(player.getCurrentRoom());
-
-		if (player != null) {
-			if (!room.hasGhoul) {
-				return "There is no ghoul in this room.";
-			}
-
-			try {
-				GhoulLog myLog = new GhoulLog();
-				myLog.glLog("GameCore","pokeGhoul", "Player" + " " + playerName + " has just poked the Ghoul");
-			} catch (Exception e){
-				e.printStackTrace();
-			}
-			
-			ghoul.modifyAngryLevel(1);
-			int angerLvl = ghoul.getAngryLevel();
-			if (angerLvl >= 7) {
-				ghoul.Drag(player);
-				draggedToSpawn(player);
-			}
-			return ("Ghoul anger level has increased to " + angerLvl);
-		} else {
-			return null;
-		}}
     /**
      * Returns a string of what and who you plan to offer an item to
      * @param srcName Name of player making offer
@@ -1238,4 +1239,18 @@ public class GameCore implements GameCoreInterface {
         pw.close();
         return;
     }
+
+    /**
+     * Generates list of all online players.
+     * @return String of linked list PlayerList
+     */
+    public String showPlayers(){
+      StringBuilder users = new StringBuilder();
+      users.append("Players online:\n");
+      for(Player a : playerList){
+        users.append(a.getName() + "\n");
+      }
+      return users.toString();
+    }
+
 }

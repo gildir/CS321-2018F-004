@@ -233,6 +233,9 @@ public class GameClient {
                         System.out.println(remoteGameInterface.shout(this.playerName, message));
                     }
                     break;
+                case "ONLINE":
+                    System.out.println(remoteGameInterface.showPlayers());
+					break;
                 case "W":
                 case "WHISPER":
                     if (tokens.isEmpty()) {
