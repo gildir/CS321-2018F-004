@@ -54,6 +54,15 @@ object are on the ground and what direction you are facing.
     <help command = "VENMO">
         <description>  VENMO         - Allows you to send money to people. Try: VENMO HELP</description>
     </help>
+     <help command = "ADDCOMMAND">
+        <description>  ADDCOMMAND name- Add a custom command.</description>
+    </help>
+    <help command = "REMOVECOMMAND">
+        <description>  REMOVECOMMAND  - Remove a configured custom command.</description>
+    </help>
+    <help command = "CUSTOMHELP">
+        <description>  CUSTOMHELP     - Show every configured custom commands.</description>
+    </help>
     <help command = "POKE_GHOUL">
         <description>  POKE_GHOUL    - Pokes the ghoul in the current room.</description>
     </help>
@@ -80,5 +89,8 @@ object are on the ground and what direction you are facing.
     </help>
         <help command = "POKE_GHOUL">
         <description>  POKE_GHOUL    - Pokes the ghoul in the current room.</description>
+    </help>
+    <help command = "REDO">
+        <description>  REDO          - Repeats the last command you entered.</description>
     </help>
 </helps>
