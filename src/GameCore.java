@@ -1043,6 +1043,8 @@ public class GameCore implements GameCoreInterface {
 		if (player != null) {
 			this.broadcast(player, "You see " + player.getName() + " heading off to class.");
 			this.playerList.removePlayer(name);
+            connectionLog(false, player.getName());
+            this.accountManager.forceUpdateData(player);
 			return player;
 		}
 		return null;

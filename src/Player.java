@@ -167,6 +167,7 @@ public class Player {
      * Access the list of players this player is ignoring.
      * @return - Returns a String of all player names this player is ignoring
      */
+    @JsonIgnore
     public String getIgnoredPlayersList() {
         StringBuilder ignoredPlayersList = new StringBuilder();
         ignoredPlayersList.append("\nIgnored Players: ");
