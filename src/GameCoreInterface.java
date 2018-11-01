@@ -63,20 +63,8 @@ public interface GameCoreInterface {
      * @param name
      * @return Player that is added, null if player name is already registered to someone else
      */
-    public Player joinGame(String name, String password);
+    public Player joinGame(String name);
     
-	/**
-	 * Allows a player to create an account. If the player name already exists this
-	 * returns the corresponding enum. If the players name is of an invalid format
-	 * this returns that corresponding emum. Otherwise this returns success and
-	 * calls joinGame.
-	 * 
-	 * @param name
-	 * @param password
-	 * @return an enumeration representing the creation status.
-	 */
-	public Responses createAccountAndJoinGame(String name, String password);
-
     /**
      * Returns a look at the area of the specified player.
      * @param playerName Player Name
@@ -251,12 +239,4 @@ public interface GameCoreInterface {
      *@return Message showing success.
      */
     public String shout(String name, String message);
-
-	/**
-	 * Delete a player's account.
-     *
-	 * @param name Name of the player to be deleted
-	 * @return Player that was just deleted.
-	 */
-	public Player deleteAccount(String name);
 }
