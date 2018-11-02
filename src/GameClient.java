@@ -85,26 +85,54 @@ public class GameClient {
             //   Lets the player choose a name and checks it with the server.  If the name is
             //    already taken or the user doesn't like their input, they can choose again.
             while(nameSat == false) {
-                try {
-                    System.out.println("Please enter a name for your player.");
-                    System.out.print("> ");
-                    this.playerName = keyboardInput.readLine();
-                    System.out.println("Welcome, " + this.playerName + ". Are you sure you want to use this name?");
-                    System.out.print("(Y/N) >");
-                    if(keyboardInput.readLine().equalsIgnoreCase("Y")) {
-                        // Attempt to join the server
-                        if(remoteGameInterface.joinGame(this.playerName) == false) {
-                            System.out.println("I'm sorry, " + this.playerName + ", but someone else is already logged in with your name. Please pick another.");
-                        }
-                        else {
-                            nameSat = true;
-                        }
-                    }
-                } catch (IOException ex) {
-                    System.err.println("[CRITICAL ERROR] Error at reading any input properly.  Terminating the client now.");
-                    System.exit(-1);
-                }
-            }
+				try {
+					System.out.println("Logging in or creating account?");
+					String mode;
+					do {
+						System.out.print("(L/C)> ");
+						mode = keyboardInput.readLine().toUpperCase().trim();
+					} while (!(mode.equals("L") || mode.equals("C")));
+					System.out.print("Username: ");
+					this.playerName = keyboardInput.readLine().trim();
+					System.out.print("Password: ");
+					String pass = keyboardInput.readLine();
+					switch (mode) {
+					case "L":
+						nameSat = remoteGameInterface.joinGame(this.playerName, pass);
+						if (!nameSat)
+							System.out.println("Username and password combination invalid\n");
+						break;
+					case "C":
+						Responses resp = remoteGameInterface.createAccountAndJoinGame(playerName, pass);
+						switch (resp) {
+						case BAD_USERNAME_FORMAT:
+							System.out
+									.println("This is a bad user name. Please use only spaces, numbers, and letters.");
+							break;
+						case USERNAME_TAKEN:
+							System.out.println("Sorry but this username was already taken.");
+							break;
+						case UNKNOWN_FAILURE:
+							System.out.println("The server experienced an unknown failure.");
+							break;
+						case SUCCESS:
+							nameSat = true;
+							break;
+						default:
+							System.out.println("Unknown server behavior");
+							break;
+						}
+						if (!nameSat)
+							System.out.println();
+
+					}
+
+				} catch (IOException ex) {
+					System.err.println(
+							"[CRITICAL ERROR] Error at reading any input properly.  Terminating the client now.");
+					System.exit(-1);
+				}
+			}
 
             // Player has joined, now start up the remote socket.
             this.runListener = true;
@@ -447,6 +475,10 @@ public class GameClient {
                     remoteGameInterface.leave(this.playerName);
                     runListener = false;
                     break;
+                case "DELETE":
+                     remoteGameInterface.deleteAccount(this.playerName);
+                     runListener = false;
+                     break;
                 case "HELP":
                     showCommand();
                     break;
@@ -463,6 +495,46 @@ public class GameClient {
                     break;
                 case "CUSTOMHELP":
                     showCustomCommands();
+                    break;
+                case "CHALLENGE":
+                    if(tokens.isEmpty()){
+                      System.err.println("You need to provide a name.");
+                    }
+                    else{
+                      System.out.println(remoteGameInterface.challenge(this.playerName, tokens.remove(0)));
+                    }
+                    break;
+                case "ACCEPT":
+                    if(tokens.isEmpty()){
+                      System.err.println("You need to provide a name.");
+                    }
+                    else{
+                      System.out.println(remoteGameInterface.accept(this.playerName, tokens.remove(0)));
+                    }
+                    break;
+                case "REJECT":
+                    if(tokens.isEmpty()){
+                      System.err.println("You need to provide a name.");
+                    }
+                    else{
+                      System.out.println(remoteGameInterface.reject(this.playerName, tokens.remove(0)));
+                    }
+                    break;
+                case "PICK":
+                    if(tokens.isEmpty()){
+                      System.err.println("You need to provide either rock, paper or scissors");
+                    }
+                    else{
+                      String options = tokens.remove(0);
+                      options = options.toUpperCase();
+                      if(options.equals("ROCK") || options.equals("PAPER") || options.equals("SCISSORS"))
+                        System.out.println(remoteGameInterface.pickRPS(this.playerName, options));
+                      else
+                        System.out.println("Invalid option.");
+                    }
+                    break;
+                case "TEACH":
+                    System.out.println(remoteGameInterface.teach(this.playerName));
                     break;
                 default:
                     //If command does not match with any, see if it is custom command

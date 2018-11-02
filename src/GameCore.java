@@ -1,38 +1,23 @@
 
-import java.util.HashSet;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Random;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Random;
 import java.util.Scanner;
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Scanner;
-import java.io.File;
-import java.lang.StringBuilder;
-import java.io.FileNotFoundException;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-import java.lang.StringBuilder;
+import java.util.logging.Handler;
+import java.util.logging.Level;
+import java.util.logging.LogRecord;
+import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
+import java.util.logging.StreamHandler;
 
 /**
  *
@@ -46,13 +31,23 @@ public class GameCore implements GameCoreInterface {
     private Ghoul ghoul;
     private PrintWriter pw;
 
+	// Accounts and Login
+	private final PlayerAccountManager accountManager;
+	private final Object loginLock = new Object();
+	private final Object createAccountLock = new Object();
+	private Logger playerLogger = Logger.getLogger("connections");
+    
     /**
-     * Creates a new GameCoreObject.  Namely, creates the map for the rooms in the game,
-     *  and establishes a new, empty, player list.
-     * 
-     * This is the main core that both the RMI and non-RMI based servers will interface with.
-     */
-    public GameCore(String worldFile) throws IOException {
+	 * Creates a new GameCoreObject. Namely, creates the map for the rooms in the
+	 * game, and establishes a new, empty, player list.
+	 * 
+	 * This is the main core that both the RMI and non-RMI based servers will
+	 * interface with.
+	 * 
+	 * @throws Exception
+	 * 
+	 */
+    public GameCore(String playerAccountsLocation, String worldFile) throws Exception {
 
         // Generate the game map.
         map = new Map(worldFile);
@@ -72,6 +67,10 @@ public class GameCore implements GameCoreInterface {
         pw.flush();
         pw.close();
 
+        initConnectionsLogger();
+        
+        accountManager = new PlayerAccountManager(playerAccountsLocation);
+        
         Thread objectThread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -605,26 +604,51 @@ public class GameCore implements GameCoreInterface {
 	 * non-coordinated, waiting for the player to open a socket for message events
 	 * not initiated by the player (ie. other player actions)
 	 * 
-	 * @param name
+     * @param name
+     * @param password password hash for corresponding account.
 	 * @return Player is player is added, null if player name is already registered
 	 *         to someone else
+     */
+    @Override
+	public Player joinGame(String name, String password) {
+		synchronized (loginLock) {
+			// Check to see if the player of that name is already in game.
+			Player player = this.playerList.findPlayer(name);
+			if (player != null)
+				return null;
+			PlayerAccountManager.AccountResponse resp = accountManager.getAccount(name, password);
+			if (!resp.success())
+				return null;
+			player = resp.player;
+			this.playerList.addPlayer(player);
+
+			this.broadcast(player, player.getName() + " has arrived.");
+			connectionLog(true, player.getName());
+			return player;
+		}
+	}
+
+	/**
+	 * Allows a player to create an account. If the player name already exists this
+	 * returns the corresponding enum. If the players name is of an invalid format
+	 * this returns that corresponding emum. Otherwise this returns success and
+	 * calls joinGame.
+	 * 
+	 * @param name
+	 * @param password
+	 * @return an enumeration representing the creation status.
 	 */
 	@Override
-	public Player joinGame(String name) {
-		// Check to see if the player of that name is already in game.
-		Player newPlayer;
-		if (this.playerList.findPlayer(name) == null) {
-			// New player, add them to the list and return true.
-			newPlayer = new Player(name);
-			this.playerList.addPlayer(newPlayer);
 
-                        // New player starts in a room. Send a message to everyone else in that room,
-                        // that the player has arrived.
-                        this.broadcast(newPlayer, newPlayer.getName() + " has arrived.");
-                        return newPlayer;
-                }
-                // A player of that name already exists.
-                return null;
+	public synchronized Responses createAccountAndJoinGame(String name, String password) {
+		synchronized (createAccountLock) {
+			PlayerAccountManager.AccountResponse resp = accountManager.createNewAccount(name, password);
+			if (!resp.success())
+				return resp.error;
+			if (joinGame(name, password) != null)
+				return Responses.SUCCESS;
+			return Responses.UNKNOWN_FAILURE;
+		}
 	}
 
        	/**
@@ -1014,6 +1038,172 @@ public class GameCore implements GameCoreInterface {
         return "You have accepted to enter a trade with " + acceptingPlayer.getTradePartner();
     }
 
+    @Override
+    public String challenge(String challenger, String challengee){
+      Player playerChallenger = this.playerList.findPlayer(challenger);
+      Player playerChallengee = this.playerList.findPlayer(challengee);
+      if(playerChallengee == null || playerChallenger == null){
+        return "This player does not exist in the game.";
+      }
+      if(playerChallenger.getInBattle() == true){
+        return "You are already in a R-P-S battle.";
+      }
+      if(playerChallengee.getInBattle()){
+        return "This player is already in a R-P-S battle";
+      }
+      if(playerChallengee.getInBattle() == true){
+        return playerChallengee.getName() + " is already in a R-P-S battle.";
+      }
+      if(playerChallenger != playerChallengee && playerChallenger.getCurrentRoom() == playerChallengee.getCurrentRoom()) {
+        playerChallengee.setChallenger(challenger);
+        playerChallenger.setChallenger(challengee);
+        playerChallengee.setHasChallenge(true);
+        playerChallengee.getReplyWriter().println(playerChallenger.getName() + " challenges you to a R-P-S");
+        return "You challenged " + playerChallengee.getName() + " to a R-P-S.";
+      }
+      else if(playerChallenger == playerChallengee)
+        return "You can't challenge yourself to R-P-S.";
+      else {
+        return "This person is not in the same room as you or doesn't exist in the game.";
+      }
+    }
+
+    @Override
+    public String accept(String challengee, String challenger){
+      Player playerChallenger = this.playerList.findPlayer(challenger);
+      Player playerChallengee = this.playerList.findPlayer(challengee);
+      if(playerChallengee == null || playerChallenger == null){
+        return "This player does not exist in the game.";
+      }
+      if(playerChallengee.getChallenger().equals(playerChallenger.getName()) && playerChallengee.getHasChallenge() == true){
+        if(playerChallenger != playerChallengee && playerChallenger.getCurrentRoom() == playerChallengee.getCurrentRoom()) {
+          playerChallenger.getReplyWriter().println(playerChallengee.getName() + " accepts your challenge to a R-P-S. \nPick rock, paper, or scissors: ");
+          playerChallengee.setHasChallenge(false);
+          playerChallengee.setInBattle(true);
+          playerChallenger.setInBattle(true);
+          return "You accept " + playerChallenger.getName() + "\'s challenge to a R-P-S. \nPick rock, paper, or scissors: ";
+        }
+        else
+        {
+          return "This person is not in the same room as you or doesn't exist in the game.";
+        }
+      }
+      else if(playerChallenger == playerChallengee){
+        return "You can't challenge yourself to R-P-S.";
+      }
+      else{
+        return "You have not been challenged by " + playerChallenger.getName();
+      }
+    }
+
+    @Override
+    public String reject(String challengee, String challenger){
+      Player playerChallenger = this.playerList.findPlayer(challenger);
+      Player playerChallengee = this.playerList.findPlayer(challengee);
+      if(playerChallengee == null || playerChallenger == null){
+        return "This player does not exist in the game.";
+      }
+      if(playerChallengee.getChallenger().equals(playerChallenger.getName()) && playerChallengee.getHasChallenge() == true){
+        if(playerChallenger != playerChallengee && playerChallenger.getCurrentRoom() == playerChallengee.getCurrentRoom()) {
+          playerChallengee.setChallenger(" ");
+          playerChallenger.setChallenger(" ");
+          playerChallengee.setHasChallenge(false);
+          playerChallenger.getReplyWriter().println(playerChallengee.getName() + " rejects your challenge to a R-P-S");
+          return "You reject " + playerChallenger.getName() + "\'s challenge to a R-P-S.";
+        }
+        else if(playerChallenger == playerChallengee)
+          return "You can't challenge yourself to R-P-S.";
+        else {
+          return "This person is not in the same room as you or doesn't exist in the game.";
+        }
+      }
+      else if(playerChallenger == playerChallengee){
+        return "You can't challenge yourself to R-P-S.";
+      }
+      else{
+        return "You have not been challenged by " + playerChallenger.getName();
+      }
+    }
+
+    @Override
+    public String pickRPS(String name,  String option){
+      Player player = this.playerList.findPlayer(name);
+      Player challengee = this.playerList.findPlayer(player.getChallenger());
+
+      if(player.getInBattle() == true){
+        if(player.getOption().equals("ROCK") || player.getOption().equals("PAPER") || player.getOption().equals("SCISSORS")){
+          return "You already pick rock, paper or scissors. You picked " + player.getOption();
+        }
+        player.setOption(option);
+        challengee.setChallengerOption(option);
+        String message = "You picked " + option;
+
+        if(challengee.getOption().equals("ROCK") || challengee.getOption().equals("PAPER") || challengee.getOption().equals("SCISSORS")){
+          switch(player.getOption()) {
+            case "ROCK":
+              if (challengee.getOption().equals("PAPER")) {
+                message = challengee.getName() + " wins with " + challengee.getOption();
+              }
+              else if (challengee.getOption().equals("ROCK")){
+                message = "It is a tie.";
+              }
+              else {
+                message = player.getName() + " wins with " + player.getOption();
+              }
+              challengee.getReplyWriter().println(message);
+              player.setInBattle(false);
+              player.setChallenger(" ");
+              player.setOption("");
+              challengee.setChallenger(" ");
+              challengee.setInBattle(false);
+              challengee.setOption("");
+              break;
+            case "PAPER":
+              if (challengee.getOption().equals("SCISSORS")) {
+                message = challengee.getName() + " wins with " + challengee.getOption();
+              }
+              else if (challengee.getOption().equals("PAPER")){
+                message = "It is a tie.";
+              }
+              else {
+                message = player.getName() + " wins with " + player.getOption();
+              }
+              challengee.getReplyWriter().println(message);
+              player.setInBattle(false);
+              player.setChallenger(" ");
+              player.setOption("");
+              challengee.setChallenger(" ");
+              challengee.setInBattle(false);
+              player.setOption("");
+              break;
+            case "SCISSORS":
+              if (challengee.getOption().equals("ROCK")) {
+                message = challengee.getName() + " wins with " + challengee.getOption();
+              }
+              else if (challengee.getOption().equals("SCISSORS")){
+                message = "It is a tie";
+              }
+              else {
+                message = player.getName() + " wins with " + player.getOption();
+              }
+              challengee.getReplyWriter().println(message);
+              player.setInBattle(false);
+              player.setChallenger(" ");
+              player.setOption("");
+              challengee.setChallenger(" ");
+              challengee.setInBattle(false);
+              challengee.setOption("");
+              break;
+            default:
+              break;
+          }
+        }
+        return message;
+      }
+      else
+        return "You are not in a R-P-S challenge.";
+    }
+
 	/**
 	 * Leaves the game.
 	 * 
@@ -1026,6 +1216,8 @@ public class GameCore implements GameCoreInterface {
 		if (player != null) {
 			this.broadcast(player, "You see " + player.getName() + " heading off to class.");
 			this.playerList.removePlayer(name);
+            connectionLog(false, player.getName());
+            this.accountManager.forceUpdateData(player);
 			return player;
 		}
 		return null;
@@ -1240,6 +1432,19 @@ public class GameCore implements GameCoreInterface {
         return;
     }
 
+    @Override
+     public String teach(String player){
+         Player players = this.playerList.findPlayer(player);
+         String message;
+         if(players.getCurrentRoom() == 1){
+            message = "Here is the Heirarchy of power in R-P-S:\n\tRock beats Scissors\n\tScissors beats Paper\n\tPaper beats Rock\n\nCHALLENGE <name>: \tIf you challenge someone, you must wait for them to accept or reject\nACCEPT/REJECT <name>: \tIf you have been challenge, you must accept or reject the challenge\nYou may not be challenged while in a R-P-S battle\n";
+         }
+         else{
+            message = "You are not in the Clock in the Main Quad where the teacher is located\n";
+         }
+         return message;
+     }
+
     /**
      * Generates list of all online players.
      * @return String of linked list PlayerList
@@ -1252,5 +1457,67 @@ public class GameCore implements GameCoreInterface {
       }
       return users.toString();
     }
+
+	/**
+	 * Logs player connections
+	 * 
+	 * @param connecting true if they're connecting, false if they are disconnecting
+	 * @param name
+	 */
+	private void connectionLog(boolean connecting, String name) {
+		playerLogger.info(String.format("(%s) logged %s", name, connecting ? "in" : "out"));
+		for (Handler h : playerLogger.getHandlers())
+			h.flush();
+	}
+
+	/**
+	 * Creates the logger outside of the constructor. Uses RFC3339 timestamps
+	 * 
+	 * @throws IOException
+	 */
+	private void initConnectionsLogger() throws IOException {
+		File f = new File("connections.log");
+		if (!f.exists())
+			f.createNewFile();
+		FileOutputStream out = new FileOutputStream(f, true);
+		StreamHandler handle = new StreamHandler(out, new SimpleFormatter() {
+			private final SimpleDateFormat rfc3339 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
+
+			@Override
+			public String format(LogRecord log) {
+				StringBuilder sb = new StringBuilder();
+				sb.append("[").append(rfc3339.format(new Date(log.getMillis()))).append("] ");
+				sb.append("[").append(log.getLoggerName()).append("] ");
+				sb.append("[").append(log.getLevel()).append("] ");
+				sb.append(log.getMessage()).append("\r\n");
+				Throwable e = log.getThrown();
+				if (e != null)
+					for (StackTraceElement el : e.getStackTrace())
+						sb.append(el.toString()).append("\r\n");
+				return sb.toString();
+			}
+		});
+		playerLogger.setUseParentHandlers(false);
+		playerLogger.addHandler(handle);
+		playerLogger.info("Player connections logger has started");
+		handle.flush();
+	}
+
+	/**
+	 * Delete a player's account.
+	 * 
+	 * @param name Name of the player to be deleted
+	 * @return Player that was just deleted.
+	 */
+	public Player deleteAccount(String name) {
+		Player player = this.playerList.findPlayer(name);
+		if (player != null) {
+			this.broadcast(player, "You hear that " + player.getName() + " has dropped out of school.");
+			this.playerList.removePlayer(name);
+			this.accountManager.deleteAccount(player.getName());
+			return player;
+		}
+		return null; // No such player was found.
+	}
 
 }

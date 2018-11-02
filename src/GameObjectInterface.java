@@ -3,7 +3,6 @@
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
-import java.util.ArrayList;
 import java.util.HashSet;
 
 /**
@@ -39,8 +38,21 @@ public interface GameObjectInterface extends Remote {
      * @return true if name is available and join is successful, false otherwise.
      * @throws RemoteException 
      */
-    public boolean joinGame(String name) throws RemoteException;
-    
+	public boolean joinGame(String name, String password) throws RemoteException;
+
+	/**
+	 * Allows a player to create an account. If the player name already exists this
+	 * returns the corresponding enum. If the players name is of an invalid format
+	 * this returns that corresponding emum. Otherwise this returns success and
+	 * calls joinGame.
+	 * 
+	 * @param name
+	 * @param password
+	 * @return an enumeration representing the creation status.
+	 * @throws RemoteException
+	 */
+	public Responses createAccountAndJoinGame(String name, String password) throws RemoteException;
+
     /**
      * Returns a look at the area of the specified player.
      * @param name Player Name
@@ -324,4 +336,56 @@ public interface GameObjectInterface extends Remote {
      * @return A formatted string representing the Shop's inventory
      */
     public String getShopInv(int id) throws RemoteException;
+	
+	/**
+	 * Delete a player's account.
+	 * 
+	 * @param name Name of the player to be deleted
+	 * @throws RemoteException
+	 */
+	public void deleteAccount(String name) throws RemoteException;
+
+    /**
+    * Prompts a message that someone is challenging them to a R-P-S
+    * @param challenger is the name of the player challenging someone in the area
+    * @param challenge is the name of the player being challenge
+    * @return Message showing success
+    * @throws RemoteException
+    */
+    public String challenge(String challenger, String challengee) throws RemoteException;
+
+    /**
+    * Prompts a message that they are accepting a challnge from someone to a R-P-S
+    * @param challenger is the name of the player challenging someone in the area
+    * @param challenge is the name of the player accepting
+    * @return Message showing success
+    * @throws RemoteException
+    */
+    public String accept(String challenger, String challengee) throws RemoteException;
+
+    /**
+     * Prompts a messaging that they are rejectin a challenge from someone to R-P-S
+     * @param challenger is the name of the player challenging someone in the area
+     * @param challengee is the name of the player accepting
+     * @return MEssage showing success
+     * @throws Remote Exception
+     */
+    public String reject(String challenger, String challengee) throws RemoteException;
+
+    /**
+      * Prompts a message that picks R-P-S
+      * @param name is the name of the player
+      * @param options is either R-P-S
+      * @return Message showing success
+      * @throws RemoteException
+      */
+    public String pickRPS(String name, String options) throws RemoteException;
+
+    /**
+      * Sends a messages teaching the player how to play R-P-S
+      * @param player is the name of the player that needs to be taught
+      * @return MEssage showing success
+      * @throws Remote Exception
+      */
+     public String teach(String player) throws RemoteException;
 }

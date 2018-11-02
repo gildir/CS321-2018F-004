@@ -63,8 +63,20 @@ public interface GameCoreInterface {
      * @param name
      * @return Player that is added, null if player name is already registered to someone else
      */
-    public Player joinGame(String name);
+    public Player joinGame(String name, String password);
     
+	/**
+	 * Allows a player to create an account. If the player name already exists this
+	 * returns the corresponding enum. If the players name is of an invalid format
+	 * this returns that corresponding emum. Otherwise this returns success and
+	 * calls joinGame.
+	 * 
+	 * @param name
+	 * @param password
+	 * @return an enumeration representing the creation status.
+	 */
+	public Responses createAccountAndJoinGame(String name, String password);
+
     /**
      * Returns a look at the area of the specified player.
      * @param playerName Player Name
@@ -239,4 +251,53 @@ public interface GameCoreInterface {
      *@return Message showing success.
      */
     public String shout(String name, String message);
+
+	/**
+	 * Delete a player's account.
+     *
+	 * @param name Name of the player to be deleted
+	 * @return Player that was just deleted.
+	 */
+	public Player deleteAccount(String name);
+
+     /**
+      * Challenge someone to R-P-S
+      * @param challenger is the name of the player challenging to R-P-S
+      * @param challenge is the name of the player being challenge
+      * @return String message of the challenge
+      */
+    public String challenge(String challenger, String challengee);
+
+    /**
+      * Accept someones challenge to R-P-S
+      * @param challenger is the name of the player challenging to R-P-S
+      * @param challenge is the name of the player accepting
+      * @return String message of the acceptence
+      */
+    public String accept(String challenger, String challengee);
+
+    /**
+     *
+     * Reject someones challenge to a R-P-s
+     * @param challenger is the name of the player challenging to R-P-S
+     * @param challengee is the name of the player accepting 
+     * @return String message of the rejection
+     */
+    public String reject(String challenger, String challengee);
+
+    /**
+      * Pick R-P-S
+      * @param name is the name of player
+      * @options is what the player pick R-P-S
+      * @return String message of what they pick and who won
+      */
+    public String pickRPS(String name, String options);
+
+    /**
+      *
+      * Teaches player how to play R-P-s
+      * @param player is the name of the player to teach R-P-S
+      * @return String message of the rejection
+      */
+     public String teach(String player);
 }

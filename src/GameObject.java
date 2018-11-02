@@ -1,10 +1,12 @@
 
 
 
-import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashSet;
 
@@ -22,10 +24,10 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
      *  and establishes a new, empty, player list.
      * @throws RemoteException 
      */
-    public GameObject(String worldFile) throws RemoteException, IOException {
+	public GameObject(String playerAccountsLocation, String worldFile) throws Exception {
         super();
         
-        core = new GameCore(worldFile);
+		core = new GameCore(playerAccountsLocation, worldFile);
 
     }
 
@@ -43,8 +45,25 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
         }
         return false;
     }    
-  
-    
+
+	/**
+	 * Used to create a hash encrypted in SHA256 for use in encrypting passwords
+	 * 
+	 * @param toHash
+	 * @return SHA256 encrypted hash value, or "ERROR" If encryption method fails.
+	 */
+	public String hash(String toHash) {
+		try {
+			byte[] encodedhash = MessageDigest.getInstance("SHA-256").digest(toHash.getBytes(StandardCharsets.UTF_8));
+			StringBuilder sb = new StringBuilder();
+			for (byte b : encodedhash)
+				sb.append(String.format("%02X", b));
+			return sb.toString();
+		} catch (NoSuchAlgorithmException e) {
+		}
+		return "ERROR";
+	}
+
 	/**
 	 * Pokes the ghoul in the current room
 	 * @param playerName Player name
@@ -79,11 +98,35 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
      * @throws RemoteException 
      */
     @Override
-    public boolean joinGame(String name) throws RemoteException {
-        // Request join to the core and return the results back to the remotely calling method.
-        return (core.joinGame(name) != null);
-    }
-        
+	public boolean joinGame(String name, String password) throws RemoteException {
+		// Request join to the core and return the results back to the remotely calling
+		// method.
+		password = hash(password);
+		if (!password.equals("ERROR"))
+			return (core.joinGame(name, password) != null);
+		return false; // Password is invalid due to failure of hash function
+	}
+
+	/**
+	 * Allows a player to create an account. If the player name already exists this
+	 * returns the corresponding enum. If the players name is of an invalid format
+	 * this returns that corresponding emum. Otherwise this returns success and
+	 * calls joinGame.
+	 * 
+	 * @param name
+	 * @param password
+	 * @return an enumeration representing the creation status, or null if password
+	 *         failed to be encrypted in hash function.
+	 * @throws RemoteException
+	 */
+	@Override
+	public Responses createAccountAndJoinGame(String name, String password) throws RemoteException {
+		password = hash(password);
+		if (password.equals("ERROR"))
+			return Responses.UNKNOWN_FAILURE;
+		return core.createAccountAndJoinGame(name, password);
+	}
+
     /**
      * Returns a look at the area of the specified player.
      * @param playerName Player Name
@@ -393,7 +436,39 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
     public String playerResponse(String acceptingTrader, String traderToAccept) throws RemoteException{
         return core.playerResponse(acceptingTrader, traderToAccept);
     }
+    
+    /**
+     * Prompts a message that someone is rejecting a challenge to R-P-S
+     * @param challenger is the name of the player challenging someone in the area
+     * @param challengee is the name of the player rejecting 
+     * @return Messaging showing success
+     * @throws RemoteException
+     */
+    public String reject(String challenger, String challengee) throws RemoteException{
+	return core.reject(challenger, challengee);
+    }
 
+    /**
+      * Prompts a message that someone pick either R-P-S
+      * @param name is the name of the player
+      * @param option is either R-P-S
+      * @return Messaging showing success
+      * @throws RemoteException
+      */
+    public String pickRPS(String name, String option) throws RemoteException {
+        return core.pickRPS(name, option);
+    }
+
+    /**
+      * Sends a message to the play to teach them how to play R-P-S
+      * @param challenger is the name of the player who wants to be taught
+      * @return Messaging showing success
+      * @throws RemoteException
+      */
+     public String teach(String player) throws RemoteException{
+         return core.teach(player);
+     }
+     
      /**
      * Leaves the game.
      * @param name Name of the player to leave
@@ -464,5 +539,38 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
      */
     public String getShopInv(int id) throws RemoteException{
     	return core.getShopInv(id);
+    }
+	
+	/**
+	 * Delete a player's account.
+	 * 
+	 * @param name Name of the player to be deleted
+	 * @throws RemoteException
+	 */
+	public void deleteAccount(String name) throws RemoteException{
+		Player player = core.deleteAccount(name);
+		if (player != null) {
+			player.getReplyWriter().close();
+		}
+	}
+
+    /**Prompts a message that someone is challenging them to a R-P-S
+     * @param challenger is the name of the player challenging someone in the area
+     * @param challenge is the name of the player being challenge
+     * @return Message showing success
+     * @throws RemoteException
+     */
+    public String challenge(String challenger, String challengee) throws RemoteException{
+      return core.challenge(challenger, challengee);
+    }
+
+    /**Prompts a message that someone is accepting a challenge to a R-P-S
+     * @param challenger is the name of the player challenging someone in the area
+     * @param challenge is the name of the player accepting
+     * @return Message showing success
+     * @throws RemoteException
+     */
+    public String accept(String challenger, String challengee) throws RemoteException{
+      return core.accept(challenger, challengee);
     }
 }
