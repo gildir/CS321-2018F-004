@@ -11,89 +11,237 @@ import java.util.Scanner;
 /**
  * @author Kevin
  */
-public class Map {
-    private final LinkedList<Room> map;
 
-    public Map(String worldFile) {
-        map = new LinkedList<>();
-        try {
-            File mapFile = new File(worldFile);
-	    Scanner mapIn = new Scanner(mapFile).useDelimiter(",|\\n|\\r\\n");
- 
-	    int numRooms, numExits;
+public class Map{   
+        private final LinkedList<Room> map;
+
+        public Map(String worldFile) {
+                map = new LinkedList<>();
+                try {
+                        File mapFile = new File(worldFile);
+                        Scanner mapIn = new Scanner(mapFile).useDelimiter(",|\\n|\\r\\n");
+
+                        int numRooms, numExits;
+
+                        String title, description, room_type;
+                        String message;
+                        int id, link;
+
+                        Direction exitId;
+
+                        Room newRoom;
+                        Exit newExit;
+
+                        numRooms = Integer.parseInt(mapIn.nextLine());
+                        numExits = 4;
+
+                        for(int i = 0; i < numRooms; i++) {
+
+                                mapIn.useDelimiter(",|\\n|\\r\\n"); 
+                                id = Integer.parseInt(mapIn.next());
+                                room_type = mapIn.next();
+                                title = mapIn.next();
+                                mapIn.useDelimiter("\\S|\\s");
+                                mapIn.next();
+                                mapIn.useDelimiter("\\n|\\r\\n");
+                                description = mapIn.next();
+
+                                //                System.out.println("Adding Room " + id + " with Title " + title + ": " + description);
 
 
-            String title, room_type, description;
-            String message;
-            int id, link;
+                                if(id == 1){
+                                        LinkedList<String> quests = new LinkedList<>(Arrays.asList("quest1", "quest2", "quest3"));
+                                        newRoom = new Room(id, room_type, title, description, new LinkedList<>(Arrays.asList(
+                                                            new NPC("questNPC", 1, quests))));
+                                }
+                                else {
+                                        newRoom = new Room(id, room_type, title, description);
+                                }
 
-            Direction exitId;
+                                for(int j = 0; j < numExits; j++) {
 
-            Room newRoom;
-            Exit newExit;
+                                        mapIn.useDelimiter(",|\\n|\\r\\n");
+                                        exitId = Direction.valueOf(mapIn.next());
+                                        link = Integer.parseInt(mapIn.next());
+                                        mapIn.useDelimiter("\\S|\\s");
+                                        mapIn.next();
+                                        mapIn.useDelimiter("\\n|\\r\\n");
+                                        message = mapIn.next();
 
-            numRooms = Integer.parseInt(mapIn.nextLine());
-            numExits = 4;
+                                        //                    System.out.println("... Adding Exit " + exitId + " to " + link + ": " + message);
+                                        newRoom.addExit(exitId, link, message);
+                                }                
 
-            for (int i = 0; i < numRooms; i++) {
-
-                mapIn.useDelimiter(",|\\n|\\r\\n");
-                id = Integer.parseInt(mapIn.next());
-                title = mapIn.next();
-		room_type = mapIn.next();
-                mapIn.useDelimiter("\\S|\\s");
-                mapIn.next();
-                mapIn.useDelimiter("\\n|\\r\\n");
-                description = mapIn.next();
-
-//                System.out.println("Adding Room " + id + " with Title " + title + ": " + description);
-
-
-                if(id == 1){
-                    LinkedList<String> quests = new LinkedList<>(Arrays.asList("quest1", "quest2", "quest3"));
-                    newRoom = new Room(id, title, room_type, description, new LinkedList<>(Arrays.asList(
-                            new NPC("questNPC", 1, quests))));
+                                map.add(newRoom);
+                        }
+                        mapIn.close();
+                } catch (IOException ex) {
+                        Logger.getLogger(Map.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                else {
-                    newRoom = new Room(id, title, room_type, description);
-                }
-
-                for (int j = 0; j < numExits; j++) {
-
-                    mapIn.useDelimiter(",|\\n|\\r\\n");
-                    exitId = Direction.valueOf(mapIn.next());
-                    link = Integer.parseInt(mapIn.next());
-                    mapIn.useDelimiter("\\S|\\s");
-                    mapIn.next();
-                    mapIn.useDelimiter("\\n|\\r\\n");
-                    message = mapIn.next();
-
-//                    System.out.println("... Adding Exit " + exitId + " to " + link + ": " + message);
-                    newRoom.addExit(exitId, link, message);
-                }
-
-                map.add(newRoom);
-            }
-        mapIn.close();
-        } catch (IOException | java.lang.IllegalArgumentException ex) {
-
-            Logger.getLogger(Map.class.getName()).log(Level.SEVERE, null, ex);
-	    System.out.println("[SHUTDOWN] Invalid File " + worldFile);
-	    System.exit(-1);
         }
-    }
 
-    public Room findRoom(int roomId) {
-        for (Room room : this.map) {
-            if (room.getId() == roomId) {
-                return room;
-            }
+        public Room findRoom(int roomId) {
+                for(Room room : this.map) {
+                        if(room.getId() == roomId) {
+                                return room;
+                        }
+                }
+                return null;
         }
-        return null;
-    }
 
     public Room randomRoom() {
         Random rand = new Random();
         return map.get(rand.nextInt(map.size()));
+    }
+    
+    /**
+     * @author Group 4: King
+     * Checks that room the player is contains a shop
+     * @param r The room in question
+     * @return true if it's a shoppable room, false otherwise
+     */
+    public boolean isShoppable(Room r) {
+    	if (r.getId() == 1) {	// Need to improve this if more shops are added
+    		return true;
+    	}
+    	return false;
+    }
+
+    /**
+     * @author Group 6: Ryan
+     * Displays a map of nearby rooms. Assumes a grid layout, though the actual layout may be different
+     * @param baseId The room to center the map on
+     * @return String representation of a map
+     */
+    public String asciiMap(int baseId)
+    {
+        Node[][] nodeArr = new Node[3][5];
+        String result = "";
+	int row = 1;
+	int col = 2;
+
+	setExits(row,col,nodeArr,baseId);
+
+	result += "   ______________________________________________\n";
+	result += "   |ASCII Map - Displaying rooms near you!      |\n";
+	result += "   | X = You  -+ = exit  # = Inside | = Outside |\n";
+	result += "   | G = Ghoul $ = Shop                         |\n";
+	result += "   |                                            |\n";
+	result += "   |                                            |\n";
+        result += "   |                                            |\n";
+        result += "   |                                            |\n";
+        result += "   |                                            |\n";
+        result += "   |                                            |\n";
+        result += "   |                                            |\n";
+        result += "   |                                            |\n";
+        result += "   |                      X                     |\n";
+        result += "   |                                            |\n";
+        result += "   |                                            |\n";
+        result += "   |                                            |\n";
+        result += "   |                                            |\n";
+        result += "   |                                            |\n";
+        result += "   |                                            |\n";
+        result += "   |                                            |\n";
+        result += "   |                                            |\n";
+        result += "   |____________________________________________|\n";
+	
+	for(row = 0; row < 3; row ++)
+	{
+           for(col = 0; col < 5; col ++)
+	   {
+              if(nodeArr[row][col] != null){
+		 System.out.println("Printing Room [" + row +"][" + col + "]");
+	         result = result.substring(0,309 + (250*row) +(8*col)) + "___" +result.substring(312 + (250*row) + (8*col),result.length());
+	         if(!nodeArr[row][col].inside){
+	            result = result.substring(0,358 + (250*row) +(8*col)) +"|   |" +result.substring(363 + (250*row) + (8*col),result.length());
+	            result = result.substring(0,408 + (250*row) +(8*col)) +"|___|" +result.substring(413 + (250*row) + (8*col),result.length());
+                 }
+	         else{
+	            result = result.substring(0,358 + (250*row) +(8*col)) +"#   #" +result.substring(363 + (250*row) + (8*col),result.length());
+                    result = result.substring(0,408 + (250*row) +(8*col)) +"#___#" +result.substring(413 + (250*row) + (8*col),result.length());
+	         }
+	         if(row == 1 && col == 2){
+                    result = result.substring(0,626) + "X" + result.substring(627,result.length());
+	         }
+	         if(nodeArr[row][col].n){
+                    result = result.substring(0,209 + (250*row) + (8*col)) + "+" + result.substring(210 + (250*row) + (8*col),result.length());
+	   	    result = result.substring(0,259 + (250*row) + (8*col)) + "|" + result.substring(260 + (250*row) + (8*col),result.length());
+	         }
+	         if(nodeArr[row][col].s){
+                    result = result.substring(0,461 + (250*row) + (8*col)) + "|" + result.substring(462 + (250*row) + (8*col),result.length());
+                    result = result.substring(0,511 + (250*row) + (8*col)) + "+" + result.substring(512 + (250*row) + (8*col),result.length());
+                 }
+	         if(nodeArr[row][col].w){
+                    result = result.substring(0,405 + (250*row) + (8*col)) + "+-" + result.substring(407 + (250*row) + (8*col),result.length());
+                 }
+	         if(nodeArr[row][col].e){
+                    result = result.substring(0,364 + (250*row) + (8*col)) + "-+" + result.substring(366 + (250*row) + (8*col),result.length());
+                 }
+                 if(nodeArr[row][col].ghoul){
+                    result = result.substring(0,409 + (250*row) + (8*col)) + "G" + result.substring(410 + (250*row) + (8*col),result.length());
+                 }
+                 if(nodeArr[row][col].shop){
+                    result = result.substring(0,411 + (250*row) + (8*col)) + "$" + result.substring(412 + (250*row) + (8*col),result.length());
+                 }
+	      }
+	   }
+	}	
+	return result;
+    }
+
+    /**
+     * @author Group 6: Ryan
+     * Helper method to recursively set the exit values for all the nodes in an node array
+     * @param row Row index of the current node
+     * @param col Column index of the current node
+     * @param nodeArr Array of nodes to set the exits for
+     * @param roomId The room id for the corresponding node
+     */
+    private void setExits(int row, int col, Node[][] nodeArr,int roomId)
+    {
+
+       if(roomId != 0 && row >= 0 && col >= 0 && row < nodeArr.length && col < nodeArr[0].length && nodeArr[row][col] == null)
+	       //Exit conditions: Out of bounds, already initialized, or no path into
+       {
+          System.out.println("Setting exits for room [" + row + "][" + col + "]");
+	  Room room = this.findRoom(roomId);
+	  nodeArr[row][col] = new Node(room);
+	  setExits(row - 1, col, nodeArr, room.getLink(Direction.valueOf("NORTH")));
+	  setExits(row + 1, col, nodeArr, room.getLink(Direction.valueOf("SOUTH")));
+	  setExits(row, col - 1, nodeArr, room.getLink(Direction.valueOf("WEST")));
+	  setExits(row, col + 1, nodeArr, room.getLink(Direction.valueOf("EAST")));
+       }
+    }
+
+    /**
+     * @author Group 6: Ryan
+     * A node class containing information about a room
+     */
+    private class Node
+    {
+       public boolean n, s, e, w;//Exits going (north | south | east | west)
+       public boolean inside, ghoul, shop;	  
+
+       public Node()
+       {
+          n = false;
+	  s = false;
+	  e = false;
+	  w = false;
+	  inside = false;
+	  ghoul = false;
+	  shop = false;
+       }
+
+       public Node(Room room)
+       {
+	  n = room.canExit(Direction.valueOf("NORTH"));
+	  s = room.canExit(Direction.valueOf("SOUTH"));
+	  e = room.canExit(Direction.valueOf("EAST"));
+	  w = room.canExit(Direction.valueOf("WEST"));
+	  inside = room.getRoomType().equals("inside");
+	  ghoul = room.hasGhoul;
+	  shop = isShoppable(room);
+       }
     }
 }
