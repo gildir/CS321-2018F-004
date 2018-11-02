@@ -465,4 +465,24 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
     public String getShopInv(int id) throws RemoteException{
     	return core.getShopInv(id);
     }
+
+    /**Prompts a message that someone is challenging them to a R-P-S
+     * @param challenger is the name of the player challenging someone in the area
+     * @param challenge is the name of the player being challenge
+     * @return Message showing success
+     * @throws RemoteException
+     */
+    public String challenge(String challenger, String challengee) throws RemoteException{
+      return core.challenge(challenger, challengee);
+    }
+
+    /**Prompts a message that someone is accepting a challenge to a R-P-S
+     * @param challenger is the name of the player challenging someone in the area
+     * @param challenge is the name of the player accepting
+     * @return Message showing success
+     * @throws RemoteException
+     */
+    public String accept(String challenger, String challengee) throws RemoteException{
+      return core.accept(challenger, challengee);
+    }
 }
