@@ -345,6 +345,35 @@ public interface GameObjectInterface extends Remote {
 	 * @throws RemoteException
 	 */
 	public void deleteAccount(String name) throws RemoteException;
+
+	/**
+	 * Adds a player to your friends list
+	 * 
+	 * @param name
+	 * @param friend
+	 * @return responseType
+	 * @throws RemoteException
+	 */
+	public Responses addFriend(String name, String friend) throws RemoteException;
+
+	/**
+	 * Removes a player from your friends list
+	 * 
+	 * @param name
+	 * @param ex
+	 * @return responseType
+	 * @throws RemoteException
+	 */
+	public Responses removeFriend(String name, String ex) throws RemoteException;
+
+	/**
+	 * returns a message showing all online friends
+	 * 
+	 * @param Player name
+	 * @return Message showing online friends
+	 * @throws RemoteException
+	 */
+	String viewOnlineFriends(String name) throws RemoteException;
 	
 	/**
 	 * Resets passwords.

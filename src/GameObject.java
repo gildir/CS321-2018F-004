@@ -548,12 +548,51 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
 	 * @param name Name of the player to be deleted
 	 * @throws RemoteException
 	 */
-	public void deleteAccount(String name) throws RemoteException{
+	@Override
+	public void deleteAccount(String name) throws RemoteException {
 		Player player = core.deleteAccount(name);
 		if (player != null) {
 			player.getReplyWriter().close();
 		}
 	}
+
+	/**
+	 * Adds a player to your friends list
+	 * 
+	 * @param name
+	 * @param friend
+	 * @return responseType
+	 * @throws RemoteException
+	 */
+	@Override
+	public Responses addFriend(String name, String friend) throws RemoteException {
+		return core.addFriend(name, friend);
+	}
+
+	/**
+	 * Removes a player from your friends list
+	 * 
+	 * @param name
+	 * @param ex
+	 * @return responseType
+	 * @throws RemoteException
+	 */
+	@Override
+	public Responses removeFriend(String name, String ex) throws RemoteException {
+		return core.removeFriend(name, ex);
+	}
+	
+	/**
+	 * returns a message showing all online friends
+	 * 
+	 * @param Player name
+	 * @return Message showing online friends
+	 * @throws RemoteException 
+	 */
+	@Override
+    public String viewOnlineFriends(String name) throws RemoteException {
+        return core.viewOnlineFriends(name);
+    }  
 	
 	/**
 	 * Gets user's recovery question

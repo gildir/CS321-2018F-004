@@ -8,6 +8,7 @@ import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -37,6 +38,8 @@ public class GameCore implements GameCoreInterface {
 	private final Object loginLock = new Object();
 	private final Object createAccountLock = new Object();
 	private Logger playerLogger = Logger.getLogger("connections");
+	private FriendsManager friendsManager;
+	private final Object friendsLock = new Object();
     
     /**
 	 * Creates a new GameCoreObject. Namely, creates the map for the rooms in the
@@ -72,6 +75,8 @@ public class GameCore implements GameCoreInterface {
         
         accountManager = new PlayerAccountManager(playerAccountsLocation);
         
+		friendsManager = FriendsManager.Create(new File("friends.json"));
+        		
         Thread objectThread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -1524,23 +1529,89 @@ public class GameCore implements GameCoreInterface {
 		handle.flush();
 	}
 
-    /**
-     * Delete a player's account.
-     * 
-     * @param name Name of the player to be deleted
-     * @return Player that was just deleted.
-     */
-    public Player deleteAccount(String name) {
-        Player player = this.playerList.findPlayer(name);
-        if (player != null) {
-            this.broadcast(player, "You hear that " + player.getName() + " has dropped out of school.");
-            this.playerList.removePlayer(name);
-            this.accountManager.deleteAccount(player.getName());
-            return player;
-        }
-	    return null; // No such player was found.
-    }
-        
+	/**
+	 * Delete a player's account.
+	 * 
+	 * @param name Name of the player to be deleted
+	 * @return Player that was just deleted.
+	 */
+	@Override
+	public Player deleteAccount(String name) {
+		Player player = this.playerList.findPlayer(name);
+		if (player != null) {
+			this.broadcast(player, "You hear that " + player.getName() + " has dropped out of school.");
+			this.playerList.removePlayer(name);
+			this.accountManager.deleteAccount(player.getName());
+			synchronized (friendsLock) {
+				this.friendsManager.purge(name);
+			}
+			return player;
+		}
+		return null; // No such player was found.
+	}
+
+	/**
+	 * Adds a player to the friend list if the player exists and isn't on the friend
+	 * list already
+	 * 
+	 * @param name
+	 * @param friend
+	 * @return responseType
+	 */
+	@Override
+	public Responses addFriend(String name, String friend) {
+		synchronized (friendsLock) {
+			if (!this.accountManager.accountExists(name))
+				return Responses.INTERNAL_SERVER_ERROR;
+			if (!this.accountManager.accountExists(friend))
+				return Responses.NOT_FOUND;
+			return this.friendsManager.addFriend(name, friend);
+		}
+	}
+
+	/**
+	 * Removes a player from the friend list
+	 * 
+	 * @param name
+	 * @param ex
+	 * @return reponseType
+	 */
+	@Override
+	public Responses removeFriend(String name, String ex) {
+		synchronized (friendsLock) {
+			if (!this.accountManager.accountExists(name))
+				return Responses.INTERNAL_SERVER_ERROR;
+			return this.friendsManager.removeFriend(name, ex);
+		}
+	}
+	
+	/**
+	 * Returns a message showing all online friends
+	 * 
+	 * @param Player name
+	 * @return Message showing online friends
+	 */
+	@Override
+	public String viewOnlineFriends(String name) {
+
+		String message = "Your friends that are currently online: \n"; // This is the first part of the message
+
+		// get list of friends from FriendsManager
+		HashSet<String> flist = this.friendsManager.getMyAdded().get(name.toLowerCase());
+		if (flist == null) {
+			message += "You don't have any.\n";
+			return message;
+		}
+
+		// find online friends using flit and findPlayer from playerList
+		for (String str : flist) {
+			Player p;
+			if ((p = this.playerList.findPlayer(str)) != null)
+				message += "  " + p.getName() + "\n";
+		}
+		return message;
+	}
+
     @Override
     public void heartbeatCheck(String name){
         playerList.heartbeat(name);

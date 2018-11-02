@@ -332,4 +332,31 @@ public interface GameCoreInterface {
       * @return String message of the rejection
       */
      public String teach(String player);
+
+	/**
+	 * Adds a player to the friend list if the player exists and isn't on the friend
+	 * list already
+	 * 
+	 * @param name
+	 * @param friend
+	 * @return responseType
+	 */
+	public Responses addFriend(String name, String friend);
+
+	/**
+	 * Removes a player from the friend list
+	 * 
+	 * @param name
+	 * @param ex
+	 * @return reponseType
+	 */
+	public Responses removeFriend(String name, String ex);
+	
+	/**
+	 * returns a message showing all online friends
+	 * 
+	 * @param Player name
+	 * @return Message showing online friends
+	 */
+	public String viewOnlineFriends(String name);
 }
