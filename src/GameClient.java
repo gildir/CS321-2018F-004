@@ -141,7 +141,7 @@ public class GameClient {
             remoteOutputThread.start();
             
             //Sends a heartbeat every 10 seconds
-            Thread objectThread = new Thread(new Runnable() {
+            Thread hbThread = new Thread(new Runnable() {
                 @Override
                 public void run() {
                         while(true) {
@@ -160,9 +160,9 @@ public class GameClient {
                     }
                 });
             
-            objectThread.setDaemon(true);
-            objectThread.setName("heartbeat");
-            objectThread.start();
+            hbThread.setDaemon(true);
+            hbThread.setName("heartbeat");
+            hbThread.start();
             
 
             // 409 Word Filter

@@ -1523,22 +1523,22 @@ public class GameCore implements GameCoreInterface {
 		handle.flush();
 	}
 
-	/**
-	 * Delete a player's account.
-	 * 
-	 * @param name Name of the player to be deleted
-	 * @return Player that was just deleted.
-	 */
-	public Player deleteAccount(String name) {
-		Player player = this.playerList.findPlayer(name);
-		if (player != null) {
-			this.broadcast(player, "You hear that " + player.getName() + " has dropped out of school.");
-			this.playerList.removePlayer(name);
-			this.accountManager.deleteAccount(player.getName());
-			return player;
-		}
-		return null; // No such player was found.
-	}
+    /**
+     * Delete a player's account.
+     * 
+     * @param name Name of the player to be deleted
+     * @return Player that was just deleted.
+     */
+    public Player deleteAccount(String name) {
+        Player player = this.playerList.findPlayer(name);
+        if (player != null) {
+            this.broadcast(player, "You hear that " + player.getName() + " has dropped out of school.");
+            this.playerList.removePlayer(name);
+            this.accountManager.deleteAccount(player.getName());
+            return player;
+        }
+	    return null; // No such player was found.
+    }
         
     @Override
     public void heartbeatCheck(String name){
