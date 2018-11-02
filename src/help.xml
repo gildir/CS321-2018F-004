@@ -120,4 +120,10 @@ object are on the ground and what direction you are facing.
     <help command = "DELETE">
         <description>  DELETE                   - Deletes your character permanently.</description>
     </help>
+    <help command = "CHALLENGE">
+        <description>  CHALLENGE                   - Challenge a player to a R-P-S in the same area.</description>
+    </help>
+    <help command = "ACCEPT">
+        <description>  ACCEPT                   - Accept a challenge from a player to a R-P-S in the same area.</description>
+    </help>
 </helps>
