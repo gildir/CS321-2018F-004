@@ -52,27 +52,34 @@ public class GameServer {
 			Logger.getLogger(GameServer.class.getName()).log(Level.SEVERE, null, re);
 		} catch (MalformedURLException ex) {
 			Logger.getLogger(GameServer.class.getName()).log(Level.SEVERE, null, ex);
-		}
-	}
+		} catch (IOException e) {
+           e.printStackTrace();
+       }
+    }
     
     public static void main(String[] args) {
+        Runtime.getRuntime().addShutdownHook(new Thread(){ 
+            public void run(){ 
+                DailyLogger dailyLogger = new DailyLogger();
+                dailyLogger.write("SERVER FORCIBLY TERMINATED");
+                System.out.println("shutdown");
+            } 
+            });
 		if(args.length < 1) {
-			System.out.println("[SHUTDOWN] .. This program requires one argument. Run as java -Djava.security.policy=game.policy GameServer hostname");
+			System.out.println("[SHUTDOWN] .. This program requires at least one argument. Run as java -Djava.security.policy=game.policy GameServer hostname (worldFilePath)");
 			System.exit(-1);
 		}
 		
         try {
-		        System.out.println("[STARTUP] Game GameServer Now Starting...");
-			if(args.length < 2){
-		           System.out.println("[STARTUP] Game GameServer Now Starting...");
-			   System.out.println("[STARTUP] Loading Default World rooms.csv...");
-			   new GameServer(args[0], "rooms.csv");
+			System.out.println("[STARTUP] Game GameServer Now Starting...");
+			if(args.length > 1){
+			    System.out.println("[STARTUP] Loading World " + args[1] + "...");
+			    new GameServer(args[0], args[1]);
 			}
 			else{
-			   System.out.println("[STARTUP] Loading World " + args[1] + "...");
-			   new GameServer(args[0], args[1]);
+			    System.out.println("[STARTUP] Loading Default World rooms.csv...");
+			    new GameServer(args[0], "rooms.csv");
 			}
-
         } catch (RemoteException ex) {
             Logger.getLogger(GameServer.class.getName()).log(Level.SEVERE, null, ex);
         }
