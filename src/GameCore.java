@@ -1018,12 +1018,25 @@ public class GameCore implements GameCoreInterface {
     public String challenge(String challenger, String challengee){
       Player playerChallenger = this.playerList.findPlayer(challenger);
       Player playerChallengee = this.playerList.findPlayer(challengee);
-      playerChallengee.setChallenger(challenger);
-      playerChallengee.setHasChallenge(true);
-      if(playerChallenger != null && playerChallengee != null && playerChallenger != playerChallengee && playerChallenger.getCurrentRoom() == playerChallengee.getCurrentRoom()) {
+      if(playerChallengee == null || playerChallenger == null){
+        return "This player does not exist in the game.";
+      }
+      if(playerChallenger.getInBattle() == true){
+        return "You are already in a R-P-S battle.";
+      }
+      if(playerChallengee.getInBattle()){
+        return "This player is already in a R-P-S battle";
+      }
+      if(playerChallengee.getInBattle() == true){
+        return playerChallengee.getName() + " is already in a R-P-S battle.";
+      }
+      if(playerChallenger != playerChallengee && playerChallenger.getCurrentRoom() == playerChallengee.getCurrentRoom()) {
+        playerChallengee.setChallenger(challenger);
+        playerChallenger.setChallenger(challengee);
+        playerChallengee.setHasChallenge(true);
         playerChallengee.getReplyWriter().println(playerChallenger.getName() + " challenges you to a R-P-S");
         return "You challenged " + playerChallengee.getName() + " to a R-P-S.";
-          }
+      }
       else if(playerChallenger == playerChallengee)
         return "You can't challenge yourself to R-P-S.";
       else {
@@ -1035,12 +1048,44 @@ public class GameCore implements GameCoreInterface {
     public String accept(String challengee, String challenger){
       Player playerChallenger = this.playerList.findPlayer(challenger);
       Player playerChallengee = this.playerList.findPlayer(challengee);
-      if(playerChallengee.getChallenger() != " " && playerChallengee.getHasChallenge() == true){
-        playerChallengee.setChallenger(" ");
-        playerChallengee.setHasChallenge(false);
-        if(playerChallenger != null && playerChallengee != null && playerChallenger != playerChallengee && playerChallenger.getCurrentRoom() == playerChallengee.getCurrentRoom()) {
-          playerChallenger.getReplyWriter().println(playerChallengee.getName() + " accepts your challenge to a R-P-S");
-          return "You accept " + playerChallenger.getName() + "\'s challenge to a R-P-S.";
+      if(playerChallengee == null || playerChallenger == null){
+        return "This player does not exist in the game.";
+      }
+      if(playerChallengee.getChallenger().equals(playerChallenger.getName()) && playerChallengee.getHasChallenge() == true){
+        if(playerChallenger != playerChallengee && playerChallenger.getCurrentRoom() == playerChallengee.getCurrentRoom()) {
+          playerChallenger.getReplyWriter().println(playerChallengee.getName() + " accepts your challenge to a R-P-S. \nPick rock, paper, or scissors: ");
+          playerChallengee.setHasChallenge(false);
+          playerChallengee.setInBattle(true);
+          playerChallenger.setInBattle(true);
+          return "You accept " + playerChallenger.getName() + "\'s challenge to a R-P-S. \nPick rock, paper, or scissors: ";
+        }
+        else
+        {
+          return "This person is not in the same room as you or doesn't exist in the game.";
+        }
+      }
+      else if(playerChallenger == playerChallengee){
+        return "You can't challenge yourself to R-P-S.";
+      }
+      else{
+        return "You have not been challenged by " + playerChallenger.getName();
+      }
+    }
+
+    @Override
+    public String reject(String challengee, String challenger){
+      Player playerChallenger = this.playerList.findPlayer(challenger);
+      Player playerChallengee = this.playerList.findPlayer(challengee);
+      if(playerChallengee == null || playerChallenger == null){
+        return "This player does not exist in the game.";
+      }
+      if(playerChallengee.getChallenger().equals(playerChallenger.getName()) && playerChallengee.getHasChallenge() == true){
+        if(playerChallenger != playerChallengee && playerChallenger.getCurrentRoom() == playerChallengee.getCurrentRoom()) {
+          playerChallengee.setChallenger(" ");
+          playerChallenger.setChallenger(" ");
+          playerChallengee.setHasChallenge(false);
+          playerChallenger.getReplyWriter().println(playerChallengee.getName() + " rejects your challenge to a R-P-S");
+          return "You reject " + playerChallenger.getName() + "\'s challenge to a R-P-S.";
         }
         else if(playerChallenger == playerChallengee)
           return "You can't challenge yourself to R-P-S.";
@@ -1048,7 +1093,91 @@ public class GameCore implements GameCoreInterface {
           return "This person is not in the same room as you or doesn't exist in the game.";
         }
       }
-      return "You have not been challenged by " + playerChallenger.getName();
+      else if(playerChallenger == playerChallengee){
+        return "You can't challenge yourself to R-P-S.";
+      }
+      else{
+        return "You have not been challenged by " + playerChallenger.getName();
+      }
+    }
+
+    @Override
+    public String pickRPS(String name,  String option){
+      Player player = this.playerList.findPlayer(name);
+      Player challengee = this.playerList.findPlayer(player.getChallenger());
+
+      if(player.getInBattle() == true){
+        if(player.getOption().equals("ROCK") || player.getOption().equals("PAPER") || player.getOption().equals("SCISSORS")){
+          return "You already pick rock, paper or scissors. You picked " + player.getOption();
+        }
+        player.setOption(option);
+        challengee.setChallengerOption(option);
+        String message = "You picked " + option;
+
+        if(challengee.getOption().equals("ROCK") || challengee.getOption().equals("PAPER") || challengee.getOption().equals("SCISSORS")){
+          switch(player.getOption()) {
+            case "ROCK":
+              if (challengee.getOption().equals("PAPER")) {
+                message = challengee.getName() + " wins with " + challengee.getOption();
+              }
+              else if (challengee.getOption().equals("ROCK")){
+                message = "It is a tie.";
+              }
+              else {
+                message = player.getName() + " wins with " + player.getOption();
+              }
+              challengee.getReplyWriter().println(message);
+              player.setInBattle(false);
+              player.setChallenger(" ");
+              player.setOption("");
+              challengee.setChallenger(" ");
+              challengee.setInBattle(false);
+              challengee.setOption("");
+              break;
+            case "PAPER":
+              if (challengee.getOption().equals("SCISSORS")) {
+                message = challengee.getName() + " wins with " + challengee.getOption();
+              }
+              else if (challengee.getOption().equals("PAPER")){
+                message = "It is a tie.";
+              }
+              else {
+                message = player.getName() + " wins with " + player.getOption();
+              }
+              challengee.getReplyWriter().println(message);
+              player.setInBattle(false);
+              player.setChallenger(" ");
+              player.setOption("");
+              challengee.setChallenger(" ");
+              challengee.setInBattle(false);
+              player.setOption("");
+              break;
+            case "SCISSORS":
+              if (challengee.getOption().equals("ROCK")) {
+                message = challengee.getName() + " wins with " + challengee.getOption();
+              }
+              else if (challengee.getOption().equals("SCISSORS")){
+                message = "It is a tie";
+              }
+              else {
+                message = player.getName() + " wins with " + player.getOption();
+              }
+              challengee.getReplyWriter().println(message);
+              player.setInBattle(false);
+              player.setChallenger(" ");
+              player.setOption("");
+              challengee.setChallenger(" ");
+              challengee.setInBattle(false);
+              challengee.setOption("");
+              break;
+            default:
+              break;
+          }
+        }
+        return message;
+      }
+      else
+        return "You are not in a R-P-S challenge.";
     }
 
 	/**
@@ -1276,6 +1405,19 @@ public class GameCore implements GameCoreInterface {
         pw.close();
         return;
     }
+
+    @Override
+     public String teach(String player){
+         Player players = this.playerList.findPlayer(player);
+         String message;
+         if(players.getCurrentRoom() == 1){
+            message = "Here is the Heirarchy of power in R-P-S:\n\tRock beats Scissors\n\tScissors beats Paper\n\tPaper beats Rock\n\nCHALLENGE <name>: \tIf you challenge someone, you must wait for them to accept or reject\nACCEPT/REJECT <name>: \tIf you have been challenge, you must accept or reject the challenge\nYou may not be challenged while in a R-P-S battle\n";
+         }
+         else{
+            message = "You are not in the Clock in the Main Quad where the teacher is located\n";
+         }
+         return message;
+     }
 
     /**
      * Generates list of all online players.

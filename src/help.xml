@@ -123,4 +123,13 @@ object are on the ground and what direction you are facing.
     <help command = "ACCEPT">
         <description>  ACCEPT                   - Accept a challenge from a player to a R-P-S in the same area.</description>
     </help>
+    <help command = "REJECT">
+        <description>  REJECT                   - Reject a challenge from a player to a R-P-S in the same area.</description>
+    </help>
+    <help command = "PICK">
+        <description>  PICK                   - Pick rock, paper or scissors.</description>
+    </help>
+    <help command = "TEACH">
+        <description>  TEACH                   - Teaches you the basics of how to play R-P-S.</description>
+    </help>
 </helps>

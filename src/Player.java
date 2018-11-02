@@ -26,7 +26,11 @@ public class Player {
     private String tradePartner = "";
     private String lastPlayer = "";
     private boolean hasChallenge = false;
+    private boolean inBattle = false;
     private String challenger = " ";
+    private String option = "";
+    private String challengerOption = "";
+    private boolean hasOption = false;
 
     public Player(String name) {
         this.currentRoom = 1;
@@ -263,6 +267,14 @@ public class Player {
         this.lastPlayer = lastPlayer;
     }
 
+    public void setInBattle(boolean battle){
+	inBattle = battle;
+    }
+
+    public boolean getInBattle(){
+	return inBattle;
+    } 
+
     public String getName() {
         return name;
     }
@@ -376,6 +388,22 @@ public class Player {
     
     public Direction getDirection() {
         return this.currentDirection;
+    }
+
+    public String getOption(){
+        return this.option;
+    }
+
+    public void setOption(String option){
+        this.option = option;
+    }
+
+    public String getChallengerOption(){
+        return this.challengerOption;
+    }
+
+    public void setChallengerOption(String challengerOption){
+        this.challengerOption = challengerOption;
     }
     
     public double getMoney() {

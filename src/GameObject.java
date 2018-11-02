@@ -393,7 +393,39 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
     public String playerResponse(String acceptingTrader, String traderToAccept) throws RemoteException{
         return core.playerResponse(acceptingTrader, traderToAccept);
     }
+    
+    /**
+     * Prompts a message that someone is rejecting a challenge to R-P-S
+     * @param challenger is the name of the player challenging someone in the area
+     * @param challengee is the name of the player rejecting 
+     * @return Messaging showing success
+     * @throws RemoteException
+     */
+    public String reject(String challenger, String challengee) throws RemoteException{
+	return core.reject(challenger, challengee);
+    }
 
+    /**
+      * Prompts a message that someone pick either R-P-S
+      * @param name is the name of the player
+      * @param option is either R-P-S
+      * @return Messaging showing success
+      * @throws RemoteException
+      */
+    public String pickRPS(String name, String option) throws RemoteException {
+        return core.pickRPS(name, option);
+    }
+
+    /**
+      * Sends a message to the play to teach them how to play R-P-S
+      * @param challenger is the name of the player who wants to be taught
+      * @return Messaging showing success
+      * @throws RemoteException
+      */
+     public String teach(String player) throws RemoteException{
+         return core.teach(player);
+     }
+     
      /**
      * Leaves the game.
      * @param name Name of the player to leave
