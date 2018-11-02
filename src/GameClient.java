@@ -164,6 +164,31 @@ public class GameClient {
             remoteOutputThread = new Thread(new GameClient.ReplyRemote(host));
             remoteOutputThread.setDaemon(true);
             remoteOutputThread.start();
+            
+            //Sends a heartbeat every 10 seconds
+            Thread hbThread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                        while(true) {
+                            try {
+                                Thread.sleep(10000);
+                                try{
+                                    remoteGameInterface.heartbeatCheck(playerName);
+                                }catch(RemoteException re) {
+                                    System.err.println("[CRITICAL ERROR] There was a severe error with the RMI mechanism.");
+                                    System.err.println("[CRITICAL ERROR] Code: " + re);
+                                    System.exit(-1);
+                                } 
+                            } catch (InterruptedException ex) {
+                            }
+                        }
+                    }
+                });
+            
+            hbThread.setDaemon(true);
+            hbThread.setName("heartbeat");
+            hbThread.start();
+            
 
             // 409 Word Filter
             readWordFilterFile();

@@ -8,6 +8,7 @@ import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Random;
@@ -117,6 +118,25 @@ public class GameCore implements GameCoreInterface {
                         Logger.getLogger(GameObject.class.getName()).log(Level.SEVERE, null, ex);}
                 }}});
 
+                Thread hbThread = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        while(true) {
+                            try {
+                                Thread.sleep(5000);
+                                List<String> expiredPlayers  = playerList.getExpiredPlayers();
+                                expiredPlayers.forEach(s -> {
+                                        leave(s);
+                                        });
+                                  } catch (InterruptedException ex) {
+                                        }
+                            }
+                         }
+                    });
+                 hbThread.setDaemon(true);
+                 hbThread.setName("heartbeatChecker");
+                 hbThread.start();
+        
                 // new thread awake and control the action of Ghoul.
                 // team5 added in 10/13/2018
                 Thread awakeDayGhoul = new Thread(new Runnable() {
@@ -1504,22 +1524,27 @@ public class GameCore implements GameCoreInterface {
 		handle.flush();
 	}
 
-	/**
-	 * Delete a player's account.
-	 * 
-	 * @param name Name of the player to be deleted
-	 * @return Player that was just deleted.
-	 */
-	public Player deleteAccount(String name) {
-		Player player = this.playerList.findPlayer(name);
-		if (player != null) {
-			this.broadcast(player, "You hear that " + player.getName() + " has dropped out of school.");
-			this.playerList.removePlayer(name);
-			this.accountManager.deleteAccount(player.getName());
-			return player;
-		}
-		return null; // No such player was found.
-	}
+    /**
+     * Delete a player's account.
+     * 
+     * @param name Name of the player to be deleted
+     * @return Player that was just deleted.
+     */
+    public Player deleteAccount(String name) {
+        Player player = this.playerList.findPlayer(name);
+        if (player != null) {
+            this.broadcast(player, "You hear that " + player.getName() + " has dropped out of school.");
+            this.playerList.removePlayer(name);
+            this.accountManager.deleteAccount(player.getName());
+            return player;
+        }
+	    return null; // No such player was found.
+    }
+        
+    @Override
+    public void heartbeatCheck(String name){
+        playerList.heartbeat(name);
+    }
 	
 	/**
 	 * Gets recovery question

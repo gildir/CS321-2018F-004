@@ -253,13 +253,20 @@ public interface GameCoreInterface {
      */
     public String shout(String name, String message);
 
-	/**
-	 * Delete a player's account.
+    /**
+     * Delete a player's account.
      *
-	 * @param name Name of the player to be deleted
-	 * @return Player that was just deleted.
-	 */
-	public Player deleteAccount(String name);
+     * @param name Name of the player to be deleted
+     * @return Player that was just deleted.
+     */
+    public Player deleteAccount(String name);
+    
+    /**
+     * Player check in to ensure the client has not crashed. A client needs to 
+     * call this method at least every hour or else it will be logged off.
+     * @param name Name of client's player that is checking in.
+     */
+    public void heartbeatCheck(String name);
 	
 	/**
 	 * Gets recovery question
