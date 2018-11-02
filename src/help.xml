@@ -129,4 +129,7 @@ object are on the ground and what direction you are facing.
     <help command = "PICK">
         <description>  PICK                   - Pick rock, paper or scissors.</description>
     </help>
+    <help command = "TEACH">
+        <description>  TEACH                   - Teaches you the basics of how to play R-P-S.</description>
+    </help>
 </helps>

@@ -67,7 +67,6 @@ public class GameClient {
         //please modify the xml to add more commands
         showIntroduction();
         showCommand();
-        System.out.println();
         
 
 
@@ -501,6 +500,9 @@ public class GameClient {
                       else
                         System.out.println("Invalid option.");
                     }
+                    break;
+                case "TEACH":
+                    System.out.println(remoteGameInterface.teach(this.playerName));
                     break;
                 default:
                     //If command does not match with any, see if it is custom command

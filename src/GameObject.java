@@ -415,6 +415,17 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
     public String pickRPS(String name, String option) throws RemoteException {
         return core.pickRPS(name, option);
     }
+
+    /**
+      * Sends a message to the play to teach them how to play R-P-S
+      * @param challenger is the name of the player who wants to be taught
+      * @return Messaging showing success
+      * @throws RemoteException
+      */
+     public String teach(String player) throws RemoteException{
+         return core.teach(player);
+     }
+     
      /**
      * Leaves the game.
      * @param name Name of the player to leave

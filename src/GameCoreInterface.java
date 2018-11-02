@@ -272,4 +272,12 @@ public interface GameCoreInterface {
       * @return String message of what they pick and who won
       */
     public String pickRPS(String name, String options);
+
+    /**
+      *
+      * Teaches player how to play R-P-s
+      * @param player is the name of the player to teach R-P-S
+      * @return String message of the rejection
+      */
+     public String teach(String player);
 }
