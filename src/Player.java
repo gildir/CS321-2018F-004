@@ -2,6 +2,7 @@
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -35,11 +36,15 @@ public class Player {
     private String option = "";
     private String challengerOption = "";
     private boolean hasOption = false;
-
-    public Player(@JsonProperty("name") String name) {
+    @JsonProperty("recovery")
+    private ArrayList<String> recovery;
+    
+    
+	public Player(@JsonProperty("name") String name, @JsonProperty("recovery") ArrayList<String> recovery) {
         this.currentRoom = 1;
         this.currentDirection = Direction.NORTH;
         this.name = name;
+        this.recovery = recovery;
         this.currentInventory = new LinkedList<>();
         this.money = 0;
     }
@@ -284,10 +289,27 @@ public class Player {
     public String getName() {
         return name;
     }
+    
+    @JsonProperty("recovery")
+    public void setRecovery(ArrayList<String> recovery) {
+    	this.recovery = recovery;
+    }
 
     public void setName(String name) {
         this.name = name;
     }
+	
+	public String getQuestion(int num) {
+		if(this.recovery.size() >= num * 2)
+			return this.recovery.get(num * 2);
+		return null;
+	}
+	
+	public String getAnswer(int num) {
+		if(this.recovery.size() >= (num * 2) + 1)
+			return this.recovery.get((num * 2) + 1);
+		return null;
+	}
 
     public LinkedList<Item> getCurrentInventory() {
         return currentInventory;
@@ -418,7 +440,7 @@ public class Player {
     public double getMoney() {
         return this.money;
     }
-    
+
     public void setMoney(double m){
         this.money = m;
     }
