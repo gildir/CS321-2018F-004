@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Item
@@ -7,6 +8,15 @@ public class Item
 	double price;
 
 	public Item(@JsonProperty("name") String name, @JsonProperty("weight") double weight, @JsonProperty("price") double price)
+=======
+public class Item
+{
+	String name;
+	double  weight;
+	double price;
+
+	public Item(String name, double weight, double price)
+>>>>>>> refs/remotes/base/dev
 	{
 		this.name = name;
 		this.weight = weight;

@@ -1,23 +1,57 @@
 
+<<<<<<< HEAD
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+=======
+import java.util.HashSet;
+>>>>>>> refs/remotes/base/dev
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+<<<<<<< HEAD
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
+=======
+>>>>>>> refs/remotes/base/dev
 import java.util.Random;
+<<<<<<< HEAD
 import java.util.Scanner;
 import java.util.logging.Handler;
+=======
+>>>>>>> refs/remotes/base/dev
 import java.util.logging.Level;
-import java.util.logging.LogRecord;
 import java.util.logging.Logger;
-import java.util.logging.SimpleFormatter;
-import java.util.logging.StreamHandler;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Scanner;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Scanner;
+import java.io.File;
+import java.lang.StringBuilder;
+import java.io.FileNotFoundException;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+import java.lang.StringBuilder;
 
 /**
  *
@@ -31,13 +65,17 @@ public class GameCore implements GameCoreInterface {
     private Ghoul ghoul;
     private PrintWriter pw;
 
+<<<<<<< HEAD
 	// Accounts and Login
 	private final PlayerAccountManager accountManager;
 	private final Object loginLock = new Object();
 	private final Object createAccountLock = new Object();
 	private Logger playerLogger = Logger.getLogger("connections");
     
+=======
+>>>>>>> refs/remotes/base/dev
     /**
+<<<<<<< HEAD
 	 * Creates a new GameCoreObject. Namely, creates the map for the rooms in the
 	 * game, and establishes a new, empty, player list.
 	 * 
@@ -48,6 +86,14 @@ public class GameCore implements GameCoreInterface {
 	 * 
 	 */
     public GameCore(String playerAccountsLocation, String worldFile) throws Exception {
+=======
+     * Creates a new GameCoreObject.  Namely, creates the map for the rooms in the game,
+     *  and establishes a new, empty, player list.
+     * 
+     * This is the main core that both the RMI and non-RMI based servers will interface with.
+     */
+    public GameCore(String worldFile) throws IOException {
+>>>>>>> refs/remotes/base/dev
 
         // Generate the game map.
         map = new Map(worldFile);
@@ -67,10 +113,13 @@ public class GameCore implements GameCoreInterface {
         pw.flush();
         pw.close();
 
+<<<<<<< HEAD
         initConnectionsLogger();
         
         accountManager = new PlayerAccountManager(playerAccountsLocation);
         
+=======
+>>>>>>> refs/remotes/base/dev
         Thread objectThread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -116,6 +165,7 @@ public class GameCore implements GameCoreInterface {
                     } catch (InterruptedException ex) {
                         Logger.getLogger(GameObject.class.getName()).log(Level.SEVERE, null, ex);}
                 }}});
+<<<<<<< HEAD
 
                 // new thread awake and control the action of Ghoul.
                 // team5 added in 10/13/2018
@@ -621,34 +671,536 @@ public class GameCore implements GameCoreInterface {
 				return null;
 			player = resp.player;
 			this.playerList.addPlayer(player);
+=======
+>>>>>>> refs/remotes/base/dev
 
-			this.broadcast(player, player.getName() + " has arrived.");
-			connectionLog(true, player.getName());
-			return player;
+                // new thread awake and control the action of Ghoul.
+                // team5 added in 10/13/2018
+                Thread awakeDayGhoul = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Random rand = new Random();
+                        Room room = map.randomRoom();
+                        ghoul = new Ghoul(room.getId());
+                        room.hasGhoul = true;
+                        GameCore.this.broadcast(room, "You see a Ghoul appear in this room");
+
+                        while (true) {
+                            try {
+                                // Ghoul move in each 10-15 seconds.
+                                Thread.sleep(12000 + rand.nextInt(5000));
+
+                                // make Ghoul walk to other room;
+                                GameCore.this.ghoulWander(ghoul, room);
+                                room.hasGhoul = false;
+                                GameCore.this.broadcast(room, "You see a Ghoul leave this room");
+                                room = map.findRoom(ghoul.getRoom());
+                                room.hasGhoul = true;
+                                GameCore.this.broadcast(room, "You see a Ghoul enter this room");
+
+
+                            } catch (InterruptedException ex) {
+                                Logger.getLogger(GameObject.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        }
+                    }
+                });
+
+                objectThread.setDaemon(true);
+                awakeDayGhoul.setDaemon(true);
+                objectThread.start();
+                awakeDayGhoul.start();
+            }
+	
+
+	public void ghoulWander(Ghoul g, Room room) {
+		Random rand = new Random();
+		int[] candinateRoom = new int[4];
+
+		// easiest way to get all possible room;
+		candinateRoom[0] = room.getLink(Direction.NORTH);
+		candinateRoom[1] = room.getLink(Direction.SOUTH);
+		candinateRoom[2] = room.getLink(Direction.WEST);
+		candinateRoom[3] = room.getLink(Direction.EAST);
+
+		// random walk.
+		while (true) {
+			int roomID = candinateRoom[rand.nextInt(4)];
+			if (roomID != 0) {
+				g.setRoom(roomID);
+				return;
+			}
+		}
+    }
+    
+      
+    
+    /**
+     * @author Group 4: King
+     * Adds the player to list of players in store, and returns shop they just entered
+     * @param name Name of the player to add to shop
+     * @return The id of the shop the player will enter, -1 otherwise
+     */
+    public int shop(String name) {
+    	Player player = this.playerList.findPlayer(name);
+    	Room room = map.findRoom(player.getCurrentRoom());
+    	
+    	// Add player to shop in room if applicable
+    	if (map.isShoppable(room)) {
+    		return room.getId();
+    	}
+    	return -1;
+    }
+    
+
+
+    /**
+     * Returns Shop.tostring
+     * @param id The shop's id in the hashmap
+     * @return a reference to the shop
+     */
+    public String getShopStr(int id) {
+    	return this.shoplist.get(id).toString();
+    }
+
+    /**
+     * Allows player to sell an item to a shop, and increases their money
+     * @author Team 4: King
+     * @param name Name of the player
+     * @param shopId The ID of the shop the player is selling an item to
+     * @param item The item the player is selling (eventually will be an Item obj)
+     */
+    public double sellItem(String name, int shopId, String item) {
+    	Player player = this.playerList.findPlayer(name);
+    	Shop s = shoplist.get(shopId);
+    	double value = 0;
+    	
+    	Item removed = player.removeObjectFromInventory(item);
+    	if (removed != null) {
+    		s.add(removed);
+    		value = removed.price;
+        	player.changeMoney(value);
+    	}
+    	
+    	//int value = removed.getValue();
+    	return value;
+    }
+
+
+	public String bribeGhoul(String playerName, String item){
+		item = item.toLowerCase();
+		Player player = playerList.findPlayer(playerName);
+		Room room = this.map.findRoom(player.getCurrentRoom());
+		Item object = player.removeObjectFromInventory(item);
+		if(player == null){
+			return null;
+		}
+		if(room.hasGhoul){
+			//LinkedList<Item> itemList = player.getCurrentInventory();
+			//boolean giveAble = false;
+			//if (player.currentyInventory.size() > 0){
+			//    giveAble = true;
+			//    break;
+            //}
+			//for (String thing : itemList){
+				//if(thing.equalsIgnoreCase(item)){
+				//	giveAble = itemList.remove(thing);
+				//	break;
+				//}
+            boolean giveAble = false;
+            if (object != null){
+                giveAble = true;
+            }
+
+
+
+			if(giveAble){
+				try {
+					GhoulLog myLog = new GhoulLog();
+					myLog.glLog("GameCore","bribeGhoul", "Player" + " " + playerName + " has just given a " + object + " to the Ghoul");
+				} catch (Exception e){
+					e.printStackTrace();
+				}
+
+				ghoul.modifyAngryLevel(-1);
+				int angryLv = ghoul.getAngryLevel();
+				String message = "Ghoul gets " + item + ", " + "and its anger level decreases to " + angryLv + ".";
+				return  message;
+			}else{
+				return "Do not have this item......";
+			}
+		}else{
+			return "No Ghoul in this room";
+		}
+
+	}
+
+	public String pokeGhoul(String playerName) {
+		Player player = playerList.findPlayer(playerName);
+		Room room = this.map.findRoom(player.getCurrentRoom());
+
+		if (player != null) {
+			if (!room.hasGhoul) {
+				return "There is no ghoul in this room.";
+			}
+
+			try {
+				GhoulLog myLog = new GhoulLog();
+				myLog.glLog("GameCore","pokeGhoul", "Player" + " " + playerName + " has just poked the Ghoul");
+			} catch (Exception e){
+				e.printStackTrace();
+			}
+
+			ghoul.modifyAngryLevel(1);
+			int angerLvl = ghoul.getAngryLevel();
+			if (angerLvl >= 7) {
+				ghoul.Drag(player);
+				draggedToSpawn(player);
+			}
+			return ("Ghoul anger level has increased to " + angerLvl);
+		} else {
+			return null;
+		}}
+    /**
+     * 605B_buy_method
+     * Allows player to sell an item to a shop, and increases their money
+     * @author Team 4: Mistry
+     * @param name Name of the player
+     * @param shopId The ID of the shop the player is selling an item to
+     * @param item The item the player is buying (eventually will be an Item obj)
+     */
+    public String buyItem(String name, int shopId, String itemName)
+    {
+    	double val = 0;
+    	Player player = this.playerList.findPlayer(name);
+    	Shop s = shoplist.get(shopId);
+    	
+    	Item item = null;
+    	
+    	for (Item ii : s.getInven()) 
+    		if (ii.name.compareToIgnoreCase(itemName) == 0) 
+    			item = ii;
+
+    	if (item == null)  return "Item not in stock!!!";    	
+    	
+    	if(s.getInven().contains(item))
+    	{
+    		if (player.getMoney() > item.price) {
+    			s.remove(item);
+    		}
+    		else {
+    			return "Not enough money!!!";
+    		}
+    	}
+    	
+    	
+    	player.addObjectToInventory(item);
+    
+    	//val = removed.getValue() * 1.2;
+    	val = item.price;
+    	player.changeMoney(-val);
+    	return "Thank you, that will be $" + val + ".";
+    }
+
+    /**
+     * Takes the player into venmo. The new and improved way to exchange money with other players.
+     * 
+     * @author Team 4: Alaqeel
+     * @param name Name of the player enter the bank
+     */	@Override
+	public String venmo(String name, ArrayList<String> tokens) {
+		// checks if the player forgot to enter enough commands
+		if (tokens.isEmpty()) return "You need to provide more arguments.\n" + Venmo.instructions();
+		
+		// Gets the object of the caller player
+		Player player1 = this.playerList.findPlayer(name);
+			
+		// Executes the relevant commands
+		switch(tokens.remove(0).toUpperCase()) {
+			case "SEND": // sending a transaction
+				if (tokens.isEmpty()) return "Specify recipient and amount.";
+				// gets the object of the receiving player
+				Player player2 = this.playerList.findPlayer(tokens.remove(0));
+				// checks that the name is correct
+				if (player2 == null) return "Incorrect player name."; 
+				// checks if user entered a transaction amount
+				if (tokens.isEmpty()) return "Specify transaction amount";
+				
+				float amount;
+				// checks if the player entered a valid number
+				try {
+					amount = Float.parseFloat(tokens.remove(0));
+				} catch (NumberFormatException e) {
+					return "Please enter a valid number.";
+				}
+				return Venmo.send(player1, player2, amount);
+			case "HELP": // prints the help menu
+				return "This is how you can use Venmo:\n" + Venmo.instructions();
+			case "DEMO": // helpful for demo purposes
+				if (!tokens.isEmpty() && tokens.remove(0).equalsIgnoreCase("********")) {
+					player1.changeMoney(10);
+					System.out.printf("[Venmo] %s excuted the demo command\n", player1.getName());
+					return "Shush! Don't tell anyone that I added $10.00 to your wallet.";
+				}
+			default:
+				return "Unknown argument.\n" + Venmo.instructions();
+		}		
+	}      
+	
+	/**
+	 * Shows player how much money they have
+	 * @param name Name of the player
+	 * @return A string representation of the player's money
+	 */
+	public String wallet(String name) {
+		Player player = this.playerList.findPlayer(name);
+		double m = player.getMoney();
+		
+		return "$" + String.format("%.02f", m);
+	}
+	
+
+
+	/**
+     * Returns a Shop's inventory as a formatted string
+     * @param id The shop ID
+     * @return A formatted string representing the Shop's inventory
+     */
+    public String getShopInv(int id) {
+		Shop s = this.shoplist.get(new Integer(id));
+		return s.getObjects();
+    }
+    
+    /**
+     * Attempts to pick up all objects in the room. Will return a message on any success or failure.
+     * @param name Name of the player to move
+     * @return Message showing success. 
+     */    
+    public String pickupAll(String name) {
+        Player player = this.playerList.findPlayer(name);
+        if(player != null) {
+            Room room = map.findRoom(player.getCurrentRoom());
+            LinkedList<Item> objects = room.removeAllObjects();
+            if(objects != null && objects.size() > 0) {
+                for (Item object : objects)
+                {
+                    player.addObjectToInventory(object);
+                }
+                this.broadcast(player, player.getName() + " bends over to pick up all objects that were on the ground.");
+                return "You bend over and pick up all objects on the ground.";
+            }
+            else {
+                this.broadcast(player, player.getName() + " bends over to pick up something, but doesn't find anything.");
+                return "You look around for objects but can't find any.";
+            }
+        }
+        else {
+            return null;
+        }
+    }       
+    
+    /**
+     * Returns a string of what and who you plan to offer an item to
+     * @param srcName Name of player making offer
+     * @param dstName Name of player receiving offer
+     * @param message Object item being offered
+     * @return Message showing status of offer
+     */
+    public String offer(String srcName, String dstName, String message){
+	Player srcPlayer = this.playerList.findPlayer(srcName);
+	Player dstPlayer = this.playerList.findPlayer(dstName);
+	Room room = map.findRoom(srcPlayer.getCurrentRoom());
+	String returnMessage;
+	Item object = srcPlayer.removeObjectFromInventory(message);
+	if (srcPlayer == dstPlayer)
+		returnMessage = "So now we talking to ourselves? Is that what's hot?";
+	else if (dstPlayer != null && (dstPlayer.getCurrentRoom() != srcPlayer.getCurrentRoom()))
+	    returnMessage = "Player ain't in your room, or your life";
+	else if (object == null)
+	    returnMessage = "You ain't got that fool: " + message;
+	else if (dstPlayer == null)
+	    returnMessage = "Player " + dstName + " not found.";
+	else if (srcPlayer == null)
+	    returnMessage = "Messge failed, check connection to server.";
+	else {
+	    dstPlayer.getReplyWriter().println(srcPlayer.getName() + " offers you an item: " + message);
+	    returnMessage = "You offer to " + dstPlayer.getName() + " an item: " + message;
+	}
+	if (object != null)
+	    srcPlayer.addObjectToInventory(object);
+	return returnMessage;
+	}
+
+	//Same functionality as bribe_ghoul, not currently used
+	//public String giveToGhoul(String object, String playerName) {
+	//	Player player = playerList.findPlayer(playerName);
+	//	Room room = this.map.findRoom(player.getCurrentRoom());
+	//	boolean isItem = false;
+		
+	//	if (player != null) {
+	//		if (!room.hasGhoul) {
+	//			return "There is no ghoul in this room.";
+	//		}
+	//		else {
+	//			for (String s : player.getCurrentInventory()) {
+	//				if (s.equals(object)) {
+	//					isItem = true;
+	//				}
+	//			}
+	//			if (! isItem) {
+	//				return "you don't have" + object + "!";
+	//			}
+	//			player.getCurrentInventory().remove(object);
+	//			ghoul.modifyAngryLevel(-1);
+	//			return("the ghoul is a little more calm");
+	//		}
+	//	}
+	//	else {
+	//		return "failed to give ghoul item.";
+	//	}
+	//}
+
+	/**
+	 * Broadcasts a message to all other players in the same room as player.
+	 * 
+	 * @param player  Player initiating the action.
+	 * @param message Message to broadcast.
+	 */
+	@Override
+	public void broadcast(Player player, String message) {
+		for (Player otherPlayer : this.playerList) {
+			if(otherPlayer != player && !otherPlayer.isIgnoring(player) && otherPlayer.getCurrentRoom() == player.getCurrentRoom()) {
+                dailyLogger.write(message);
+			    String newMessage = otherPlayer.filterMessage(message);
+				otherPlayer.getReplyWriter().println(newMessage);
+				/* Can delete this. Was causing merge conflict. Functionality remains unchanged.
+			if (otherPlayer != player && otherPlayer.getCurrentRoom() == player.getCurrentRoom()) {
+				dailyLogger.write(message);
+				otherPlayer.getReplyWriter().println(message);
+				*/
+			}
 		}
 	}
 
 	/**
-	 * Allows a player to create an account. If the player name already exists this
-	 * returns the corresponding enum. If the players name is of an invalid format
-	 * this returns that corresponding emum. Otherwise this returns success and
-	 * calls joinGame.
+	 * Broadcasts a message to all players in the specified room.
 	 * 
-	 * @param name
-	 * @param password
-	 * @return an enumeration representing the creation status.
+	 * @param room    Room to broadcast the message to.
+	 * @param message Message to broadcast.
 	 */
 	@Override
-
-	public synchronized Responses createAccountAndJoinGame(String name, String password) {
-		synchronized (createAccountLock) {
-			PlayerAccountManager.AccountResponse resp = accountManager.createNewAccount(name, password);
-			if (!resp.success())
-				return resp.error;
-			if (joinGame(name, password) != null)
-				return Responses.SUCCESS;
-			return Responses.UNKNOWN_FAILURE;
+	public void broadcast(Room room, String message) {
+		for (Player player : this.playerList) {
+			if (player.getCurrentRoom() == room.getId()) {
+				dailyLogger.write(message);
+			    String newMessage = player.filterMessage(message);
+				player.getReplyWriter().println(newMessage);
+				/* Delete this, functionality remains unchanged
+				dailyLogger.write(message);
+				player.getReplyWriter().println(message);
+				*/
+			}
 		}
+	}
+
+<<<<<<< HEAD
+       	/**
+	 * Returns a look at the area of the specified player.
+ * 
+	 * @param playerName Player Name
+	 * @return String representation of the current area the player is in.
+	 */
+	@Override
+	public String look(String playerName) {
+		Player player = playerList.findPlayer(playerName);
+=======
+	/**
+	 * Returns the player with the given name or null if no such player.
+	 * 
+	 * @param name Name of the player to find.
+	 * @return Player found or null if none.
+	 */
+	@Override
+	public Player findPlayer(String name) {
+		for (Player player : this.playerList) {
+			if (player.getName().equalsIgnoreCase(name)) {
+				return player;
+			}
+		}
+		return null;
+	}
+     /**
+     * Prints message to player if request can processed, contacts other player about their request
+     * @param requestingTrader Name of the player who has requested the trade
+     * @param traderToRequest Name of the player whom the first player has requested to trade with
+     */ 
+    public void requestPlayer(String requestingTrader, String traderToRequest){
+        Player playerToRequest = this.playerList.findPlayer(traderToRequest);
+        Player requestingPlayer = this.playerList.findPlayer(requestingTrader);
+        if(requestingTrader.equals(traderToRequest)){
+            requestingPlayer.getReplyWriter().println("You cannot trade with yourself.");
+            return;
+        }
+        else if(playerToRequest == null){
+            requestingPlayer.getReplyWriter().println("This player does not exist, choose an existing trade partner");
+            return;
+        }
+>>>>>>> refs/remotes/base/dev
+
+<<<<<<< HEAD
+		if (player != null) {
+			// Find the room the player is in.
+			Room room = this.map.findRoom(player.getCurrentRoom());
+=======
+        boolean tradeInProgress = false;
+        for(Player player : this.playerList) {
+            if(player.isInTrade()) {
+                tradeInProgress = true;
+            }
+        }
+	 if(tradeInProgress){
+            requestingPlayer.getReplyWriter().println("There is already a trade in progress. ");
+            return;
+        
+        }
+>>>>>>> refs/remotes/base/dev
+
+<<<<<<< HEAD
+=======
+        playerToRequest.setTradeRequest(true);
+        playerToRequest.getReplyWriter().println(requestingTrader + " has requested a trade. You may ignore this request or type: A_TRADE " +requestingTrader+" to proceed. ");
+        requestingPlayer.getReplyWriter().println("Player has been contacted. You will receive a notification when they accept. ");
+    }
+
+
+
+	/**
+	 * Allows a player to join the game. If a player with the same name
+	 * (case-insensitive) is already in the game, then this returns false.
+	 * Otherwise, adds a new player of that name to the game. The next step is
+	 * non-coordinated, waiting for the player to open a socket for message events
+	 * not initiated by the player (ie. other player actions)
+	 * 
+	 * @param name
+	 * @return Player is player is added, null if player name is already registered
+	 *         to someone else
+	 */
+	@Override
+	public Player joinGame(String name) {
+		// Check to see if the player of that name is already in game.
+		Player newPlayer;
+		if (this.playerList.findPlayer(name) == null) {
+			// New player, add them to the list and return true.
+			newPlayer = new Player(name);
+			this.playerList.addPlayer(newPlayer);
+
+                        // New player starts in a room. Send a message to everyone else in that room,
+                        // that the player has arrived.
+                        this.broadcast(newPlayer, newPlayer.getName() + " has arrived.");
+                        return newPlayer;
+                }
+                // A player of that name already exists.
+                return null;
 	}
 
        	/**
@@ -665,6 +1217,7 @@ public class GameCore implements GameCoreInterface {
 			// Find the room the player is in.
 			Room room = this.map.findRoom(player.getCurrentRoom());
 
+>>>>>>> refs/remotes/base/dev
 			// Send a message to all other players in the room that this player is looking
 			// around.
 			this.broadcast(player, player.getName() + " takes a look around.");
@@ -1022,6 +1575,7 @@ public class GameCore implements GameCoreInterface {
         Player acceptingPlayer = this.playerList.findPlayer(acceptingTrader); 
         if(playerToAccept == null){
             return "This player does not exist. ";
+<<<<<<< HEAD
         }
         if(!acceptingPlayer.hasTradeRequest()){
             return "You cannot accept a trade because you have not been asked to enter a trade by " + traderToAccept;
@@ -1052,6 +1606,263 @@ public class GameCore implements GameCoreInterface {
 			this.playerList.removePlayer(name);
             connectionLog(false, player.getName());
             this.accountManager.forceUpdateData(player);
+			return player;
+		}
+		return null;
+	}
+
+	/**
+     * Whispers "message" to a specific player.
+     * @param srcName Name of the player to speak
+     * @param dstName Name of the player to receive
+     * @param message Message to speak
+     * @return Message showing success
+     */
+    public String whisper(String srcName, String dstName, String message){
+        Player srcPlayer = this.playerList.findPlayer(srcName);
+        Player dstPlayer = this.playerList.findPlayer(dstName);
+        String returnMessage;
+        if (dstPlayer == null)
+            returnMessage = "Player " + dstName + " not found.";
+        else if (srcPlayer == null)
+            returnMessage = "Message failed, check connection to server.";
+        else if (dstPlayer.isIgnoring(srcPlayer))
+            returnMessage = "Player " + dstPlayer.getName() + " is ignoring you.";
+        else {
+            dstPlayer.setLastPlayer(srcName);
+            String newMessage = dstPlayer.filterMessage(message);
+            dstPlayer.getReplyWriter().println(srcPlayer.getName() + " whispers you, " + newMessage);
+            returnMessage = "You whisper to " + dstPlayer.getName() + ", " + message;
+=======
+>>>>>>> refs/remotes/base/dev
+        }
+<<<<<<< HEAD
+        try {
+                chatLog(srcPlayer, 1, message, dstPlayer.getName());
+            } catch (IOException e) {
+                System.out.println("Failed to log chat");
+            }
+        return returnMessage;
+    }
+
+    /**
+     * Reply "message" to last whisper.
+     * @param srcName Name of the player to speak
+     * @param message Message to speak
+     * @return Message showing success
+     */
+    public String quickReply(String srcName, String message) {
+        Player srcPlayer = this.playerList.findPlayer(srcName);
+        Player dstPlayer = this.playerList.findPlayer(srcPlayer.getLastPlayer());
+        String returnMessage;
+        if (dstPlayer == null)
+            returnMessage = "No whisper to reply to.";
+        else if (srcPlayer == null)
+            returnMessage = "Message failed, check connection to server.";
+        else {
+        	returnMessage = this.whisper(srcName,dstPlayer.getName(),message);
+        }
+        return returnMessage;
+    }
+
+   /**
+     * Player ignores further messages from another Player
+     * @param srcName Player making the ignore request
+     * @param dstName Player to be ignored
+     * @return Message showing success
+     */
+    public String ignorePlayer(String srcName, String dstName) {
+        Player srcPlayer = this.playerList.findPlayer(srcName);
+        Player dstPLayer = this.playerList.findPlayer(dstName);
+        String returnMessage;
+        if (dstPLayer == null)
+            returnMessage = "Player " + dstName + " not found.";
+        else if (srcPlayer == null)
+            returnMessage = "Ignore failed, check connection to server.";
+        else if (srcPlayer.getName() == dstPLayer.getName())
+            returnMessage = "You cannot ignore yourself! <no matter how hard you try>";
+        else if (srcPlayer.isIgnoring(dstPLayer))
+            returnMessage = "You're already ignoring " + dstPLayer.getName() + "!";
+        else {
+            srcPlayer.ignorePlayer(dstPLayer);
+            returnMessage = "You're now ignoring " + dstPLayer.getName() + ".";
+        }
+        return returnMessage;
+    }
+
+    /**
+     * Player unIgnores further messages from another Player
+     * @param srcName Player making the unIgnore request
+     * @param dstName Player to be unIgnored
+     * @return Message showing success
+     */
+    public String unIgnorePlayer(String srcName, String dstName) {
+        Player srcPlayer = this.playerList.findPlayer(srcName);
+        Player dstPLayer = this.playerList.findPlayer(dstName);
+        String returnMessage;
+        if (dstPLayer == null)
+            returnMessage = "Player " + dstName + " not found.";
+        else if (srcPlayer == null)
+            returnMessage = "Unignore failed, check connection to server.";
+        else if (srcPlayer.getName() == dstPLayer.getName())
+            returnMessage = "You never ignored yourself in the first place";
+        else if (!srcPlayer.isIgnoring(dstPLayer))
+            returnMessage = "You aren't ignoring " + dstPLayer.getName() + "!";
+        else {
+            srcPlayer.unIgnorePlayer(dstPLayer);
+            returnMessage = "You're no longer ignoring " + dstPLayer.getName() + ".";
+        }
+        return returnMessage;
+    }
+
+    /**
+     * Player displays the list of players that are being ignored
+     * @param name Player who's list is being targeted
+     * @return The list of players being ignored
+     */
+    public String getIgnoredPlayersList(String name) {
+        Player player = this.playerList.findPlayer(name);
+        String returnMessage;
+        if(player != null){
+            returnMessage = player.getIgnoredPlayersList();
+        }else{
+            returnMessage = "Error: Could not find player. Check server connection status";
+        }
+        return returnMessage;
+    }
+
+    // Feature 410: Joke
+    /**
+     * Tells a joke to the room. Reads local "chat config" file
+     * that keeps a list of jokes, one per line. The command
+     * chooses a random joke.
+     * NOTE: Importing Scanners, File, ArrayList, Random, and
+     * FileNotFoundException for this method.
+     * @param filename the "chat config" file to read the joke from.
+     * */
+    public String joke(String filename){
+      File file = new File(filename);
+      try{
+      Scanner sc = new Scanner(file);
+      // using ArrayList to store jokes in file for randomization.
+      ArrayList<String> joke = new ArrayList<String>();
+
+      while (sc.hasNextLine()){
+        joke.add(sc.nextLine());
+      }
+
+      sc.close();
+      Random r = new Random();
+      return joke.get(r.nextInt(joke.size()));
+      }
+      catch (FileNotFoundException e){
+        return ("File not found. Please add a joke.");
+      }
+    }
+
+    //Feature 411. Shout
+    /**
+     * Shouts "message" to everyone in the current area.
+     * @param name Name of the player to speak
+     * @param message Message to speak
+     * @return Message showing success.
+     */
+    @Override
+    public String shout(String name, String message) {
+        Player player = this.playerList.findPlayer(name);
+        if(player != null){
+            for(Player otherPlayer : this.playerList) {
+                if(otherPlayer != player && !otherPlayer.isIgnoring(player)) {
+                    String newMessage = otherPlayer.filterMessage(message);
+                    otherPlayer.getReplyWriter().println(player.getName() + " shouts, \"" + newMessage + "\"");
+                }
+            }
+            try {
+                    chatLog(player, 2, "\""+message+"\"", "Everyone");
+                } catch (IOException e) {
+                    System.out.println("Failed to log chat");
+                }
+            return "You shout, \"" + message + "\"";
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * 'player' says 'message' to all other players in the same room
+     * @param message message to deliver
+     * @param player speaker of the message
+     */
+    public void sayToAll(String message, Player player) {
+        for(Player otherPlayer : this.playerList) {
+            if(otherPlayer != player && !otherPlayer.isIgnoring(player) && otherPlayer.getCurrentRoom() == player.getCurrentRoom()) {
+                otherPlayer.printMessage(player, message, "says");
+            }
+        }
+    }
+
+    private void chatLog(Player player, int chatType, String message, String target) throws IOException {
+        pw = new PrintWriter(new FileWriter("chatlog.txt", true));
+        String type = "";
+        String msg;
+        switch(chatType) {
+            case 0:
+                type = "SAID";
+                break;
+            case 1:
+                type = "WHISPERED";
+                break;
+            case 2:
+                type = "SHOUTED";
+                break;
+        }
+        msg = "PLAYER [" + player.getName() + "] " + type + " (" + message + ") to [" + target + "]\n";
+        pw.write(msg);
+        pw.flush();
+        pw.close();
+        return;
+    }
+
+    /**
+     * Generates list of all online players.
+     * @return String of linked list PlayerList
+     */
+    public String showPlayers(){
+      StringBuilder users = new StringBuilder();
+      users.append("Players online:\n");
+      for(Player a : playerList){
+        users.append(a.getName() + "\n");
+      }
+      return users.toString();
+=======
+        if(!acceptingPlayer.hasTradeRequest()){
+            return "You cannot accept a trade because you have not been asked to enter a trade by " + traderToAccept;
+        }
+
+        acceptingPlayer.setInTrade(true);
+        acceptingPlayer.setTradeRequest(false);
+
+        acceptingPlayer.setTradePartner(traderToAccept);
+        playerToAccept.setTradePartner(acceptingTrader);
+
+        playerToAccept.getReplyWriter().println(playerToAccept.getTradePartner() + " has accepted your request.");
+
+        return "You have accepted to enter a trade with " + acceptingPlayer.getTradePartner();
+>>>>>>> refs/remotes/base/dev
+    }
+
+	/**
+	 * Leaves the game.
+	 * 
+	 * @param name Name of the player to leave
+	 * @return Player that was just removed.
+	 */
+	@Override
+	public Player leave(String name) {
+		Player player = this.playerList.findPlayer(name);
+		if (player != null) {
+			this.broadcast(player, "You see " + player.getName() + " heading off to class.");
+			this.playerList.removePlayer(name);
 			return player;
 		}
 		return null;
@@ -1278,67 +2089,5 @@ public class GameCore implements GameCoreInterface {
       }
       return users.toString();
     }
-
-	/**
-	 * Logs player connections
-	 * 
-	 * @param connecting true if they're connecting, false if they are disconnecting
-	 * @param name
-	 */
-	private void connectionLog(boolean connecting, String name) {
-		playerLogger.info(String.format("(%s) logged %s", name, connecting ? "in" : "out"));
-		for (Handler h : playerLogger.getHandlers())
-			h.flush();
-	}
-
-	/**
-	 * Creates the logger outside of the constructor. Uses RFC3339 timestamps
-	 * 
-	 * @throws IOException
-	 */
-	private void initConnectionsLogger() throws IOException {
-		File f = new File("connections.log");
-		if (!f.exists())
-			f.createNewFile();
-		FileOutputStream out = new FileOutputStream(f, true);
-		StreamHandler handle = new StreamHandler(out, new SimpleFormatter() {
-			private final SimpleDateFormat rfc3339 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
-
-			@Override
-			public String format(LogRecord log) {
-				StringBuilder sb = new StringBuilder();
-				sb.append("[").append(rfc3339.format(new Date(log.getMillis()))).append("] ");
-				sb.append("[").append(log.getLoggerName()).append("] ");
-				sb.append("[").append(log.getLevel()).append("] ");
-				sb.append(log.getMessage()).append("\r\n");
-				Throwable e = log.getThrown();
-				if (e != null)
-					for (StackTraceElement el : e.getStackTrace())
-						sb.append(el.toString()).append("\r\n");
-				return sb.toString();
-			}
-		});
-		playerLogger.setUseParentHandlers(false);
-		playerLogger.addHandler(handle);
-		playerLogger.info("Player connections logger has started");
-		handle.flush();
-	}
-
-	/**
-	 * Delete a player's account.
-	 * 
-	 * @param name Name of the player to be deleted
-	 * @return Player that was just deleted.
-	 */
-	public Player deleteAccount(String name) {
-		Player player = this.playerList.findPlayer(name);
-		if (player != null) {
-			this.broadcast(player, "You hear that " + player.getName() + " has dropped out of school.");
-			this.playerList.removePlayer(name);
-			this.accountManager.deleteAccount(player.getName());
-			return player;
-		}
-		return null; // No such player was found.
-	}
 
 }

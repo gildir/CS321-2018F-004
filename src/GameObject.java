@@ -1,12 +1,15 @@
 
 
 
+import java.io.IOException;
 import java.io.PrintWriter;
-import java.nio.charset.StandardCharsets;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+<<<<<<< HEAD
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+=======
+>>>>>>> refs/remotes/base/dev
 import java.util.ArrayList;
 import java.util.HashSet;
 
@@ -24,10 +27,18 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
      *  and establishes a new, empty, player list.
      * @throws RemoteException 
      */
+<<<<<<< HEAD
 	public GameObject(String playerAccountsLocation, String worldFile) throws Exception {
+=======
+    public GameObject(String worldFile) throws RemoteException, IOException {
+>>>>>>> refs/remotes/base/dev
         super();
         
+<<<<<<< HEAD
 		core = new GameCore(playerAccountsLocation, worldFile);
+=======
+        core = new GameCore(worldFile);
+>>>>>>> refs/remotes/base/dev
 
     }
 
@@ -45,25 +56,8 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
         }
         return false;
     }    
-
-	/**
-	 * Used to create a hash encrypted in SHA256 for use in encrypting passwords
-	 * 
-	 * @param toHash
-	 * @return SHA256 encrypted hash value, or "ERROR" If encryption method fails.
-	 */
-	public String hash(String toHash) {
-		try {
-			byte[] encodedhash = MessageDigest.getInstance("SHA-256").digest(toHash.getBytes(StandardCharsets.UTF_8));
-			StringBuilder sb = new StringBuilder();
-			for (byte b : encodedhash)
-				sb.append(String.format("%02X", b));
-			return sb.toString();
-		} catch (NoSuchAlgorithmException e) {
-		}
-		return "ERROR";
-	}
-
+  
+    
 	/**
 	 * Pokes the ghoul in the current room
 	 * @param playerName Player name
@@ -77,6 +71,19 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
 	/**
 	 * Pokes the ghoul in the current room
 	 * @param playerName Player name
+<<<<<<< HEAD
+	 * @return String message of ghoul
+	 * @throws RemoteException
+	 */
+	public String pokeGhoul(String playerName) throws RemoteException {
+		return core.pokeGhoul(playerName);
+	}
+
+	/**
+	 * Pokes the ghoul in the current room
+	 * @param playerName Player name
+=======
+>>>>>>> refs/remotes/base/dev
 	 * @param item item's name, which will be throw. 
 	 * @return String message of ghoul
 	 * @throws RemoteException
@@ -98,35 +105,11 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
      * @throws RemoteException 
      */
     @Override
-	public boolean joinGame(String name, String password) throws RemoteException {
-		// Request join to the core and return the results back to the remotely calling
-		// method.
-		password = hash(password);
-		if (!password.equals("ERROR"))
-			return (core.joinGame(name, password) != null);
-		return false; // Password is invalid due to failure of hash function
-	}
-
-	/**
-	 * Allows a player to create an account. If the player name already exists this
-	 * returns the corresponding enum. If the players name is of an invalid format
-	 * this returns that corresponding emum. Otherwise this returns success and
-	 * calls joinGame.
-	 * 
-	 * @param name
-	 * @param password
-	 * @return an enumeration representing the creation status, or null if password
-	 *         failed to be encrypted in hash function.
-	 * @throws RemoteException
-	 */
-	@Override
-	public Responses createAccountAndJoinGame(String name, String password) throws RemoteException {
-		password = hash(password);
-		if (password.equals("ERROR"))
-			return Responses.UNKNOWN_FAILURE;
-		return core.createAccountAndJoinGame(name, password);
-	}
-
+    public boolean joinGame(String name) throws RemoteException {
+        // Request join to the core and return the results back to the remotely calling method.
+        return (core.joinGame(name) != null);
+    }
+        
     /**
      * Returns a look at the area of the specified player.
      * @param playerName Player Name
@@ -464,6 +447,7 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
 		return core.venmo(name, tokens);
 		
 	}    
+<<<<<<< HEAD
 	
 	/**
 	 * @author Team 4: King
@@ -508,17 +492,50 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
     public String getShopInv(int id) throws RemoteException{
     	return core.getShopInv(id);
     }
+=======
+>>>>>>> refs/remotes/base/dev
 	
 	/**
-	 * Delete a player's account.
-	 * 
-	 * @param name Name of the player to be deleted
-	 * @throws RemoteException
+	 * @author Team 4: King
+	 * Returns a string representation of how much money a player has
 	 */
-	public void deleteAccount(String name) throws RemoteException{
-		Player player = core.deleteAccount(name);
-		if (player != null) {
-			player.getReplyWriter().close();
-		}
+	public String wallet(String name) throws RemoteException {
+		return core.wallet(name);
 	}
+	
+	public String getShopStr(int id) throws RemoteException{
+		return core.getShopStr(id);
+	}
+	
+	/**
+     * Allows player to sell an item to a shop, and increases their money
+     * @author Team 4: King
+     * @param name Name of the player
+     * @param shopId The ID of the shop the player is selling an item to
+     * @param item The item the player is selling (eventually will be an Item obj)
+     */
+    public double sellItem(String name, int shopId, String item) throws RemoteException{
+    	return core.sellItem(name, shopId, item);
+    }
+
+    /**
+     * 605B_buy_method
+     * Allows player to sell an item to a shop, and increases their money
+     * @author Team 4: Mistry
+     * @param name Name of the player
+     * @param shopId The ID of the shop the player is selling an item to
+     * @param item The item the player is selling (eventually will be an Item obj)
+     */
+    public String buyItem(String name, int shopId, String item) throws RemoteException{
+    	return core.buyItem(name, shopId, item);
+    }
+    
+    /**
+     * Returns a Shop's inventory as a formatted string
+     * @param id The shop ID
+     * @return A formatted string representing the Shop's inventory
+     */
+    public String getShopInv(int id) throws RemoteException{
+    	return core.getShopInv(id);
+    }
 }

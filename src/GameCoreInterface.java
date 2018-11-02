@@ -63,20 +63,8 @@ public interface GameCoreInterface {
      * @param name
      * @return Player that is added, null if player name is already registered to someone else
      */
-    public Player joinGame(String name, String password);
+    public Player joinGame(String name);
     
-	/**
-	 * Allows a player to create an account. If the player name already exists this
-	 * returns the corresponding enum. If the players name is of an invalid format
-	 * this returns that corresponding emum. Otherwise this returns success and
-	 * calls joinGame.
-	 * 
-	 * @param name
-	 * @param password
-	 * @return an enumeration representing the creation status.
-	 */
-	public Responses createAccountAndJoinGame(String name, String password);
-
     /**
      * Returns a look at the area of the specified player.
      * @param playerName Player Name
@@ -218,6 +206,7 @@ public interface GameCoreInterface {
      * @return A formatted string representing the Shop's inventory
      */
     public String getShopInv(int id);
+<<<<<<< HEAD
 
     /**
      * Returns a string representation of the offer statement.
@@ -251,12 +240,39 @@ public interface GameCoreInterface {
      *@return Message showing success.
      */
     public String shout(String name, String message);
+=======
+>>>>>>> refs/remotes/base/dev
 
-	/**
-	 * Delete a player's account.
-     *
-	 * @param name Name of the player to be deleted
-	 * @return Player that was just deleted.
-	 */
-	public Player deleteAccount(String name);
+    /**
+     * Returns a string representation of the offer statement.
+     * @param srcName Name of player making offer
+     * @param dstName Name of player receiving offer
+     * @param message Message item offered
+     * @return Message showing offer
+     * @throws RemoteException.
+     */
+    public String offer(String srcName, String dstName, String message); 
+
+    /**
+     * Prints message to player if request can processed, contacts other player about their request
+     * @param requestingTrader Name of the player who has requested the trade
+     * @param traderToRequest Name of the player whom the first player has requested to trade with
+     */ 
+    public void requestPlayer(String requestingTrader, String traderToRequest);
+
+    /**
+     * Return string representation of trade acceptance
+     * @param acceptingTrader Name of the player who is accepting the trade
+     * @param traderToAccept Name of the player who has requested a trade
+     * @return Message of success or fail
+     */ 
+    public String playerResponse(String acceptingTrader, String traderToAccept);
+
+    /**
+     *Shouts "message" to everyone that is online
+     *@param name Name of the player speaking
+     *@param message Meesage to be spoken
+     *@return Message showing success.
+     */
+    public String shout(String name, String message);
 }
