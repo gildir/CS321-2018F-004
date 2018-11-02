@@ -553,6 +553,12 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
 			player.getReplyWriter().close();
 		}
 	}
+    
+    @Override
+    public void heartbeatCheck(String name) throws RemoteException{
+        core.heartbeatCheck(name);
+    }
+        
 
     /**Prompts a message that someone is challenging them to a R-P-S
      * @param challenger is the name of the player challenging someone in the area
