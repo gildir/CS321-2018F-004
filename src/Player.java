@@ -1,17 +1,21 @@
 
-import java.io.DataOutputStream;
 import java.io.DataInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.DataOutputStream;
 import java.io.PrintWriter;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.LinkedList;
-import java.util.*;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  *
  * @author Kevin
  */
+@JsonIgnoreProperties({ "replyWriter", "outputWriter" })
 public class Player {
     public LinkedList<Item> currentInventory;
     private String name;
@@ -32,7 +36,7 @@ public class Player {
     private String challengerOption = "";
     private boolean hasOption = false;
 
-    public Player(String name) {
+    public Player(@JsonProperty("name") String name) {
         this.currentRoom = 1;
         this.currentDirection = Direction.NORTH;
         this.name = name;
@@ -169,6 +173,7 @@ public class Player {
      * Access the list of players this player is ignoring.
      * @return - Returns a String of all player names this player is ignoring
      */
+	@JsonIgnore
     public String getIgnoredPlayersList() {
         StringBuilder ignoredPlayersList = new StringBuilder();
         ignoredPlayersList.append("\nIgnored Players: ");
@@ -275,6 +280,7 @@ public class Player {
 	return inBattle;
     } 
 
+    @JsonProperty("name")
     public String getName() {
         return name;
     }
@@ -287,6 +293,7 @@ public class Player {
         return currentInventory;
     }
 
+	@JsonProperty("currentInventory")
     public void setCurrentInventory(LinkedList<Item> currentInventory) {
         this.currentInventory = currentInventory;
     }
@@ -378,10 +385,12 @@ public class Player {
         return this.currentRoom;
     }
     
+	@JsonProperty("currentRoom")
     public void setCurrentRoom(int room) {
         this.currentRoom = room;
     }
     
+	@JsonIgnore
     public String getCurrentDirection() {
         return this.currentDirection.name();
     }
