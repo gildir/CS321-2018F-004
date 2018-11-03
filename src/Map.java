@@ -119,13 +119,14 @@ public class Map{
         String result = "";
 	int row = 1;
 	int col = 2;
+	Room current;
 
 	setExits(row,col,nodeArr,baseId);
 
 	result += "   ______________________________________________\n";
 	result += "   |ASCII Map - Displaying rooms near you!      |\n";
-	result += "   | X = You  -+ = exit  # = Inside | = Outside |\n";
-	result += "   | G = Ghoul $ = Shop                         |\n";
+	result += "   | X = You  $ = Shop   # = Inside | = Outside |\n";
+	result += "   | G = Ghoul -+ = Exit -0 =  Exit to Off Map  |\n";
 	result += "   |                                            |\n";
 	result += "   |                                            |\n";
         result += "   |                                            |\n";
@@ -150,7 +151,8 @@ public class Map{
            for(col = 0; col < 5; col ++)
 	   {
               if(nodeArr[row][col] != null){
-		 System.out.println("Printing Room [" + row +"][" + col + "]");
+                 current = this.findRoom(nodeArr[row][col].id);
+		// System.out.println("Printing Room [" + row +"][" + col + "]");
 	         result = result.substring(0,309 + (250*row) +(8*col)) + "___" +result.substring(312 + (250*row) + (8*col),result.length());
 	         if(!nodeArr[row][col].inside){
 	            result = result.substring(0,358 + (250*row) +(8*col)) +"|   |" +result.substring(363 + (250*row) + (8*col),result.length());
@@ -164,18 +166,30 @@ public class Map{
                     result = result.substring(0,626) + "X" + result.substring(627,result.length());
 	         }
 	         if(nodeArr[row][col].n){
-                    result = result.substring(0,209 + (250*row) + (8*col)) + "+" + result.substring(210 + (250*row) + (8*col),result.length());
+	            if(row > 0 && current.getLink(Direction.valueOf("NORTH")) == nodeArr[row-1][col].id)
+                       result = result.substring(0,209 + (250*row) + (8*col)) + "+" + result.substring(210 + (250*row) + (8*col),result.length());
+		    else
+		       result = result.substring(0,209 + (250*row) + (8*col)) + "0" + result.substring(210 + (250*row) + (8*col),result.length());
 	   	    result = result.substring(0,259 + (250*row) + (8*col)) + "|" + result.substring(260 + (250*row) + (8*col),result.length());
 	         }
 	         if(nodeArr[row][col].s){
-                    result = result.substring(0,461 + (250*row) + (8*col)) + "|" + result.substring(462 + (250*row) + (8*col),result.length());
-                    result = result.substring(0,511 + (250*row) + (8*col)) + "+" + result.substring(512 + (250*row) + (8*col),result.length());
-                 }
+	            if(row < nodeArr.length-1 && current.getLink(Direction.valueOf("SOUTH")) == nodeArr[row+1][col].id)
+                       result = result.substring(0,511 + (250*row) + (8*col)) + "+" + result.substring(512 + (250*row) + (8*col),result.length());
+		    else
+		       result = result.substring(0,511 + (250*row) + (8*col)) + "0" + result.substring(512 + (250*row) + (8*col),result.length());
+		    result = result.substring(0,461 + (250*row) + (8*col)) + "|" + result.substring(462 + (250*row) + (8*col),result.length());
+		 }
 	         if(nodeArr[row][col].w){
-                    result = result.substring(0,405 + (250*row) + (8*col)) + "+-" + result.substring(407 + (250*row) + (8*col),result.length());
+	            if(col > 0 && current.getLink(Direction.valueOf("WEST")) == nodeArr[row][col-1].id)
+                       result = result.substring(0,405 + (250*row) + (8*col)) + "+-" + result.substring(407 + (250*row) + (8*col),result.length());
+		    else
+		       result = result.substring(0,405 + (250*row) + (8*col)) + "0-" + result.substring(407 + (250*row) + (8*col),result.length());
                  }
 	         if(nodeArr[row][col].e){
-                    result = result.substring(0,364 + (250*row) + (8*col)) + "-+" + result.substring(366 + (250*row) + (8*col),result.length());
+	            if(col < nodeArr[1].length - 1 && current.getLink(Direction.valueOf("EAST")) == nodeArr[row][col+1].id)
+                       result = result.substring(0,364 + (250*row) + (8*col)) + "-+" + result.substring(366 + (250*row) + (8*col),result.length());
+		    else
+		       result = result.substring(0,364 + (250*row) + (8*col)) + "-0" + result.substring(366 + (250*row) + (8*col),result.length());
                  }
                  if(nodeArr[row][col].ghoul){
                     result = result.substring(0,409 + (250*row) + (8*col)) + "G" + result.substring(410 + (250*row) + (8*col),result.length());
@@ -203,7 +217,7 @@ public class Map{
        if(roomId != 0 && row >= 0 && col >= 0 && row < nodeArr.length && col < nodeArr[0].length && nodeArr[row][col] == null)
 	       //Exit conditions: Out of bounds, already initialized, or no path into
        {
-          System.out.println("Setting exits for room [" + row + "][" + col + "]");
+         // System.out.println("Setting exits for room [" + row + "][" + col + "]");
 	  Room room = this.findRoom(roomId);
 	  nodeArr[row][col] = new Node(room);
 	  setExits(row - 1, col, nodeArr, room.getLink(Direction.valueOf("NORTH")));
@@ -220,7 +234,8 @@ public class Map{
     private class Node
     {
        public boolean n, s, e, w;//Exits going (north | south | east | west)
-       public boolean inside, ghoul, shop;	  
+       public boolean inside, ghoul, shop;
+       public int id;       
 
        public Node()
        {
@@ -231,6 +246,7 @@ public class Map{
 	  inside = false;
 	  ghoul = false;
 	  shop = false;
+	  id = 0;
        }
 
        public Node(Room room)
@@ -242,6 +258,7 @@ public class Map{
 	  inside = room.getRoomType().equals("inside");
 	  ghoul = room.hasGhoul;
 	  shop = isShoppable(room);
+	  id = room.getId();
        }
     }
 }
