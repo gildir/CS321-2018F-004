@@ -85,32 +85,110 @@ public class GameClient {
             //   Lets the player choose a name and checks it with the server.  If the name is
             //    already taken or the user doesn't like their input, they can choose again.
             while(nameSat == false) {
-                try {
-                    System.out.println("Please enter a name for your player.");
-                    System.out.print("> ");
-                    this.playerName = keyboardInput.readLine();
-                    System.out.println("Welcome, " + this.playerName + ". Are you sure you want to use this name?");
-                    System.out.print("(Y/N) >");
-                    if(keyboardInput.readLine().equalsIgnoreCase("Y")) {
-                        // Attempt to join the server
-                        if(remoteGameInterface.joinGame(this.playerName) == false) {
-                            System.out.println("I'm sorry, " + this.playerName + ", but someone else is already logged in with your name. Please pick another.");
-                        }
-                        else {
-                            nameSat = true;
-                        }
-                    }
-                } catch (IOException ex) {
-                    System.err.println("[CRITICAL ERROR] Error at reading any input properly.  Terminating the client now.");
-                    System.exit(-1);
-                }
-            }
+				try {
+					System.out.println("Logging in or creating account?");
+					String mode;
+					String reset;
+					ArrayList<String> recovery = new ArrayList<String>();//questions and answers, order q1,a1,q2,a2,q3,a3
+					int count;
+					do {
+						System.out.print("(L/C)> ");
+						mode = keyboardInput.readLine().toUpperCase().trim();
+					} while (!(mode.equals("L") || mode.equals("C")));
+					System.out.print("Username: ");
+					this.playerName = keyboardInput.readLine().trim();
+					System.out.print("Password: ");
+					String pass = keyboardInput.readLine();
+					switch (mode) {
+					case "L":
+						nameSat = remoteGameInterface.joinGame(this.playerName, pass);
+						if (!nameSat) {
+							System.out.println("Username and password combination invalid");
+							resetPassword();
+							}
+						break;
+					case "C":
+						//prompt user for recovery questions
+						count = 0;
+						System.out.println("Please create 1st security question for password recovery");
+						System.out.print(">");
+						recovery.add(keyboardInput.readLine().trim());
+						System.out.println("Please give the answer");
+						System.out.print(">");
+						recovery.add(keyboardInput.readLine().trim());
+						System.out.println("Please create 2nd security question for password recovery");
+						System.out.print(">");
+						recovery.add(keyboardInput.readLine().trim());
+						System.out.println("Please give the answer");
+						System.out.print(">");
+						recovery.add(keyboardInput.readLine().trim());
+						System.out.println("Please create 3rd security question for password recovery");
+						System.out.print(">");
+						recovery.add(keyboardInput.readLine().trim());
+						System.out.println("Please give the answer");
+						System.out.print(">");
+						recovery.add(keyboardInput.readLine().trim());
+						Responses resp = remoteGameInterface.createAccountAndJoinGame(playerName, pass, recovery);
+						switch (resp) {
+						case BAD_USERNAME_FORMAT:
+							System.out
+									.println("This is a bad user name. Please use only spaces, numbers, and letters.");
+							break;
+						case USERNAME_TAKEN:
+							System.out.println("Sorry but this username was already taken.");
+							break;
+						case UNKNOWN_FAILURE:
+							System.out.println("The server experienced an unknown failure.");
+							break;
+						case SUCCESS:
+							nameSat = true;
+							break;
+						default:
+							System.out.println("Unknown server behavior");
+							break;
+						}
+						if (!nameSat)
+							System.out.println();
+
+					}
+
+				} catch (IOException ex) {
+					System.err.println(
+							"[CRITICAL ERROR] Error at reading any input properly.  Terminating the client now.");
+					System.exit(-1);
+				}
+			}
 
             // Player has joined, now start up the remote socket.
             this.runListener = true;
             remoteOutputThread = new Thread(new GameClient.ReplyRemote(host));
             remoteOutputThread.setDaemon(true);
             remoteOutputThread.start();
+            
+            //Sends a heartbeat every 10 seconds
+            Thread hbThread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                        while(true) {
+                            try {
+                                Thread.sleep(10000);
+                                try{
+                                    remoteGameInterface.heartbeatCheck(playerName);
+                                }catch(RemoteException re) {
+                                    System.err.println("[CRITICAL ERROR] There was a severe error with the RMI mechanism.");
+                                    System.err.println("[CRITICAL ERROR] Code: " + re);
+                                    System.exit(-1);
+                                } 
+                            } catch (InterruptedException ex) {
+                            }
+                        }
+                    }
+                });
+            
+            hbThread.setDaemon(true);
+            hbThread.setName("heartbeat");
+            hbThread.start();
+            
 
             // 409 Word Filter
             readWordFilterFile();
@@ -447,6 +525,10 @@ public class GameClient {
                     remoteGameInterface.leave(this.playerName);
                     runListener = false;
                     break;
+                case "DELETE":
+                     remoteGameInterface.deleteAccount(this.playerName);
+                     runListener = false;
+                     break;
                 case "HELP":
                     showCommand();
                     break;
@@ -467,6 +549,108 @@ public class GameClient {
 		case "MAP":
                     System.out.println(remoteGameInterface.showMap(this.playerName));
 		    break;
+                case "CHALLENGE":
+                    if(tokens.isEmpty()){
+                      System.err.println("You need to provide a name.");
+                    }
+                    else{
+                      System.out.println(remoteGameInterface.challenge(this.playerName, tokens.remove(0)));
+                    }
+                    break;
+                case "ACCEPT":
+                    if(tokens.isEmpty()){
+                      System.err.println("You need to provide a name.");
+                    }
+                    else{
+                      System.out.println(remoteGameInterface.accept(this.playerName, tokens.remove(0)));
+                    }
+                    break;
+                case "REJECT":
+                    if(tokens.isEmpty()){
+                      System.err.println("You need to provide a name.");
+                    }
+                    else{
+                      System.out.println(remoteGameInterface.reject(this.playerName, tokens.remove(0)));
+                    }
+                    break;
+                case "PICK":
+                    if(tokens.isEmpty()){
+                      System.err.println("You need to provide either rock, paper or scissors");
+                    }
+                    else{
+                      String options = tokens.remove(0);
+                      options = options.toUpperCase();
+                      if(options.equals("ROCK") || options.equals("PAPER") || options.equals("SCISSORS"))
+                        System.out.println(remoteGameInterface.pickRPS(this.playerName, options));
+                      else
+                        System.out.println("Invalid option.");
+                    }
+                    break;
+                case "TEACH":
+                    System.out.println(remoteGameInterface.teach(this.playerName));
+                    break;
+                case "FRIENDS":
+    				String sub;
+    				if (tokens.isEmpty() || !((sub = tokens.remove(0).toUpperCase()).equals("ADD") || sub.equals("REMOVE")
+    						|| sub.equals("ONLINE"))) {
+    					System.out.println("\nProvide FRIENDS subcommand");
+    					System.out.println("  ADD name     - Adds a player to your friends list");
+    					System.out.println("  REMOVE name  - Removes a player from your friends list");
+    					System.out.println("  ONLINE       - lists your friends who are currently online");
+    					break;
+    				}
+    				if (tokens.isEmpty() && !sub.equals("ONLINE")) {
+    					System.out.println("Please provide a name for this command");
+    					break;
+    				} else if (tokens.isEmpty()) {
+    					System.out.println(remoteGameInterface.viewOnlineFriends(this.playerName));
+    					break;
+    				}
+    				String name = tokens.remove(0);
+    				while (!tokens.isEmpty())
+    					name += " " + tokens.remove(0);
+    				switch (sub) {
+    				case "ADD":
+    					switch (remoteGameInterface.addFriend(this.playerName, name)) {
+    					case INTERNAL_SERVER_ERROR:
+    						System.out.println("There was an internal server error with your account");
+    						break;
+    					case NOT_FOUND:
+    						System.out.println("The player you were trying to add could not be found");
+    						break;
+    					case EXISTS:
+    						System.out.println("You already have this friend added");
+    						break;
+    					case SILLY:
+    						System.out.println("Sorry, you cannot add yourself as a friend. Go make some");
+    						break;
+    					case SUCCESS:
+    						System.out.println(name + " was added to your friends list!");
+    						break;
+    					default:
+    						System.out.println("Unknown server behavior");
+    					}
+    					break;
+    				case "REMOVE":
+    					switch (remoteGameInterface.removeFriend(this.playerName, name)) {
+    					case INTERNAL_SERVER_ERROR:
+    						System.out.println("There was an internal server error with your account");
+    						break;
+    					case NOT_FOUND:
+    						System.out.println("This player was not on your friends list");
+    						break;
+    					case SILLY:
+    						System.out.println("Removing yourself? Who am I to judge");
+    						break;
+    					case SUCCESS:
+    						System.out.println(name + " was removed from your friends list");
+    						break;
+    					default:
+    						System.out.println("Unknown server behavior");
+    					}
+    					break;
+    				}
+    				break;
                 default:
                     //If command does not match with any, see if it is custom command
                     if (!executeCustomCommand(command, tokens)) {
@@ -480,6 +664,135 @@ public class GameClient {
         } catch (RemoteException ex) {
             Logger.getLogger(GameClient.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    /**
+     * Prompts the user through a dialogue tree to give them the option to reset their password
+     */
+    public void resetPassword() {
+    	InputStreamReader keyboardReader = new InputStreamReader(System.in);
+        BufferedReader keyboardInput = new BufferedReader(keyboardReader);
+    	String reset;
+    	String name;
+    	String question;
+    	String answer;
+    	String input;
+    	String password;
+    	Responses response;
+    	int count;
+    	boolean correct;
+    	//booleans for dialogue loops
+    	boolean go;
+    	boolean test;
+    	boolean test2;
+    	try {
+	    	go = true;
+	    	//asks if player wants to reset password
+	    	while(go) {
+	    		System.out.println();
+	    		System.out.println("Reset password?");
+	    		System.out.print("(Y/N)> ");
+	    		reset = keyboardInput.readLine().toUpperCase().trim();
+	    		switch (reset) {
+	    		case "Y":
+	    			go = false;
+	    			//asks for account name for password resets
+	    			System.out.println();
+	    			System.out.println("Please enter your account name");
+	    			System.out.print(">");
+	    			name = keyboardInput.readLine().trim();
+	    			question = remoteGameInterface.getQuestion(name, 0);
+	    			answer = remoteGameInterface.getAnswer(name, 0);
+	    			if (question != null && answer != null) {
+	    				test = true;
+	    				while (test) {
+	    					//asks recovery question
+	    					correct = true;
+	    					for(int i = 0; i < 3; i++) {
+	    						question = remoteGameInterface.getQuestion(name, i);
+	    		    			answer = remoteGameInterface.getAnswer(name, i);
+		    					System.out.println();
+			    				System.out.println(question);
+			    				System.out.print("Answer:");
+			    				input = keyboardInput.readLine().toLowerCase().trim();
+			    				if(correct)
+			    					correct = input.equals(answer);
+	    					}
+		    				//gets new password if recovery question answered
+		    				if(correct) {
+		    					test = false;
+		    					System.out.println();
+		    					System.out.println("Please input new password");
+		    					System.out.print(">");
+		    					password = keyboardInput.readLine().trim();
+		    					response = remoteGameInterface.resetPassword(name, password);
+		    					switch(response) {
+								case SUCCESS:
+									System.out.println("Password Succesfully changed");
+									break;
+								case UNKNOWN_FAILURE:
+									System.out.println("The server experienced an unkown failure");
+									break;
+								case INTERNAL_SERVER_ERROR:
+									System.out.println("The experianced a data error");
+									break;
+								default:
+									System.out.println("Unkown server behavior");
+									break;
+		    					}
+		    				} else {
+		    					test2 = true;
+		    					//asks user if they want to try again after failing the recovery question
+		    					while (test2) {
+		    						System.out.println();
+		    						System.out.println("Your answers did not match, try again?");
+		    						System.out.print("(Y/N) >");
+			    					input = keyboardInput.readLine().toUpperCase().trim();
+			    					switch (input) {
+			    					case "N":
+			    						test = false;
+			    					case "Y":
+			    						test2 = false;
+			    						break;
+			    					default:
+			    						System.out.println("Invalid input");
+			    					}
+		    					}
+		    				}
+	    				}
+	    			} else {
+		    			test2 = true;
+		    				//Username inputed by user wasn't found, asks if they want to continue recovery process
+			    			while(test2) {
+			    				System.out.println();
+			    				System.out.println("Your username was not found, try again?");
+			    				System.out.print("(Y/N) >");
+			    				input = keyboardInput.readLine().toUpperCase().trim();
+			    				switch(input) {
+			    				case "N":
+			    					go = false;
+			    				case "Y":
+			    					go = true;
+			    					test2 = false;
+			    					break;
+			    				default:
+			    					System.out.println("Invalid input");
+			    				}
+			    			}
+	    			}
+	    			break;
+	    		case "N":
+	    			go = false;
+	    			//Recovery process is ended
+	    			break;
+	    		default:
+	    			System.out.println("Invalid input");
+	    		}
+	    	}
+    	}catch (IOException ex) {
+    		Logger.getLogger(GameClient.class.getName()).log(Level.SEVERE, null, ex);
+    	}
+    	System.out.println();
     }
     
     public static void main(String[] args) {

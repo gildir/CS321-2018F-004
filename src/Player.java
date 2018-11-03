@@ -1,17 +1,22 @@
 
-import java.io.DataOutputStream;
 import java.io.DataInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.DataOutputStream;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.LinkedList;
-import java.util.*;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  *
  * @author Kevin
  */
+@JsonIgnoreProperties({ "replyWriter", "outputWriter" })
 public class Player {
     public LinkedList<Item> currentInventory;
     private String name;
@@ -25,11 +30,21 @@ public class Player {
     private boolean tradeRequested = false;
     private String tradePartner = "";
     private String lastPlayer = "";
-
-    public Player(String name) {
+    private boolean hasChallenge = false;
+    private boolean inBattle = false;
+    private String challenger = " ";
+    private String option = "";
+    private String challengerOption = "";
+    private boolean hasOption = false;
+    @JsonProperty("recovery")
+    private ArrayList<String> recovery;
+    
+    
+	public Player(@JsonProperty("name") String name, @JsonProperty("recovery") ArrayList<String> recovery) {
         this.currentRoom = 1;
         this.currentDirection = Direction.NORTH;
         this.name = name;
+        this.recovery = recovery;
         this.currentInventory = new LinkedList<>();
         this.money = 0;
     }
@@ -163,6 +178,7 @@ public class Player {
      * Access the list of players this player is ignoring.
      * @return - Returns a String of all player names this player is ignoring
      */
+	@JsonIgnore
     public String getIgnoredPlayersList() {
         StringBuilder ignoredPlayersList = new StringBuilder();
         ignoredPlayersList.append("\nIgnored Players: ");
@@ -261,18 +277,45 @@ public class Player {
         this.lastPlayer = lastPlayer;
     }
 
+    public void setInBattle(boolean battle){
+	inBattle = battle;
+    }
+
+    public boolean getInBattle(){
+	return inBattle;
+    } 
+
+    @JsonProperty("name")
     public String getName() {
         return name;
+    }
+    
+    @JsonProperty("recovery")
+    public void setRecovery(ArrayList<String> recovery) {
+    	this.recovery = recovery;
     }
 
     public void setName(String name) {
         this.name = name;
     }
+	
+	public String getQuestion(int num) {
+		if(this.recovery.size() >= num * 2)
+			return this.recovery.get(num * 2);
+		return null;
+	}
+	
+	public String getAnswer(int num) {
+		if(this.recovery.size() >= (num * 2) + 1)
+			return this.recovery.get((num * 2) + 1);
+		return null;
+	}
 
     public LinkedList<Item> getCurrentInventory() {
         return currentInventory;
     }
 
+	@JsonProperty("currentInventory")
     public void setCurrentInventory(LinkedList<Item> currentInventory) {
         this.currentInventory = currentInventory;
     }
@@ -364,10 +407,12 @@ public class Player {
         return this.currentRoom;
     }
     
+	@JsonProperty("currentRoom")
     public void setCurrentRoom(int room) {
         this.currentRoom = room;
     }
     
+	@JsonIgnore
     public String getCurrentDirection() {
         return this.currentDirection.name();
     }
@@ -375,13 +420,45 @@ public class Player {
     public Direction getDirection() {
         return this.currentDirection;
     }
+
+    public String getOption(){
+        return this.option;
+    }
+
+    public void setOption(String option){
+        this.option = option;
+    }
+
+    public String getChallengerOption(){
+        return this.challengerOption;
+    }
+
+    public void setChallengerOption(String challengerOption){
+        this.challengerOption = challengerOption;
+    }
     
     public double getMoney() {
         return this.money;
     }
-    
+
     public void setMoney(double m){
         this.money = m;
+    }
+
+    public String getChallenger(){
+        return challenger;
+    }
+
+    public void setChallenger(String name){
+        challenger = name;
+    }
+
+    public boolean getHasChallenge(){
+        return hasChallenge;
+    }
+
+    public void setHasChallenge(boolean challenged){
+        hasChallenge = challenged;
     }
     
     /**

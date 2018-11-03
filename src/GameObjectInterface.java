@@ -3,7 +3,6 @@
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
-import java.util.ArrayList;
 import java.util.HashSet;
 
 /**
@@ -39,8 +38,22 @@ public interface GameObjectInterface extends Remote {
      * @return true if name is available and join is successful, false otherwise.
      * @throws RemoteException 
      */
-    public boolean joinGame(String name) throws RemoteException;
-    
+	public boolean joinGame(String name, String password) throws RemoteException;
+
+	/**
+	 * Allows a player to create an account. If the player name already exists this
+	 * returns the corresponding enum. If the players name is of an invalid format
+	 * this returns that corresponding emum. Otherwise this returns success and
+	 * calls joinGame.
+	 * 
+	 * @param name
+	 * @param password
+	 * @param recovery List of recovery questions and answers, ordered q1,a1,q2,a2,q3,a3
+	 * @return an enumeration representing the creation status.
+	 * @throws RemoteException
+	 */
+	public Responses createAccountAndJoinGame(String name, String password, ArrayList<String> recovery) throws RemoteException;
+
     /**
      * Returns a look at the area of the specified player.
      * @param name Player Name
@@ -332,4 +345,121 @@ public interface GameObjectInterface extends Remote {
      * @return String representation of the map
      */
     public String showMap(String name) throws RemoteException;
+	
+	/**
+	 * Delete a player's account.
+	 * 
+	 * @param name Name of the player to be deleted
+	 * @throws RemoteException
+	 */
+	public void deleteAccount(String name) throws RemoteException;
+
+	/**
+	 * Adds a player to your friends list
+	 * 
+	 * @param name
+	 * @param friend
+	 * @return responseType
+	 * @throws RemoteException
+	 */
+	public Responses addFriend(String name, String friend) throws RemoteException;
+
+	/**
+	 * Removes a player from your friends list
+	 * 
+	 * @param name
+	 * @param ex
+	 * @return responseType
+	 * @throws RemoteException
+	 */
+	public Responses removeFriend(String name, String ex) throws RemoteException;
+
+	/**
+	 * returns a message showing all online friends
+	 * 
+	 * @param Player name
+	 * @return Message showing online friends
+	 * @throws RemoteException
+	 */
+	String viewOnlineFriends(String name) throws RemoteException;
+	
+	/**
+	 * Resets passwords.
+	 * 
+	 * @param name Name of player getting password reset
+	 * @param password New password to be saved
+	 * @throws RemoteException
+	 */
+	public Responses resetPassword(String name, String password) throws RemoteException;
+	
+	/**
+	 * Gets recovery question
+	 * @param name User of recovery question 
+	 * @param num Marks which question will be grabbed
+	 * @return String of recovery question, null if user doesn't exist
+	 * @throws RemoteException
+	 */
+	public String getQuestion(String name, int num) throws RemoteException;
+	
+	/**
+	 * Gets recovery answer
+	 * @param name User of recovery answer
+	 * @param num Marks which answer will be grabbed
+	 * @return String of recovery question, null if user doesn't exist
+	 * @throws RemoteException
+	 */
+	public String getAnswer(String name, int num) throws RemoteException;
+
+    
+    /**
+     * Player check in to ensure the client has not crashed. A client needs to 
+     * call this method at least every hour or else it will be logged off.
+     * @param name Name of client's player that is checking in.
+     * @throws java.rmi.RemoteException
+     */
+    public void heartbeatCheck(String name) throws RemoteException;
+
+    /**
+    * Prompts a message that someone is challenging them to a R-P-S
+    * @param challenger is the name of the player challenging someone in the area
+    * @param challenge is the name of the player being challenge
+    * @return Message showing success
+    * @throws RemoteException
+    */
+    public String challenge(String challenger, String challengee) throws RemoteException;
+
+    /**
+    * Prompts a message that they are accepting a challnge from someone to a R-P-S
+    * @param challenger is the name of the player challenging someone in the area
+    * @param challenge is the name of the player accepting
+    * @return Message showing success
+    * @throws RemoteException
+    */
+    public String accept(String challenger, String challengee) throws RemoteException;
+
+    /**
+     * Prompts a messaging that they are rejectin a challenge from someone to R-P-S
+     * @param challenger is the name of the player challenging someone in the area
+     * @param challengee is the name of the player accepting
+     * @return MEssage showing success
+     * @throws Remote Exception
+     */
+    public String reject(String challenger, String challengee) throws RemoteException;
+
+    /**
+      * Prompts a message that picks R-P-S
+      * @param name is the name of the player
+      * @param options is either R-P-S
+      * @return Message showing success
+      * @throws RemoteException
+      */
+    public String pickRPS(String name, String options) throws RemoteException;
+
+    /**
+      * Sends a messages teaching the player how to play R-P-S
+      * @param player is the name of the player that needs to be taught
+      * @return MEssage showing success
+      * @throws Remote Exception
+      */
+     public String teach(String player) throws RemoteException;
 }
