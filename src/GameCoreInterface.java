@@ -63,8 +63,21 @@ public interface GameCoreInterface {
      * @param name
      * @return Player that is added, null if player name is already registered to someone else
      */
-    public Player joinGame(String name);
+    public Player joinGame(String name, String password);
     
+	/**
+	 * Allows a player to create an account. If the player name already exists this
+	 * returns the corresponding enum. If the players name is of an invalid format
+	 * this returns that corresponding emum. Otherwise this returns success and
+	 * calls joinGame.
+	 * 
+	 * @param name
+	 * @param password
+	 * @param recovery List of recovery questions and answers, ordered q1,a1,q2,a2,q3,a3
+	 * @return an enumeration representing the creation status.
+	 */
+	public Responses createAccountAndJoinGame(String name, String password, ArrayList<String> recovery);
+
     /**
      * Returns a look at the area of the specified player.
      * @param playerName Player Name
@@ -241,6 +254,45 @@ public interface GameCoreInterface {
     public String shout(String name, String message);
 
     /**
+     * Delete a player's account.
+     *
+     * @param name Name of the player to be deleted
+     * @return Player that was just deleted.
+     */
+    public Player deleteAccount(String name);
+    
+    /**
+     * Player check in to ensure the client has not crashed. A client needs to 
+     * call this method at least every hour or else it will be logged off.
+     * @param name Name of client's player that is checking in.
+     */
+    public void heartbeatCheck(String name);
+	
+	/**
+	 * Gets recovery question
+	 * @param name User of recovery question 
+	 * @param num Marks which question will be grabbed
+	 * @return String of recovery question, null if user doesn't exist
+	 */
+	public String getQuestion(String name, int num);
+	
+	/**
+	 * Gets recovery answer
+	 * @param name User of recovery answer
+	 * @param num Marks which answer will be grabbed
+	 * @return String of recovery question, null if user doesn't exist
+	 */
+	public String getAnswer(String name, int num);
+	
+	/**
+	 * Resets passwords.
+	 * 
+	 * @param name Name of player getting password reset
+	 * @param password New password to be saved
+	 */
+	public Responses resetPassword(String name, String pass);
+
+     /**
       * Challenge someone to R-P-S
       * @param challenger is the name of the player challenging to R-P-S
       * @param challenge is the name of the player being challenge
@@ -280,4 +332,31 @@ public interface GameCoreInterface {
       * @return String message of the rejection
       */
      public String teach(String player);
+
+	/**
+	 * Adds a player to the friend list if the player exists and isn't on the friend
+	 * list already
+	 * 
+	 * @param name
+	 * @param friend
+	 * @return responseType
+	 */
+	public Responses addFriend(String name, String friend);
+
+	/**
+	 * Removes a player from the friend list
+	 * 
+	 * @param name
+	 * @param ex
+	 * @return reponseType
+	 */
+	public Responses removeFriend(String name, String ex);
+	
+	/**
+	 * returns a message showing all online friends
+	 * 
+	 * @param Player name
+	 * @return Message showing online friends
+	 */
+	public String viewOnlineFriends(String name);
 }

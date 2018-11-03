@@ -1,10 +1,12 @@
 
 
 
-import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashSet;
 
@@ -22,10 +24,10 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
      *  and establishes a new, empty, player list.
      * @throws RemoteException 
      */
-    public GameObject(String worldFile) throws RemoteException, IOException {
+	public GameObject(String playerAccountsLocation, String worldFile) throws Exception {
         super();
         
-        core = new GameCore(worldFile);
+		core = new GameCore(playerAccountsLocation, worldFile);
 
     }
 
@@ -43,8 +45,25 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
         }
         return false;
     }    
-  
-    
+
+	/**
+	 * Used to create a hash encrypted in SHA256 for use in encrypting passwords
+	 * 
+	 * @param toHash
+	 * @return SHA256 encrypted hash value, or "ERROR" If encryption method fails.
+	 */
+	public String hash(String toHash) {
+		try {
+			byte[] encodedhash = MessageDigest.getInstance("SHA-256").digest(toHash.getBytes(StandardCharsets.UTF_8));
+			StringBuilder sb = new StringBuilder();
+			for (byte b : encodedhash)
+				sb.append(String.format("%02X", b));
+			return sb.toString();
+		} catch (NoSuchAlgorithmException e) {
+		}
+		return "ERROR";
+	}
+
 	/**
 	 * Pokes the ghoul in the current room
 	 * @param playerName Player name
@@ -79,11 +98,36 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
      * @throws RemoteException 
      */
     @Override
-    public boolean joinGame(String name) throws RemoteException {
-        // Request join to the core and return the results back to the remotely calling method.
-        return (core.joinGame(name) != null);
-    }
-        
+	public boolean joinGame(String name, String password) throws RemoteException {
+		// Request join to the core and return the results back to the remotely calling
+		// method.
+		password = hash(password);
+		if (!password.equals("ERROR"))
+			return (core.joinGame(name, password) != null);
+		return false; // Password is invalid due to failure of hash function
+	}
+
+	/**
+	 * Allows a player to create an account. If the player name already exists this
+	 * returns the corresponding enum. If the players name is of an invalid format
+	 * this returns that corresponding emum. Otherwise this returns success and
+	 * calls joinGame.
+	 * 
+	 * @param name
+	 * @param password
+	 * @param recovery List of recovery questions and answers, ordered q1,a1,q2,a2,q3,a3
+	 * @return an enumeration representing the creation status, or null if password
+	 *         failed to be encrypted in hash function.
+	 * @throws RemoteException
+	 */
+	@Override
+	public Responses createAccountAndJoinGame(String name, String password, ArrayList<String> recovery) throws RemoteException {
+		password = hash(password);
+		if (password.equals("ERROR"))
+			return Responses.UNKNOWN_FAILURE;
+		return core.createAccountAndJoinGame(name, password, recovery);
+	}
+
     /**
      * Returns a look at the area of the specified player.
      * @param playerName Player Name
@@ -497,6 +541,100 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
     public String getShopInv(int id) throws RemoteException{
     	return core.getShopInv(id);
     }
+	
+	/**
+	 * Delete a player's account.
+	 * 
+	 * @param name Name of the player to be deleted
+	 * @throws RemoteException
+	 */
+	@Override
+	public void deleteAccount(String name) throws RemoteException {
+		Player player = core.deleteAccount(name);
+		if (player != null) {
+			player.getReplyWriter().close();
+		}
+	}
+
+	/**
+	 * Adds a player to your friends list
+	 * 
+	 * @param name
+	 * @param friend
+	 * @return responseType
+	 * @throws RemoteException
+	 */
+	@Override
+	public Responses addFriend(String name, String friend) throws RemoteException {
+		return core.addFriend(name, friend);
+	}
+
+	/**
+	 * Removes a player from your friends list
+	 * 
+	 * @param name
+	 * @param ex
+	 * @return responseType
+	 * @throws RemoteException
+	 */
+	@Override
+	public Responses removeFriend(String name, String ex) throws RemoteException {
+		return core.removeFriend(name, ex);
+	}
+	
+	/**
+	 * returns a message showing all online friends
+	 * 
+	 * @param Player name
+	 * @return Message showing online friends
+	 * @throws RemoteException 
+	 */
+	@Override
+    public String viewOnlineFriends(String name) throws RemoteException {
+        return core.viewOnlineFriends(name);
+    }  
+	
+	/**
+	 * Gets user's recovery question
+	 *
+	 *@param name Name of user
+	 *@param num Marks which question will be grabbed
+	 */
+	public String getQuestion(String name, int num) throws RemoteException {
+		return core.getQuestion(name, num);
+	}
+	
+	/**
+	 * Gets a user's recovery answer
+	 * 
+	 * @param name Name of user
+	 * @param num Marks which answer will be grabbed
+	 * @throws RemoteException
+	 */
+	public String getAnswer(String name, int num) throws RemoteException {
+		return core.getAnswer(name, num);
+	}
+	
+	/**
+	 * Resets Users password
+	 * 
+	 * @param name Name of user
+	 * @param pass New password
+	 * @throws RemoteException
+	 */
+	public Responses resetPassword(String name, String pass) throws RemoteException {
+		pass = hash(pass);
+		if(pass.endsWith("ERROR")) {
+			return Responses.UNKNOWN_FAILURE;
+		}
+		return core.resetPassword(name, pass);
+	}
+    
+    @Override
+    public void heartbeatCheck(String name) throws RemoteException{
+        core.heartbeatCheck(name);
+    }
+        
 
     /**Prompts a message that someone is challenging them to a R-P-S
      * @param challenger is the name of the player challenging someone in the area

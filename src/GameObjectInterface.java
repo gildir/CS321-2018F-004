@@ -3,7 +3,6 @@
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
-import java.util.ArrayList;
 import java.util.HashSet;
 
 /**
@@ -39,8 +38,22 @@ public interface GameObjectInterface extends Remote {
      * @return true if name is available and join is successful, false otherwise.
      * @throws RemoteException 
      */
-    public boolean joinGame(String name) throws RemoteException;
-    
+	public boolean joinGame(String name, String password) throws RemoteException;
+
+	/**
+	 * Allows a player to create an account. If the player name already exists this
+	 * returns the corresponding enum. If the players name is of an invalid format
+	 * this returns that corresponding emum. Otherwise this returns success and
+	 * calls joinGame.
+	 * 
+	 * @param name
+	 * @param password
+	 * @param recovery List of recovery questions and answers, ordered q1,a1,q2,a2,q3,a3
+	 * @return an enumeration representing the creation status.
+	 * @throws RemoteException
+	 */
+	public Responses createAccountAndJoinGame(String name, String password, ArrayList<String> recovery) throws RemoteException;
+
     /**
      * Returns a look at the area of the specified player.
      * @param name Player Name
@@ -324,6 +337,79 @@ public interface GameObjectInterface extends Remote {
      * @return A formatted string representing the Shop's inventory
      */
     public String getShopInv(int id) throws RemoteException;
+	
+	/**
+	 * Delete a player's account.
+	 * 
+	 * @param name Name of the player to be deleted
+	 * @throws RemoteException
+	 */
+	public void deleteAccount(String name) throws RemoteException;
+
+	/**
+	 * Adds a player to your friends list
+	 * 
+	 * @param name
+	 * @param friend
+	 * @return responseType
+	 * @throws RemoteException
+	 */
+	public Responses addFriend(String name, String friend) throws RemoteException;
+
+	/**
+	 * Removes a player from your friends list
+	 * 
+	 * @param name
+	 * @param ex
+	 * @return responseType
+	 * @throws RemoteException
+	 */
+	public Responses removeFriend(String name, String ex) throws RemoteException;
+
+	/**
+	 * returns a message showing all online friends
+	 * 
+	 * @param Player name
+	 * @return Message showing online friends
+	 * @throws RemoteException
+	 */
+	String viewOnlineFriends(String name) throws RemoteException;
+	
+	/**
+	 * Resets passwords.
+	 * 
+	 * @param name Name of player getting password reset
+	 * @param password New password to be saved
+	 * @throws RemoteException
+	 */
+	public Responses resetPassword(String name, String password) throws RemoteException;
+	
+	/**
+	 * Gets recovery question
+	 * @param name User of recovery question 
+	 * @param num Marks which question will be grabbed
+	 * @return String of recovery question, null if user doesn't exist
+	 * @throws RemoteException
+	 */
+	public String getQuestion(String name, int num) throws RemoteException;
+	
+	/**
+	 * Gets recovery answer
+	 * @param name User of recovery answer
+	 * @param num Marks which answer will be grabbed
+	 * @return String of recovery question, null if user doesn't exist
+	 * @throws RemoteException
+	 */
+	public String getAnswer(String name, int num) throws RemoteException;
+
+    
+    /**
+     * Player check in to ensure the client has not crashed. A client needs to 
+     * call this method at least every hour or else it will be logged off.
+     * @param name Name of client's player that is checking in.
+     * @throws java.rmi.RemoteException
+     */
+    public void heartbeatCheck(String name) throws RemoteException;
 
     /**
     * Prompts a message that someone is challenging them to a R-P-S
