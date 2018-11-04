@@ -220,10 +220,25 @@ public class Map{
          // System.out.println("Setting exits for room [" + row + "][" + col + "]");
 	  Room room = this.findRoom(roomId);
 	  nodeArr[row][col] = new Node(room);
-	  setExits(row - 1, col, nodeArr, room.getLink(Direction.valueOf("NORTH")));
-	  setExits(row + 1, col, nodeArr, room.getLink(Direction.valueOf("SOUTH")));
-	  setExits(row, col - 1, nodeArr, room.getLink(Direction.valueOf("WEST")));
-	  setExits(row, col + 1, nodeArr, room.getLink(Direction.valueOf("EAST")));
+	  Scanner exits = new Scanner(room.getExits()).useDelimiter(" ");
+          while(exits.hasNext())
+          {
+             switch(exits.next())
+             {
+                case "NORTH":
+                   setExits(row - 1, col, nodeArr, room.getLink(Direction.valueOf("NORTH")));
+                   break;
+                case "SOUTH":
+                   setExits(row + 1, col, nodeArr, room.getLink(Direction.valueOf("SOUTH")));
+                   break;
+                case "EAST":
+                   setExits(row, col - 1, nodeArr, room.getLink(Direction.valueOf("WEST")));
+                   break;
+                case "WEST":
+                   setExits(row, col + 1, nodeArr, room.getLink(Direction.valueOf("EAST")));
+                   break;
+             }
+          }
        }
     }
 
@@ -251,10 +266,29 @@ public class Map{
 
        public Node(Room room)
        {
-	  n = room.canExit(Direction.valueOf("NORTH"));
-	  s = room.canExit(Direction.valueOf("SOUTH"));
-	  e = room.canExit(Direction.valueOf("EAST"));
-	  w = room.canExit(Direction.valueOf("WEST"));
+	  n = false;
+	  s = false;
+	  e = false;
+	  w = false;
+	  Scanner exits = new Scanner(room.getExits()).useDelimiter(" ");
+	  while(exits.hasNext())
+	  {
+             switch(exits.next())
+	     {
+                case "NORTH":
+		   n = true;
+		   break;
+		case "SOUTH":
+		   s = true;
+		   break;
+		case "EAST":
+		   e = true;
+		   break;
+		case "WEST":
+		   w = true;
+		   break;
+	     }
+	  }
 	  inside = room.getRoomType().equals("inside");
 	  ghoul = room.hasGhoul;
 	  shop = isShoppable(room);

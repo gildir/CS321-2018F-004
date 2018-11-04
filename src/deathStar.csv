@@ -15,10 +15,10 @@ EAST,0,You consider pressing some buttons, but decide you don't want to break an
 SOUTH,2,You head back down to the main hallway
 WEST,0,You look out the window and see Storm Troopers marching away from the Hangar
 4,inside,Millennium Falcon - Secret Compartments,You are crouched down in the secret storage under the main hallway
-NORTH,2,You crawl out of the secret compartment
-EAST,2,You crawl out of the secret compartment
-SOUTH,2,You crawl out of the secret compartment
-WEST,2,You crawl out of the secret compartment
+NORTH,-2,You crawl out of the secret compartment
+EAST,-2,You crawl out of the secret compartment
+SOUTH,-2,You crawl out of the secret compartment
+WEST,-2,You crawl out of the secret compartment
 5,inside,Millennium Falcon - Living Quarters,You are in the living quarters of the Millennium Falcon. Someone left an unfished game of Holo-Chess on the table
 NORTH,0,You walk over to the Holo Table, and mess around with the board a bit.
 EAST,2,You go back into the main hallway
