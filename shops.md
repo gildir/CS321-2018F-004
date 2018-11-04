@@ -16,7 +16,7 @@ In the code, there are two classes that control shops: the Shop class and the Sh
 
 The ShopClient class is a way for the player to interact with the server-side Shop class. Any time a player enters a shop, a ShopClient object is generated to listen to their commands and send them to the Shop class they are interacting with. Because neither class is serializable, the methods can only have Strings and primitive-type return values. The below UML diagram further illustrates the relationship between shops.
 
-![Shop and ShopCLient CLass Diagram](shop_class_diagram.png?raw=true "Shop and ShopClient Class Diagram")
+![Shop and ShopCLient CLass Diagram](images/shop_class_diagram.png?raw=true "Shop and ShopClient Class Diagram")
 ###### _Shop and ShopClient Class Diagram (Isaiah)_
 
 ### For Users
@@ -48,7 +48,7 @@ Selling works in much the same way as buying. It's initiated on the client side,
 ### For Users
 Once in the shop, type the command "sell \[item\]" to sell in item in your inventory. If you have that item in your inventory, the store will tell you how much it was purchased for and add the appropriate amount of money to your wallet. Much like the "buy" command, be cautious. It is case sensitive and will alert you that you don't have an item if the name doesn't match exactly. Be  sure that you want to sell it, since you can't get it back without paying the shop's markup.
 
-![A flowchart that represents the procedure of buying and selling.](Flow_of_infoBuyAdnSell.jpg?raw=true "Buy and sell")
+![A flowchart that represents the procedure of buying and selling.](images/Flow_of_infoBuyAdnSell.jpg?raw=true "Buy and sell")
 
 ###### _Buy and Sell Flowchart (Rish)_
 
@@ -85,7 +85,7 @@ Future additions may switch this to a list of type Item, and to limit the size o
 ### For Developers
 Money is currently simply implemented as a field in the Player class of type float. This is to account for the whole dollars and cents that can comprise a players balance. This value is altered through simple getters and setters, getMoney() and setMoney(float m).
 
-![Player Class Diagram re:Money](player_class_dia_rough_for_money.png?raw=true "Player Class Diagram re:Money")
+![Player Class Diagram re:Money](images/player_class_dia_rough_for_money.png?raw=true "Player Class Diagram re:Money")
 ###### _Player Class Diagram re:Money (Riley)_
 
 The player's balance is printed out via the wallet command, parsed in GameClient to call wallet with the player's name. The wallet method in GameCore takes in a name and returns a string representation of the return value from getMoney(), culled to two decimal places for appropriate represenation of cents.
@@ -125,7 +125,7 @@ Venmo has the following method: `public Static String send(Player from, Player t
 - If the transaction is valid, a success message will be printed to the recipient, and another success message will be returned to the sender.
 - If the transaction is invalid, an error message will be returned to the sender (based on the order above).
 
-![A flowchart that represents the procedure of sending money.](VenmoDiagram.png?raw=true "Venmo.send(\) Flowchart")
+![A flowchart that represents the procedure of sending money.](images/VenmoDiagram.png?raw=true "Venmo.send(\) Flowchart")
 ###### _Venmo Flowchart (Abdullah)_
 
 ### For Users
