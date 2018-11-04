@@ -166,27 +166,27 @@ public class Map{
                     result = result.substring(0,626) + "X" + result.substring(627,result.length());
 	         }
 	         if(nodeArr[row][col].n){
-	            if(row > 0 && current.getLink(Direction.valueOf("NORTH")) == nodeArr[row-1][col].id)
+	            if(row > 0 && nodeArr[row-1][col] != null && current.getLink(Direction.valueOf("NORTH")) == nodeArr[row-1][col].id)
                        result = result.substring(0,209 + (250*row) + (8*col)) + "+" + result.substring(210 + (250*row) + (8*col),result.length());
 		    else
 		       result = result.substring(0,209 + (250*row) + (8*col)) + "0" + result.substring(210 + (250*row) + (8*col),result.length());
 	   	    result = result.substring(0,259 + (250*row) + (8*col)) + "|" + result.substring(260 + (250*row) + (8*col),result.length());
 	         }
 	         if(nodeArr[row][col].s){
-	            if(row < nodeArr.length-1 && current.getLink(Direction.valueOf("SOUTH")) == nodeArr[row+1][col].id)
+	            if(row < nodeArr.length-1 && nodeArr[row+1][col] != null && current.getLink(Direction.valueOf("SOUTH")) == nodeArr[row+1][col].id)
                        result = result.substring(0,511 + (250*row) + (8*col)) + "+" + result.substring(512 + (250*row) + (8*col),result.length());
 		    else
 		       result = result.substring(0,511 + (250*row) + (8*col)) + "0" + result.substring(512 + (250*row) + (8*col),result.length());
 		    result = result.substring(0,461 + (250*row) + (8*col)) + "|" + result.substring(462 + (250*row) + (8*col),result.length());
 		 }
 	         if(nodeArr[row][col].w){
-	            if(col > 0 && current.getLink(Direction.valueOf("WEST")) == nodeArr[row][col-1].id)
+	            if(col > 0 && nodeArr[row][col-1] != null && current.getLink(Direction.valueOf("WEST")) == nodeArr[row][col-1].id)
                        result = result.substring(0,405 + (250*row) + (8*col)) + "+-" + result.substring(407 + (250*row) + (8*col),result.length());
 		    else
 		       result = result.substring(0,405 + (250*row) + (8*col)) + "0-" + result.substring(407 + (250*row) + (8*col),result.length());
                  }
 	         if(nodeArr[row][col].e){
-	            if(col < nodeArr[1].length - 1 && current.getLink(Direction.valueOf("EAST")) == nodeArr[row][col+1].id)
+	            if(col < (nodeArr[1].length - 1) && nodeArr[row][col+1] != null && current.getLink(Direction.valueOf("EAST")) == nodeArr[row][col+1].id)
                        result = result.substring(0,364 + (250*row) + (8*col)) + "-+" + result.substring(366 + (250*row) + (8*col),result.length());
 		    else
 		       result = result.substring(0,364 + (250*row) + (8*col)) + "-0" + result.substring(366 + (250*row) + (8*col),result.length());

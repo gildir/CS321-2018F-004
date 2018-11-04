@@ -106,7 +106,7 @@ SOUTH,20,You walk alongside the cannons barrel
 WEST,0,You fiddle with the controls a bit, pull an interesting lever, and accidently shoot off a laser. Hopefully you didn't hit anything important!
 22,inside,Death Star,You are in a hallway in the Death Star
 NORTH,25,You walk over to the escape pod deck
-EAST,8,You go to the main engineering hub
+EAST,14,You go to the main engineering hub
 SOUTH,21,You walk over to the laser controls
 WEST,0,Your path is blocked by a group of engineers arguing about some sort of exhaust port vulnerability
 23,inside,Death Star - External Laser Turret,You're in the control room for a defensive turret
