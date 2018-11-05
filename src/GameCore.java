@@ -237,7 +237,15 @@ public class GameCore implements GameCoreInterface {
 				value = Double.parseDouble(tokens[0]);
 				double playerMoney = player.getMoney();
 				
-				if (playerMoney >= value) {
+				if (value < 0) {
+					return "Surprisingly, this is the only place in college you can't put yourself in debt";
+				}
+				
+				else if (value == 0) {
+					return "The teller looks at your deposit slip for $0.00 and frowns. She's not amused";
+				}
+				
+				else if (playerMoney >= value) {
 					player.setMoney(player.getMoney() - value);
 					double newBalance = bank.deposit(name, value);
 					return String.format("New account balance: $%.2f", newBalance);
