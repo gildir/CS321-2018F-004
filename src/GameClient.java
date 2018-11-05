@@ -414,6 +414,7 @@ public class GameClient {
                 	int bankId = remoteGameInterface.bank(this.playerName); 
                 	if (bankId != -1) {
                 		new BankClient(this.playerName, remoteGameInterface);
+                		System.out.println(remoteGameInterface.look(this.playerName));  // When player leaves print look screen
                 	}
                 	else {
                 		System.out.println("There is no bank here");

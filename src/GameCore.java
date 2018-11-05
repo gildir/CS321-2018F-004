@@ -226,7 +226,42 @@ public class GameCore implements GameCoreInterface {
      * @return A string based on the success or failure of the command
      */
     public String bankCmdRunner(String cmd, String name, String args) {
-    	return this.bank.command(cmd, name, args);
+		//parse arguments
+    	String tokens[] = args.split("\\s+");
+    	Player player = this.playerList.findPlayer(name);
+    	double value;
+    	
+    	switch (cmd) {
+			case "deposit":
+			// Expects a double for how much player deposits
+				value = Double.parseDouble(tokens[0]);
+				double playerMoney = player.getMoney();
+				
+				if (playerMoney >= value) {
+					player.setMoney(player.getMoney() - value);
+					double newBalance = bank.deposit(name, value);
+					return String.format("New account balance: $%.2f", newBalance);
+				} else {
+					return String.format("You don't have enough money to deposit $%.2f", value);
+				}
+			
+			case "withdraw":
+			// Expects a double for how much player withdraws 
+				value = Double.parseDouble(tokens[0]);
+				
+				if(bank.canWithdraw(name, value)) {
+					player.setMoney(player.getMoney() + value);
+					return 	bank.withdraw(name, Long.parseLong(tokens[0])) + 
+							String.format("\nNew wallet balance: $%.2f", player.getMoney());
+				} else {
+					return "You don't have enough money in your account";
+				}
+				
+			case "printAccount":
+				return bank.printAccount(name);	
+		}
+    	
+    	return "";
     }
     
     /**

@@ -294,7 +294,7 @@ public interface GameObjectInterface extends Remote {
      * @param cmd Any extra arguments that may need to be sent to the command
      * @return A string based on the success or failure of the command
      */
-    public String bankCmdRunner(String cmd, String name, String args);
+    public String bankCmdRunner(String cmd, String name, String args) throws RemoteException;
     
     /**
      * @author Team 4: King

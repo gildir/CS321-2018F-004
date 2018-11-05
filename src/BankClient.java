@@ -1,6 +1,7 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 
@@ -71,7 +72,7 @@ public class BankClient {
 		);
 	}
 	
-	private void parseInput(String input) {
+	private void parseInput(String input) throws RemoteException {
 		// Ripped from GameClient
 		StringTokenizer commandTokens = new StringTokenizer(input);
         ArrayList<String> tokens = new ArrayList<>();
@@ -115,13 +116,14 @@ public class BankClient {
         	case "QUIT":
         	case "L":
         	case "LEAVE":
-        		System.out.println("Leaving bank; be seeing you...");
+        		System.out.println("You exit the bank");
         		this.inBank = false;
         		break;
         	
         	case "H":
         	case "HELP":
         		this.printMenu();
+        		break;
         		
         	default:
         		System.out.println("I'm sorry, I didn't understand your command, type HELP to see a menu");
