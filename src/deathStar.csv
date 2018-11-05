@@ -1,0 +1,251 @@
+50
+1,inside,Death Star - Hangar 6C,You are standing in the ship docking bay, right outside of the Millenium Falcon
+NORTH,6,You walk to the nearest elevator and head up.
+EAST,7,You take a leisurely stroll to the adjacent hangar
+SOUTH,0,You look out of the hangar and admire the vastness of space
+WEST,2,You walk up the entry ramp into the Millennium Falcon
+2,inside,Millennium Falcon - Main Hallway,You are in the main hallway of the Millennium Falcon
+NORTH,3,You head down towards the cockpit
+EAST,1,You walk down the ramp back into the Death Star Hangar
+SOUTH,-4,You crawl underneath the floor into a secret storage compartment
+WEST,5,You walk down the hallway into the living quarters
+3,inside,Millennium Falcon - Cockpit,You are in the cockpit of the Millennium Falcon, with plenty of flashing lights and buttons
+NORTH,0,You attempt to start up the ship, but the Death Star's tractor beam is still engaged
+EAST,0,You consider pressing some buttons, but decide you don't want to break anything
+SOUTH,2,You head back down to the main hallway
+WEST,0,You look out the window and see Storm Troopers marching away from the Hangar
+4,inside,Millennium Falcon - Secret Compartments,You are crouched down in the secret storage under the main hallway
+NORTH,2,You crawl out of the secret compartment
+EAST,2,You crawl out of the secret compartment
+SOUTH,2,You crawl out of the secret compartment
+WEST,2,You crawl out of the secret compartment
+5,inside,Millennium Falcon - Living Quarters,You are in the living quarters of the Millennium Falcon. Someone left an unfished game of Holo-Chess on the table
+NORTH,0,You walk over to the Holo Table, and mess around with the board a bit.
+EAST,2,You go back into the main hallway
+SOUTH,0,You climb into the gun well, but there is nothing to shoot so you go back.
+WEST,0,You walk into a wall. Your head now has a slight ache.
+6,inside,Death Star - Hangar Control Room,You are in a room overlooking several hangars.
+NORTH,8,You walk out into a long hallway
+EAST,0,You go over to the controls and mess around a bit. You decide to stop when you accidentally send a crane into a pile of boxes, knocking them all over the place
+SOUTH,1,You go down the elevator into the hangars
+WEST,0,You sit down in one of the chairs and think about your CS project. Suddenly, inspiration hits you, and you jump out of your seat ready for action
+7,inside,Death Star - Hangar 6D,You are in a docking bay with many TIE-Fighters and Pilots waiting on standby
+NORTH,0,You try to walk down a hallway, but a Storm Trooper stops you, and informs you its closed because of a gas leak
+EAST,11,You follow a squad of Storm Troopers into a hallway
+SOUTH,0,You attempt to get into one of the TIE-Fighters, but one of the pilots starts yelling at you. Not wanting to make more a scene, you decide to leave it alone
+WEST,1,You see the Millennium Falcon in the next hangar over, and decide to check it out
+8,inside,Death Star,You are in a long hallway with elevators on one of the walls.
+NORTH,9,You go inside one of the elevators and start going down to the prison deck
+EAST,10,You walk down the hallway, in the direction of the troopers' quarters
+SOUTH,6,You walk into the Hangar Control Room
+WEST,14,You walk down the hallway, in the direction of the engineering department
+9,inside,Death Star - Prison Deck,You are at the prison deck's main desk. The guard on duty seems to have fallen asleep.
+NORTH,8,You go up the elevator
+EAST,0,You look down one of the prison hallways, but decide it looks a bit too boring
+SOUTH,15,You walk down an interesting looking prison hallway
+WEST,24,You take an elevator up to a laser turret tower
+10,inside,Death Star - Troop Quarters,You are in the main hub of the troops quarters
+NORTH,28,You take an elevator up
+EAST,27,You go through a large doorway, into a room filled with bunk beds
+SOUTH,11,You walk out into a hallway
+WEST,8,You walk out into a hallway
+11,inside,Death Star,You are in a hallway, and can see the mess hall off to the north
+NORTH,10,You walk into the Troop Quarters, in the direction of the Mess Hall
+EAST,12,You walk down the hallway towards the shuttle bay
+SOUTH,0,You trip and fall. Cursing as you get up, you forgot where it was you were trying to go
+WEST,7,You walk down the hallway into the hangar bay
+12,inside,Death Star - Shuttle Bay,You are standing in the shuttle bay, but it doesn't look like there are any outgoing shuttles
+NORTH,0,You walk up to a shuttle, but the door is locked
+EAST,13,You go into the cargo room
+SOUTH,0,You check the flight schedule, and all the outgoing shuttles are canceled at the moment because of a security breach
+WEST,11,You go out into the hallway
+13,inside,Death Star - Cargo Hold,You are standing in the cramped Cargo Hold, inbetween a box of E-11 Blaster Rifles and a couple speeder bikes
+NORTH,0,You try to turn on a speeder bike, but you can't find the key
+EAST,0,You try to push your way through, but can't get past a couple of rusted old droids
+SOUTH,0,You grab a blaster rifle, but can't figure out how to get the safety off. You put it back.
+WEST,12,You go back to the shuttle bay
+14,inside,Death Star - Engineering Hub,You're in a crowded room with many maintenance droids and engineers running all over the place.
+NORTH,0,You inspect one of the maintanenance droids, until it hits you over the head and tells you to mind your own business
+WEST,22,You follow a group of engineers into an elevator, and start heading down
+SOUTH,19,You go into a nearby elevator, and go down to the reactor core level
+EAST,8,You head down a nearby hallway
+15,inside,Death Star - Prison,You are in a long hallway lined with cells
+NORTH,9,You go back out to the prison deck
+EAST,0,After trying several of the cell doors, you eventually give up
+SOUTH,16,You find a cell with its door open, and walk in
+WEST,-17,You're walking down the hall, when you slip and fall down a blasted in trash chute. What rotten luck!
+16,inside,Death Star - Prison Cell,You're inside a small, cramped prison cell
+NORTH,0,You lie down on the bed and take a nap. It is not very comfortable
+EAST,0,You try to walk to the east, but realize the only way out of a cell is back the way you came.
+SOUTH,15,You exit the cell
+WEST,0,You stare at the wall and twidle your thumbs. What else is there to do in a cell?
+17,inside,Death Star - Trash Compactor,You find yourself in a wet, stinky, and overall disgusting trash compactor. Why did you think this was a good idea?
+NORTH,18,You find the door and quickly leave. However, the stench will likely stick around for a bit longer
+EAST,0,You try to climb up the trash chute, but it is too steep and slippery
+WEST,0,After walking around a bit, you feel a tentacle start to grab your leg. Startled, you jump back and look for an exit
+SOUTH,0,You look for an exit too the south, but cannot seem to find one
+18,inside,Death Star,You find yourself on a bridge above what looks like a couple reactor cores
+NORTH,19,You walk down the bridge towards the main engineering hub
+EAST,0,You are absent-mindedly walking along, when you almost fall off the bridge! Someone should really put a railing here.
+SOUTH,17,You decide to go through the trash compactor access door
+WEST,20,You take the bridge down toward the main cannon
+19,inside,Death Star - Tractor Beam Controls,You are standing next to a large reactor that appears to be the tractor beam engine
+NORTH,14,You walk to the main engineering hub
+EAST,0,You attempt to disengage the tractor beam, but don't quite know what you're doing
+SOUTH,18,You walk away from the engineering hub
+WEST,21,You walk towards the control console for the laser cannon
+20,inside,Death Star - Laser Cannon Barrel,You stand next to a long cylinder, where one of the Death Star's lasers originates from
+NORTH,21,You walk towards the control console
+EAST,18,You go out onto the walkway by the reactor cores
+SOUTH,0,You start to walk along the barrel, but see a squadron of Storm Troopers and decide to stay where you are
+WEST,0,You admire the impressive weapon, but wonder if all the flashing lights really mean something
+21,inside,Death Star - Laser Cannon Console,You stand at the coontrol panel for the large laser cannon in front of you
+NORTH,22,You walk into a nearby hallway
+EAST,19,You go over to the nearby tractor beam controls
+SOUTH,20,You walk alongside the cannons barrel
+WEST,0,You fiddle with the controls a bit, pull an interesting lever, and accidently shoot off a laser. Hopefully you didn't hit anything important!
+22,inside,Death Star,You are in a hallway in the Death Star
+NORTH,25,You walk over to the escape pod deck
+EAST,8,You go to the main engineering hub
+SOUTH,21,You walk over to the laser controls
+WEST,0,Your path is blocked by a group of engineers arguing about some sort of exhaust port vulnerability
+23,inside,Death Star - External Laser Turret,You're in the control room for a defensive turret
+NORTH,0,You have nothing to shoot at, but fire a few shots off anyways.
+EAST,0,You look out the window and admire the view. Funny, you would've thought you could see Aldeeran from here.
+WEST,0,You notice a coffee machine on the counter. You sit down and enjoy a nice hot cup.
+SOUTH,21,You go back down the elevator
+24,inside,Death Star - External Laser Turret,You're in the control room for a defensive turret
+NORTH,0,You have nothing to shoot at, but fire a few shots off anyways.
+EAST,0,You look out the window and admire the view. Funny, you would've thought you could see Aldeeran from here.
+SOUTH,0,You notice a coffee machine on the counter. You sit down and enjoy a nice hot cup.
+WEST,9,You go back down the elevator
+25,inside,Death Star - Escape Pods,You find yourself next to several escape pods
+NORTH,0,You sit down and take a rest
+EAST,26,You find an open escape pod and go inside
+SOUTH,22,You walk away from the escape pods
+WEST,0,You start heading down the rows of escape pods, but inexplicably decide to turn back
+26,inside,Death Star - Escape Pod,You are sitting inside an escape pod
+NORTH,0,You look at the destination panel, and it appears a course has been preloaded for Tattooine
+EAST,-30,You press a button, and suddenly your pod is launched out into space!
+SOUTH,0,You sit in your chair for a while and ponder the meaning of life
+WEST,25,You exit your escape pod
+27,inside,Death Star - Troop Bunks,The large array of bunks in this room allows you to figure out this is where the Storm Troopers sleep
+NORTH,0,You try to get into the lockers, but you can't find one with the combination 1-2-3-4
+EAST,0,You lie down in a bed and take a nap, until an officer rudely shakes you away and tells you to get in uniform
+SOUTH,0,You trip and fall
+WEST,10,You go exit the troop bunks
+28,inside,Death Star - Imperial Hangar,You are in the Empire's leaders' personal hangar
+NORTH,0,A large group of Storm Troopers are standing at attention outside a shuttle. You decide to avoid this.
+EAST,0,You find the light switch, and start flicking the lights on and off, until one of the officers shoots you a dirty look
+SOUTH,10,You take the elevator to the troop quarters
+WEST,29,You take the elevator to the throne room
+29,inside,Death Star - Throne Room,You are in the Imperial Throne Room
+NORTH,0,You walk up to the throne and sit in it. Nobody stops you, so you must be allowed to
+WEST,0,You look out the window, but don't see anything except a couple stars. What a lame window
+SOUTH,0,You chat to an Imperial Guard, and find out that they can barely see out of their masks
+EAST,28,You exit the throne room by going down an elevator
+30,outside,Tatooine - Pod Crash Site,You are standing outside a crashed escape pod, in the middle of a seemingly endless desert
+NORTH,-31,You walk out into the desert
+EAST,-37,You walk out into the desert
+SOUTH,-35,You walk out into the desert
+WEST,-33,You walk out into the desert
+31,outside,Tatooine - Desert,You are standing in the middle of a seemingly endless desert
+NORTH,0,You walk out into the desert
+EAST,0,You walk out into the desert
+SOUTH,0,You walk out into the desert
+WEST,-32,You walk out into the desert
+32,outside,Tatooine - Desert,You are standing in the middle of a seemingly endless desert
+NORTH,0,You walk out into the desert
+EAST,-31,You walk out into the desert
+SOUTH,-33,You walk out into the desert
+WEST,0,You walk out into the desert
+33,outside,Tatooine - Desert,You are standing in the middle of a seemingly endless desert
+NORTH,-32,You walk out into the desert
+EAST,-30,You walk out into the desert
+SOUTH,0,You walk out into the desert
+WEST,0,You walk out into the desert
+34,outside,Tatooine - Desert,You are standing in the middle of a seemingly endless desert
+NORTH,0,You walk out into the desert
+EAST,-35,You walk out into the desert
+SOUTH,-49,You walk out into the desert, and catch glimpse of a large metal door in the distance
+WEST,0,You walk out into the desert
+35,outside,Tatooine - Desert,You are standing in the middle of a seemingly endless desert
+NORTH,-30,You walk out into the desert
+EAST,-36,You walk out into the desert
+SOUTH,0,You walk out into the desert
+WEST,-34,You walk out into the desert
+36,outside,Tatooine - Desert,You are standing in the middle of a seemingly endless desert
+NORTH,0,You walk out into the desert
+EAST,-50,You walk out into the desert
+SOUTH,0,You walk out into the desert
+WEST,-35,You walk out into the desert
+37,outside,Tatooine - Desert,You are standing in the middle of a seemingly endless desert
+NORTH,-38,You walk out into the desert
+EAST,0,You walk out into the desert
+SOUTH,-36,You walk out into the desert
+WEST,-30,You walk out into the desert
+38,outside,Tatooine - Desert,You are standing in the middle of a seemingly endless desert
+NORTH,0,You walk out into the desert
+EAST,-39,You walk out into the desert, and see civilization up ahead!
+SOUTH,-37,You walk out into the desert
+WEST,-31,You walk out into the desert
+39,outside,Tatooine - Mos Eisely Spaceport Streets,You are in the crowded streets of Mos Eisely Spaceport
+NORTH,41,You walk over to the space docks, and see an Imperial shuttlie
+EAST,43,You walk over to check out the pod racing track
+SOUTH,40,You go into a local junk shop
+WEST,38,You walk out into the desert. Try not to get lost!
+40,inside,Tatooine - Junk Shop,You are in a crowded room filled with droids and various engine parts
+NORTH,39,You exit the shop
+EAST,0,You tap one of the droids, and it springs into action and starts making a mess. Frantically, you hit it on the nose and it stops moving
+SOUTH,0,You try to talk to the shop keeper, but he waves you away and continues talking with another customer
+WEST,0,You walk into another room, but this one is even more cluttered so you go back
+41,inside,Tatooine - Imperial Shuttle Dock,You find yourself in a busy docking port with an imperial shuttle
+NORTH,12,You see some official looking papers on a table, grab them, and use them to board the shuttle. The shuttle takes off and heads for a nearby moon
+EAST,42,You get bored of the spaceport action and decide to go get a drink at the cantina
+SOUTH,39,You leave the dock and walk back out to the streets
+WEST,0,You talk to an officer, who tells you the shuttle is bound for the Death Star, but you can't board without official documentation
+42,inside,Tatooine - Cantina,The band is playing up a storm in this small cantina
+NORTH,0,You walk over to the bar and order a glass of Geonosian Ale, but it tastes like it was made by bugs of some sort
+EAST,0,You try to buy a flight off of Tattooine, but don't have enough money to get any pilots attention
+SOUTH,43,You head off to the race track
+WEST,41,You walk over to the space docks
+43,outside,Tatooine - Race Track,You are standing outside the Pod Racing Track, but it is closed for today
+NORTH,42,You go inside to the cantina
+EAST,0,You try to find a way into the track, but the doors are all locked
+SOUTH,-44,You talk to some racers standing outside the track, and one offers you a free lift to a crime lord's nearby palace. You gladly accept.
+WEST,39,You walk over to the streets
+44,inside,Tatooine - Jabba's Palace,You are standing in a room with many different vehicles, including several large Sand Barges
+NORTH,0,You get on one of the barges, but they dont seem to be going anywhere
+EAST,-43,You talk to a nearby pilot, who allows you to hitch a ride to a nearby spaceport
+SOUTH,0,You try to steal a speeder bike, but no one left the key in the ignition
+WEST,45,You walk down the hallway, deeper into the palace
+45,inside,Tatooine - Jabba's Palace,You find yourself in the steamy kitchens
+NORTH,46,You leave the kitchens and head toward the main entrance
+EAST,44,You walk down to what looks like a large parking garage
+SOUTH,0,You try some of the soup, which tastes very bland
+WEST,0,You look through a door and see a large Rancor, and decide its probably best to avoid that
+46,inside,Tatooine - Jabba's Palace,You are standing in the large entrance hall to Jabba the Hutt's Palace
+NORTH,47,You walk down to the throne room
+EAST,49,You go outside
+SOUTH,50,You head down to the kitchens
+WEST,0,You talk to a guard, who grunts and says "No lollygaggin'!"
+47,inside,Tatooine - Jabba's Palace,You are standing in the middle of a large throne room.
+NORTH,0,You go up to the throne, but a small critter screaches at you, so you stay where you are
+EAST,0,You notice an instrument that looks like a piano on the side. You try playing it, but it appears to be made for an octopus of sorts
+SOUTH,46,You head back to the entrance
+WEST,-48,You are walking along when suddenly the floor falls out from beneath you!
+48,inside,Tatooine - Jabba's Palace,You fell down into a pit, with a Rancor! Luckily, it is asleep right now
+NORTH,0,You consider poking the Rancor to see if its alive, but decide against it
+EAST,0,You trip over a pile of bones, and decide not to go that way
+WEST,0,You look for an exit, but can't seem to find one
+SOUTH,45,You run for the escape hatch. Fortunately for you, it was unlocked.
+49,outside,Tatooine - Jabba's Palace,You are outside a large door that is raised just high enough for you to enter
+NORTH,34,You walk back out into the desert. Don't get lost!
+EAST,0,You look out over the desert, but decide not to go that way
+SOUTH,0,You look around, but don't see anything besides the large door
+WEST,46,You walk into the palace
+50,outside,Tatooine - The Sarlacc Pit,You look up and see a large pit with tentacles and teeth! Don't get too close!
+NORTH,-37,You wander off into the desert
+EAST,-33,You wander off into the desert
+SOUTH,-36,You wander off into the desert
+WEST,-36,You wander off into the desert

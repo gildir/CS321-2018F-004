@@ -1,4 +1,4 @@
-
+import java.util.ArrayList;
 
 /**
  *
@@ -95,6 +95,12 @@ public interface GameCoreInterface {
     public String say(String name, String message);
 
     /**
+     * Generates list of all online players.
+     * @return String of linked list PlayerList
+     */
+    public String showPlayers();
+
+    /**
      * Whispers "message" to a specific player.
      * @param srcName Name of the player to speak
      * @param dstName Name of the player to receive
@@ -156,8 +162,50 @@ public interface GameCoreInterface {
      * Leaves the game.
      * @param name Name of the player to leave
      * @return Player that was just removed.
-     */    
+     */
     public Player leave(String name);
+   
+    
+    /**
+     * Takes the player into venmo. The new and improved way to exchange money with other players.
+     * 
+     * @author Team 4: Alaqeel
+     * @param name Name of the player enter the bank
+     */    
+    public String venmo(String name, ArrayList<String> tokens);
+    
+    /**
+     * Returns a reference to a shop 
+     * @param id
+     * @return the shop or null
+     */
+    public String getShopStr(int id);
+    
+    /**
+     * Allows player to sell an item to a shop, and increases their money
+     * @author Team 4: King
+     * @param name Name of the player
+     * @param shopId The ID of the shop the player is selling an item to
+     * @param item The item the player is selling (eventually will be an Item obj)
+     */
+    public double sellItem(String name, int shopId, String item);
+    
+    /**
+     * 605B_buy_method
+     * Allows player to sell an item to a shop, and increases their money
+     * @author Team 4: Mistry
+     * @param name Name of the player
+     * @param shopId The ID of the shop the player is selling an item to
+     * @param item The item the player is buying (eventually will be an Item obj)
+     */
+    public String buyItem(String name, int shopId, String item);
+  
+    /**
+     * Returns a Shop's inventory as a formatted string
+     * @param id The shop ID
+     * @return A formatted string representing the Shop's inventory
+     */
+    public String getShopInv(int id);
 
     /**
      * Returns a string representation of the offer statement.
@@ -167,13 +215,13 @@ public interface GameCoreInterface {
      * @return Message showing offer
      * @throws RemoteException.
      */
-    public String offer(String srcName, String dstName, String message);
+    public String offer(String srcName, String dstName, String message); 
 
     /**
      * Prints message to player if request can processed, contacts other player about their request
      * @param requestingTrader Name of the player who has requested the trade
      * @param traderToRequest Name of the player whom the first player has requested to trade with
-     */
+     */ 
     public void requestPlayer(String requestingTrader, String traderToRequest);
 
     /**
@@ -181,7 +229,7 @@ public interface GameCoreInterface {
      * @param acceptingTrader Name of the player who is accepting the trade
      * @param traderToAccept Name of the player who has requested a trade
      * @return Message of success or fail
-     */
+     */ 
     public String playerResponse(String acceptingTrader, String traderToAccept);
 
     /**
@@ -191,4 +239,20 @@ public interface GameCoreInterface {
      *@return Message showing success.
      */
     public String shout(String name, String message);
+
+    /**
+      * Challenge someone to R-P-S
+      * @param challenger is the name of the player challenging to R-P-S
+      * @param challenge is the name of the player being challenge
+      * @return String message of the challenge
+      */
+    public String challenge(String challenger, String challengee);
+
+    /**
+      * Accept someones challenge to R-P-S
+      * @param challenger is the name of the player challenging to R-P-S
+      * @param challenge is the name of the player accepting
+      * @return String message of the acceptence
+      */
+    public String accept(String challenger, String challengee);
 }

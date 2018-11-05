@@ -15,10 +15,10 @@ import java.util.Scanner;
 public class Map{   
         private final LinkedList<Room> map;
 
-        public Map() {
+        public Map(String worldFile) {
                 map = new LinkedList<>();
                 try {
-                        File mapFile = new File("./rooms.csv");
+                        File mapFile = new File(worldFile);
                         Scanner mapIn = new Scanner(mapFile).useDelimiter(",|\\n|\\r\\n");
 
                         int numRooms, numExits;
@@ -89,8 +89,21 @@ public class Map{
                 return null;
         }
 
-        public Room randomRoom() {
-                Random rand = new Random();
-                return map.get(rand.nextInt(map.size()));
-        }
+    public Room randomRoom() {
+        Random rand = new Random();
+        return map.get(rand.nextInt(map.size()));
+    }
+    
+    /**
+     * @author Group 4: King
+     * Checks that room the player is contains a shop
+     * @param r The room in question
+     * @return true if it's a shoppable room, false otherwise
+     */
+    public boolean isShoppable(Room r) {
+    	if (r.getId() == 1) {	// Need to improve this if more shops are added
+    		return true;
+    	}
+    	return false;
+    }
 }

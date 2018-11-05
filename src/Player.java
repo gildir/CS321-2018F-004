@@ -19,17 +19,21 @@ public class Player {
     private Direction currentDirection;
     private PrintWriter replyWriter = null;
     private DataOutputStream outputWriter = null;
+    private double money;
     private DataInputStream inputWriter = null;
     private boolean inTrade = false;
     private boolean tradeRequested = false;
     private String tradePartner = "";
     private String lastPlayer = "";
+    private boolean hasChallenge = false;
+    private String challenger = " ";
 
     public Player(String name) {
         this.currentRoom = 1;
         this.currentDirection = Direction.NORTH;
         this.name = name;
         this.currentInventory = new LinkedList<>();
+        this.money = 0;
     }
 
     private HashSet<Player> ignoredPlayers = new HashSet<Player>();
@@ -342,8 +346,6 @@ public class Player {
         tradePartner = s;
     }
 
-
-
     public void setReplyWriter(PrintWriter writer) {
         this.replyWriter = writer;
     }
@@ -376,10 +378,44 @@ public class Player {
         return this.currentDirection;
     }
     
+    public double getMoney() {
+        return this.money;
+    }
+    
+    public void setMoney(double m){
+        this.money = m;
+    }
+
+    public String getChallenger(){
+        return challenger;
+    }
+
+    public void setChallenger(String name){
+        challenger = name;
+    }
+
+    public boolean getHasChallenge(){
+        return hasChallenge;
+    }
+
+    public void setHasChallenge(boolean challenged){
+        hasChallenge = challenged;
+    }
+    
+    /**
+     * Allows the caller to add/take money in user's wallet.
+     * 
+     * @author Team 4: Alaqeel
+     * @param m Amount to be added/taken.
+     */
+    public void changeMoney(double m){
+        this.money += m;
+    }
+    
     public String viewInventory() {
         String result = "";
         if(this.currentInventory.isEmpty() == true) {
-            return "nothing.";
+            return " nothing.";
         }
         else {
             for(Item obj : this.currentInventory) {
