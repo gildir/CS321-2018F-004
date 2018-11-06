@@ -701,8 +701,7 @@ public class GameCore implements GameCoreInterface {
 
 	public synchronized Responses createAccountAndJoinGame(String name, String password, ArrayList<String> recovery) {
 		synchronized (createAccountLock) {
-			password = hash(password);
-			PlayerAccountManager.AccountResponse resp = accountManager.createNewAccount(name, password, recovery);
+			PlayerAccountManager.AccountResponse resp = accountManager.createNewAccount(name, hash(password), recovery);
 			if (!resp.success())
 				return resp.error;
 			if (joinGame(name, password) != null)
