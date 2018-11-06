@@ -10,24 +10,27 @@ public class AccountEditWizard {
 
 	@FunctionalInterface
 	public static interface Action {
-		public void run();
+		public void run() throws java.lang.Exception;
 	}
 
 	protected abstract static class AccountWizardModule {
-		protected String moduleName;
+		protected String listName;
 		protected BufferedReader stdin;
+		protected PrintStream stdout;
 		protected GameObjectInterface obj;
 		protected String playerName;
 
-		public AccountWizardModule(BufferedReader stdin, GameObjectInterface obj, String playerName) {
+		public AccountWizardModule(BufferedReader stdin, PrintStream stdout, GameObjectInterface obj,
+				String playerName) {
 			this.stdin = stdin;
+			this.stdout = stdout;
 			this.obj = obj;
 			this.playerName = playerName;
 		}
 
-		public abstract void run();
+		public abstract void run() throws java.lang.Exception;
 
-		public abstract String getName();
+		public abstract String getListName();
 	}
 
 	public static class TextMenu {
@@ -72,7 +75,11 @@ public class AccountEditWizard {
 					continue;
 				} else if (option == count + 1)
 					break;
-				actions.get(option - 1).run();
+				try {
+					actions.get(option - 1).run();
+				} catch (Exception e) {
+					stdout.println("There was a problem casting this spell");
+				}
 			}
 		}
 
@@ -89,7 +96,6 @@ public class AccountEditWizard {
 	private ArrayList<AccountWizardModule> modules = new ArrayList<>();
 	private ArrayList<Class<?>> moduleClasses = new ArrayList<>();
 	{
-		moduleClasses.add(AccountEditWizardModules.ChangePasswordModule.class);
 	}
 
 	private BufferedReader stdin;
@@ -105,10 +111,12 @@ public class AccountEditWizard {
 		this.stdin = stdin;
 		this.obj = obj;
 		this.playerName = playerName;
+		this.stdout = System.out;
 
 		for (Class<?> c : moduleClasses) {
-			Constructor<?> con = c.getConstructor(BufferedReader.class, GameObjectInterface.class, String.class);
-			modules.add((AccountWizardModule) con.newInstance(stdin, obj, playerName));
+			Constructor<?> con = c.getConstructor(BufferedReader.class, PrintStream.class, GameObjectInterface.class,
+					String.class);
+			modules.add((AccountWizardModule) con.newInstance(stdin, stdout, obj, playerName));
 		}
 
 		this.printStream = new PrintStream(new OutputStream() {
@@ -124,11 +132,10 @@ public class AccountEditWizard {
 			System.out.println("Sorry, currently there are no spells this wizard can perform.");
 			return;
 		}
-		stdout = System.out;
 		System.setOut(printStream);
 		TextMenu mainMenu = new TextMenu("Account Edit Wizard", stdin, stdout);
 		for (AccountWizardModule m : modules)
-			mainMenu.add(m.getName(), m::run);
+			mainMenu.add(m.getListName(), m::run);
 		mainMenu.display();
 		leave();
 	}
@@ -138,6 +145,5 @@ public class AccountEditWizard {
 		stdout.println(bufferedString.toString());
 		bufferedString.setLength(0);
 		System.setOut(stdout);
-		stdout = null;
 	}
 }
