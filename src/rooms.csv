@@ -19,8 +19,8 @@ NORTH,100000,You head north, into the elevator.
 SOUTH,1,You try to head south, back to the Hallway.
 WEST,0,You tried heading west, there is nothing there.
 EAST,0,You head east into a room 7.
-100000,indoors,Elevator, You you can now go to your private room, type move north.
-NORTH,0,You are headed to your room through the north exit
+100000,indoors,Elevator, You can now go to your private room, type move north.
+NORTH,100001,You are headed to your room through the north exit
 SOUTH,4,You try to head back to the Hallway
 WEST,0,You tried heading west, there is nothing there.
 EAST,0,You tried heading, east there is nothing there.

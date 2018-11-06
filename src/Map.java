@@ -13,7 +13,7 @@ import java.util.Scanner;
  */
 
 public class Map{   
-        private final LinkedList<Room> map;
+        private LinkedList<Room> map;
 
         public Map(String worldFile) {
                 map = new LinkedList<>();
@@ -96,6 +96,10 @@ public class Map{
         return map.get(rand.nextInt(map.size()));
     }
     
+    public void addRoom(Room room) {
+    	
+    	map.add(room);
+    }
     /**
      * @author Group 4: King
      * Checks that room the player is contains a shop
