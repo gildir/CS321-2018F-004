@@ -2,7 +2,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
-import java.io.PrintWriter;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -29,10 +28,9 @@ public class AccountEditWizard {
 			this.playerName = playerName;
 		}
 
-		public abstract void run() throws Exception;
+		public abstract void run() throws java.lang.Exception;
 
 		public abstract String getListName();
-
 	}
 
 	public static class TextMenu {
@@ -112,9 +110,9 @@ public class AccountEditWizard {
 			throws NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException,
 			IllegalArgumentException, InvocationTargetException {
 		this.stdin = stdin;
-		this.stdout = System.out;
 		this.obj = obj;
 		this.playerName = playerName;
+		this.stdout = System.out;
 
 		for (Class<?> c : moduleClasses) {
 			Constructor<?> con = c.getConstructor(BufferedReader.class, PrintStream.class, GameObjectInterface.class,
@@ -148,6 +146,5 @@ public class AccountEditWizard {
 		stdout.println(bufferedString.toString());
 		bufferedString.setLength(0);
 		System.setOut(stdout);
-		stdout = null;
 	}
 }
