@@ -126,7 +126,7 @@ public class Map{
 	result += "   ______________________________________________\n";
 	result += "   |ASCII Map - Displaying rooms near you!      |\n";
 	result += "   | X = You  $ = Shop   # = Inside | = Outside |\n";
-	result += "   | G = Ghoul -+ = Exit -0 =  Exit to Off Map  |\n";
+	result += "   | G = Ghoul  -+ = Exit  -0 = Exit to Off Map |\n";
 	result += "   |                                            |\n";
 	result += "   |                                            |\n";
         result += "   |                                            |\n";
@@ -214,7 +214,7 @@ public class Map{
     private void setExits(int row, int col, Node[][] nodeArr,int roomId)
     {
 
-       if(roomId != 0 && row >= 0 && col >= 0 && row < nodeArr.length && col < nodeArr[0].length && nodeArr[row][col] == null)
+       if(roomId != 0 && row >= 0 && col >= 0 && row < nodeArr.length && col < nodeArr[0].length && nodeArr[row][col] == null && roomId < 100001)
 	       //Exit conditions: Out of bounds, already initialized, or no path into
        {
          // System.out.println("Setting exits for room [" + row + "][" + col + "]");
