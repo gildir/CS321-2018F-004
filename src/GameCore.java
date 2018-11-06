@@ -197,7 +197,7 @@ public class GameCore implements GameCoreInterface {
 		// random walk.
 		while (true) {
 			int roomID = candinateRoom[rand.nextInt(4)];
-			if (roomID != 0) {
+			if (roomID != 0 && roomID < 100001) {
 				g.setRoom(roomID);
 				return;
 			}
@@ -656,6 +656,7 @@ public class GameCore implements GameCoreInterface {
 			dorm.addExit(Direction.valueOf("SOUTH"),100000,"You go back to the elevator");
 			dorm.addExit(Direction.valueOf("WEST"),-100000,"You go back to the elevator");
 			this.map.addRoom(dorm);
+			if(player.getCurrentRoom() > 100000){player.setCurrentRoom(dormCountId);}
 			dormCountId++;
 
 			this.broadcast(player, player.getName() + " has arrived.");

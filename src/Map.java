@@ -93,7 +93,11 @@ public class Map{
 
     public Room randomRoom() {
         Random rand = new Random();
-        return map.get(rand.nextInt(map.size()));
+	Room ret = null;
+	do{
+        ret = map.get(rand.nextInt(map.size()));
+	}while(ret.getId() >= 100000);
+	return ret;
     }
     
     public void addRoom(Room room) {
