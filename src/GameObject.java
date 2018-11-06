@@ -2,11 +2,8 @@
 
 
 import java.io.PrintWriter;
-import java.nio.charset.StandardCharsets;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashSet;
 
@@ -100,8 +97,7 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
 	 * @throws RemoteException
 	 */
 	@Override
-	public Responses createAccountAndJoinGame(String name, String password, ArrayList<String> recovery)
-			throws RemoteException {
+	public Responses createAccountAndJoinGame(String name, String password, ArrayList<String> recovery) throws RemoteException {
 		return core.createAccountAndJoinGame(name, password, recovery);
 	}
 

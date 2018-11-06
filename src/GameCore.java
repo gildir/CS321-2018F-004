@@ -5,6 +5,9 @@ import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -686,8 +689,7 @@ public class GameCore implements GameCoreInterface {
 
 	public synchronized Responses createAccountAndJoinGame(String name, String password, ArrayList<String> recovery) {
 		synchronized (createAccountLock) {
-			password = hash(password);
-			PlayerAccountManager.AccountResponse resp = accountManager.createNewAccount(name, password, recovery);
+			PlayerAccountManager.AccountResponse resp = accountManager.createNewAccount(name, hash(password), recovery);
 			if (!resp.success())
 				return resp.error;
 			if (joinGame(name, password) != null)
