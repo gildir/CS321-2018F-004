@@ -1,11 +1,7 @@
-<<<<<<< HEAD
 import java.io.BufferedReader;
 import java.io.PrintStream;
 
-=======
->>>>>>> refs/heads/216_account_wizard
 public class AccountEditWizardModules {
-<<<<<<< HEAD
 	protected static class ChangePasswordModule extends AccountEditWizard.AccountWizardModule {
 
 		public ChangePasswordModule(BufferedReader stdin, PrintStream stdout, GameObjectInterface obj,
@@ -52,6 +48,4 @@ public class AccountEditWizardModules {
 			}
 		}
 	}
-=======
->>>>>>> refs/heads/216_account_wizard
 }
