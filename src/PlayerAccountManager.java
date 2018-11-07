@@ -47,13 +47,17 @@ public class PlayerAccountManager {
 	}
 
 	/**
+         * @param username Desired username for new account
+         * @param password Hashed password for account
 	 * @param recovery List of recovery questions and answers, ordered q1,a1,q2,a2,q3,a3
+         * @return AccountResponse with the given status
 	 */
 	public synchronized AccountResponse createNewAccount(String username, String password, ArrayList<String> recovery) {
-		String lower = username.toLowerCase();
+		String lower = username.toLowerCase().trim();
+                
 		if (accountExists(lower))
 			return new AccountResponse(Responses.USERNAME_TAKEN);
-		if (!lower.matches("^[a-zA-Z 0-9]+$"))
+		if (!lower.matches("^[a-zA-Z 0-9]{2,15}$"))
 			return new AccountResponse(Responses.BAD_USERNAME_FORMAT);
 		File userDir = new File(accountFolder.getAbsolutePath() + "/" + lower);
 		try {
