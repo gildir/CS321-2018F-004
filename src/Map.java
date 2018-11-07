@@ -1,87 +1,109 @@
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.w3c.dom.Document;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
+import java.util.Scanner;
 
 /**
- *
  * @author Kevin
  */
-public class Map {   
-    private final LinkedList<Room> map;
-    
-    public Map() {
-        map = new LinkedList<>();
-        try {
-            File mapFile = new File("./rooms.xml");
-            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-            Document document = dBuilder.parse(mapFile);
-            
-            document.getDocumentElement().normalize();
-            NodeList xmlRooms = document.getElementsByTagName("room");
-            NodeList xmlExits;
-            
-            String title, description;
-            String message;
-            int id, link;
-            Element roomElement;
-            Element exitElement;
-            Direction exitId;
-            
-            Room newRoom;
-            Exit newExit;
-            
-            for(int i = 0; i < xmlRooms.getLength(); i++) {
-                roomElement = (Element) xmlRooms.item(i);
-                
-                id = Integer.parseInt(roomElement.getAttribute("id"));
-                title = roomElement.getElementsByTagName("title").item(0).getTextContent();
-                description = roomElement.getElementsByTagName("description").item(0).getTextContent();
-                
-//                System.out.println("Adding Room " + id + " with Title " + title + ": " + description);
-                newRoom = new Room(id, title, description);
-                
-                xmlExits = roomElement.getElementsByTagName("exit");
-                for(int j = 0; j < xmlExits.getLength(); j++) {
-                    exitElement = (Element) xmlExits.item(j);
-                    
-                    exitId = Direction.valueOf(exitElement.getAttribute("id"));
-                    link = Integer.parseInt(exitElement.getElementsByTagName("link").item(0).getTextContent());
-                    message = exitElement.getElementsByTagName("message").item(0).getTextContent();
-//                    System.out.println("... Adding Exit " + exitId + " to " + link + ": " + message);
-                    newRoom.addExit(exitId, link, message);
-                }                
-                
-                map.add(newRoom);
-            }
-            
-        } catch (ParserConfigurationException | SAXException | IOException ex) {
-            Logger.getLogger(Map.class.getName()).log(Level.SEVERE, null, ex);
+
+public class Map{   
+        private final LinkedList<Room> map;
+
+        public Map(String worldFile) {
+                map = new LinkedList<>();
+                try {
+                        File mapFile = new File(worldFile);
+                        Scanner mapIn = new Scanner(mapFile).useDelimiter(",|\\n|\\r\\n");
+
+                        int numRooms, numExits;
+
+                        String title, description, room_type;
+                        String message;
+                        int id, link;
+
+                        Direction exitId;
+
+                        Room newRoom;
+                        Exit newExit;
+
+                        numRooms = Integer.parseInt(mapIn.nextLine());
+                        numExits = 4;
+
+                        for(int i = 0; i < numRooms; i++) {
+
+                                mapIn.useDelimiter(",|\\n|\\r\\n"); 
+                                id = Integer.parseInt(mapIn.next());
+                                room_type = mapIn.next();
+                                title = mapIn.next();
+                                mapIn.useDelimiter("\\S|\\s");
+                                mapIn.next();
+                                mapIn.useDelimiter("\\n|\\r\\n");
+                                description = mapIn.next();
+
+                                //                System.out.println("Adding Room " + id + " with Title " + title + ": " + description);
+
+
+                                if(id == 1){
+                                        LinkedList<String> quests = new LinkedList<>(Arrays.asList("quest1", "quest2", "quest3"));
+                                        newRoom = new Room(id, room_type, title, description, new LinkedList<>(Arrays.asList(
+                                                            new NPC("questNPC", 1, quests))));
+                                }
+                                else {
+                                        newRoom = new Room(id, room_type, title, description);
+                                }
+
+                                for(int j = 0; j < numExits; j++) {
+
+                                        mapIn.useDelimiter(",|\\n|\\r\\n");
+                                        exitId = Direction.valueOf(mapIn.next());
+                                        link = Integer.parseInt(mapIn.next());
+                                        mapIn.useDelimiter("\\S|\\s");
+                                        mapIn.next();
+                                        mapIn.useDelimiter("\\n|\\r\\n");
+                                        message = mapIn.next();
+
+                                        //                    System.out.println("... Adding Exit " + exitId + " to " + link + ": " + message);
+                                        newRoom.addExit(exitId, link, message);
+                                }                
+
+                                map.add(newRoom);
+                        }
+                        mapIn.close();
+                } catch (IOException ex) {
+                        Logger.getLogger(Map.class.getName()).log(Level.SEVERE, null, ex);
+                }
         }
-    }
-    
-    public Room findRoom(int roomId) {
-        for(Room room : this.map) {
-            if(room.getId() == roomId) {
-                return room;
-            }
+
+        public Room findRoom(int roomId) {
+                for(Room room : this.map) {
+                        if(room.getId() == roomId) {
+                                return room;
+                        }
+                }
+                return null;
         }
-        return null;
-    }
-    
+
     public Room randomRoom() {
         Random rand = new Random();
         return map.get(rand.nextInt(map.size()));
+    }
+    
+    /**
+     * @author Group 4: King
+     * Checks that room the player is contains a shop
+     * @param r The room in question
+     * @return true if it's a shoppable room, false otherwise
+     */
+    public boolean isShoppable(Room r) {
+    	if (r.getId() == 1) {	// Need to improve this if more shops are added
+    		return true;
+    	}
+    	return false;
     }
 }
