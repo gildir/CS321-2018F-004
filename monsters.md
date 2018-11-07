@@ -11,7 +11,7 @@ If the Ghoul stay in some room, any players can get an message *"THERE IS A GHOU
 In another case, if the Ghoul try to enter/leave some room, all players in this room can also get an message *"You see a Ghoul enter/leave this room"*.  
 
 *the following picture show what happened when the Ghoul enter/leave the room, and player try to look them when they stay in room*
-![The player saw Ghoul enter the room, and try to look it; then the Ghoul leave the room](./example.png)
+![The player saw Ghoul enter the room, and try to look it; then the Ghoul leave the room](./images/ghoul_readme_image.png)
 
 
 ## Ghoul guide for developers
@@ -51,7 +51,7 @@ This class already exist in the origin src code. We modified it.
 When a player moves to a new room, there is a small chance that a ghost will appear in that room. If a ghost appears, it will say something spooky/funny, then quickly disappear from the room.
 
 *The following picture shows what happens when a ghost appears in a room you enter.*
-![The ghost appears, says something spooky, then disappears.](./ghost_readme_image.png)
+![The ghost appears, says something spooky, then disappears.](./images/ghost_readme_image.png)
 
 ## Ghost Guide for Developers
 
@@ -92,7 +92,7 @@ A text file of ghoul interactions will be created when a player interacts with a
  
 - The method will be called from the GameCore class, within the method poke_ghoul. The message level identifiers will be SEVERE. The message that will be displayed in the log: "Player" + " " + playerName + " has just poked the Ghoul". 
 
-![example log](./log_example.png)	
+![example log](./images/ghoulLog_readme_image.png)
 
 
 
@@ -118,7 +118,7 @@ then drag them to the clock tower.
 Then, it will proceed to take a random item
 from the player's inventory, and lowers its anger by 1.
 
-Example from in game: ![Ghoul Anger Manipulation](./screenshotreadme.PNG)
+Example from in game: ![Ghoul Anger Manipulation](./images/ghoulAnger_readme_image.PNG)
 
 
 ## Contributors
