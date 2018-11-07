@@ -55,11 +55,8 @@ public class AccountEditWizard {
 		}
 
 		public void display() throws IOException {
-			for (int i = 0; i < this.name.length(); i++)
-				stdout.print("_");
-			stdout.println();
-			stdout.println(this.name);
 			while (true) {
+				printHeader();
 				printOptions();
 				stdout.print("> ");
 				String line = stdin.readLine().trim();
@@ -81,6 +78,13 @@ public class AccountEditWizard {
 					stdout.println("There was a problem casting this spell");
 				}
 			}
+		}
+
+		private void printHeader() {
+			for (int i = 0; i < this.name.length(); i++)
+				stdout.print("_");
+			stdout.println();
+			stdout.println(this.name);
 		}
 
 		private void printOptions() {
@@ -105,6 +109,7 @@ public class AccountEditWizard {
 	private PrintStream printStream;
 	private StringBuilder bufferedString = new StringBuilder();
 	private PrintStream stdout;
+	private TextMenu mainMenu;
 
 	public AccountEditWizard(BufferedReader stdin, GameObjectInterface obj, String playerName)
 			throws NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException,
@@ -126,6 +131,10 @@ public class AccountEditWizard {
 				bufferedString.append((char) arg0);
 			}
 		});
+
+		mainMenu = new TextMenu("Account Edit Wizard", stdin, stdout);
+		for (AccountWizardModule m : modules)
+			mainMenu.add(m.getListName(), m::run);
 	}
 
 	public void enter() throws IOException {
@@ -134,9 +143,6 @@ public class AccountEditWizard {
 			return;
 		}
 		System.setOut(printStream);
-		TextMenu mainMenu = new TextMenu("Account Edit Wizard", stdin, stdout);
-		for (AccountWizardModule m : modules)
-			mainMenu.add(m.getListName(), m::run);
 		mainMenu.display();
 		leave();
 	}
