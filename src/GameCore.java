@@ -438,6 +438,16 @@ public class GameCore implements GameCoreInterface {
 		Shop s = this.shoplist.get(new Integer(id));
 		return s.getObjects();
     }
+
+    /**
+     * Returns a Shop's "In Demand" inventory as a formatted string
+     * @param id The shop ID
+     * @return A formatted string representing the Shop's "In Demand" inventory
+     */
+    public String getShopDemInv(int id) {
+        Shop s = this.shoplist.get(new Integer(id));
+        return s.getObjectsInDemand();
+    }
     
     /**
      * Attempts to pick up all objects in the room. Will return a message on any success or failure.

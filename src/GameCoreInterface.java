@@ -221,6 +221,13 @@ public interface GameCoreInterface {
     public String getShopInv(int id);
 
     /**
+     * Returns a Shop's "In Demand" inventory as a formatted string
+     * @param id The shop ID
+     * @return A formatted string representing the Shop's "In Demand" inventory
+     */
+    public String getShopDemInv(int id);
+
+    /**
      * Returns a string representation of the offer statement.
      * @param srcName Name of player making offer
      * @param dstName Name of player receiving offer

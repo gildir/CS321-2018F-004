@@ -541,6 +541,15 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
     public String getShopInv(int id) throws RemoteException{
     	return core.getShopInv(id);
     }
+
+    /**
+     * Returns a Shop's "In Demand" inventory as a formatted string
+     * @param id The shop ID
+     * @return A formatted string representing the Shop's "In Demand" inventory
+     */
+    public String getShopDemInv(int id) throws RemoteException{
+        return core.getShopDemInv(id);
+    }
 	
 	/**
 	 * Delete a player's account.

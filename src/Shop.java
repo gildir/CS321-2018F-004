@@ -195,6 +195,61 @@ public class Shop
 		
 		return menu;
 	}
+
+	/**
+	 * @author Team 4: Alaqeel/Keesling
+	 * 
+	 * Iterates through the list of the objects and creates a table populated with object names and prices.
+	 * @return table of the objects
+	 */
+	public String getObjectsInDemand() {
+		
+		if (inventory.size() == 0) {
+			return "There aren't any items in Demand!\n";
+		}
+		
+		int itemLen = 15, countLen = 2, f1 = 3, f2 = 2, priceField = f1 + f2 + 2;
+		int menuWidth = itemLen + countLen + f1 + f2 + 6 + 2; // 6 = column padding, 2 = currency + decimal point
+		
+		// String formats for consistency
+		String format = "%-" + countLen +"s | %-" + itemLen + "s | $%-" + f1 + "." + f2 + "f\n";
+		String headerFormat = "%-" + countLen +"s | %-" + itemLen + "s | %-" + priceField + "s\n";
+		
+		// generates menu separator
+		String separator = "";
+		for (int s = 0; s < menuWidth; s++) separator += "-";
+		
+		
+		// menu header
+		String menu = "We sell:\n";
+		menu += "...................\n";
+		menu += String.format(headerFormat, "#", "Item", "Price");
+		
+		menu += separator + "\n";
+		
+		// adding menu items
+		int i = 1;
+		for (Item obj : inventory) {
+			double price = obj.price; // TODO: replace with price getter
+			
+			if (this.inDemand.contains(obj)) price *= 1.2; // change price according to demand list
+			String item = obj.toString();
+			
+			// handles items with long names
+			if (item.length() > itemLen) {
+				menu += String.format(format, i++, item.substring(0,itemLen), price);
+				for (int j = 1; j <= item.length() % 15; j--) {
+					menu += String.format(format, "", item.substring((itemLen*j)+1 ,itemLen*(j+1)), "");
+				}
+			}
+			// names that aren't long
+			else menu += String.format(format, i++, item, price);
+		}
+		
+		menu += separator + "\n";
+		
+		return menu;
+	}
 	
 	/**
 	 * @author Team 4: Alaqeel

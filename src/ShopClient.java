@@ -104,7 +104,7 @@ public class ShopClient {
             case "D":
             case "DEM":
             case "DEMAND":
-            	System.out.println("Method not yet in use");
+            	System.out.println(this.getDemInv());
             	break;
             	
             case "Q":
@@ -145,4 +145,8 @@ public class ShopClient {
 	public String getInv() throws RemoteException{
 		return remote.getShopInv(this.id);
 	}
+
+    public String getDemInv() throws RemoteException{
+        return remote.getShopDemInv(this.id);
+    }
 }
