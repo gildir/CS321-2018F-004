@@ -2,7 +2,7 @@ import java.io.BufferedReader;
 import java.io.PrintStream;
 
 public class AccountEditWizardModules {
-	protected static class ChangePasswordModule extends AccountEditWizard.AccountWizardModule {
+	protected static class ChangePasswordModule extends Wizard.WizardModule {
 
 		public ChangePasswordModule(BufferedReader stdin, PrintStream stdout, GameObjectInterface obj,
 				String playerName) {
