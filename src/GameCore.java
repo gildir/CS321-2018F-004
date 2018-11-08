@@ -1586,30 +1586,40 @@ public class GameCore implements GameCoreInterface {
 	}
 	
 	/**
-	 * Returns a message showing all online friends
-	 * 
-	 * @param Player name
+	 * returns a message showing all online friends
+         * @param name name of player requesting list of friends
+         * @param onlineOnly true if you only want a list of online friends, else false.
 	 * @return Message showing online friends
 	 */
 	@Override
-	public String viewOnlineFriends(String name) {
+	public String viewFriends(String name, boolean onlineOnly) {
 
-		String message = "Your friends that are currently online: \n"; // This is the first part of the message
+                StringBuilder message = new StringBuilder();
 
 		// get list of friends from FriendsManager
 		HashSet<String> flist = this.friendsManager.getMyAdded().get(name.toLowerCase());
 		if (flist == null) {
-			message += "You don't have any.\n";
-			return message;
+			message.append("You don't have any friends...\n");
+			return message.toString();
 		}
 
-		// find online friends using flit and findPlayer from playerList
-		for (String str : flist) {
-			Player p;
-			if ((p = this.playerList.findPlayer(str)) != null)
-				message += "  " + p.getName() + "\n";
-		}
-		return message;
+                if(onlineOnly){
+                    message.append("Online friends: \n"); // This is the first part of the message
+                    // find online friends using flit and findPlayer from playerList
+                    flist.forEach((str) -> {
+                        Player p;
+                    if ((p = this.playerList.findPlayer(str)) != null) {
+                        message.append("  ").append(p.getName()).append("\n");
+                    }
+                });
+                }else{
+                    message.append("All friends: \n"); // This is the first part of the message
+                    flist.forEach((str) -> {
+                        message.append("  ").append(str).append("\n");
+                    });
+                }
+                
+		return message.toString();
 	}
 
     @Override
