@@ -141,6 +141,44 @@ public class GameCore implements GameCoreInterface {
                  hbThread.setDaemon(true);
                  hbThread.setName("heartbeatChecker");
                  hbThread.start();
+				 
+				// Thread that controls the random appearance of spirits in the map
+				Thread spiritThread = new Thread(new Runnable() {
+					@Override
+					public void run() {
+						Random rand = new Random();
+						Room room = map.randomRoom();
+						String spirit = null;
+						
+						ArrayList<String> spirits = new ArrayList<String>();
+						//Add all spirit types here: ex: happy, sad, scary, etc.
+						spirits.add("test");
+						
+						while(true) {
+							try {
+								//A random spirit will appear in a random room every 20-30 seconds
+								Thread.sleep(20000 + rand.nextInt(10000));
+								
+								
+								//remove previously spawned spirit
+								if(spirit!=null) GameCore.this.broadcast(room, "The " + spirit + " spirit has disappeared.");
+								room.removeSpirit();
+								
+								//add new spirit to random room
+								spirit = spirits.get(rand.nextInt(spirits.size()));
+								room = map.randomRoom();
+								room.addSpirit(spirit);
+								GameCore.this.broadcast(room, "A " + spirit + " spirit has appeared in the room.");
+						
+							} catch (InterruptedException ex) {
+								Logger.getLogger(GameObject.class.getName()).log(Level.SEVERE, null, ex);
+							}
+						}
+					}
+				});
+				spiritThread.setDaemon(true);
+				spiritThread.setName("spiritThread");
+				spiritThread.start();
         
                 // new thread awake and control the action of Ghoul.
                 // team5 added in 10/13/2018
