@@ -1593,31 +1593,40 @@ public class GameCore implements GameCoreInterface {
 	 */
 	@Override
 	public String viewFriends(String name, boolean onlineOnly) {
-
                 StringBuilder message = new StringBuilder();
+		
 
 		// get list of friends from FriendsManager
 		HashSet<String> flist = this.friendsManager.getMyAdded().get(name.toLowerCase());
-		if (flist == null) {
-			message.append("You don't have any friends...\n");
-			return message.toString();
-		}
+		if (flist == null) 
+			return "You don't have any friends....\n";
+		
 
-                if(onlineOnly){
-                    message.append("Online friends: \n"); // This is the first part of the message
-                    // find online friends using flit and findPlayer from playerList
-                    flist.forEach((str) -> {
-                        Player p;
+		// find online friends using flit and findPlayer from playerList
+                HashSet<String> online = new HashSet<>();
+                flist.forEach((str) -> {
+                    Player p;
                     if ((p = this.playerList.findPlayer(str)) != null) {
-                        message.append("  ").append(p.getName()).append("\n");
+                        online.add(str);
                     }
                 });
-                }else{
-                    message.append("All friends: \n"); // This is the first part of the message
-                    flist.forEach((str) -> {
-                        message.append("  ").append(str).append("\n");
-                    });
+                
+                if(!online.isEmpty()){
+                    message.append("Online friends:\n");
+                    online.forEach(str -> message.append("  ").append(str).append("\n"));
                 }
+                
+                //list all offline friends, if needed
+                if(!onlineOnly){
+                    flist.removeAll(online);
+                    if(!flist.isEmpty()){
+                        message.append("Offline friends:\n");
+                        flist.forEach(str -> message.append("  ").append(str).append("\n"));
+                    }
+                }
+                
+                if(onlineOnly && online.isEmpty())
+                    message.append("You have no online friends.");
                 
 		return message.toString();
 	}
