@@ -254,6 +254,13 @@ public interface GameCoreInterface {
     public String shout(String name, String message);
 
     /**
+     * In game ASCII map
+     * Returns an ascii representation of nearby rooms
+     * @param name Name of the player
+     * @return String representation of the map
+     */
+    public String showMap(String name);
+     /*
      * Delete a player's account.
      *
      * @param name Name of the player to be deleted

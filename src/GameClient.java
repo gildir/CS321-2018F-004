@@ -546,6 +546,9 @@ public class GameClient {
                 case "CUSTOMHELP":
                     showCustomCommands();
                     break;
+		case "MAP":
+                    System.out.println(remoteGameInterface.showMap(this.playerName));
+		    break;
                 case "CHALLENGE":
                     if(tokens.isEmpty()){
                       System.err.println("You need to provide a name.");

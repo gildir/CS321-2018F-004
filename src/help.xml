@@ -117,6 +117,9 @@ object are on the ground and what direction you are facing.
     <help command = "ONLINE">
         <description>  ONLINE                   - Display a list of all online players.</description>
     </help>
+    <help command = "MAP">
+	    <description>  MAP			- Displays a map of nearby rooms.</description>
+    </help>
     <help command = "FRIENDS">
         <description>  FRIENDS                   - Displays friend subcommand list.</description>
     </help>
