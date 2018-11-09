@@ -7,7 +7,7 @@ Players no longer have a direction field. In order to move, they instead indicat
 ##### For Users:
 You no longer have a direction. Simply move by saying move north. This is case insensitive, and you can use NESW for directions if you want. Check the image for an example.
 
-![Image](images/Team8_redoExample.png)
+![Image](../images/Team8_redoExample.png)
 
 
 ## System Utilities(Patrick Veland)
@@ -15,14 +15,14 @@ You no longer have a direction. Simply move by saying move north. This is case i
 ### Help Command: 
 Previously, the player was only shown the list of commands once at the time of their login or character creation. A “HELP” command has been added in order to provide the player with the opportunity to display what commands are possible within the confines of the game. The HELP command calls the showCommand() function which reads from an XML file containing every command possible. This was done so that if the command list changes or needs to be updated, a server reboot is not required, as all is required is an edit of the XML file. The XML file also contains the message that is displayed once a player has started running runClientLocal.sh. This message was taken out of the main code base for the same reason as the commands: so that if any edits to the message must be made, the server does not have to reboot. GameClient.java contains the code for opening and reading the XML file.
 
-![Image](images/Team8_xmlExample.PNG)
+![Image](../images/Team8_xmlExample.PNG)
 Part of the help.xml file which contains a  list of all commands as well as the introduction message
 
 
 ### Logging Functionality:
 A DailyLogger class was created and added to the code base to serve the basic function of logging every user command that has been done on the server. This is so that if an error occurs, there is a clear log of what the player was doing right before their game crashed. The DailyLogger and its instantiation create a text file with the name “log (current date).” The log is set to track all user commands for the day, so if the server reboots on the same day it first booted, the log of user commands will go into the existing log. Currently, DailyLogger tracks user commands in the following fashion: “[timestamp] - [player name] used command [command] @ [location].” In the future, DailyLogger can track more server functions, but currently it only tracks the commands that users enter. The logs created by DailyLogger are stored in the /logs/ folder it creates.
 
-![Image](images/Team8_ServerLogExample.PNG)
+![Image](../images/Team8_ServerLogExample.PNG)
 Example log file showing basic commands as well as login, logout, and server boot information
 
 
@@ -45,7 +45,7 @@ Custom command has been added to the game. Custom command allows players to bind
 
 “CUSTOMHELP” command when they wish to remove command they have configured in the past.
 
-![Image](images/Team8_CustomCommandExample.png)
+![Image](../images/Team8_CustomCommandExample.png)
 
 
 ### Redo and help command:
@@ -130,7 +130,7 @@ The three whiteboard commands are:
 
 ### Example Interaction with whiteboard
 
-![Image](images/Team8_WhiteboardExample.png)
+![Image](../images/Team8_WhiteboardExample.png)
 
 ## General Fixes(Kamuran Keyimu)
 
@@ -140,4 +140,4 @@ There are fixes that are made to the code base to improve the experience of the 
 
 The help command fixes the most important error which was whenever a wrong value is entered, the game crashes. It fixes it and gives the command for help command which prints all the commands. The typo fix is minor but still improves the experience for the players. The fix is done simply by adding a default case for the main switcher statement.
 
-![Image](images/Team8_helpCommandSample.PNG)
+![Image](../images/Team8_helpCommandSample.PNG)

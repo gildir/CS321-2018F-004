@@ -10,8 +10,8 @@ After users have enter into a game, users can see a list of commands. To play ro
 
 One important note is that when you want to challenge someone to a rock, paper, scissors, you both need to be in the same room or else it would return a message saying that the person you challenged is not in the same room as you. Another note is that when using command "pick", the only option users can enter is rock, paper, or scissors. The basic R-P-S rules applies to this game, which means rock beats scissors, scissors beats paper, and paper beats rock. Here is an example of Vyann challenging Hannah to rock, paper, scissors:
 
-![RPS Screenshot1](images/VyannScreenshot1.png)
-![RPS Screenshot2](images/VyannScreenshot2.png)
+![RPS Screenshot1](../images/VyannScreenshot1.png)
+![RPS Screenshot2](../images/VyannScreenshot2.png)
 
 #### As a Developer:
 When the user enter the command "challenge", "accept", "reject", or "pick", the following methods in GameObject are being call on the client's side:
@@ -36,7 +36,7 @@ Each player in the game will be given a ranking based on their R-P-S battles. Th
 
 Player ranking will continuously update after every R-P-S battle to ensure accuracy in their respective ranking and title. All players who aren't in the top 10 will have the title of "Casual", the list of the top 10 titles are the following:
 
-![RPS Screenshot3](images/AhmedScreenshot1.png)
+![RPS Screenshot3](../images/AhmedScreenshot1.png)
 
 #### For Developers:
 The commands "top10", "rank", and "listAllPlayers" will come from the GameObject file in their respective methods. The methods will relay the information about the players to the GameCore file that will produce the information about the players to the GameCore file that will produce the information the player is asking. The calculation for each players R-P-S score will use the following formula: **(win/(1+loss) x totalGames)**. The results of every R-P-S will be stored in a log file in order to calculate players R-P-S scores. This way to ensure someone who only played and won a single game of R-P-S doesn't receive the first place title against someone who has played and won more games. The rankings of the top 10 will be shown even if the users are offline. 
@@ -45,7 +45,7 @@ The commands "top10", "rank", and "listAllPlayers" will come from the GameObject
 #### For Users:
 Challenges are items that can be used to start a R-P-S battle. Players can have up to 10 challenges at a time. 1 challenge is restored automatically every five minutes. Challenges will only be deducted from the player's inventory if the challengee accepts the challenge. When a player enters the command "inventory" the following will be shown:
 
-![RPS Screenshot4](images/HannahScreenshot1.png)
+![RPS Screenshot4](../images/HannahScreenshot1.png)
 
 The number of challenges left will be displayed as a fraction over 10. The rest of the items will be displayed below.
 
@@ -56,7 +56,7 @@ The command "inventory" calls the following method from GameObject on the client
 #### For Users:
 The user should know nothing about the files related to the game, but the Users interactions with files related to R-P-S include the files required to run the R-P-S battles but also the ranking system. The user will be able to get his own ranking to see how well he is doing compared to other R-P-S players as well as the best top 10 players to see who is winning the most right now.
 
-![RPS Screenshot5](images/JimmyScreenshot1.png)
+![RPS Screenshot5](../images/JimmyScreenshot1.png)
 
 #### For Developers:
 When the users enter commands such as “challenge”, “accept”, “reject”, “teach”, and “pick” are entered GameClient.java processes the perspective methods and checks to see for certain conditions from Player.java are set such as being able to accept only one challenge at a time. the methods from GameObjects.java are called from the client side and then from there the method will go to the server side and call the perspective methods from GameCore.java. Depending on the following methods, Player.java will be checked for attributes it holds to see if those commands are valid. Then from there GameCore.java will print information based on the command given. This is how all the files GameCore.java, GameObject.java, GameClient.java, and Player.java all work together to run R-P-S. The other files involved in R-P-S will include the recording files that include a record of all the R-P-S battles to see if there is any issues. This also includes ranking the R-P-S battles.

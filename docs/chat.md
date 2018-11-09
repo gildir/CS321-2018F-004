@@ -4,7 +4,7 @@
 
 Example chat log:
 
-![](images/chatlog.png)
+![](../images/chatlog.png)
 ### Dev:
 > The chat log functionality is handled within the GameCore class. The constructor creates a PrintWriter object with a new file called chatlog.txt and closes the PrintWriter. Every time a message is logged, the chatlog.txt file is opened with a new PrintWriter object, written to, and closed. This process is handled within the chatLog(Player player, int chatType, String message, String target) method in GameCore and ensures that the file is updated properly while the game server is running. The chatLog(Player player, int chatType, String message, String target) method in GameCore is called in the say(String name, String message), whisper(String srcName, String dstName, String message), and shout(String name, String message) methods in GameCore.
 
@@ -29,7 +29,7 @@ R hello world!
 ### Dev:
 > The show players command is called from the GameCore.java file, using remoteGameInterface in the GameClient.java file. The code uses a StringBuilder object to generate the list of online players, appending a new line after each player name. It is called within the switch case for ONLINE within the GameClient.java file and access the PlayerList class within GameCore.java to access the name of each player. The method showPlayers() has no parameters, but the StringBuilder within the showPlayers() method can be edited by anyone to format the list of players in a better fashion (for example, alphabetizing or creating a more organized list), at the developer's discretion.
 
-![](images/showplayers.png)
+![](../images/showplayers.png)
 
 ## Ignore - Reed
 
@@ -51,7 +51,7 @@ Command: IgnoreList
 
 >The only argument needed for this command to function properly is, the current players name so that the list of ignored players can be displayed. This list of ignored players is located in the Player class.
 
-![](images/ignorelist.png)
+![](../images/ignorelist.png)
 
 ## Unignore - Carl
 
@@ -71,7 +71,7 @@ Command: Unignore [player to unignore]
 ### Dev:
 > The joke command is called from the GameCore.java file, using remoteGameInterface in the GameClient.java file. The code uses the File, ArrayList, Random, and Scanner objects in order to read in the text file of jokes. The file is read using the Scanner, and after each new line, the jokes are placed into an ArrayList<String> named joke. From there, the Scanner closes and the Random object randomly selects a joke from the ArrayList<String> joke. Finally, in the GameClient.java file, the method joke(String filename) is called through the RemoteGameInterface.say() method, using remoteGameInterface.joke("jokes.txt") as a parameter for the message to be said by the user inputting the joke command. This call to remoteGameInterface.say() is carried out in a switch statement case for "JOKE" within the GameClient.java switch statement.
   
-![](images/joke.png)
+![](../images/joke.png)
 
 ## Shout - Carl
 
@@ -92,7 +92,7 @@ Command: Shout [message]
 ### Dev:
 > Words are read from a file for each user by the GameClient class, and added to a HashSet of String objects contained within the Player class instance associated with that user. The user's player instance then parses each message (say, whisper, shout, etc) word by word. If one of the words in a message being parsed is found to also be contained in the Filtered Words Hashset, that word is replaced with a bleep string ("[BLEEEP]") in a new message that is presented to the user instead of the original. 
   
-![](images/gitpic.jpg)
+![](../images/gitpic.jpg)
 
 
 
@@ -119,7 +119,7 @@ or
 
 Example of ignored me:
 
-![](images/IgnoredMe.png)
+![](../images/IgnoredMe.png)
 
 ### Dev:
 > The Ignored Me feature is checked in GameCore.whisper. When it is found that a player is ignoring the whisperer, the whisper operation ends and returns an appropriate message to the whisperer.
