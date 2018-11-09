@@ -288,6 +288,14 @@ public interface GameObjectInterface extends Remote {
      */
     public int shop(String name) throws RemoteException;
     
+    
+    /**
+     * updates the playlist in the Shop
+     * @param name Name of the player
+     * @return 
+     * @return void
+     */
+    public void shopLeft(String name) throws RemoteException;
     /**
      * Returns a player object when given the player's name
      * @param name The name of the player to find
