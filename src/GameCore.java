@@ -423,7 +423,7 @@ public class GameCore implements GameCoreInterface {
                 return Venmo.accept(player1, tokens.remove(0));
 			case "REJECT": // rejecting a transaction
                 if (tokens.isEmpty()) return "Enter the transaction ID. Type \"venmo help\" to learn more.";
-                return Venmo.accept(player1, tokens.remove(0));
+                return Venmo.reject(player1, tokens.remove(0));
 			case "LIST": // listing pending transactions
 			    return Venmo.list(player1);
 			case "HELP": // prints the help menu
