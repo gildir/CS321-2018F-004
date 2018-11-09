@@ -27,6 +27,7 @@ import java.util.logging.StreamHandler;
  * @author Kevin
  */
 public class GameCore implements GameCoreInterface {
+	private int dormCountId;
     private final PlayerList playerList;
     private final Map map;
     protected DailyLogger dailyLogger;
@@ -59,7 +60,7 @@ public class GameCore implements GameCoreInterface {
         this.dailyLogger = new DailyLogger();
         dailyLogger.write("SERVER STARTED");
         playerList = new PlayerList(); 
-        
+        dormCountId = 100002;//used for dormroom initialization
         // Builds a list of shops mapped to their map id (can be expanded as needed)
         shoplist = new HashMap<Integer,Shop>();
         shoplist.put(new Integer(1), new Shop("Clocktower shop", "The shopping destination for all of your gaming needs."));
@@ -196,7 +197,7 @@ public class GameCore implements GameCoreInterface {
 		// random walk.
 		while (true) {
 			int roomID = candinateRoom[rand.nextInt(4)];
-			if (roomID != 0) {
+			if (roomID != 0 && roomID < 100001) {
 				g.setRoom(roomID);
 				return;
 			}
@@ -648,6 +649,15 @@ public class GameCore implements GameCoreInterface {
 				return null;
 			player = resp.player;
 			this.playerList.addPlayer(player);
+			player.setDormId(dormCountId);
+			DormRoom dorm = new DormRoom(dormCountId,"inside","Dorm Room","Your very own, personal dorm room!");
+			dorm.addExit(Direction.valueOf("NORTH"),-100000,"You go back to the elevator");
+			dorm.addExit(Direction.valueOf("EAST"),-100000,"You go back to the elevator");
+			dorm.addExit(Direction.valueOf("SOUTH"),100000,"You go back to the elevator");
+			dorm.addExit(Direction.valueOf("WEST"),-100000,"You go back to the elevator");
+			this.map.addRoom(dorm);
+			if(player.getCurrentRoom() > 100000){player.setCurrentRoom(dormCountId);}
+			dormCountId++;
 
 			this.broadcast(player, player.getName() + " has arrived.");
 			connectionLog(true, player.getName());
@@ -854,7 +864,14 @@ public class GameCore implements GameCoreInterface {
         if(room.canExit(direction)) {
             this.broadcast(player, player.getName() + " has walked off to the " + direction);
             player.getReplyWriter().println(room.exitMessage(direction));
+            if(room.getLink(direction) == 100001)
+            {
+            	player.setCurrentRoom(player.getDormId());
+            }
+            else
+            {
             player.setCurrentRoom(room.getLink(direction));
+            }
             String logMessage = String.format("%s used command MOVE %s [moved from %s to %s]", player.getName(), direction.toString(), room.getTitle(), map.findRoom(player.getCurrentRoom()).getTitle());
 			this.broadcast(player, player.getName() + " just walked into the area.");
 			Ghost g = new Ghost(player);
