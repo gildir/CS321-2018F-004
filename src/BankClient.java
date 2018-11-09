@@ -48,7 +48,7 @@ public class BankClient {
 	}
 	
 	private void printMenu() {
-		String ln = "+----------------------------------------+\n";
+		String ln = "+-----------------------------------------+\n";
 		System.out.println(
 				ln +
 				"|  Welcome to the Patriot Center Bank!    |\n" +

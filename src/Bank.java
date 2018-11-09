@@ -14,6 +14,7 @@ import java.util.HashMap;
 public class Bank {
 	private HashMap<String, HashMap<String, Object>> ledger;
 	private String lastCheckin = "lastCheckin", money = "money"; // Keys used in the ledger
+	private static long fiveMins = 300000;
 	
 	public Bank() {
 		this.ledger = new HashMap<String, HashMap<String, Object>>();
@@ -103,14 +104,20 @@ public class Bank {
 		long currentTime = System.currentTimeMillis();
 		long timePassed = currentTime - (long) account.get(lastCheckin);
 		
-		// A = P(1 + r)^n
-		interest = principal * (Math.pow((1 + 0.0001), timePassed/300000));
+		int incriments = (int) (timePassed/fiveMins); // Truncates down
 		
-		// Update ledger
-		account.put(money, interest);
-		account.put(lastCheckin, currentTime);
+		if (incriments > 0) {
+			// A = P(1 + r)^n
+			interest = principal * (Math.pow((1 + 0.0001), incriments));
 		
-		return interest - principal;
+			// Update ledger
+			account.put(money, interest);
+			long updated = (Long) account.get(lastCheckin) + (incriments*fiveMins);
+			account.put(lastCheckin, updated);
+			
+			return interest - principal;
+		}
+		return 0;
 	}
 	
 	/**
