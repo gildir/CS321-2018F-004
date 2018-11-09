@@ -32,6 +32,7 @@ public class GameCore implements GameCoreInterface {
     private HashMap<Integer,Shop> shoplist;
     private Ghoul ghoul;
     private PrintWriter pw;
+    private Bank bank;
 
 	// Accounts and Login
 	private final PlayerAccountManager accountManager;
@@ -62,11 +63,10 @@ public class GameCore implements GameCoreInterface {
         // Builds a list of shops mapped to their map id (can be expanded as needed)
         shoplist = new HashMap<Integer,Shop>();
         shoplist.put(new Integer(1), new Shop("Clocktower shop", "The shopping destination for all of your gaming needs."));
-        
-        // Builds a list of shops mapped to their map id (can be expanded as needed)
-        shoplist = new HashMap<Integer,Shop>();
-        shoplist.put(new Integer(1), new Shop("Clocktower shop", "The shopping destination for all of your gaming needs."));
 
+        // Set up empty central bank
+        bank = new Bank();
+        
         pw = new PrintWriter(new FileWriter("chatlog.txt"));
         pw.flush();
         pw.close();
@@ -201,7 +201,76 @@ public class GameCore implements GameCoreInterface {
 		}
     }
     
-      
+
+    /**
+     * @author Group 4: King
+     * If player is in an area that allows it, they may enter a bank and save/withdraw money
+     * @param name 
+     * @return the id of the bank they have entered
+     */
+    public int bank(String name) {
+    	Player player = this.playerList.findPlayer(name);
+    	Room room = map.findRoom(player.getCurrentRoom());
+    	
+    	if (map.isShoppable(room)) { // For now we will make shop rooms also banks: subject to change
+    		return room.getId();
+    	}
+    	return -1;
+    }
+    
+    /**
+     * Gives the central bank object commands (implimented like this for maximum encapsulation)
+     * @param cmd The id of the command to be used (mapped in the BankClient class)
+     * @param name The name of the user interacting with the Bank
+     * @param args Any extra arguments that may need to be sent to the command
+     * @return A string based on the success or failure of the command
+     */
+    public String bankCmdRunner(String cmd, String name, String args) {
+		//parse arguments
+    	String tokens[] = args.split("\\s+");
+    	Player player = this.playerList.findPlayer(name);
+    	double value;
+    	
+    	switch (cmd) {
+			case "deposit":
+			// Expects a double for how much player deposits
+				value = Double.parseDouble(tokens[0]);
+				double playerMoney = player.getMoney();
+				
+				if (value < 0) {
+					return "Surprisingly, this is the only place in college you can't put yourself in debt";
+				}
+				
+				else if (value == 0) {
+					return "The teller looks at your deposit slip for $0.00 and frowns. She's not amused";
+				}
+				
+				else if (playerMoney >= value) {
+					player.setMoney(player.getMoney() - value);
+					double newBalance = bank.deposit(name, value);
+					return String.format("New account balance: $%.2f", newBalance);
+				} else {
+					return String.format("You don't have enough money to deposit $%.2f", value);
+				}
+			
+			case "withdraw":
+			// Expects a double for how much player withdraws 
+				value = Double.parseDouble(tokens[0]);
+				
+				if(bank.canWithdraw(name, value)) {
+					player.setMoney(player.getMoney() + value);
+					return 	bank.withdraw(name, Long.parseLong(tokens[0])) + 
+							String.format("\nNew wallet balance: $%.2f", player.getMoney());
+				} else {
+					return "You don't have enough money in your account";
+				}
+				
+			case "printAccount":
+				return bank.printAccount(name);	
+		}
+    	
+    	return "";
+    }
     
     /**
      * @author Group 4: King
@@ -219,8 +288,6 @@ public class GameCore implements GameCoreInterface {
     	}
     	return -1;
     }
-    
-
 
     /**
      * Returns Shop.tostring
@@ -253,8 +320,7 @@ public class GameCore implements GameCoreInterface {
     	//int value = removed.getValue();
     	return value;
     }
-
-
+    
 	public String bribeGhoul(String playerName, String item){
 		item = item.toLowerCase();
 		Player player = playerList.findPlayer(playerName);
