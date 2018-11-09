@@ -74,6 +74,10 @@ public class Room {
 		return (this.spirit == null) ? ("None.") : (this.spirit + " spirit.");
 	}
 	
+	public boolean hasSpirit() {
+		return this.spirit != null;
+	}
+	
     public int getId() {
         return this.id;
     }

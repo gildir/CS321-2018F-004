@@ -440,6 +440,9 @@ public class GameClient {
                         System.out.println(remoteGameInterface.bribeGhoul(this.playerName, tokens.remove(0)));
 		    }
 		break;
+		case "CAPTURE":
+			System.out.println(remoteGameInterface.capture(this.playerName));
+			break;
 		case "DROP":
                     if(tokens.isEmpty()) {
                         System.err.println("You need to provide an object to drop.");

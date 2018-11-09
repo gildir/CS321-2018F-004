@@ -161,8 +161,10 @@ public class GameCore implements GameCoreInterface {
 								
 								
 								//remove previously spawned spirit
-								if(spirit!=null) GameCore.this.broadcast(room, "The " + spirit + " spirit has disappeared.");
-								room.removeSpirit();
+								if(room.hasSpirit()) {
+									GameCore.this.broadcast(room, "The " + spirit + " spirit has disappeared.");
+									room.removeSpirit();
+								}
 								
 								//add new spirit to random room
 								spirit = spirits.get(rand.nextInt(spirits.size()));
@@ -292,7 +294,12 @@ public class GameCore implements GameCoreInterface {
     	return value;
     }
 
-
+	/**
+	 * Bribe the ghoul in the current room
+	 * @param playerName Player name
+	 * @param item item's name, which will be throw. 
+	 * @return String message of ghoul
+	 */
 	public String bribeGhoul(String playerName, String item){
 		item = item.toLowerCase();
 		Player player = playerList.findPlayer(playerName);
@@ -341,6 +348,11 @@ public class GameCore implements GameCoreInterface {
 
 	}
 
+	/**
+	 * Pokes the ghoul in the current room
+	 * @param playerName Player name
+	 * @return String message of ghoul
+	 */
 	public String pokeGhoul(String playerName) {
 		Player player = playerList.findPlayer(playerName);
 		Room room = this.map.findRoom(player.getCurrentRoom());
@@ -367,6 +379,28 @@ public class GameCore implements GameCoreInterface {
 		} else {
 			return null;
 		}}
+
+	/**
+	 * Captures the spirit in the current room
+	 * @param playerName Player name
+	 * @return String message of spirit capture success or failure
+	 */
+	public String capture(String playerName) {
+		Player player = playerList.findPlayer(playerName);
+		Room room = this.map.findRoom(player.getCurrentRoom());
+		
+		if(player != null) {
+			if(!room.hasSpirit()) {
+				return "There is no spirit in this room.";
+			}
+			String curSpirit = room.getSpirit();
+			room.removeSpirit();
+			return "You have captured a " + curSpirit;
+		} else {
+			return null;
+		}
+	}
+		
     /**
      * 605B_buy_method
      * Allows player to sell an item to a shop, and increases their money

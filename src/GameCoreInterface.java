@@ -20,6 +20,13 @@ public interface GameCoreInterface {
 	 */
 	public String pokeGhoul(String playerName);
 	
+	/**
+	 * Captures the spirit in the current room
+	 * @param playerName Player name
+	 * @return String message of spirit capture success or failure
+	 */
+	public String capture(String playerName);
+	
 
 	/**
 	 * Bribe the ghoul in the current room
