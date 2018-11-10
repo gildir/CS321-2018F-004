@@ -1597,11 +1597,14 @@ public class GameCore implements GameCoreInterface {
 		
 
 		// get list of friends from FriendsManager
-		HashSet<String> flist = this.friendsManager.getMyAdded().get(name.toLowerCase());
-		if (flist == null) 
+                HashSet<String> fullList = this.friendsManager.getMyAdded().get(name.toLowerCase());
+                
+                if (fullList == null) 
 			return "You don't have any friends....\n";
+                
+		HashSet<String> flist = new HashSet<>();
+                flist.addAll(fullList);
 		
-
 		// find online friends using flit and findPlayer from playerList
                 HashSet<String> online = new HashSet<>();
                 flist.forEach((str) -> {
