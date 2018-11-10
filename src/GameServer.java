@@ -9,6 +9,7 @@ import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.Date;
 
 /**
  *
@@ -25,6 +26,11 @@ public class GameServer {
     
 // ----- NON-RMI RELATED MEMBERS ------------    
     private Thread gameThread;
+    private static Date date = new Date();
+    
+    public static Date getDate() {
+        return date;
+    }
     
     /**
      * Main game server class.  
