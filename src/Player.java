@@ -38,13 +38,16 @@ public class Player {
     private boolean hasOption = false;
     @JsonProperty("recovery")
     private ArrayList<String> recovery;
+    @JsonProperty("accountAge")
+    private final long accountAge;
     
     
-	public Player(@JsonProperty("name") String name, @JsonProperty("recovery") ArrayList<String> recovery) {
+	public Player(@JsonProperty("name") String name, @JsonProperty("recovery") ArrayList<String> recovery, @JsonProperty("accountAge") long accountAge) {
         this.currentRoom = 1;
         this.currentDirection = Direction.NORTH;
         this.name = name;
         this.recovery = recovery;
+        this.accountAge = accountAge;
         this.currentInventory = new LinkedList<>();
         this.money = 0;
     }
@@ -309,6 +312,10 @@ public class Player {
 		if(this.recovery.size() >= (num * 2) + 1)
 			return this.recovery.get((num * 2) + 1);
 		return null;
+	}
+	
+	public long getAccountAge() {
+		return accountAge;
 	}
 
     public LinkedList<Item> getCurrentInventory() {

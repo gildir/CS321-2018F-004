@@ -63,7 +63,11 @@ public class PlayerAccountManager {
 			for(String i : recovery)
 				recoveryArray[count++] = i;
 			count = 0;*/
-			Player p = new Player(username, recovery);
+			
+			//get current system time for new account age
+			long accountAge = System.currentTimeMillis();
+			
+			Player p = new Player(username, recovery, accountAge);
 			userDir.mkdir();
 			writePlayerDataFile(p);
 			FileOutputStream passFile = new FileOutputStream(userDir.getAbsolutePath() + "/pass.txt");
