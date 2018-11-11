@@ -1154,7 +1154,7 @@ public class GameCore implements GameCoreInterface {
       }
     }
     private void rpsLog(String winner, String loser, String status){
-	    rpsLogger.info(winner + " " + status + " " +loser + "\n");
+	    rpsLogger.info(winner + " " + status + " against " +loser + "\n");
     }
     private void rpsLogger() throws IOException {
        rpsHandler = new FileHandler("battles.log", true);
