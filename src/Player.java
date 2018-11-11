@@ -34,6 +34,7 @@ public class Player {
     private boolean inBattle = false;
     private String challenger = " ";
     private String option = "";
+    public boolean toggleChat = false;
     private String challengerOption = "";
     private boolean hasOption = false;
     @JsonProperty("recovery")
@@ -527,4 +528,22 @@ public class Player {
 		}
 	}
     }
+
+    /*
+     * This toggles the R-P-S resolutions of other players in the same room
+     */
+    public String toggleResolution(){
+	if (toggleChat == false){
+		toggleChat = true;
+		return "You have turned off RPS resolutions in your area";
+	}
+	else{
+		toggleChat = false;
+		return "You have turned on RPS resolutions in your area";
+	}
+
+
+    }
+
+
 }
