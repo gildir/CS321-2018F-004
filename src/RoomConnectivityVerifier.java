@@ -1,11 +1,9 @@
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Queue;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 public class RoomConnectivityVerifier {
-    public static boolean verifyConnectivity(String worldFile){
+    public static HashSet<Room> verifyConnectivity(String worldFile){
         Map map = new Map(worldFile);
         Room startingRoom = map.findRoom(1);
         Queue<Room> queue = new LinkedList<>();
@@ -26,20 +24,50 @@ public class RoomConnectivityVerifier {
                 }
             }
         }
-        HashSet<Room> allRooms = new HashSet<>();
-        IntStream stream = IntStream.range(1, Integer.MAX_VALUE);
-        allRooms.addAll(stream.parallel().mapToObj((int i) -> (map.findRoom(i))).filter((Room r) -> r != null).collect(Collectors.toSet()));
-        return visited.equals(allRooms);
+        return visited;
+//        HashSet<Room> allRooms = new HashSet<>();
+//        IntStream stream = IntStream.range(1, Integer.MAX_VALUE);
+//        HashSet<Integer> difference = new HashSet<>();
+//        for(Room room: allRooms){
+//            if(!visited.contains(room)){
+//                difference.add(room.getId());
+//            }
+//        }
+//        System.out.println(difference);
+////        difference.removeAll(visited);
+////        System.out.println(difference);
+//        allRooms.addAll(stream.parallel().mapToObj((int i) -> (map.findRoom(i))).filter((Room r) -> r != null).collect(Collectors.toSet()));
+//        return visited.equals(allRooms);
     }
 
     public static void main(String[] args){
         if(args.length != 1){
             System.out.println("improper arguments, should be run with");
-            System.out.println("*insert proper usage here");
+            System.out.println("java RoomConnectivityVerifier <worldFile>");
             System.exit(-1);
         }
-        boolean connectivityStatus = verifyConnectivity(args[0]);
-        if(connectivityStatus){
+        HashSet<Room> visitedRooms = verifyConnectivity(args[0]);
+        HashSet<Integer> roomIDs = new HashSet<>();
+        for(Room room: visitedRooms){
+            roomIDs.add(room.getId());
+        }
+//        System.out.println(roomIDs);
+        Map map = new Map(args[0]);
+        HashSet<Integer> allRoomIds = new HashSet<>();
+        for(int i=1; i < Integer.MAX_VALUE; i++){
+            Room room = map.findRoom(i);
+            if(room == null){
+//                System.out.println("no room with ID: " + i);
+                break;
+            }
+            allRoomIds.add(room.getId());
+//            if(!visitedRooms.contains(room)){
+//            try{
+            if(!roomIDs.contains(room.getId())){
+                System.out.println("room: " + room.getId() + " is unconnected");
+            }
+        }
+        if(roomIDs.equals(allRoomIds)){
             System.out.println("the rooms are all connected");
         }
         else{
