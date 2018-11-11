@@ -13,22 +13,44 @@ public class RecoveryQuestionsWizardModules {
 		
 		@Override
 		public void run() throws Exception {
-			// TODO Auto-generated method stub
 			String question;
 			String answer;
+			Boolean test;
 			stdout.println("Please enter the recovery question you would like to add");
 			stdout.print(">");
 			question = stdin.readLine().trim();
+			if(question.length() < 4) {
+				test = true;
+				while(test) {
+					stdout.println("Please submit a question that is at least 4 characters");
+					stdout.print(">");
+					question = stdin.readLine().trim();
+					if(question.length() >= 4) {
+						test = false;
+					}
+				}
+			}
 			stdout.println("Please enter the answer");
 			stdout.print(">");
 			answer = stdin.readLine().trim().toLowerCase();
-			stdout.println(question + " " + answer);
+			if(answer.length() < 4) {
+				test = true;
+				while(test) {
+					stdout.println("Please submit an answer that is at least 4 characters");
+					stdout.print(">");
+					answer = stdin.readLine().trim();
+					if(answer.length() >= 4) {
+						test = false;
+					}
+				}
+			}
+			stdout.println("Question: " + question);
+			stdout.print("Answer: " + answer);
 			this.obj.addQuestion(this.playerName, question, answer);
 		}
 
 		@Override
 		public String getListName() {
-			// TODO Auto-generated method stub
 			return this.listName;
 		}
 		
@@ -44,7 +66,6 @@ public class RecoveryQuestionsWizardModules {
 
 		@Override
 		public void run() throws Exception {
-			// TODO Auto-generated method stub
 			ArrayList<String> questions = new ArrayList<String>();
 			int count;
 			Integer num;
@@ -84,7 +105,6 @@ public class RecoveryQuestionsWizardModules {
 
 		@Override
 		public String getListName() {
-			// TODO Auto-generated method stub
 			return this.listName;
 		}
 		
