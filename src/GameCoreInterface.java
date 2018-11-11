@@ -359,4 +359,11 @@ public interface GameCoreInterface {
 	 * @return Message showing online friends
 	 */
 	public String viewOnlineFriends(String name);
+	
+	/**
+	 * Returns a message saying the player has toggled the RPS resolutions in area
+	 * @param Player name
+	 * @return message saying the chat has been toggled on or off
+	 */
+	public String toggleRPSChat(String player);
 }
