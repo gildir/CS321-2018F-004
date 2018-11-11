@@ -36,6 +36,8 @@ public class Player {
     private String option = "";
     private String challengerOption = "";
     private boolean hasOption = false;
+    private int rounds = 0;
+    private int wins = 0;
     @JsonProperty("recovery")
     private ArrayList<String> recovery;
     
@@ -435,6 +437,20 @@ public class Player {
 
     public void setChallengerOption(String challengerOption){
         this.challengerOption = challengerOption;
+    }
+    public void setRounds(int round){
+        this.rounds = round;
+    }
+
+    public int getRounds(){
+        return this.rounds;
+    }
+
+    public void setWins(int wins){
+        this.wins = wins;
+    }
+    public int getWins(){
+        return this.wins;
     }
     
     public double getMoney() {

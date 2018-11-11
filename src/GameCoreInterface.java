@@ -306,7 +306,7 @@ public interface GameCoreInterface {
       * @param challenge is the name of the player accepting
       * @return String message of the acceptence
       */
-    public String accept(String challenger, String challengee);
+    public String accept(String challenger, String challengee, String rounds);
 
     /**
      *

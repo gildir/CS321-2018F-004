@@ -427,7 +427,7 @@ public interface GameObjectInterface extends Remote {
     * @return Message showing success
     * @throws RemoteException
     */
-    public String accept(String challenger, String challengee) throws RemoteException;
+    public String accept(String challenger, String challengee, String rounds) throws RemoteException;
 
     /**
      * Prompts a messaging that they are rejectin a challenge from someone to R-P-S

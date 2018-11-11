@@ -556,10 +556,19 @@ public class GameClient {
                     break;
                 case "ACCEPT":
                     if(tokens.isEmpty()){
-                      System.err.println("You need to provide a name.");
+                      System.err.println("You need to provide a name and number of rounds.");
                     }
                     else{
-                      System.out.println(remoteGameInterface.accept(this.playerName, tokens.remove(0)));
+                        if(tokens.size() < 2){
+                          System.err.println("You need to provide the number of rounds.");
+                        }
+                        else{
+
+                            String option1 = tokens.remove(0);
+                            String option2 = tokens.remove(0);
+                            //System.out.println(option1 + " \t\t" + option2);
+                            System.out.println(remoteGameInterface.accept(this.playerName, option1, option2));//tokens.remove(0), tokens.remove(0)));
+                        }
                     }
                     break;
                 case "REJECT":
@@ -662,7 +671,6 @@ public class GameClient {
             Logger.getLogger(GameClient.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
     /**
      * Prompts the user through a dialogue tree to give them the option to reset their password
      */
