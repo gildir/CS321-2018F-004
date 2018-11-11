@@ -8,6 +8,7 @@ public class AccountEditWizard extends Wizard.BlockingWizard {
 	private ArrayList<Class<?>> moduleClasses = new ArrayList<>();
 	{
 		moduleClasses.add(AccountEditWizardModules.ChangePasswordModule.class);
+		moduleClasses.add(AccountEditWizardModules.RecoveryQuestionsModule.class);
 		moduleClasses.add(AccountEditWizardModules.TestModule.class);
 	}
 

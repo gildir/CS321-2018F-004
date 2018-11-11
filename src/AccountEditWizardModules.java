@@ -3,6 +3,32 @@ import java.io.PrintStream;
 import java.lang.reflect.InvocationTargetException;
 
 public class AccountEditWizardModules {
+	protected static class RecoveryQuestionsModule extends Wizard.WizardModule {
+		Wizard.SimpleWizard rqWizard;
+
+		public RecoveryQuestionsModule(BufferedReader stdin, PrintStream stdout, GameObjectInterface obj, String playerName)
+				throws NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException,
+				IllegalArgumentException, InvocationTargetException {
+			super(stdin, stdout, obj, playerName);
+			this.listName = "Recovery Question";
+
+			rqWizard = new Wizard.SimpleWizard(stdin, stdout, obj, playerName, "Recovery Question Wizard");
+			rqWizard.addModules(RecoveryQuestionsWizardModules.AddQuestionModule.class);
+			rqWizard.addModules(RecoveryQuestionsWizardModules.RemoveQuestionModule.class);
+		}
+		
+		@Override
+		public void run() throws Exception {
+			rqWizard.enter();
+			
+		}
+
+		@Override
+		public String getListName() {
+			return this.listName;
+		}
+		
+	}
 	protected static class ChangePasswordModule extends Wizard.WizardModule {
 
 		public ChangePasswordModule(BufferedReader stdin, PrintStream stdout, GameObjectInterface obj,

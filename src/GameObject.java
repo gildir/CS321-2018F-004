@@ -91,7 +91,6 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
 	 * 
 	 * @param name
 	 * @param password
-	 * @param recovery List of recovery questions and answers, ordered q1,a1,q2,a2,q3,a3
 	 * @return an enumeration representing the creation status, or null if password
 	 *         failed to be encrypted in hash function.
 	 * @throws RemoteException
@@ -577,6 +576,10 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
 		return core.getQuestion(name, num);
 	}
 	
+	public void addQuestion(String name, String question, String answer) {
+		core.addQuestion(name, question, answer);
+	}
+	
 	/**
 	 * Gets a user's recovery answer
 	 * 
@@ -584,8 +587,8 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
 	 * @param num Marks which answer will be grabbed
 	 * @throws RemoteException
 	 */
-	public String getAnswer(String name, int num) throws RemoteException {
-		return core.getAnswer(name, num);
+	public Boolean getAnswer(String name, int num, String answer) throws RemoteException {
+		return core.getAnswer(name, num, answer);
 	}
 	
 	public Responses verifyPassword(String name, String pass) throws RemoteException {
@@ -627,5 +630,9 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
      */
     public String accept(String challenger, String challengee) throws RemoteException{
       return core.accept(challenger, challengee);
+    }
+    
+    public void removeQuestion(String name, int num) {
+    	core.removeQuestion(name, num);
     }
 }

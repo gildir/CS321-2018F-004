@@ -46,9 +46,7 @@ public class PlayerAccountManager {
 		logger = Logger.getLogger(PlayerAccountManager.class.getName());
 	}
 
-	/**
-	 * @param recovery List of recovery questions and answers, ordered q1,a1,q2,a2,q3,a3
-	 */
+	
 	public synchronized AccountResponse createNewAccount(String username, String password, ArrayList<String> recovery) {
 		String lower = username.toLowerCase();
 		if (accountExists(lower))
@@ -58,11 +56,6 @@ public class PlayerAccountManager {
 		File userDir = new File(accountFolder.getAbsolutePath() + "/" + lower);
 		try {
 			playerIds.add(lower);
-			/*String[] recoveryArray = new String[recovery.size()];
-			int count = 0;
-			for(String i : recovery)
-				recoveryArray[count++] = i;
-			count = 0;*/
 			Player p = new Player(username, recovery);
 			userDir.mkdir();
 			writePlayerDataFile(p);

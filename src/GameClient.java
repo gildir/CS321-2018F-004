@@ -131,7 +131,7 @@ public class GameClient {
 						System.out.println("Please give the answer");
 						System.out.print(">");
 						recovery.add(keyboardInput.readLine().trim());
-						Responses resp = remoteGameInterface.createAccountAndJoinGame(playerName, pass, recovery);
+						Responses resp = remoteGameInterface.createAccountAndJoinGame(playerName, pass, recovery); //removed recovery
 						switch (resp) {
 						case BAD_USERNAME_FORMAT:
 							System.out
@@ -703,6 +703,7 @@ public class GameClient {
     	Responses response;
     	int count;
     	boolean correct;
+    	Boolean buff;
     	//booleans for dialogue loops
     	boolean go;
     	boolean test;
@@ -724,13 +725,14 @@ public class GameClient {
 	    			System.out.print(">");
 	    			name = keyboardInput.readLine().trim();
 	    			question = remoteGameInterface.getQuestion(name, 0);
-	    			answer = remoteGameInterface.getAnswer(name, 0);
-	    			if (question != null && answer != null) {
+	    			//answer = remoteGameInterface.getAnswer(name, 0);
+	    			if (question != null) {
 	    				test = true;
 	    				while (test) {
 	    					//asks recovery question
 	    					correct = true;
-	    					for(int i = 0; i < 3; i++) {
+	    					count = 0;
+	    					/*for(int i = 0; i < 3; i++) {
 	    						question = remoteGameInterface.getQuestion(name, i);
 	    		    			answer = remoteGameInterface.getAnswer(name, i);
 		    					System.out.println();
@@ -739,7 +741,23 @@ public class GameClient {
 			    				input = keyboardInput.readLine().toLowerCase().trim();
 			    				if(correct)
 			    					correct = input.equals(answer);
-	    					}
+	    					}*/
+	    					//TODO get rid of old code commented out
+	    					do {
+	    						System.out.println();
+			    				System.out.println(question);
+			    				System.out.print("Answer:");
+			    				input = keyboardInput.readLine().toLowerCase().trim();
+			    				//correct = input.equals(answer);
+			    				buff = remoteGameInterface.getAnswer(name, count, input);
+			    				question = remoteGameInterface.getQuestion(name, ++count);
+			    				if(buff == null) {
+			    					question = null;
+			    				} else {
+			    					correct = buff;
+			    				}
+			    				//answer = remoteGameInterface.getAnswer(name, count);
+	    					} while(question != null && correct);
 		    				//gets new password if recovery question answered
 		    				if(correct) {
 		    					test = false;
@@ -785,9 +803,10 @@ public class GameClient {
 	    			} else {
 		    			test2 = true;
 		    				//Username inputed by user wasn't found, asks if they want to continue recovery process
+		    				//Alternatively, user may not have set up questions yet
 			    			while(test2) {
 			    				System.out.println();
-			    				System.out.println("Your username was not found, try again?");
+			    				System.out.println("Your username was not found or your account has no recovery questions, try again?");
 			    				System.out.print("(Y/N) >");
 			    				input = keyboardInput.readLine().toUpperCase().trim();
 			    				switch(input) {

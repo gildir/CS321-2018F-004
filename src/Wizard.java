@@ -126,7 +126,7 @@ public abstract class Wizard {
 					String.class);
 			modules.add((Wizard.WizardModule) con.newInstance(stdin, stdout, obj, playerName));
 		}
-		for (Wizard.WizardModule m : modules)
+		for (Wizard.WizardModule m : modules) 
 			mainMenu.add(m.getListName(), m::run);
 		return this;
 	}

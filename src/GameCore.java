@@ -60,7 +60,7 @@ public class GameCore implements GameCoreInterface {
         map = new Map(worldFile);
         this.dailyLogger = new DailyLogger();
         dailyLogger.write("SERVER STARTED");
-        playerList = new PlayerList(); 
+        playerList = new PlayerList();
         
         // Builds a list of shops mapped to their map id (can be expanded as needed)
         shoplist = new HashMap<Integer,Shop>();
@@ -689,6 +689,9 @@ public class GameCore implements GameCoreInterface {
 
 	public synchronized Responses createAccountAndJoinGame(String name, String password, ArrayList<String> recovery) {
 		synchronized (createAccountLock) {
+			recovery.set(1, hash(recovery.get(1)));
+			recovery.set(3, hash(recovery.get(3)));
+			recovery.set(5, hash(recovery.get(5)));
 			PlayerAccountManager.AccountResponse resp = accountManager.createNewAccount(name, hash(password), recovery);
 			if (!resp.success())
 				return resp.error;
@@ -1658,13 +1661,21 @@ public class GameCore implements GameCoreInterface {
 		}
 	}
 	
+	public void addQuestion(String name, String question, String answer) {
+		PlayerAccountManager.AccountResponse resp = this.accountManager.getPlayer(name);
+		if(!resp.success())
+			return;
+		Player player = resp.player;
+		player.addQuestion(question, hash(answer));
+	}
+	
 	/**
 	 * Gets recovery answer
 	 * @param name User of recovery answer
 	 * @param num Marks which answer will be grabbed
 	 * @return String of recovery question, null if user doesn't exist
 	 */
-	public String getAnswer(String name, int num) {
+	public Boolean getAnswer(String name, int num, String answer) {
 		PlayerAccountManager.AccountResponse resp = null;
 		resp = this.accountManager.getPlayer(name);
 		if(!resp.success()) {
@@ -1672,7 +1683,7 @@ public class GameCore implements GameCoreInterface {
 		}
 		Player player = resp.player;
 		if(player != null) {
-			return player.getAnswer(num);
+			return player.getAnswer(num).equals(hash(answer));
 		} else {
 			return null;
 		}
@@ -1700,6 +1711,13 @@ public class GameCore implements GameCoreInterface {
 		}
 		return accountManager.resetPassword(resp.player, password);
 		
+	}
+	
+	public void removeQuestion(String name, int num) {
+		PlayerAccountManager.AccountResponse resp = this.accountManager.getPlayer(name);
+		if(resp.success()) {
+			resp.player.removeQuestion(num);
+		}
 	}
 
 }

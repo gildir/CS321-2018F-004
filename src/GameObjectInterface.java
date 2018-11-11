@@ -48,7 +48,6 @@ public interface GameObjectInterface extends Remote {
 	 * 
 	 * @param name
 	 * @param password
-	 * @param recovery List of recovery questions and answers, ordered q1,a1,q2,a2,q3,a3
 	 * @return an enumeration representing the creation status.
 	 * @throws RemoteException
 	 */
@@ -400,7 +399,7 @@ public interface GameObjectInterface extends Remote {
 	 * @return String of recovery question, null if user doesn't exist
 	 * @throws RemoteException
 	 */
-	public String getAnswer(String name, int num) throws RemoteException;
+	public Boolean getAnswer(String name, int num, String answer) throws RemoteException;
 
     public Responses verifyPassword(String name, String pass) throws RemoteException;
     
@@ -455,4 +454,9 @@ public interface GameObjectInterface extends Remote {
       * @throws Remote Exception
       */
      public String teach(String player) throws RemoteException;
-}
+     
+   //TODO
+ 	public void addQuestion(String name, String question, String answer) throws RemoteException;
+ 	
+ 	public void removeQuestion(String name, int num) throws RemoteException;
+ }
