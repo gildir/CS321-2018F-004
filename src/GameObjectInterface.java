@@ -188,6 +188,9 @@ public interface GameObjectInterface extends Remote {
      */    
     public String pickup(String name, String object) throws RemoteException;
 
+    public String pickup(String name, String object, int amount) throws RemoteException;
+
+
     public String pickupAll(String name)throws RemoteException;
  
     /**

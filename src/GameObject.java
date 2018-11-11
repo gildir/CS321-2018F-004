@@ -318,6 +318,12 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
         return core.pickup(name, target);
     }
 
+    @Override
+    public String pickup(String name, String object, int amount) throws RemoteException{
+        return core.pickup(name, object, amount);
+    }
+
+
     public String pickupAll(String name)throws RemoteException{
         return core.pickupAll(name);
     }
