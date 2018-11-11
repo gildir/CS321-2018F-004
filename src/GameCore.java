@@ -1204,8 +1204,6 @@ public class GameCore implements GameCoreInterface {
                 winner = player.getName() + " challenged " + challengee.getName() + " to a Rock Paper Scissors Battle: " + challengee.getName() + " won.";
                 this.broadcast(map.findRoom(player.getCurrentRoom()), winner);
 		rpsLog(player.getName(), challengee.getName(), "wins", player.getOption(), challengee.getOption());
-              }
-               this.broadcast(map.findRoom(player.getCurrentRoom()), winner);
       		pickRPSToggle = false;  		
 		}		      
               else if (challengee.getOption().equals("ROCK")){
@@ -1215,7 +1213,6 @@ public class GameCore implements GameCoreInterface {
                 winner = player.getName() + " challenged " + challengee.getName() + " to a Rock Paper Scissors Battle: It is a tie.";
                 this.broadcast(map.findRoom(player.getCurrentRoom()), winner);
 		rpsLog(player.getName(), challengee.getName(), "ties", player.getOption(), challengee.getOption());
-              }
               	pickRPSToggle = false;
 	      }
               else {
@@ -1225,7 +1222,6 @@ public class GameCore implements GameCoreInterface {
                 winner = player.getName() + " challenged " + challengee.getName() + " to a Rock Paper Scissors Battle: " + player.getName() + " won.";
                 this.broadcast(map.findRoom(player.getCurrentRoom()), winner);
 		rpsLog(challengee.getName(), player.getName(), "wins", challengee.getOption(), player.getOption());
-              }
               	pickRPSToggle = false;
 	      }
               player.setInBattle(false);
@@ -1244,7 +1240,6 @@ public class GameCore implements GameCoreInterface {
                 winner = player.getName() + " challenged " + challengee.getName() + " to a Rock Paper Scissors Battle: " + challengee.getName() + " won.";
                 this.broadcast(map.findRoom(player.getCurrentRoom()), winner);
 		rpsLog(challengee.getName(), player.getName(), "wins", challengee.getOption(), player.getOption());
-              }
               	pickRPSToggle = false;
 	      }
               else if (challengee.getOption().equals("PAPER")){
@@ -1254,7 +1249,6 @@ public class GameCore implements GameCoreInterface {
                 winner = player.getName() + " challenged " + challengee.getName() + " to a Rock Paper Scissors Battle: It is a tie.";
                 this.broadcast(map.findRoom(player.getCurrentRoom()), winner);
 		rpsLog(player.getName(), challengee.getName(), "ties", player.getOption(), challengee.getOption());
-              }
               	pickRPSToggle = false;
 	      }
               else {
@@ -1264,7 +1258,6 @@ public class GameCore implements GameCoreInterface {
                 winner = player.getName() + " challenged " + challengee.getName() + " to a Rock Paper Scissors Battle: " + player.getName() + " won.";
                 this.broadcast(map.findRoom(player.getCurrentRoom()), winner);
 		rpsLog(player.getName(), challengee.getName(), "wins", player.getOption(), challengee.getOption());
-              }
               	pickRPSToggle = false;
 	      }
               player.setInBattle(false);
@@ -1283,7 +1276,6 @@ public class GameCore implements GameCoreInterface {
                 winner = player.getName() + " challenged " + challengee.getName() + " to a Rock Paper Scissors Battle: " + challengee.getName() + " won.";
                 this.broadcast(map.findRoom(player.getCurrentRoom()), winner);
 		rpsLog(challengee.getName(), player.getName(), "wins", challengee.getOption(), player.getOption());
-              }
               	pickRPSToggle = false;
 	      }
               else if (challengee.getOption().equals("SCISSORS")){
@@ -1293,7 +1285,6 @@ public class GameCore implements GameCoreInterface {
                 winner = player.getName() + " challenged " + challengee.getName() + " to a Rock Paper Scissors Battle: It is a tie.";
                 this.broadcast(map.findRoom(player.getCurrentRoom()), winner);
 		rpsLog(challengee.getName(), player.getName(), "ties", challengee.getOption(), player.getOption());
-              }
               	pickRPSToggle = false;
 	      }
               else {
@@ -1303,7 +1294,6 @@ public class GameCore implements GameCoreInterface {
                 winner = player.getName() + " challenged " + challengee.getName() + " to a Rock Paper Scissors Battle: " + player.getName() + " won.";
                 this.broadcast(map.findRoom(player.getCurrentRoom()), winner);
 		rpsLog(player.getName(), challengee.getName(), "wins", player.getOption(), challengee.getOption());
-              }
               	pickRPSToggle = false;
 	      }
               player.setInBattle(false);
