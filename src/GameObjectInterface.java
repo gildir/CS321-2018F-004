@@ -51,7 +51,7 @@ public interface GameObjectInterface extends Remote {
 	 * @return an enumeration representing the creation status.
 	 * @throws RemoteException
 	 */
-	public Responses createAccountAndJoinGame(String name, String password, ArrayList<String> recovery) throws RemoteException;
+	public Responses createAccountAndJoinGame(String name, String password) throws RemoteException;
 
     /**
      * Returns a look at the area of the specified player.
@@ -455,8 +455,20 @@ public interface GameObjectInterface extends Remote {
       */
      public String teach(String player) throws RemoteException;
      
-   //TODO
+   /**
+    * Adds a recovery question
+    * @param name Name of user
+    * @param question Question being added
+    * @param answer The answer
+    * @throws RemoteException
+    */
  	public void addQuestion(String name, String question, String answer) throws RemoteException;
  	
+ 	/**
+ 	 * Removes a recovery question
+ 	 * @param name Name of user
+ 	 * @param num Number of question to be removed
+ 	 * @throws RemoteException
+ 	 */
  	public void removeQuestion(String name, int num) throws RemoteException;
  }

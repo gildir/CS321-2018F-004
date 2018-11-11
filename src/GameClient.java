@@ -111,27 +111,7 @@ public class GameClient {
 						}
 						break;
 					case "C":
-						//prompt user for recovery questions
-						count = 0;
-						System.out.println("Please create 1st security question for password recovery");
-						System.out.print(">");
-						recovery.add(keyboardInput.readLine().trim());
-						System.out.println("Please give the answer");
-						System.out.print(">");
-						recovery.add(keyboardInput.readLine().trim());
-						System.out.println("Please create 2nd security question for password recovery");
-						System.out.print(">");
-						recovery.add(keyboardInput.readLine().trim());
-						System.out.println("Please give the answer");
-						System.out.print(">");
-						recovery.add(keyboardInput.readLine().trim());
-						System.out.println("Please create 3rd security question for password recovery");
-						System.out.print(">");
-						recovery.add(keyboardInput.readLine().trim());
-						System.out.println("Please give the answer");
-						System.out.print(">");
-						recovery.add(keyboardInput.readLine().trim());
-						Responses resp = remoteGameInterface.createAccountAndJoinGame(playerName, pass, recovery); //removed recovery
+						Responses resp = remoteGameInterface.createAccountAndJoinGame(playerName, pass); //removed recovery
 						switch (resp) {
 						case BAD_USERNAME_FORMAT:
 							System.out
@@ -732,23 +712,11 @@ public class GameClient {
 	    					//asks recovery question
 	    					correct = true;
 	    					count = 0;
-	    					/*for(int i = 0; i < 3; i++) {
-	    						question = remoteGameInterface.getQuestion(name, i);
-	    		    			answer = remoteGameInterface.getAnswer(name, i);
-		    					System.out.println();
-			    				System.out.println(question);
-			    				System.out.print("Answer:");
-			    				input = keyboardInput.readLine().toLowerCase().trim();
-			    				if(correct)
-			    					correct = input.equals(answer);
-	    					}*/
-	    					//TODO get rid of old code commented out
 	    					do {
 	    						System.out.println();
 			    				System.out.println(question);
 			    				System.out.print("Answer:");
 			    				input = keyboardInput.readLine().toLowerCase().trim();
-			    				//correct = input.equals(answer);
 			    				buff = remoteGameInterface.getAnswer(name, count, input);
 			    				question = remoteGameInterface.getQuestion(name, ++count);
 			    				if(buff == null) {
@@ -756,7 +724,6 @@ public class GameClient {
 			    				} else {
 			    					correct = buff;
 			    				}
-			    				//answer = remoteGameInterface.getAnswer(name, count);
 	    					} while(question != null && correct);
 		    				//gets new password if recovery question answered
 		    				if(correct) {

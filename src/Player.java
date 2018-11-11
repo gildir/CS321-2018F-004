@@ -38,17 +38,16 @@ public class Player {
     private boolean hasOption = false;
     @JsonProperty("recovery")
     private ArrayList<String> recovery; //stored question, answer, question,...
-    //private JsonArray recovery;
+
     
     
-	public Player(@JsonProperty("name") String name, @JsonProperty("recovery") ArrayList<String> recovery) {
+	public Player(@JsonProperty("name") String name) {
         this.currentRoom = 1;
         this.currentDirection = Direction.NORTH;
         this.name = name;
         this.currentInventory = new LinkedList<>();
         this.money = 0;
-        //this.recovery = new ArrayList<String>();
-        this.recovery = recovery;
+        this.recovery = new ArrayList<String>();
     }
 
     private HashSet<Player> ignoredPlayers = new HashSet<Player>();

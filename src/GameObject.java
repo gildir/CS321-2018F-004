@@ -96,8 +96,8 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
 	 * @throws RemoteException
 	 */
 	@Override
-	public Responses createAccountAndJoinGame(String name, String password, ArrayList<String> recovery) throws RemoteException {
-		return core.createAccountAndJoinGame(name, password, recovery);
+	public Responses createAccountAndJoinGame(String name, String password) throws RemoteException {
+		return core.createAccountAndJoinGame(name, password);
 	}
 
     /**

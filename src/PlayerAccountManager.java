@@ -47,7 +47,7 @@ public class PlayerAccountManager {
 	}
 
 	
-	public synchronized AccountResponse createNewAccount(String username, String password, ArrayList<String> recovery) {
+	public synchronized AccountResponse createNewAccount(String username, String password) {
 		String lower = username.toLowerCase();
 		if (accountExists(lower))
 			return new AccountResponse(Responses.USERNAME_TAKEN);
@@ -56,7 +56,7 @@ public class PlayerAccountManager {
 		File userDir = new File(accountFolder.getAbsolutePath() + "/" + lower);
 		try {
 			playerIds.add(lower);
-			Player p = new Player(username, recovery);
+			Player p = new Player(username);
 			userDir.mkdir();
 			writePlayerDataFile(p);
 			FileOutputStream passFile = new FileOutputStream(userDir.getAbsolutePath() + "/pass.txt");

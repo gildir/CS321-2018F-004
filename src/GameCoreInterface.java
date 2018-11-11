@@ -75,7 +75,7 @@ public interface GameCoreInterface {
 	 * @param password
 	 * @return an enumeration representing the creation status.
 	 */
-	public Responses createAccountAndJoinGame(String name, String password, ArrayList<String> recovery);
+	public Responses createAccountAndJoinGame(String name, String password);
 
     /**
      * Returns a look at the area of the specified player.

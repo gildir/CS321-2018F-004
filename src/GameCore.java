@@ -687,12 +687,9 @@ public class GameCore implements GameCoreInterface {
 	 */
 	@Override
 
-	public synchronized Responses createAccountAndJoinGame(String name, String password, ArrayList<String> recovery) {
+	public synchronized Responses createAccountAndJoinGame(String name, String password) {
 		synchronized (createAccountLock) {
-			recovery.set(1, hash(recovery.get(1)));
-			recovery.set(3, hash(recovery.get(3)));
-			recovery.set(5, hash(recovery.get(5)));
-			PlayerAccountManager.AccountResponse resp = accountManager.createNewAccount(name, hash(password), recovery);
+			PlayerAccountManager.AccountResponse resp = accountManager.createNewAccount(name, hash(password));
 			if (!resp.success())
 				return resp.error;
 			if (joinGame(name, password) != null)
