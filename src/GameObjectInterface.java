@@ -454,4 +454,12 @@ public interface GameObjectInterface extends Remote {
       * @throws Remote Exception
       */
      public String teach(String player) throws RemoteException;
+
+     /**
+      * Toggles the RPS resolutions of other players in the same room
+      * @param Player is the name of the Player who wants to toggle the RPS chat
+      * @return Message showing success
+      * @throws RemoteException
+      */
+     public String toggleRPSChat(String player) throws RemoteException;
 }

@@ -35,6 +35,8 @@ public class GameCore implements GameCoreInterface {
     private PrintWriter pw;
     private final Logger rpsLogger = Logger.getLogger("battles");
     private FileHandler rpsHandler;
+    private boolean pickRPSToggle = false;
+
 	// Accounts and Login
 	private final PlayerAccountManager accountManager;
 	private final Object loginLock = new Object();
@@ -563,6 +565,7 @@ public class GameCore implements GameCoreInterface {
 	public void broadcast(Room room, String message) {
 		for (Player player : this.playerList) {
 			if (player.getCurrentRoom() == room.getId()) {
+				if(pickRPSToggle == false){
 				dailyLogger.write(message);
 			    String newMessage = player.filterMessage(message);
 				player.getReplyWriter().println(newMessage);
@@ -570,6 +573,16 @@ public class GameCore implements GameCoreInterface {
 				dailyLogger.write(message);
 				player.getReplyWriter().println(message);
 				*/
+				}
+				else{
+					if(player.toggleChat == false){
+						dailyLogger.write(message);
+						String newMessage = player.filterMessage(message);
+						player.getReplyWriter().println(newMessage);
+
+					}
+				}
+
 			}
 		}
 	}
@@ -1170,6 +1183,7 @@ public class GameCore implements GameCoreInterface {
     public String pickRPS(String name,  String option){
       Player player = this.playerList.findPlayer(name);
       Player challengee = this.playerList.findPlayer(player.getChallenger());
+      pickRPSToggle = true;
 
       if(player.getInBattle() == true){
         if(player.getOption().equals("ROCK") || player.getOption().equals("PAPER") || player.getOption().equals("SCISSORS")){
@@ -1191,6 +1205,9 @@ public class GameCore implements GameCoreInterface {
                 this.broadcast(map.findRoom(player.getCurrentRoom()), winner);
 		rpsLog(player.getName(), challengee.getName(), "wins", player.getOption(), challengee.getOption());
               }
+               this.broadcast(map.findRoom(player.getCurrentRoom()), winner);
+      		pickRPSToggle = false;  		
+		}		      
               else if (challengee.getOption().equals("ROCK")){
                 challengee.getReplyWriter().println("You chose ROCK.");
                 player.getReplyWriter().println(challengee.getName() + " chose ROCK: It is a tie.");
@@ -1199,6 +1216,8 @@ public class GameCore implements GameCoreInterface {
                 this.broadcast(map.findRoom(player.getCurrentRoom()), winner);
 		rpsLog(player.getName(), challengee.getName(), "ties", player.getOption(), challengee.getOption());
               }
+              	pickRPSToggle = false;
+	      }
               else {
                 challengee.getReplyWriter().println("You chose SCISSORS.");
                 player.getReplyWriter().println(challengee.getName() + " chose SCISSORS: You win.");
@@ -1207,6 +1226,8 @@ public class GameCore implements GameCoreInterface {
                 this.broadcast(map.findRoom(player.getCurrentRoom()), winner);
 		rpsLog(challengee.getName(), player.getName(), "wins", challengee.getOption(), player.getOption());
               }
+              	pickRPSToggle = false;
+	      }
               player.setInBattle(false);
               player.setChallenger(" ");
               player.setOption("");
@@ -1224,6 +1245,8 @@ public class GameCore implements GameCoreInterface {
                 this.broadcast(map.findRoom(player.getCurrentRoom()), winner);
 		rpsLog(challengee.getName(), player.getName(), "wins", challengee.getOption(), player.getOption());
               }
+              	pickRPSToggle = false;
+	      }
               else if (challengee.getOption().equals("PAPER")){
                 challengee.getReplyWriter().println("You chose PAPER.");
                 player.getReplyWriter().println(challengee.getName() + " chose PAPER: It is a tie.");
@@ -1232,6 +1255,8 @@ public class GameCore implements GameCoreInterface {
                 this.broadcast(map.findRoom(player.getCurrentRoom()), winner);
 		rpsLog(player.getName(), challengee.getName(), "ties", player.getOption(), challengee.getOption());
               }
+              	pickRPSToggle = false;
+	      }
               else {
                 challengee.getReplyWriter().println("You chose ROCK.");
                 player.getReplyWriter().println(challengee.getName() + " chose ROCK: You win.");
@@ -1240,6 +1265,8 @@ public class GameCore implements GameCoreInterface {
                 this.broadcast(map.findRoom(player.getCurrentRoom()), winner);
 		rpsLog(player.getName(), challengee.getName(), "wins", player.getOption(), challengee.getOption());
               }
+              	pickRPSToggle = false;
+	      }
               player.setInBattle(false);
               player.setChallenger(" ");
               player.setOption("");
@@ -1257,6 +1284,8 @@ public class GameCore implements GameCoreInterface {
                 this.broadcast(map.findRoom(player.getCurrentRoom()), winner);
 		rpsLog(challengee.getName(), player.getName(), "wins", challengee.getOption(), player.getOption());
               }
+              	pickRPSToggle = false;
+	      }
               else if (challengee.getOption().equals("SCISSORS")){
                 challengee.getReplyWriter().println("You chose SCISSORS.");
                 player.getReplyWriter().println(challengee.getName() + " chose SCISSORS: It is a tie.");
@@ -1265,6 +1294,8 @@ public class GameCore implements GameCoreInterface {
                 this.broadcast(map.findRoom(player.getCurrentRoom()), winner);
 		rpsLog(challengee.getName(), player.getName(), "ties", challengee.getOption(), player.getOption());
               }
+              	pickRPSToggle = false;
+	      }
               else {
                 challengee.getReplyWriter().println("You chose PAPER.");
                 player.getReplyWriter().println(challengee.getName() + " chose PAPER: You win.");
@@ -1273,6 +1304,8 @@ public class GameCore implements GameCoreInterface {
                 this.broadcast(map.findRoom(player.getCurrentRoom()), winner);
 		rpsLog(player.getName(), challengee.getName(), "wins", player.getOption(), challengee.getOption());
               }
+              	pickRPSToggle = false;
+	      }
               player.setInBattle(false);
               player.setChallenger(" ");
               player.setOption("");
@@ -1729,6 +1762,18 @@ public class GameCore implements GameCoreInterface {
 			return resp.error;
 		}
 		return accountManager.resetPassword(resp.player, password);
+		
+	}
+
+	/**
+	 * Toggles the RPS resolution of other players in same room
+	 * @param name of Player that wants to toggle
+	 */
+	@Override
+	public String toggleRPSChat(String player){
+		Player playerToggle = this.playerList.findPlayer(player);
+		String message = playerToggle.toggleResolution();
+		return message;
 		
 	}
 
