@@ -20,6 +20,7 @@ import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 import java.util.logging.StreamHandler;
+import java.util.logging.FileHandler;
 
 /**
  *
@@ -32,7 +33,8 @@ public class GameCore implements GameCoreInterface {
     private HashMap<Integer,Shop> shoplist;
     private Ghoul ghoul;
     private PrintWriter pw;
-
+    private final Logger rpsLogger = Logger.getLogger("battles");
+    private FileHandler rpsHandler;
 	// Accounts and Login
 	private final PlayerAccountManager accountManager;
 	private final Object loginLock = new Object();
@@ -72,6 +74,7 @@ public class GameCore implements GameCoreInterface {
         pw.close();
 
         initConnectionsLogger();
+	rpsLogger();
         
         accountManager = new PlayerAccountManager(playerAccountsLocation);
         
@@ -1150,6 +1153,17 @@ public class GameCore implements GameCoreInterface {
         return "You have not been challenged by " + playerChallenger.getName();
       }
     }
+    private void rpsLog(String winner, String loser, String status){
+	    rpsLogger.info(winner + " " + status + " " +loser + "\n");
+    }
+    private void rpsLogger() throws IOException {
+       rpsHandler = new FileHandler("battles.log", true);
+       SimpleFormatter simpleformat = new SimpleFormatter();
+       rpsHandler.setFormatter(simpleformat);
+       rpsLogger.setLevel(Level.ALL);
+       rpsLogger.setUseParentHandlers(false);
+       rpsLogger.addHandler(rpsHandler);
+    }
 
     @Override
     public String pickRPS(String name,  String option){
@@ -1174,6 +1188,7 @@ public class GameCore implements GameCoreInterface {
                 challengee.getReplyWriter().println(player.getName() + " chose ROCK: You win.");
                 winner = player.getName() + " challenged " + challengee.getName() + " to a Rock Paper Scissors Battle: " + challengee.getName() + " won.";
                 this.broadcast(map.findRoom(player.getCurrentRoom()), winner);
+		rpsLog(player.getName(), challengee.getName(), "wins");
               }
               else if (challengee.getOption().equals("ROCK")){
                 challengee.getReplyWriter().println("You chose ROCK.");
@@ -1181,6 +1196,8 @@ public class GameCore implements GameCoreInterface {
                 challengee.getReplyWriter().println(player.getName() + " chose ROCK: It is a tie.");
                 winner = player.getName() + " challenged " + challengee.getName() + " to a Rock Paper Scissors Battle: It is a tie.";
                 this.broadcast(map.findRoom(player.getCurrentRoom()), winner);
+		rpsLog(player.getName(), challengee.getName(), "ties");
+
               }
               else {
                 challengee.getReplyWriter().println("You chose SCISSORS.");
@@ -1188,6 +1205,7 @@ public class GameCore implements GameCoreInterface {
                 challengee.getReplyWriter().println(player.getName() + " chose ROCK: You lose.");
                 winner = player.getName() + " challenged " + challengee.getName() + " to a Rock Paper Scissors Battle: " + player.getName() + " won.";
                 this.broadcast(map.findRoom(player.getCurrentRoom()), winner);
+		rpsLog(challengee.getName(), player.getName(), "wins");
               }
               player.setInBattle(false);
               player.setChallenger(" ");
@@ -1200,10 +1218,11 @@ public class GameCore implements GameCoreInterface {
               player.getReplyWriter().println("You chose PAPER.");
               if (challengee.getOption().equals("SCISSORS")) {
                 challengee.getReplyWriter().println("You chose SCISSORS.");
-                player.getReplyWriter().println(challengee.getName() + " chose SCISSORS: You lose.");
-                challengee.getReplyWriter().println(player.getName() + " chose PAPER: You win.");
+                player.getReplyWriter().println(challengee.getName() + " chose SCISSORS: You win.");
+                challengee.getReplyWriter().println(player.getName() + " chose PAPER: You lose.");
                 winner = player.getName() + " challenged " + challengee.getName() + " to a Rock Paper Scissors Battle: " + challengee.getName() + " won.";
                 this.broadcast(map.findRoom(player.getCurrentRoom()), winner);
+		rpsLog(challengee.getName(), player.getName(), "wins");
               }
               else if (challengee.getOption().equals("PAPER")){
                 challengee.getReplyWriter().println("You chose PAPER.");
@@ -1211,6 +1230,7 @@ public class GameCore implements GameCoreInterface {
                 challengee.getReplyWriter().println(player.getName() + " chose PAPER: It is a tie.");
                 winner = player.getName() + " challenged " + challengee.getName() + " to a Rock Paper Scissors Battle: It is a tie.";
                 this.broadcast(map.findRoom(player.getCurrentRoom()), winner);
+		rpsLog(player.getName(), challengee.getName(), "ties");
               }
               else {
                 challengee.getReplyWriter().println("You chose ROCK.");
@@ -1218,13 +1238,14 @@ public class GameCore implements GameCoreInterface {
                 challengee.getReplyWriter().println(player.getName() + " chose PAPER: You win.");
                 winner = player.getName() + " challenged " + challengee.getName() + " to a Rock Paper Scissors Battle: " + player.getName() + " won.";
                 this.broadcast(map.findRoom(player.getCurrentRoom()), winner);
+		rpsLog(player.getName(), challengee.getName(), "wins");
               }
               player.setInBattle(false);
               player.setChallenger(" ");
               player.setOption("");
               challengee.setChallenger(" ");
               challengee.setInBattle(false);
-              player.setOption("");
+              challengee.setOption("");
               break;
             case "SCISSORS":
               player.getReplyWriter().println("You chose SCISSORS.");
@@ -1234,6 +1255,7 @@ public class GameCore implements GameCoreInterface {
                 challengee.getReplyWriter().println(player.getName() + " chose SCISSORS: You win.");
                 winner = player.getName() + " challenged " + challengee.getName() + " to a Rock Paper Scissors Battle: " + challengee.getName() + " won.";
                 this.broadcast(map.findRoom(player.getCurrentRoom()), winner);
+		rpsLog(challengee.getName(), player.getName(), "wins");
               }
               else if (challengee.getOption().equals("SCISSORS")){
                 challengee.getReplyWriter().println("You chose SCISSORS.");
@@ -1241,6 +1263,7 @@ public class GameCore implements GameCoreInterface {
                 challengee.getReplyWriter().println(player.getName() + " chose SCISSORS: It is a tie.");
                 winner = player.getName() + " challenged " + challengee.getName() + " to a Rock Paper Scissors Battle: It is a tie.";
                 this.broadcast(map.findRoom(player.getCurrentRoom()), winner);
+		rpsLog(challengee.getName(), player.getName(), "ties");
               }
               else {
                 challengee.getReplyWriter().println("You chose PAPER.");
@@ -1248,6 +1271,7 @@ public class GameCore implements GameCoreInterface {
                 challengee.getReplyWriter().println(player.getName() + " chose SCISSORS: You win.");
                 winner = player.getName() + " challenged " + challengee.getName() + " to a Rock Paper Scissors Battle: " + player.getName() + " won.";
                 this.broadcast(map.findRoom(player.getCurrentRoom()), winner);
+		rpsLog(player.getName(), challengee.getName(), "wins");
               }
               player.setInBattle(false);
               player.setChallenger(" ");
