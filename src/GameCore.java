@@ -1659,11 +1659,15 @@ public class GameCore implements GameCoreInterface {
 	}
 	
 	public void addQuestion(String name, String question, String answer) {
-		PlayerAccountManager.AccountResponse resp = this.accountManager.getPlayer(name);
-		if(!resp.success())
-			return;
-		Player player = resp.player;
-		player.addQuestion(question, hash(answer));
+		//PlayerAccountManager.AccountResponse resp = this.accountManager.getPlayer(name);
+	
+		//if(!resp.success())
+			//return;
+		Player player = this.playerList.findPlayer(name);
+		if(player != null) {
+			player.addQuestion(question, hash(answer));
+		}
+		
 	}
 	
 	/**
@@ -1711,9 +1715,9 @@ public class GameCore implements GameCoreInterface {
 	}
 	
 	public void removeQuestion(String name, int num) {
-		PlayerAccountManager.AccountResponse resp = this.accountManager.getPlayer(name);
-		if(resp.success()) {
-			resp.player.removeQuestion(num);
+		Player player = this.playerList.findPlayer(name);
+		if(player != null) {
+			player.removeQuestion(num);
 		}
 	}
 
