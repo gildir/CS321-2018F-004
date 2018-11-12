@@ -62,7 +62,7 @@ public class RoomConnectivityVerifier {
             Room room = map.findRoom(i);
             if(room == null){
 //                System.out.println("no room with ID: " + i);
-                break;
+                continue;
             }
             allRoomIds.add(room.getId());
 //            if(!visitedRooms.contains(room)){
