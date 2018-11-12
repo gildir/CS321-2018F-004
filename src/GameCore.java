@@ -141,6 +141,46 @@ public class GameCore implements GameCoreInterface {
                  hbThread.setDaemon(true);
                  hbThread.setName("heartbeatChecker");
                  hbThread.start();
+				 
+				// Thread that controls the random appearance of spirits in the map
+				Thread spiritThread = new Thread(new Runnable() {
+					@Override
+					public void run() {
+						Random rand = new Random();
+						Room room = map.randomRoom();
+						String spirit = null;
+						
+						ArrayList<String> spirits = new ArrayList<String>();
+						//Add all spirit types here: ex: happy, sad, scary, etc.
+						spirits.add("test");
+						
+						while(true) {
+							try {
+								//A random spirit will appear in a random room every 20-30 seconds
+								Thread.sleep(20000 + rand.nextInt(10000));
+								
+								
+								//remove previously spawned spirit
+								if(room.hasSpirit()) {
+									GameCore.this.broadcast(room, "The " + spirit + " spirit has disappeared.");
+									room.removeSpirit();
+								}
+								
+								//add new spirit to random room
+								spirit = spirits.get(rand.nextInt(spirits.size()));
+								room = map.randomRoom();
+								room.addSpirit(spirit);
+								GameCore.this.broadcast(room, "A " + spirit + " spirit has appeared in the room.");
+						
+							} catch (InterruptedException ex) {
+								Logger.getLogger(GameObject.class.getName()).log(Level.SEVERE, null, ex);
+							}
+						}
+					}
+				});
+				spiritThread.setDaemon(true);
+				spiritThread.setName("spiritThread");
+				spiritThread.start();
         
                 // new thread awake and control the action of Ghoul.
                 // team5 added in 10/13/2018
@@ -254,7 +294,12 @@ public class GameCore implements GameCoreInterface {
     	return value;
     }
 
-
+	/**
+	 * Bribe the ghoul in the current room
+	 * @param playerName Player name
+	 * @param item item's name, which will be throw. 
+	 * @return String message of ghoul
+	 */
 	public String bribeGhoul(String playerName, String item){
 		item = item.toLowerCase();
 		Player player = playerList.findPlayer(playerName);
@@ -303,6 +348,11 @@ public class GameCore implements GameCoreInterface {
 
 	}
 
+	/**
+	 * Pokes the ghoul in the current room
+	 * @param playerName Player name
+	 * @return String message of ghoul
+	 */
 	public String pokeGhoul(String playerName) {
 		Player player = playerList.findPlayer(playerName);
 		Room room = this.map.findRoom(player.getCurrentRoom());
@@ -329,6 +379,28 @@ public class GameCore implements GameCoreInterface {
 		} else {
 			return null;
 		}}
+
+	/**
+	 * Captures the spirit in the current room
+	 * @param playerName Player name
+	 * @return String message of spirit capture success or failure
+	 */
+	public String capture(String playerName) {
+		Player player = playerList.findPlayer(playerName);
+		Room room = this.map.findRoom(player.getCurrentRoom());
+		
+		if(player != null) {
+			if(!room.hasSpirit()) {
+				return "There is no spirit in this room.";
+			}
+			String curSpirit = room.getSpirit();
+			room.removeSpirit();
+			return "You have captured a " + curSpirit;
+		} else {
+			return null;
+		}
+	}
+		
     /**
      * 605B_buy_method
      * Allows player to sell an item to a shop, and increases their money

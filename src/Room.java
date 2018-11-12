@@ -20,6 +20,7 @@ public class Room {
     private final LinkedList<NPC> npcs;
     //add tem state check for ghoul
     public boolean hasGhoul = false;
+	private String spirit;
 
     
     public Room(int id, String room_type, String title, String description) {
@@ -52,6 +53,7 @@ public class Room {
         result += this.getDescription() + "\n";
         result += "...................\n";
         result += "NPCs in the area: " + this.getNPCs() + "\n";
+		result += "Spirit in the area: " + this.getSpirit() + "\n";
         result += "Objects in the area: " + this.getObjects() + "\n";
         result += "Players in the area: " + this.getPlayers(playerList) + "\n";
         result += "You see paths in these directions: " + this.getExits() + "\n";
@@ -60,7 +62,22 @@ public class Room {
         return result;
     }
     
-    
+    public void addSpirit(String sp) {
+		this.spirit = sp;
+	}
+	
+	public void removeSpirit() {
+		this.spirit = null;
+	}
+	
+	public String getSpirit() {
+		return (this.spirit == null) ? ("None.") : (this.spirit + " spirit.");
+	}
+	
+	public boolean hasSpirit() {
+		return this.spirit != null;
+	}
+	
     public int getId() {
         return this.id;
     }

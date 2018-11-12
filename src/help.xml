@@ -69,6 +69,9 @@ object are on the ground and what direction you are facing.
         <help command = "BRIBE_GHOUL">
         <description>  BRIBE_GHOUL item_name    - Gives selected item to ghoul.</description>
     </help>
+    <help command = "CAPTURE">
+        <description>  CAPTURE    - Captures the spirit in the current room.</description>
+    </help>
         <help command = "SORT">
         <description>  SORT          - Sorts your inventory</description>
     </help>
@@ -83,12 +86,6 @@ object are on the ground and what direction you are facing.
     </help>
         <help command = "DROP">
         <description>  DROP object   - Tries to drop an object from your pockets in the same area</description>
-    </help>
-        <help command = "POKE_GHOUL">
-        <description>  POKE_GHOUL    - Pokes the ghoul in the current room.</description>
-    </help>
-        <help command = "POKE_GHOUL">
-        <description>  POKE_GHOUL    - Pokes the ghoul in the current room.</description>
     </help>
     <help command = "REDO">
         <description>  REDO          - Repeats the last command you entered.</description>
