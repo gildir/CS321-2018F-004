@@ -335,6 +335,42 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
     }
 
     /**
+     * Attempts to use an item< target >. Will return a message on any success or failure.
+     * @param name Name of the player to move
+     * @param target The case-insensitive name of the object to use.
+     * @return Message showing success.
+     * @throws RemoteException
+     */
+    @Override
+    public String useItem(String name, String target) throws RemoteException {
+        return core.useItem(name, target);
+    }
+
+    /**
+     * Gets the title of the player. Will return a message on any success or failure.
+     * @param name Name of the player
+     * @return title of player, if applicable.
+     * @throws RemoteException
+     */
+    @Override
+    public String getPlayerTitle(String name) throws RemoteException {
+        return core.getPlayerTitle(name);
+    }
+
+    /**
+     *  Strips title from a player.
+     *  @param name name of the player
+     *  @throws RemoteException
+     */
+    public boolean removePlayerTitle(String name) {
+	return core.removePlayerTitle(name);
+    }
+
+	public String examine(String name, String target) throws RemoteException 
+	{
+		return core.examine(name, target);
+	}
+    /**
      * Attempts to erase the whiteboard in the room. Will return a message on any success or failure.
      * @param name Name of the player to erase the whiteboard
      * @return Message showing success. 
@@ -414,8 +450,18 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
      * @param message String name of item being offered
      */
     @Override
-    public String offer (String srcName, String dstName, String message) throws RemoteException{
-	    return core.offer(srcName, dstName, message);
+    public String offer (String srcName, String message1, String junk, String message2) throws RemoteException{
+	    return core.offer(srcName, message1, junk, message2);
+    }
+
+    /**
+     * Returns a string message about success of offer and status of inventory
+     * @param dstName Name of player accepting or rejecting the offer
+     * @param reply whther the offer has been accepted or rejected
+     * @return Message showing status of offer reply
+     */
+    public String offerReply(String dstName, boolean reply) throws RemoteException{
+        return core.offerReply(dstName, reply);
     }
         
     /**
