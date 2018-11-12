@@ -1,3 +1,4 @@
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 
 /**
@@ -183,9 +184,26 @@ public interface GameCoreInterface {
      * Takes the player into venmo. The new and improved way to exchange money with other players.
      * 
      * @author Team 4: Alaqeel
-     * @param name Name of the player enter the bank
+     * @param name Name of the player
      */    
     public String venmo(String name, ArrayList<String> tokens);
+    
+    /**
+     * @author Group: King
+     * @param name Name of the player trying to shop
+     * @return Returns the id of the room the player has just entered a bank in 
+     * @throws RemoteException
+     */
+    public int bank(String name) throws RemoteException;
+    
+    /**
+     * Gives the central bank object commands (implimented like this for maximum encapsulation)
+     * @param cmd_id The id of the command to be used (mapped in the BankClient class)
+     * @param name The name of the user interacting with the Bank
+     * @param cmd Any extra arguments that may need to be sent to the command
+     * @return A string based on the success or failure of the command
+     */
+    public String bankCmdRunner(String cmd, String name, String args);
     
     /**
      * Returns a reference to a shop 
@@ -226,6 +244,13 @@ public interface GameCoreInterface {
      * @return A formatted string representing the Shop's "In Demand" inventory
      */
     public String getShopDemInv(int id);
+  
+    /**
+     * updates the playlist in the Shop
+     * @param name Name of the player
+     * @return void
+     */
+    public void shopLeft(String name);
 
     /**
      * Returns a string representation of the offer statement.

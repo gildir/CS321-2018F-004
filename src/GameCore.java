@@ -32,6 +32,7 @@ public class GameCore implements GameCoreInterface {
     private HashMap<Integer,Shop> shoplist;
     private Ghoul ghoul;
     private PrintWriter pw;
+    private Bank bank;
 
 	// Accounts and Login
 	private final PlayerAccountManager accountManager;
@@ -62,6 +63,9 @@ public class GameCore implements GameCoreInterface {
         // Builds a list of shops mapped to their map id (can be expanded as needed)
         shoplist = new HashMap<Integer,Shop>();
         shoplist.put(new Integer(1), new Shop("Clocktower shop", "The shopping destination for all of your gaming needs."));
+
+        // Set up empty central bank
+        bank = new Bank();
         
         pw = new PrintWriter(new FileWriter("chatlog.txt"));
         pw.flush();
@@ -197,7 +201,76 @@ public class GameCore implements GameCoreInterface {
 		}
     }
     
-      
+
+    /**
+     * @author Group 4: King
+     * If player is in an area that allows it, they may enter a bank and save/withdraw money
+     * @param name 
+     * @return the id of the bank they have entered
+     */
+    public int bank(String name) {
+    	Player player = this.playerList.findPlayer(name);
+    	Room room = map.findRoom(player.getCurrentRoom());
+    	
+    	if (map.isShoppable(room)) { // For now we will make shop rooms also banks: subject to change
+    		return room.getId();
+    	}
+    	return -1;
+    }
+    
+    /**
+     * Gives the central bank object commands (implimented like this for maximum encapsulation)
+     * @param cmd The id of the command to be used (mapped in the BankClient class)
+     * @param name The name of the user interacting with the Bank
+     * @param args Any extra arguments that may need to be sent to the command
+     * @return A string based on the success or failure of the command
+     */
+    public String bankCmdRunner(String cmd, String name, String args) {
+		//parse arguments
+    	String tokens[] = args.split("\\s+");
+    	Player player = this.playerList.findPlayer(name);
+    	double value;
+    	
+    	switch (cmd) {
+			case "deposit":
+			// Expects a double for how much player deposits
+				value = Double.parseDouble(tokens[0]);
+				double playerMoney = player.getMoney();
+				
+				if (value < 0) {
+					return "Surprisingly, this is the only place in college you can't put yourself in debt";
+				}
+				
+				else if (value == 0) {
+					return "The teller looks at your deposit slip for $0.00 and frowns. She's not amused";
+				}
+				
+				else if (playerMoney >= value) {
+					player.setMoney(player.getMoney() - value);
+					double newBalance = bank.deposit(name, value);
+					return String.format("New account balance: $%.2f", newBalance);
+				} else {
+					return String.format("You don't have enough money to deposit $%.2f", value);
+				}
+			
+			case "withdraw":
+			// Expects a double for how much player withdraws 
+				value = Double.parseDouble(tokens[0]);
+				
+				if(bank.canWithdraw(name, value)) {
+					player.setMoney(player.getMoney() + value);
+					return 	bank.withdraw(name, Long.parseLong(tokens[0])) + 
+							String.format("\nNew wallet balance: $%.2f", player.getMoney());
+				} else {
+					return "You don't have enough money in your account";
+				}
+				
+			case "printAccount":
+				return bank.printAccount(name);	
+		}
+    	
+    	return "";
+    }
     
     /**
      * @author Group 4: King
@@ -211,13 +284,24 @@ public class GameCore implements GameCoreInterface {
     	
     	// Add player to shop in room if applicable
     	if (map.isShoppable(room)) {
+    		shoplist.get(room.getId()).addPlayer(player);
     		return room.getId();
     	}
     	return -1;
     }
     
-
-
+    /**
+     * updates the playlist in the Shop
+     * @param name Name of the player
+     * @return void
+     */
+    public void shopLeft(String name)
+    {
+    	Player player = this.playerList.findPlayer(name);
+    	Room room = map.findRoom(player.getCurrentRoom());
+    	shoplist.get(room.getId()).removePlayer(player);
+    }
+    
     /**
      * Returns Shop.tostring
      * @param id The shop's id in the hashmap
@@ -264,8 +348,7 @@ public class GameCore implements GameCoreInterface {
     	}
     	return value;
     }
-
-
+    
 	public String bribeGhoul(String playerName, String item){
 		item = item.toLowerCase();
 		Player player = playerList.findPlayer(playerName);
@@ -365,7 +448,7 @@ public class GameCore implements GameCoreInterface {
     	
     	if(s.getInven().contains(item))
     	{
-    		if (player.getMoney() > item.price) {
+    		if (player.getMoney() > item.getPrice() * 1.2) {
     			s.remove(item);
     		}
     		else {
@@ -376,8 +459,7 @@ public class GameCore implements GameCoreInterface {
     	
     	player.addObjectToInventory(item);
     
-    	//val = removed.getValue() * 1.2;
-    	val = item.price;
+    	val = item.getPrice() * 1.2;
     	player.changeMoney(-val);
     	return "Thank you, that will be $" + val + ".";
     }
@@ -394,26 +476,50 @@ public class GameCore implements GameCoreInterface {
 		
 		// Gets the object of the caller player
 		Player player1 = this.playerList.findPlayer(name);
-			
+		Player player2;
+		double amount;
 		// Executes the relevant commands
 		switch(tokens.remove(0).toUpperCase()) {
 			case "SEND": // sending a transaction
-				if (tokens.isEmpty()) return "Specify recipient and amount.";
+				if (tokens.isEmpty()) return "Specify recipient and amount. Type \"venmo help\" to learn more.";
 				// gets the object of the receiving player
-				Player player2 = this.playerList.findPlayer(tokens.remove(0));
+				player2 = this.playerList.findPlayer(tokens.remove(0));
 				// checks that the name is correct
-				if (player2 == null) return "Incorrect player name."; 
+				if (player2 == null) return "Incorrect player name. Type \"venmo help\" to learn more."; 
 				// checks if user entered a transaction amount
-				if (tokens.isEmpty()) return "Specify transaction amount";
+				if (tokens.isEmpty()) return "Specify transaction amount. Type \"venmo help\" to learn more.";
 				
-				float amount;
 				// checks if the player entered a valid number
 				try {
 					amount = Float.parseFloat(tokens.remove(0));
 				} catch (NumberFormatException e) {
-					return "Please enter a valid number.";
+					return "Please enter a valid number. Type \"venmo help\" to learn more.";
 				}
 				return Venmo.send(player1, player2, amount);
+			case "OFFER": // offering a transaction
+                if (tokens.isEmpty()) return "Specify recipient and amount. Type \"venmo help\" to learn more.";
+                // gets the object of the receiving player
+                player2 = this.playerList.findPlayer(tokens.remove(0));
+                // checks that the name is correct
+                if (player2 == null) return "Incorrect player name. Type \"venmo help\" to learn more."; 
+                // checks if user entered a transaction amount
+                if (tokens.isEmpty()) return "Specify transaction amount. Type \"venmo help\" to learn more.";
+                
+                // checks if the player entered a valid number
+                try {
+                    amount = Float.parseFloat(tokens.remove(0));
+                } catch (NumberFormatException e) {
+                    return "Please enter a valid number. Type \"venmo help\" to learn more.";
+                }
+                return Venmo.offer(player1, player2, amount);
+			case "ACCEPT": // accepting a transaction
+                if (tokens.isEmpty()) return "Enter the transaction ID. Type \"venmo help\" to learn more.";
+                return Venmo.accept(player1, tokens.remove(0));
+			case "REJECT": // rejecting a transaction
+                if (tokens.isEmpty()) return "Enter the transaction ID. Type \"venmo help\" to learn more.";
+                return Venmo.reject(player1, tokens.remove(0));
+			case "LIST": // listing pending transactions
+			    return Venmo.list(player1);
 			case "HELP": // prints the help menu
 				return "This is how you can use Venmo:\n" + Venmo.instructions();
 			case "DEMO": // helpful for demo purposes
