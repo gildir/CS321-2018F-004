@@ -1395,6 +1395,65 @@ public class GameCore implements GameCoreInterface {
       }
     }
 
+	/**
+	 * Initiates dialogue with NPC
+	 * @param playerName Player name
+	 * @param npcName NPC name
+	 * @return Dialogue options for player
+	 */
+    public String talkNpc(String name, String npcName) {
+        Player player = this.playerList.findPlayer(name);
+        if(player != null) {
+            Room room = map.findRoom(player.getCurrentRoom());
+            NPC npc = room.getNPCs().get(npcName);
+            if (npc != null) {
+
+                StringBuilder sb = new StringBuilder();
+                for (int i = 0; i < npc.getDialogueList().size(); i++) {
+                    sb.append(i).append(": ");
+                    sb.append(npc.getDialogueList().get(i).getPrompt());
+                    sb.append("\n");
+                }
+
+                this.broadcast(player, player.getName() + " begins to talk to NPC: " + npcName + ".");
+                return sb.toString();
+            }
+            else {
+                return null;
+            }
+        }
+        else {
+            return null;
+        }
+    }
+
+	/**
+	 * Selects dialogue option with NPC and gets response
+	 * @param playerName Player name
+	 * @param npcName NPC name
+	 * @param dialogueChoice Choice of dialogue option
+	 * @return Dialogue options for player
+	 */
+    public String selectNPCDialogueOption(String name, String npcName, int dialogueChoice) {
+        Player player = this.playerList.findPlayer(name);
+        if(player != null) {
+            Room room = map.findRoom(player.getCurrentRoom());
+            NPC npc = room.getNPCs().get(npcName);
+            if (npc != null) {
+                if (dialogueChoice < npc.getDialogueList().size() && dialogueChoice >= 0) {
+                    return npc.getDialogueList().get(dialogueChoice).getResponse();
+                }
+                return "No dialogue choice by that number.";
+            }
+            else {
+                return "No npc by that name is in the room.";
+            }
+        }
+        else {
+            return null;
+        }
+    }
+
     //Feature 411. Shout
     /**
      * Shouts "message" to everyone in the current area.
