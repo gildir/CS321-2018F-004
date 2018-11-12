@@ -210,7 +210,7 @@ public class Player {
         // send prefix, timestamp, source, type, ", ", and message
         this.getReplyWriter().println(
             "[$PREFIX]" +
-            "[$TIME]" + " " +
+            String.format("%tD %<tT", GameServer.getDate()) + " " +
             source.getName() + " " +
             messageType + ", " +
             newMessage);
@@ -224,7 +224,7 @@ public class Player {
     public String getMessage() {
         return
             "[$PREFIX]" +
-            "[$TIME]" +
+            String.format("%tD %<tT", GameServer.getDate()) +
             " You ";
     }
 
