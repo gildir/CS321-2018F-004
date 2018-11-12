@@ -203,7 +203,7 @@ public class GameCore implements GameCoreInterface {
                         while (true) {
                             try {
                                 // Ghoul move in each 12-17 seconds.
-                                Thread.sleep(120000000 + rand.nextInt(5000));//12000+5000
+                                Thread.sleep(12000 + rand.nextInt(5000));//12000+5000
 
                                 // make Ghoul walk to other room;
                                 GameCore.this.ghoulWander(ghoul, room);
@@ -229,7 +229,7 @@ public class GameCore implements GameCoreInterface {
 					for(Player p : playerList){
 						broadcast(p, "MORNING!!!!!!!!!!!!!!!!!");
 					}
-					Thread.sleep(4500);
+					Thread.sleep(30000);
 					for(Player p : playerList){
 						broadcast(p, "evening...................");
 					}
@@ -246,7 +246,7 @@ public class GameCore implements GameCoreInterface {
 							while (!isDay) {
 							    try {
 								// Ghoul move in each 12-17 seconds.
-								Thread.sleep(2000000000 + rand.nextInt(1000));//2000
+								Thread.sleep(6000 + rand.nextInt(2500));//2000
 
 								// make Ghoul walk to other room;
 								GameCore.this.ghoulWander(ghoul, room);
@@ -262,7 +262,7 @@ public class GameCore implements GameCoreInterface {
 						}
 					});
 					nightGhoul.start();
-					Thread.sleep(45000000);//4500
+					Thread.sleep(30000);//4500
 					isDay = true;
 					Thread.sleep(1000);
 		                    } catch (InterruptedException ex) {
