@@ -138,4 +138,7 @@ object are on the ground and what direction you are facing.
     <help command = "TEACH">
         <description>  TEACH                   - Teaches you the basics of how to play R-P-S.</description>
     </help>
+     <help command = "TOGGLERPSCHAT">
+	<description> TOGGLERPSCHAT		-Toggles the win resolutions of R-P-S battles in your area.</description>
+    </help>
 </helps>
