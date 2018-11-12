@@ -32,4 +32,45 @@ public class NPC {
     public String toString(){
         return "NPC " + getName();
     }
+
+    public boolean changeDialogueList(String dialogueTag, int changeTagId)
+    {
+        for (int i = 0; i < dialogueList.size(); i++) {
+            if (dialogueList.get(i).usingTag() && dialogueList.get(i).getTag() == dialogueTag)
+            {
+                dialogueList.get(i).changeDialogueId(changeTagId);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean incrementDialogueList(String dialogueTag)
+    {
+        for (int i = 0; i < dialogueList.size(); i++) {
+            if (dialogueList.get(i).usingTag() && dialogueList.get(i).getTag() == dialogueTag)
+            {
+                dialogueList.get(i).changeDialogueId(dialogueList.get(i).getDialogueId() + 1);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public int getDialogueId(String dialogueTag)
+    {
+        for (int i = 0; i < dialogueList.size(); i++) {
+            if (dialogueList.get(i).usingTag() && dialogueList.get(i).getTag() == dialogueTag)
+            {
+                return dialogueList.get(i).getDialogueId();
+            }
+        }
+        
+        return -1;
+    }
+
+    public void addToDialogueList(String dialogueTag, String prompt)
+    {
+        dialogueList.add(new DialogueOption(prompt, dialogueTag, true));
+    }
 }
