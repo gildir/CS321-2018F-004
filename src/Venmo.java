@@ -54,7 +54,7 @@ public class Venmo {
 
         // Takes the amount out of the sender's wallet.
         from.changeMoney(-rounded);
-        // Adds the amount to the receipient's wallet.
+        // Adds the amount to the recipient's wallet.
         to.changeMoney(rounded);
 
         // Displays a message to the recipient
@@ -241,8 +241,8 @@ public class Venmo {
      * @return Instructions on how to use Venmo.
      */
     public static String instructions() {
-        return    "1- To send money, type: venmo send [recepient] [amount]\n"
-                + "2- To offer money, type: venmo offer [recepient] [amount]\n"
+        return    "1- To send money, type: venmo send [recipient] [amount]\n"
+                + "2- To offer money, type: venmo offer [recipient] [amount]\n"
                 + "2- To accept a money transfer, type: venmo accept [transaction ID]\n"
                 + "3- To reject a money transfer, type: venmo reject [transaction ID]\n"
                 + "4- To list your pending transactions, type: venmo list";
