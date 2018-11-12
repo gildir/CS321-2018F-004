@@ -63,10 +63,6 @@ public class GameCore implements GameCoreInterface {
         shoplist = new HashMap<Integer,Shop>();
         shoplist.put(new Integer(1), new Shop("Clocktower shop", "The shopping destination for all of your gaming needs."));
         
-        // Builds a list of shops mapped to their map id (can be expanded as needed)
-        shoplist = new HashMap<Integer,Shop>();
-        shoplist.put(new Integer(1), new Shop("Clocktower shop", "The shopping destination for all of your gaming needs."));
-
         pw = new PrintWriter(new FileWriter("chatlog.txt"));
         pw.flush();
         pw.close();
@@ -244,13 +240,28 @@ public class GameCore implements GameCoreInterface {
     	double value = 0;
     	
     	Item removed = player.removeObjectFromInventory(item);
+
     	if (removed != null) {
-    		s.add(removed);
-    		value = removed.price;
-        	player.changeMoney(value);
+            //check to see if the item is in demand
+
+            for (Item x : s.getDemand()){
+                if (x.getName().compareToIgnoreCase(removed.getName()) == 0){
+                    //remove and replace the in demand item
+                    s.removeDemand(x);
+                    s.addDemandRand();
+
+                    value = removed.getPrice()*2; //player gets double item's price
+                    player.changeMoney(value);
+                    s.add(removed); //add sold item to shop's inv
+                    return value;
+                }
+            }
+            value = removed.getPrice();
+            
+            s.add(removed); //add sold item to shop's inv
+            
+            player.changeMoney(value);            
     	}
-    	
-    	//int value = removed.getValue();
     	return value;
     }
 
@@ -329,6 +340,7 @@ public class GameCore implements GameCoreInterface {
 		} else {
 			return null;
 		}}
+
     /**
      * 605B_buy_method
      * Allows player to sell an item to a shop, and increases their money
@@ -436,7 +448,7 @@ public class GameCore implements GameCoreInterface {
      */
     public String getShopInv(int id) {
 		Shop s = this.shoplist.get(new Integer(id));
-		return s.getObjects();
+		return s.getObjects(0);
     }
 
     /**
@@ -446,7 +458,7 @@ public class GameCore implements GameCoreInterface {
      */
     public String getShopDemInv(int id) {
         Shop s = this.shoplist.get(new Integer(id));
-        return s.getObjectsInDemand();
+        return s.getObjects(1);
     }
     
     /**
