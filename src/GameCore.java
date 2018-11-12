@@ -1208,7 +1208,6 @@ public class GameCore implements GameCoreInterface {
     public String pickRPS(String name,  String option){
       Player player = this.playerList.findPlayer(name);
       Player challengee = this.playerList.findPlayer(player.getChallenger());
-      System.out.println("helloooooo \t " + player.getRounds() + "here");
       pickRPSToggle = true;
 
       if(player.getInBattle() == true && player.getRounds() > 0){
@@ -1232,9 +1231,9 @@ public class GameCore implements GameCoreInterface {
                 winner = player.getName() + " challenged " + challengee.getName() + " to a Rock Paper Scissors Battle: " + challengee.getName() + " won this round.";
                 challengee.setWins(challengee.getWins()+1);
                 this.broadcast(map.findRoom(player.getCurrentRoom()), winner);
-		rpsLog(player.getName(), challengee.getName(), "wins", player.getOption(), challengee.getOption());
+		        rpsLog(player.getName(), challengee.getName(), "wins", player.getOption(), challengee.getOption());
       		pickRPSToggle = false;  		
-		}		      
+		      }		      
               else if (challengee.getOption().equals("ROCK")){
                 challengee.getReplyWriter().println("You chose ROCK.");
                 player.getReplyWriter().println(challengee.getName() + " chose ROCK: It is a tie.");
@@ -1266,8 +1265,16 @@ public class GameCore implements GameCoreInterface {
                 int p1Win = player.getWins();
                 int p2Win = challengee.getWins();
                 if(p1Win > p2Win){
-                    String winner2= player.getName() + " challenged " + challengee.getName() + " to a Rock Paper Scissors Battle: " + player.getName() + " won the tournament with a final score of " + p1Win + " - " + p2Win + ".";
+                    String winner2 = player.getName() + " challenged " + challengee.getName() + " to a Rock Paper Scissors Battle: " + player.getName() + " won the tournament with a final score of " + p1Win + " - " + p2Win + ".";
                     this.broadcast(map.findRoom(player.getCurrentRoom()), winner2);
+                }
+                else if(p2Win > p1Win){
+                    String winner2 = player.getName() + " challenged " + challengee.getName() + " to a Rock Paper Scissors Battle: " + player.getName() + " won the tournament with a final score of " + p1Win + " - " + p2Win + ".";
+                    this.broadcast(map.findRoom(player.getCurrentRoom()), winner2);
+                }
+                else{
+                    String noWinner = player.getName() + " challenged " + challengee.getName() + " to a Rock Paper Scissors Battle: They tied in the tournament with a final score of " + p1Win + " - " + p2Win + ".";
+                    this.broadcast(map.findRoom(player.getCurrentRoom()), noWinner);   
                 }
 
                 player.setInBattle(false);
@@ -1326,6 +1333,14 @@ public class GameCore implements GameCoreInterface {
                 if(p1Win > p2Win){
                     String winner2 = player.getName() + " challenged " + challengee.getName() + " to a Rock Paper Scissors Battle: " + player.getName() + " won the tournament with a final score of " + p1Win + " - " + p2Win + ".";
                     this.broadcast(map.findRoom(player.getCurrentRoom()), winner2);
+                }
+                else if(p2Win > p1Win){
+                    String winner2 = player.getName() + " challenged " + challengee.getName() + " to a Rock Paper Scissors Battle: " + player.getName() + " won the tournament with a final score of " + p1Win + " - " + p2Win + ".";
+                    this.broadcast(map.findRoom(player.getCurrentRoom()), winner2);
+                }
+                else{
+                    String noWinner = player.getName() + " challenged " + challengee.getName() + " to a Rock Paper Scissors Battle: They tied in the tournament with a final score of " + p1Win + " - " + p2Win + ".";
+                    this.broadcast(map.findRoom(player.getCurrentRoom()), noWinner);   
                 }
 
                 player.setInBattle(false);
