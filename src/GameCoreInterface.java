@@ -239,6 +239,12 @@ public interface GameCoreInterface {
     public String getShopInv(int id);
 
     /**
+     * updates the playlist in the Shop
+     * @param name Name of the player
+     * @return void
+     */
+    public void shopLeft(String name);
+    /**
      * Returns a string representation of the offer statement.
      * @param srcName Name of player making offer
      * @param dstName Name of player receiving offer

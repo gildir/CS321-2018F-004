@@ -284,11 +284,24 @@ public class GameCore implements GameCoreInterface {
     	
     	// Add player to shop in room if applicable
     	if (map.isShoppable(room)) {
+    		shoplist.get(room.getId()).addPlayer(player);
     		return room.getId();
     	}
     	return -1;
     }
-
+    
+    /**
+     * updates the playlist in the Shop
+     * @param name Name of the player
+     * @return void
+     */
+    public void shopLeft(String name)
+    {
+    	Player player = this.playerList.findPlayer(name);
+    	Room room = map.findRoom(player.getCurrentRoom());
+    	shoplist.get(room.getId()).removePlayer(player);
+    }
+    
     /**
      * Returns Shop.tostring
      * @param id The shop's id in the hashmap
