@@ -398,6 +398,10 @@ public class GameCore implements GameCoreInterface {
 				//	giveAble = itemList.remove(thing);
 				//	break;
 				//}
+			LinkedList<Ghoul> ghouls = room.getGhouls();
+			if (ghouls.isEmpty()) {return "There is no ghoul in this room.";}
+			Random rand = new Random();
+			Ghoul ghoul = ghouls.get(rand.nextInt(ghouls.size()));
             boolean giveAble = false;
             if (object != null){
                 giveAble = true;
