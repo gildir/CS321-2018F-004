@@ -194,7 +194,7 @@ public class Venmo {
         // Generates and displays an update message to the sender.
         String format = "**Venmo update**\n"
                 + "%s has rejected your transaction of $%.2f."
-                + "The money is now added back to your wallet.\n"
+                + "The money is now back in your wallet.\n"
                 + "You now have: $%.2f";
         from.getReplyWriter().println(String.format(format, to.getName(), amount, from.getMoney()));
         venmo.transactions.remove(TranID);
@@ -203,7 +203,7 @@ public class Venmo {
         System.out.printf("[Venmo] %s - %s rejected %s's offer of $%.2f\n", TranID, to.getName(), from.getName(), amount);
 
         // Generates and returns a summary message to the recipient.
-        return String.format("Transaction rejected. $%.2f are now back at %s's wallet", amount, from.getName());
+        return String.format("Transaction rejected. $%.2f is now back in %s's wallet", amount, from.getName());
     }
 
     /**
