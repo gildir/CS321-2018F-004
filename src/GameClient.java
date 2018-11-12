@@ -223,13 +223,11 @@ public class GameClient {
     private String parseMessage(ArrayList<String> msgTokens) {
         //TODO: Note - Tokenizer currently trims out multiple spaces - bug or feature?
         StringBuilder msgBuilder = new StringBuilder();
-        msgBuilder.append("\"");
         while (!msgTokens.isEmpty()) {
             msgBuilder.append(msgTokens.remove(0));
             if (!msgTokens.isEmpty())
                 msgBuilder.append(" ");
         }
-        msgBuilder.append("\"");
         return msgBuilder.toString();
     }
 
