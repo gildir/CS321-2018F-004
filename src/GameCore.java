@@ -447,6 +447,13 @@ public class GameCore implements GameCoreInterface {
 				e.printStackTrace();
 			}
 
+			//random select ghoul in the room; 
+			LinkedList<Ghoul> ghouls = room.getGhouls();
+			if (ghouls.isEmpty()) {return "There is no ghoul in this room.";}
+			Random rand = new Random();
+			Ghoul ghoul = ghouls.get(rand.nextInt(ghouls.size()));
+
+
 			ghoul.modifyAngryLevel(1);
 			int angerLvl = ghoul.getAngryLevel();
 			if (angerLvl >= 7) {

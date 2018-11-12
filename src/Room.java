@@ -75,6 +75,9 @@ public class Room {
 		this.hasGhoul = !(this.ghouls.isEmpty());
 		return inf;
 	}
+	public LinkedList<Ghoul> getGhouls(){
+		return this.ghouls;
+	}
 
     public LinkedList<Room> getNearByRoom(Map map) {
 	LinkedList<Room> rooms = new LinkedList<Room>();
