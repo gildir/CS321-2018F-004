@@ -5,6 +5,14 @@ import java.util.ArrayList;
  * @author Kevin
  */
 public interface GameCoreInterface {
+
+
+	/**
+	 * add Spririts from a text file; help method, ignore it.
+	 * hopefully we keep 20 spririts from now to the end of the world......
+	 * @param spirits Spirits collection. 
+	 */
+	public void addSpririts(ArrayList<String> spirits);
 	
 	/**
 	 * Makes the ghoul walk to an adjacent room

@@ -1,0 +1,92 @@
+Daily Log for 11-12-2018
+[11-12-2018 03:30:16] - SERVER STARTED
+[11-12-2018 03:30:24] - SERVER FORCIBLY TERMINATED
+[11-12-2018 03:49:52] - SERVER STARTED
+[11-12-2018 03:50:02] - SERVER FORCIBLY TERMINATED
+[11-12-2018 09:14:39] - SERVER STARTED
+[11-12-2018 09:14:57] - SERVER FORCIBLY TERMINATED
+[11-12-2018 09:15:38] - SERVER STARTED
+[11-12-2018 09:17:29] - SERVER FORCIBLY TERMINATED
+[11-12-2018 09:21:37] - SERVER STARTED
+[11-12-2018 09:21:45] - SERVER FORCIBLY TERMINATED
+[11-12-2018 09:23:46] - SERVER STARTED
+[11-12-2018 09:24:15] - You see a Ghoul enter this room
+[11-12-2018 09:24:16] - You see a Ghoul leave this room
+[11-12-2018 09:24:26] - You see a Ghoul appear in this room
+[11-12-2018 09:24:38] - You see a Ghoul appear in this room
+[11-12-2018 09:24:39] - You see a Ghoul leave this room
+[11-12-2018 09:24:50] - You see a Ghoul appear in this room
+[11-12-2018 09:24:56] - SERVER FORCIBLY TERMINATED
+[11-12-2018 09:32:58] - SERVER STARTED
+[11-12-2018 09:33:13] - SERVER FORCIBLY TERMINATED
+[11-12-2018 09:33:55] - SERVER STARTED
+[11-12-2018 09:34:09] - SERVER FORCIBLY TERMINATED
+[11-12-2018 09:34:57] - SERVER STARTED
+[11-12-2018 09:35:05] - SERVER FORCIBLY TERMINATED
+[11-12-2018 09:36:47] - SERVER STARTED
+[11-12-2018 09:37:05] - SERVER FORCIBLY TERMINATED
+[11-12-2018 09:38:31] - SERVER STARTED
+[11-12-2018 09:38:38] - SERVER FORCIBLY TERMINATED
+[11-12-2018 09:38:57] - SERVER STARTED
+[11-12-2018 09:39:06] - SERVER FORCIBLY TERMINATED
+[11-12-2018 09:40:00] - SERVER STARTED
+[11-12-2018 09:40:17] - SERVER FORCIBLY TERMINATED
+[11-12-2018 09:44:46] - SERVER STARTED
+[11-12-2018 09:45:01] - You see a day Ghoul named -pt5$ appear in this room
+[11-12-2018 09:45:03] - You see a night Ghoul named u#l2# appear in this room
+[11-12-2018 09:45:04] - You see a night Ghoul named u#l2# appear in this room
+[11-12-2018 09:45:05] - You see a night Ghoul named u#l2# appear in this room
+[11-12-2018 09:45:06] - You see a night Ghoul named u#l2# appear in this room
+[11-12-2018 09:45:07] - You see a night Ghoul named u#l2# appear in this room
+[11-12-2018 09:45:08] - You see a night Ghoul named u#l2# appear in this room
+[11-12-2018 09:45:14] - A REAL_SSR_GOLDEN_LEGENDARY_Super_Interest_Spirit_NUMBER_10 spirit has appeared in the room.
+[11-12-2018 09:45:14] - You see a day Ghoul named -pt5$ appear in this room
+[11-12-2018 09:45:15] - You see a night Ghoul named zjpa# appear in this room
+[11-12-2018 09:45:16] - You see a night Ghoul named zjpa# appear in this room
+[11-12-2018 09:45:17] - You see a night Ghoul named zjpa# appear in this room
+[11-12-2018 09:45:18] - You see a night Ghoul named zjpa# appear in this room
+[11-12-2018 09:45:20] - You see a night Ghoul named zjpa# appear in this room
+[11-12-2018 09:45:27] - You see a night Ghoul named }"4j# appear in this room
+[11-12-2018 09:45:28] - You see a night Ghoul named }"4j# appear in this room
+[11-12-2018 09:45:29] - You see a day Ghoul named -pt5$ appear in this room
+[11-12-2018 09:45:29] - You see a night Ghoul named }"4j# appear in this room
+[11-12-2018 09:45:30] - You see a night Ghoul named }"4j# appear in this room
+[11-12-2018 09:45:32] - You see a night Ghoul named }"4j# appear in this room
+[11-12-2018 09:45:39] - You see a night Ghoul named Ys&F" appear in this room
+[11-12-2018 09:45:39] - The REAL_SSR_GOLDEN_LEGENDARY_Super_Interest_Spirit_NUMBER_10 spirit has disappeared.
+[11-12-2018 09:45:40] - You see a night Ghoul named Ys&F" appear in this room
+[11-12-2018 09:45:41] - You see a night Ghoul named Ys&F" appear in this room
+[11-12-2018 09:45:42] - You see a day Ghoul named -pt5$ appear in this room
+[11-12-2018 09:45:42] - You see a night Ghoul named Ys&F" appear in this room
+[11-12-2018 09:45:43] - You see a night Ghoul named Ys&F" appear in this room
+[11-12-2018 09:45:44] - You see a night Ghoul named Ys&F" appear in this room
+[11-12-2018 09:45:51] - You see a night Ghoul named 1\Wr appear in this room
+[11-12-2018 09:45:52] - You see a night Ghoul named 1\Wr appear in this room
+[11-12-2018 09:45:53] - You see a night Ghoul named 1\Wr appear in this room
+[11-12-2018 09:45:53] - You see a night Ghoul named 1\Wr appear in this room
+[11-12-2018 09:45:54] - You see a night Ghoul named 1\Wr appear in this room
+[11-12-2018 09:45:55] - You see a night Ghoul named 1\Wr appear in this room
+[11-12-2018 09:45:56] - You see a night Ghoul named 1\Wr appear in this room
+[11-12-2018 09:45:58] - SERVER FORCIBLY TERMINATED
+[11-12-2018 09:46:48] - SERVER STARTED
+[11-12-2018 09:46:55] - SERVER FORCIBLY TERMINATED
+[11-12-2018 09:47:03] - SERVER STARTED
+[11-12-2018 09:47:16] - You see a day Ghoul named (v`C$ enter in this room
+[11-12-2018 09:47:19] - You see a night Ghoul named t/u-" appear in this room
+[11-12-2018 09:47:21] - You see a night Ghoul named t/u-" leave in this room
+[11-12-2018 09:47:22] - You see a night Ghoul named t/u-" enter in this room
+[11-12-2018 09:47:23] - You see a night Ghoul named t/u-" leave in this room
+[11-12-2018 09:47:23] - You see a night Ghoul named t/u-" enter in this room
+[11-12-2018 09:47:24] - You see a night Ghoul named t/u-" leave in this room
+[11-12-2018 09:47:28] - You see a day Ghoul named (v`C$ leave in this room
+[11-12-2018 09:47:31] - You see a night Ghoul named uR(?" appear in this room
+[11-12-2018 09:47:32] - A REAL_SSR_GOLDEN_LEGENDARY_Super_Interest_Spirit_NUMBER_19 spirit has appeared in the room.
+[11-12-2018 09:47:33] - You see a night Ghoul named uR(?" leave in this room
+[11-12-2018 09:47:33] - You see a night Ghoul named uR(?" enter in this room
+[11-12-2018 09:47:34] - You see a night Ghoul named uR(?" leave in this room
+[11-12-2018 09:47:35] - You see a night Ghoul named uR(?" enter in this room
+[11-12-2018 09:47:36] - You see a night Ghoul named uR(?" leave in this room
+[11-12-2018 09:47:37] - You see a student rush past and drop a Flower99 (0.5)  on the ground.
+[11-12-2018 09:47:42] - You see a day Ghoul named (v`C$ enter in this room
+[11-12-2018 09:47:45] - You see a night Ghoul named 8}ya" enter in this room
+[11-12-2018 09:47:45] - SERVER FORCIBLY TERMINATED
