@@ -257,6 +257,28 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
      return core.joke(filename);
    }
 
+	/**
+	 * Initiates dialogue with NPC
+	 * @param playerName Player name
+	 * @param npcName NPC name
+	 * @return Dialogue options for player
+     * @throws RemoteException
+	 */
+    public String talkNpc(String name, String npcName) throws RemoteException {
+        return core.talkNpc(name, npcName);
+    }
+
+	/**
+	 * Selects dialogue option with NPC and gets response
+	 * @param playerName Player name
+	 * @param npcName NPC name
+	 * @param dialogueChoice Choice of dialogue option
+	 * @return Dialogue options for player
+	 */
+    public String selectNPCDialogueOption(String name, String npcName, int dialogueChoice) throws RemoteException {
+        return core.selectNPCDialogueOption(name, npcName, dialogueChoice);
+    }
+
     //Feature 411. Shout
     /**
      *Shouts "message" to everyone that is online
