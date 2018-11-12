@@ -31,8 +31,8 @@ public class RecoveryQuestionsWizardModules {
 				}
 			}
 			stdout.println("Please enter the answer");
-			stdout.print(">");
-			answer = stdin.readLine().trim().toLowerCase();
+			stdout.print("> ");
+			answer = new String(System.console().readPassword()).trim().toLowerCase(); //task 221 hides password
 			if(answer.length() < 4) {
 				test = true;
 				while(test) {
@@ -44,8 +44,6 @@ public class RecoveryQuestionsWizardModules {
 					}
 				}
 			}
-			stdout.println("Question: " + question);
-			stdout.print("Answer: " + answer);
 			this.obj.addQuestion(this.playerName, question, answer);
 		}
 
