@@ -1,0 +1,14 @@
+11月 12, 2018 10:41:39 上午 GameCore pokeGhoul
+严重: Player p1 has just poked the Ghoul
+11月 12, 2018 10:41:46 上午 GameCore pokeGhoul
+严重: Player p1 has just poked the Ghoul
+11月 12, 2018 10:41:53 上午 GameCore pokeGhoul
+严重: Player p1 has just poked the Ghoul
+11月 12, 2018 10:41:57 上午 GameCore pokeGhoul
+严重: Player p1 has just poked the Ghoul
+11月 12, 2018 10:42:01 上午 GameCore pokeGhoul
+严重: Player p1 has just poked the Ghoul
+11月 12, 2018 10:42:05 上午 GameCore pokeGhoul
+严重: Player p1 has just poked the Ghoul
+11月 12, 2018 10:42:12 上午 GameCore pokeGhoul
+严重: Player p1 has just poked the Ghoul

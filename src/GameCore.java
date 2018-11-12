@@ -195,7 +195,7 @@ public class GameCore implements GameCoreInterface {
                     @Override
                     public void run() {
                         Random rand = new Random();
-                        Room room = map.randomRoom();
+                        Room room = map.findRoom(1);//map.randomRoom();
                         ghoul = new Ghoul(room.getId());
                         room.addGhoul(ghoul);
 			String ghoulName = "["+ghoul.getTrueName()+"]";
@@ -238,7 +238,7 @@ public class GameCore implements GameCoreInterface {
 						@Override
 						public void run(){
 							Random rand = new Random();
-							Room room = map.randomRoom();
+							Room room = map.findRoom(1);//map.randomRoom();
 							ghoul = new Ghoul(room.getId());
 							room.addGhoul(ghoul);
 							String ghoulName = "["+ghoul.getTrueName()+"]";
@@ -246,7 +246,7 @@ public class GameCore implements GameCoreInterface {
 							while (!isDay) {
 							    try {
 								// Ghoul move in each 12-17 seconds.
-								Thread.sleep(2000 + rand.nextInt(1000));
+								Thread.sleep(2000000000 + rand.nextInt(1000));//2000
 
 								// make Ghoul walk to other room;
 								GameCore.this.ghoulWander(ghoul, room);
@@ -262,7 +262,7 @@ public class GameCore implements GameCoreInterface {
 						}
 					});
 					nightGhoul.start();
-					Thread.sleep(450000);
+					Thread.sleep(45000000);//4500
 					isDay = true;
 					Thread.sleep(1000);
 		                    } catch (InterruptedException ex) {
@@ -417,7 +417,7 @@ public class GameCore implements GameCoreInterface {
 
 				ghoul.modifyAngryLevel(-1);
 				int angryLv = ghoul.getAngryLevel();
-				String message = "Ghoul gets " + item + ", " + "and its anger level decreases to " + angryLv + ".";
+				String message = "Ghoul [" + ghoul.getTrueName() + "] gets " + item + ", " + "and its anger level decreases to " + angryLv + ".";
 				return  message;
 			}else{
 				return "Do not have this item......";
@@ -462,7 +462,7 @@ public class GameCore implements GameCoreInterface {
 				ghoul.Drag(player);
 				draggedToSpawn(player);
 			}
-			return ("Ghoul anger level has increased to " + angerLvl);
+			return ("Ghoul [" + ghoul.getTrueName() + "] anger level has increased to " + angerLvl);
 		} else {
 			return null;
 		}}

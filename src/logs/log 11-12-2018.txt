@@ -152,3 +152,27 @@ Daily Log for 11-12-2018
 [11-12-2018 10:33:22] - You see a night Ghoul named `CZ&$ leave in this room
 [11-12-2018 10:33:34] - You see a night Ghoul named `CZ&$ enter in this room
 [11-12-2018 10:33:36] - You see a night Ghoul named `CZ&$ leave in this room
+[11-12-2018 10:39:34] - SERVER STARTED
+[11-12-2018 10:39:43] - SERVER FORCIBLY TERMINATED
+[11-12-2018 10:39:45] - SERVER FORCIBLY TERMINATED
+[11-12-2018 10:39:47] - SERVER STARTED
+[11-12-2018 10:40:20] - You see a student rush past and drop a Flower99 (0.5)  on the ground.
+[11-12-2018 10:40:30] - SERVER FORCIBLY TERMINATED
+[11-12-2018 10:40:52] - SERVER STARTED
+[11-12-2018 10:41:12] - You see a student rush past and drop a Flower99 (0.5)  on the ground.
+[11-12-2018 10:41:38] - You see a student rush past and drop a Flower99 (0.5)  on the ground.
+[11-12-2018 10:41:46] - The REAL_SSR_GOLDEN_LEGENDARY_Super_Interest_Spirit_NUMBER_8 spirit has disappeared.
+[11-12-2018 10:42:12] - A REAL_SSR_GOLDEN_LEGENDARY_Super_Interest_Spirit_NUMBER_9 spirit has appeared in the room.
+[11-12-2018 10:42:41] - The REAL_SSR_GOLDEN_LEGENDARY_Super_Interest_Spirit_NUMBER_9 spirit has disappeared.
+[11-12-2018 10:42:41] - A REAL_SSR_GOLDEN_LEGENDARY_Super_Interest_Spirit_NUMBER_1 spirit has appeared in the room.
+[11-12-2018 10:42:48] - You see a student rush past and drop a Flower99 (0.5)  on the ground.
+[11-12-2018 10:43:04] - You see a student rush past and drop a Flower99 (0.5)  on the ground.
+[11-12-2018 10:43:05] - The REAL_SSR_GOLDEN_LEGENDARY_Super_Interest_Spirit_NUMBER_1 spirit has disappeared.
+[11-12-2018 10:43:05] - A REAL_SSR_GOLDEN_LEGENDARY_Super_Interest_Spirit_NUMBER_16 spirit has appeared in the room.
+[11-12-2018 10:43:27] - The REAL_SSR_GOLDEN_LEGENDARY_Super_Interest_Spirit_NUMBER_16 spirit has disappeared.
+[11-12-2018 10:43:50] - You see a student rush past and drop a Flower99 (0.5)  on the ground.
+[11-12-2018 10:45:06] - You see a student rush past and drop a Flower99 (0.5)  on the ground.
+[11-12-2018 10:45:35] - A REAL_SSR_GOLDEN_LEGENDARY_Super_Interest_Spirit_NUMBER_20 spirit has appeared in the room.
+[11-12-2018 10:46:04] - The REAL_SSR_GOLDEN_LEGENDARY_Super_Interest_Spirit_NUMBER_20 spirit has disappeared.
+[11-12-2018 10:46:04] - A REAL_SSR_GOLDEN_LEGENDARY_Super_Interest_Spirit_NUMBER_18 spirit has appeared in the room.
+[11-12-2018 10:46:23] - SERVER FORCIBLY TERMINATED
