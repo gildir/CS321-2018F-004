@@ -454,4 +454,12 @@ public interface GameObjectInterface extends Remote {
       * @throws Remote Exception
       */
      public String teach(String player) throws RemoteException;
+
+	/*
+     * Sets a player's chat prompt string
+     * @param playerName - player you're setting the chat prefix for
+     * @param newPrefix - the player's new prefix.
+     * @throws RemoteException
+     */
+    public void setPlayerChatPrefix(String playerName, String newPrefix) throws RemoteException;
 }
