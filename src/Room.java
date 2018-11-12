@@ -18,9 +18,10 @@ public class Room {
     private StringBuilder whiteboard;
     //list of NPCs in a room, list in case additional NPCs are added to the game
     private final LinkedList<NPC> npcs;
-    //add tem state check for ghoul
-    public boolean hasGhoul = false;
+    //add tem state check for ghoul//never use it......
+        public boolean hasGhoul = false;
 	private String spirit;
+	private LinkedList<Ghoul> ghouls;
 
     
     public Room(int id, String room_type, String title, String description) {
@@ -33,6 +34,7 @@ public class Room {
         this.description = description;
         this.room_type = room_type;
         this.npcs = new LinkedList<>();
+        this.ghouls = new LinkedList<>();
     }
 
     public Room(int id, String room_type, String title, String description, LinkedList<NPC> npcs) {
@@ -44,6 +46,7 @@ public class Room {
         this.description = description;
         this.npcs = npcs;
         this.room_type = room_type;
+        this.ghouls = new LinkedList<>();
     }
     
     public String toString(PlayerList playerList, Player player) {
@@ -62,6 +65,31 @@ public class Room {
         return result;
     }
     
+	public boolean addGhoul(Ghoul g){
+		boolean inf = this.ghouls.add(g);
+		this.hasGhoul = !(this.ghouls.isEmpty());
+		return inf;
+	}
+	public boolean removeGhoul(Ghoul g){
+		boolean inf = this.ghouls.remove(g);
+		this.hasGhoul = !(this.ghouls.isEmpty());
+		return inf;
+	}
+	public LinkedList<Ghoul> getGhouls(){
+		return this.ghouls;
+	}
+
+    public LinkedList<Room> getNearByRoom(Map map) {
+	LinkedList<Room> rooms = new LinkedList<Room>();
+	for(Exit exit : this.exits){
+		if (map.findRoom(exit.getRoom()) != null){
+			rooms.add(map.findRoom(exit.getRoom()));
+		}	
+	}
+
+	return rooms;
+    }
+
     public void addSpirit(String sp) {
 		this.spirit = sp;
 	}

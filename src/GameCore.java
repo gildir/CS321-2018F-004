@@ -1,10 +1,14 @@
-
+/*
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+*/
+//well, at least.....
+import java.io.*;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -32,6 +36,7 @@ public class GameCore implements GameCoreInterface {
     private HashMap<Integer,Shop> shoplist;
     private Ghoul ghoul;
     private PrintWriter pw;
+    private boolean isDay = true;
 
 	// Accounts and Login
 	private final PlayerAccountManager accountManager;
@@ -152,8 +157,10 @@ public class GameCore implements GameCoreInterface {
 						
 						ArrayList<String> spirits = new ArrayList<String>();
 						//Add all spirit types here: ex: happy, sad, scary, etc.
-						spirits.add("test");
-						
+						//spirits.add("test");
+						//Add 20 different spririts
+						GameCore.this.addSpririts(spirits);
+
 						while(true) {
 							try {
 								//A random spirit will appear in a random room every 20-30 seconds
@@ -188,25 +195,21 @@ public class GameCore implements GameCoreInterface {
                     @Override
                     public void run() {
                         Random rand = new Random();
-                        Room room = map.randomRoom();
+                        Room room = map.findRoom(1);//map.randomRoom();
                         ghoul = new Ghoul(room.getId());
-                        room.hasGhoul = true;
-                        GameCore.this.broadcast(room, "You see a Ghoul appear in this room");
-
+                        room.addGhoul(ghoul);
+			String ghoulName = "["+ghoul.getTrueName()+"]";
+                        GameCore.this.broadcast(room, "You see a day Ghoul named "+ ghoulName + " appear in this room");
                         while (true) {
                             try {
-                                // Ghoul move in each 10-15 seconds.
-                                Thread.sleep(12000 + rand.nextInt(5000));
+                                // Ghoul move in each 12-17 seconds.
+                                Thread.sleep(12000 + rand.nextInt(5000));//12000+5000
 
                                 // make Ghoul walk to other room;
                                 GameCore.this.ghoulWander(ghoul, room);
-                                room.hasGhoul = false;
-                                GameCore.this.broadcast(room, "You see a Ghoul leave this room");
+                                GameCore.this.broadcast(room, "You see a day Ghoul named "+ ghoulName + " leave in this room");
                                 room = map.findRoom(ghoul.getRoom());
-                                room.hasGhoul = true;
-                                GameCore.this.broadcast(room, "You see a Ghoul enter this room");
-
-
+                                GameCore.this.broadcast(room, "You see a day Ghoul named "+ ghoulName + " enter in this room");
                             } catch (InterruptedException ex) {
                                 Logger.getLogger(GameObject.class.getName()).log(Level.SEVERE, null, ex);
                             }
@@ -214,34 +217,107 @@ public class GameCore implements GameCoreInterface {
                     }
                 });
 
-                objectThread.setDaemon(true);
+
+		//make Day Night Cycle
+                Thread dayNightCycle = new Thread(new Runnable() {
+			boolean night = false;
+			@Override
+			public void run() {
+		                while (true) {
+		                    try {
+		                        // always start at day time.
+					for(Player p : playerList){
+						broadcast(p, "MORNING!!!!!!!!!!!!!!!!!");
+					}
+					Thread.sleep(30000);
+					for(Player p : playerList){
+						broadcast(p, "evening...................");
+					}
+					isDay = false;
+					Thread nightGhoul = new Thread(new Runnable(){
+						@Override
+						public void run(){
+							Random rand = new Random();
+							Room room = map.findRoom(1);//map.randomRoom();
+							ghoul = new Ghoul(room.getId());
+							room.addGhoul(ghoul);
+							String ghoulName = "["+ghoul.getTrueName()+"]";
+							GameCore.this.broadcast(room, "You see a night Ghoul named " + ghoulName + " appear in this room");
+							while (!isDay) {
+							    try {
+								// Ghoul move in each 12-17 seconds.
+								Thread.sleep(6000 + rand.nextInt(2500));//2000
+
+								// make Ghoul walk to other room;
+								GameCore.this.ghoulWander(ghoul, room);
+								GameCore.this.broadcast(room, "You see a night Ghoul named " + ghoulName + " leave in this room");
+								room = map.findRoom(ghoul.getRoom());
+								GameCore.this.broadcast(room, "You see a night Ghoul named " + ghoulName + " enter in this room");
+							    } catch (InterruptedException ex) {
+								Logger.getLogger(GameObject.class.getName()).log(Level.SEVERE, null, ex);
+							    }
+							}
+							
+							
+						}
+					});
+					nightGhoul.start();
+					Thread.sleep(30000);//4500
+					isDay = true;
+					Thread.sleep(1000);
+		                    } catch (InterruptedException ex) {
+					Logger.getLogger(GameObject.class.getName()).log(Level.SEVERE, null, ex);
+		                    }
+		                }
+		            }
+		        });
+
+		dayNightCycle.start();
+		dayNightCycle.setName("dayNightCycle");
+
                 awakeDayGhoul.setDaemon(true);
-                objectThread.start();
+		awakeDayGhoul.setName("awakeDayGhoul");
                 awakeDayGhoul.start();
+
+                objectThread.setDaemon(true);
+                objectThread.start();
             }
 	
 
+
+
+
+	//add Spririts from a text file; help method, ignore it.
+	//hopefully we keep 20 spririts from now to the end of the world......
+	public void addSpririts(ArrayList<String> spirits) {
+
+		try{
+			File f = new File("./spiritTypes.txt");
+			Scanner scan = new Scanner(f);
+			
+			for(int i = 0; i < 20; i++){
+				spirits.add(scan.nextLine());
+			}
+		} catch (Exception e){
+			e.printStackTrace();			
+		}
+		return;
+	}
+    
+	//let ghoul Wander to nearby room; help method, ignore it.
 	public void ghoulWander(Ghoul g, Room room) {
 		Random rand = new Random();
-		int[] candinateRoom = new int[4];
+		LinkedList<Room> candinateRoom = room.getNearByRoom(map);
+		int size = candinateRoom.size();
+		
 
-		// easiest way to get all possible room;
-		candinateRoom[0] = room.getLink(Direction.NORTH);
-		candinateRoom[1] = room.getLink(Direction.SOUTH);
-		candinateRoom[2] = room.getLink(Direction.WEST);
-		candinateRoom[3] = room.getLink(Direction.EAST);
-
+		room.removeGhoul(g);
 		// random walk.
-		while (true) {
-			int roomID = candinateRoom[rand.nextInt(4)];
-			if (roomID != 0) {
-				g.setRoom(roomID);
-				return;
-			}
-		}
-    }
-    
-      
+		room = candinateRoom.get(rand.nextInt(size));
+
+		g.setRoom(room.getId());
+		room.addGhoul(g);
+	}
     
     /**
      * @author Group 4: King
@@ -320,6 +396,10 @@ public class GameCore implements GameCoreInterface {
 				//	giveAble = itemList.remove(thing);
 				//	break;
 				//}
+			LinkedList<Ghoul> ghouls = room.getGhouls();
+			if (ghouls.isEmpty()) {return "There is no ghoul in this room.";}
+			Random rand = new Random();
+			Ghoul ghoul = ghouls.get(rand.nextInt(ghouls.size()));
             boolean giveAble = false;
             if (object != null){
                 giveAble = true;
@@ -337,7 +417,7 @@ public class GameCore implements GameCoreInterface {
 
 				ghoul.modifyAngryLevel(-1);
 				int angryLv = ghoul.getAngryLevel();
-				String message = "Ghoul gets " + item + ", " + "and its anger level decreases to " + angryLv + ".";
+				String message = "Ghoul [" + ghoul.getTrueName() + "] gets " + item + ", " + "and its anger level decreases to " + angryLv + ".";
 				return  message;
 			}else{
 				return "Do not have this item......";
@@ -369,13 +449,20 @@ public class GameCore implements GameCoreInterface {
 				e.printStackTrace();
 			}
 
+			//random select ghoul in the room; 
+			LinkedList<Ghoul> ghouls = room.getGhouls();
+			if (ghouls.isEmpty()) {return "There is no ghoul in this room.";}
+			Random rand = new Random();
+			Ghoul ghoul = ghouls.get(rand.nextInt(ghouls.size()));
+
+
 			ghoul.modifyAngryLevel(1);
 			int angerLvl = ghoul.getAngryLevel();
 			if (angerLvl >= 7) {
 				ghoul.Drag(player);
 				draggedToSpawn(player);
 			}
-			return ("Ghoul anger level has increased to " + angerLvl);
+			return ("Ghoul [" + ghoul.getTrueName() + "] anger level has increased to " + angerLvl);
 		} else {
 			return null;
 		}}
@@ -771,7 +858,11 @@ public class GameCore implements GameCoreInterface {
 			// return room.toString(this.playerList, player);
 			// modified in 2018.10.17, which for player can look ghoul.
 			if (room.hasGhoul) {
-				String watchGhoul = "\n\nTHERE IS A GHOUL IN THE ROOM!!!!!!\n\n";
+				String watchGhoul = "\n\nGHOUL ";
+				for(Ghoul g : room.getGhouls()){
+					watchGhoul += "["+g.getTrueName() + "], ";
+				}
+				watchGhoul += "IN THE ROOM!!!!!!\n\n";
 				return room.toString(this.playerList, player) + watchGhoul;
 			} else {
 				return room.toString(this.playerList, player);
@@ -895,6 +986,12 @@ public class GameCore implements GameCoreInterface {
 				player.setCurrentRoom(room.getLink(player.getDirection()));
 				this.broadcast(player, player.getName() + " just walked into the area.");
 				Ghost g = new Ghost(player);
+				if (!isDay){
+					Ghost g1 = new Ghost(player);
+					Ghost g2 = new Ghost(player);
+					g1.start();
+					g2.start();
+				}
 				g.start();
 				player.getReplyWriter()
 						.println(this.map.findRoom(player.getCurrentRoom()).toString(playerList, player));
@@ -929,6 +1026,12 @@ public class GameCore implements GameCoreInterface {
 			this.broadcast(player, player.getName() + " just walked into the area.");
 			Ghost g = new Ghost(player);
 				g.start();
+			if (!isDay){
+				Ghost g1 = new Ghost(player);
+				Ghost g2 = new Ghost(player);
+				g1.start();
+				g2.start();
+			}
             player.getReplyWriter().println(this.map.findRoom(player.getCurrentRoom()).toString(playerList, player));
         } else {
             String logMessage  = String.format("%s used command MOVE %s [unable to move in direction]", player.getName(), direction.toString());

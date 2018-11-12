@@ -9,12 +9,27 @@ public class Ghoul{
 
 	private int angryLevel; //Measure of a ghoul's anger on a scale of 0(calm) to 10(furious)
 	private int currentRoom;
+	private final int id;
+	private static int totalGhoul = 0;
+	private String ghoulName = null;
 
 	//Summon a new Ghoul. New Ghoul will always very claim.
 	public Ghoul(int room){
+		Random rand = new Random();
 		this.currentRoom = room;
 		this.angryLevel = 0;
-	}	
+		this.id = Ghoul.totalGhoul;
+		Ghoul.totalGhoul += 1;	
+		int magic = rand.nextInt(0xfffffff)+this.id;
+		String ghoulName = "";		
+		while(magic > 0){
+			//totally 94 chars can be used in ascii; #33 - #126
+			char a = (char)(33 + (magic % 94));
+			magic = magic / 94;
+			ghoulName += a;
+		}
+		this.ghoulName = ghoulName;
+	}
 
 	public int getAngryLevel(){
 		return this.angryLevel;
@@ -23,6 +38,19 @@ public class Ghoul{
 	public int getRoom(){
 		return this.currentRoom;
 	}
+
+	public int getId(){
+		return this.id;
+	}
+
+	public boolean equals(Ghoul g){
+		return (this.id == g.getId());
+	}
+
+	public String getTrueName(){
+		return this.ghoulName;
+	}
+
 	public void setRoom(int room){
 		this.currentRoom = room;
 	}
