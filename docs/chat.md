@@ -135,6 +135,15 @@ Example of ignored me:
 > The implementation of timestamps is done in the Player.java file. In the messagePlayer and getMessage methods in the Player.java file, a call to GameServer.java's getDate() method is used in order to receive the server time within the message, and is formatted to where the timestamp is placed before the actual message. This format can be altered by those who wish to implement different message formats or different forms of timestamps.
 
 
+## Prefix - Reed, Carl
+### User:
+> The prefix feature is an addition to mesages that distinguishes chat messages from other types of messages within the game. The default prefix is ">>>" and can be changed within the user's "chat config" file. The prefix will appear for messages said within player chat, such as say, shout, whisper, and quick reply messages, but will not appear for other messages, such as events that happen within the game world.
+
+![](../images/prefix.png)
+
+### Dev:
+> The implementation of the prefix is done in the Player.java file, while the file to read in the prefix is done in the GameClient.java file. Within the GameClient.java file, the method readPrefixFromFile is called, in which the chat config file is read in to the player's configuration. By default, it is ">>>" and set in the setPrefix method in the Player.java file, called within the GameObject.java file in the setPlayerChatPrefix(String, String) method. In the messagePlayer and getMessage methods, the prefix is set by adding this.prefix in the message statment, and the prefix is added to the user's chat output. This format can be altered by those who wish to implement different message formats or different forms of prefixes. 
+
 
 ## Note to Devs
 > When adding a new feature, start at GameClient -> GameObjectInterface -> GameObject -> GameCoreInterface -> GameCore.
