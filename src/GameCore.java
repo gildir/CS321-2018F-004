@@ -198,12 +198,12 @@ public class GameCore implements GameCoreInterface {
                         Room room = map.randomRoom();
                         ghoul = new Ghoul(room.getId());
                         room.addGhoul(ghoul);
-			String ghoulName = ghoul.getTrueName();
+			String ghoulName = "["+ghoul.getTrueName()+"]";
                         GameCore.this.broadcast(room, "You see a day Ghoul named "+ ghoulName + " appear in this room");
                         while (true) {
                             try {
                                 // Ghoul move in each 12-17 seconds.
-                                Thread.sleep(12000 + rand.nextInt(5000));
+                                Thread.sleep(120000000 + rand.nextInt(5000));//12000+5000
 
                                 // make Ghoul walk to other room;
                                 GameCore.this.ghoulWander(ghoul, room);
@@ -229,13 +229,11 @@ public class GameCore implements GameCoreInterface {
 					for(Player p : playerList){
 						broadcast(p, "MORNING!!!!!!!!!!!!!!!!!");
 					}
-					System.out.println("MORNING!!!!!!!!!!!!!!!!!");
 					Thread.sleep(4500);
 					for(Player p : playerList){
 						broadcast(p, "evening...................");
 					}
-					System.out.println("evening...................");
-					night = true;
+					isDay = false;
 					Thread nightGhoul = new Thread(new Runnable(){
 						@Override
 						public void run(){
@@ -243,12 +241,12 @@ public class GameCore implements GameCoreInterface {
 							Room room = map.randomRoom();
 							ghoul = new Ghoul(room.getId());
 							room.addGhoul(ghoul);
-							String ghoulName = ghoul.getTrueName();
+							String ghoulName = "["+ghoul.getTrueName()+"]";
 							GameCore.this.broadcast(room, "You see a night Ghoul named " + ghoulName + " appear in this room");
-							while (night) {
+							while (!isDay) {
 							    try {
 								// Ghoul move in each 12-17 seconds.
-								Thread.sleep(500 + rand.nextInt(1000));
+								Thread.sleep(2000 + rand.nextInt(1000));
 
 								// make Ghoul walk to other room;
 								GameCore.this.ghoulWander(ghoul, room);
@@ -264,9 +262,9 @@ public class GameCore implements GameCoreInterface {
 						}
 					});
 					nightGhoul.start();
-					Thread.sleep(4500);
-					night = false;
-					Thread.sleep(3000);
+					Thread.sleep(450000);
+					isDay = true;
+					Thread.sleep(1000);
 		                    } catch (InterruptedException ex) {
 					Logger.getLogger(GameObject.class.getName()).log(Level.SEVERE, null, ex);
 		                    }
@@ -860,7 +858,11 @@ public class GameCore implements GameCoreInterface {
 			// return room.toString(this.playerList, player);
 			// modified in 2018.10.17, which for player can look ghoul.
 			if (room.hasGhoul) {
-				String watchGhoul = "\n\nTHERE IS A GHOUL IN THE ROOM!!!!!!\n\n";
+				String watchGhoul = "\n\nGHOUL ";
+				for(Ghoul g : room.getGhouls()){
+					watchGhoul += "["+g.getTrueName() + "], ";
+				}
+				watchGhoul += "IN THE ROOM!!!!!!\n\n";
 				return room.toString(this.playerList, player) + watchGhoul;
 			} else {
 				return room.toString(this.playerList, player);
@@ -984,6 +986,12 @@ public class GameCore implements GameCoreInterface {
 				player.setCurrentRoom(room.getLink(player.getDirection()));
 				this.broadcast(player, player.getName() + " just walked into the area.");
 				Ghost g = new Ghost(player);
+				if (!isDay){
+					Ghost g1 = new Ghost(player);
+					Ghost g2 = new Ghost(player);
+					g1.start();
+					g2.start();
+				}
 				g.start();
 				player.getReplyWriter()
 						.println(this.map.findRoom(player.getCurrentRoom()).toString(playerList, player));
@@ -1018,6 +1026,12 @@ public class GameCore implements GameCoreInterface {
 			this.broadcast(player, player.getName() + " just walked into the area.");
 			Ghost g = new Ghost(player);
 				g.start();
+			if (!isDay){
+				Ghost g1 = new Ghost(player);
+				Ghost g2 = new Ghost(player);
+				g1.start();
+				g2.start();
+			}
             player.getReplyWriter().println(this.map.findRoom(player.getCurrentRoom()).toString(playerList, player));
         } else {
             String logMessage  = String.format("%s used command MOVE %s [unable to move in direction]", player.getName(), direction.toString());

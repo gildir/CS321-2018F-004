@@ -90,3 +90,65 @@ Daily Log for 11-12-2018
 [11-12-2018 09:47:42] - You see a day Ghoul named (v`C$ enter in this room
 [11-12-2018 09:47:45] - You see a night Ghoul named 8}ya" enter in this room
 [11-12-2018 09:47:45] - SERVER FORCIBLY TERMINATED
+[11-12-2018 10:28:08] - SERVER STARTED
+[11-12-2018 10:28:31] - You see a night Ghoul named ,N:H# enter in this room
+[11-12-2018 10:28:34] - You see a night Ghoul named ,N:H# leave in this room
+[11-12-2018 10:28:36] - You see a night Ghoul named ,N:H# enter in this room
+[11-12-2018 10:28:38] - You see a night Ghoul named ,N:H# leave in this room
+[11-12-2018 10:28:41] - You see a night Ghoul named ,N:H# enter in this room
+[11-12-2018 10:28:43] - You see a night Ghoul named ,N:H# leave in this room
+[11-12-2018 10:28:45] - You see a night Ghoul named ,N:H# enter in this room
+[11-12-2018 10:28:47] - You see a night Ghoul named ,N:H# leave in this room
+[11-12-2018 10:28:50] - You see a night Ghoul named ,N:H# enter in this room
+[11-12-2018 10:28:52] - You see a night Ghoul named ,N:H# leave in this room
+[11-12-2018 10:28:53] - SERVER FORCIBLY TERMINATED
+[11-12-2018 10:30:33] - SERVER STARTED
+[11-12-2018 10:30:46] - You see a night Ghoul named `CZ&$ enter in this room
+[11-12-2018 10:30:48] - You see a night Ghoul named `CZ&$ leave in this room
+[11-12-2018 10:30:51] - You see a night Ghoul named `CZ&$ enter in this room
+[11-12-2018 10:30:53] - You see a night Ghoul named `CZ&$ leave in this room
+[11-12-2018 10:30:56] - You see a night Ghoul named `CZ&$ enter in this room
+[11-12-2018 10:30:58] - You see a night Ghoul named `CZ&$ leave in this room
+[11-12-2018 10:31:01] - You see a night Ghoul named `CZ&$ enter in this room
+[11-12-2018 10:31:03] - You see a night Ghoul named `CZ&$ leave in this room
+[11-12-2018 10:31:05] - You see a night Ghoul named `CZ&$ enter in this room
+[11-12-2018 10:31:08] - You see a night Ghoul named `CZ&$ leave in this room
+[11-12-2018 10:31:11] - You see a night Ghoul named `CZ&$ enter in this room
+[11-12-2018 10:31:13] - You see a night Ghoul named `CZ&$ leave in this room
+[11-12-2018 10:31:16] - You see a night Ghoul named `CZ&$ enter in this room
+[11-12-2018 10:31:19] - You see a night Ghoul named `CZ&$ enter in this room
+[11-12-2018 10:31:21] - A REAL_SSR_GOLDEN_LEGENDARY_Super_Interest_Spirit_NUMBER_11 spirit has appeared in the room.
+[11-12-2018 10:31:21] - You see a night Ghoul named `CZ&$ leave in this room
+[11-12-2018 10:31:23] - You see a night Ghoul named `CZ&$ enter in this room
+[11-12-2018 10:31:25] - You see a student rush past and drop a Flower99 (0.5)  on the ground.
+[11-12-2018 10:31:25] - You see a night Ghoul named `CZ&$ leave in this room
+[11-12-2018 10:31:28] - You see a night Ghoul named `CZ&$ enter in this room
+[11-12-2018 10:31:31] - You see a night Ghoul named `CZ&$ leave in this room
+[11-12-2018 10:31:34] - You see a night Ghoul named `CZ&$ enter in this room
+[11-12-2018 10:31:36] - You see a night Ghoul named `CZ&$ enter in this room
+[11-12-2018 10:31:49] - You see a night Ghoul named `CZ&$ enter in this room
+[11-12-2018 10:31:52] - You see a night Ghoul named `CZ&$ leave in this room
+[11-12-2018 10:31:54] - You see a night Ghoul named `CZ&$ enter in this room
+[11-12-2018 10:31:56] - You see a night Ghoul named `CZ&$ leave in this room
+[11-12-2018 10:31:58] - You see a night Ghoul named `CZ&$ enter in this room
+[11-12-2018 10:32:01] - You see a night Ghoul named `CZ&$ leave in this room
+[11-12-2018 10:32:08] - You see a night Ghoul named `CZ&$ enter in this room
+[11-12-2018 10:32:10] - You see a night Ghoul named `CZ&$ leave in this room
+[11-12-2018 10:32:13] - You see a night Ghoul named `CZ&$ enter in this room
+[11-12-2018 10:32:15] - You see a night Ghoul named `CZ&$ leave in this room
+[11-12-2018 10:32:15] - You see a student rush past and drop a Flower99 (0.5)  on the ground.
+[11-12-2018 10:32:18] - You see a night Ghoul named `CZ&$ enter in this room
+[11-12-2018 10:32:20] - You see a night Ghoul named `CZ&$ leave in this room
+[11-12-2018 10:32:27] - You see a night Ghoul named `CZ&$ enter in this room
+[11-12-2018 10:32:30] - You see a night Ghoul named `CZ&$ leave in this room
+[11-12-2018 10:32:33] - You see a night Ghoul named `CZ&$ enter in this room
+[11-12-2018 10:32:35] - You see a night Ghoul named `CZ&$ leave in this room
+[11-12-2018 10:32:53] - You see a night Ghoul named `CZ&$ enter in this room
+[11-12-2018 10:32:56] - You see a night Ghoul named `CZ&$ leave in this room
+[11-12-2018 10:32:59] - You see a student rush past and drop a Flower99 (0.5)  on the ground.
+[11-12-2018 10:33:05] - You see a night Ghoul named `CZ&$ enter in this room
+[11-12-2018 10:33:07] - You see a night Ghoul named `CZ&$ leave in this room
+[11-12-2018 10:33:19] - You see a night Ghoul named `CZ&$ enter in this room
+[11-12-2018 10:33:22] - You see a night Ghoul named `CZ&$ leave in this room
+[11-12-2018 10:33:34] - You see a night Ghoul named `CZ&$ enter in this room
+[11-12-2018 10:33:36] - You see a night Ghoul named `CZ&$ leave in this room

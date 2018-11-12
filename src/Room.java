@@ -86,7 +86,7 @@ public class Room {
 			rooms.add(map.findRoom(exit.getRoom()));
 		}	
 	}
-	System.out.println(rooms);
+
 	return rooms;
     }
 
