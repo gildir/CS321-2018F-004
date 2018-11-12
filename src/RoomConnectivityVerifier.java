@@ -58,7 +58,7 @@ public class RoomConnectivityVerifier {
         HashSet<Integer> roomIDs = verifyConnectivity(args[0]);
         Map map = new Map(args[0]);
         HashSet<Integer> allRoomIds = new HashSet<>();
-        for(int i=1; i < Integer.MAX_VALUE; i++){
+        for(int i=1; i < 100000; i++){
             Room room = map.findRoom(i);
             if(room == null){
 //                System.out.println("no room with ID: " + i);
@@ -71,11 +71,18 @@ public class RoomConnectivityVerifier {
 //                System.out.println("room: " + room.getId() + " is unconnected");
 //            }
         }
+	Room room = map.findRoom(100000);
+        if(room != null){
+            allRoomIds.add(room.getId());
+	}
+
         if(roomIDs.equals(allRoomIds)){
             System.out.println("the rooms are all connected");
         }
         else{
             System.out.println("there are unconnected rooms");
+	    System.out.println("Expected " + allRoomIds.size() + " rooms");
+	    System.out.println("Found " + roomIDs.size() + " rooms");
             for(Integer i: allRoomIds){
                 if(!roomIDs.contains(i)) {
                     System.out.println("room " + i + " is unconnected");
