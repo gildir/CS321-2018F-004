@@ -1126,16 +1126,16 @@ public class GameCore implements GameCoreInterface {
         case "ONE":
             rounds = 1;
             break;
-        case "2":
-        case "TWO":
-            rounds = 2;
-            break;
         case "3":
         case "THREE":
             rounds = 3;
             break;
+        case "5":
+        case "FIVE":
+            rounds = 5;
+            break;
       }
-      if(rounds != 1 && rounds != 2 && rounds != 3){
+      if(rounds != 1 && rounds != 3 && rounds != 5){
         return "This is an invalid number of rounds, please choose from 1, 3, or 5 rounds: ";
       }
       if(playerChallengee.getChallenger().equals(playerChallenger.getName()) && playerChallengee.getHasChallenge() == true){
