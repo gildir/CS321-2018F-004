@@ -538,7 +538,7 @@ public class addRoom{
  				output += ',';	//add the comma separator
  			}
  			output += this.head.roomDescription;	//add the description of the room to the string
- 			output += ',';	//
+ 			output += ", ";	//
  			//output += this.head.indorOutdoor;	//old format changed 10/19/2018 by Jorge to implement the Indoor Outdoor when entering a room feature
  			output += '\n';
  			strToBytes = output.getBytes();	//Convert the data into bytes to be sent to the file writer

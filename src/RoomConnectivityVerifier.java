@@ -11,17 +11,16 @@ public class RoomConnectivityVerifier {
         HashSet<Room> visited = new HashSet<>();
         while (!queue.isEmpty()){
             Room currentRoom = queue.poll();
-//            currentRoom.getExits()
             for(Direction direction: Direction.values()){
                 int connectedRoomID = currentRoom.getLink(direction);
-                if(connectedRoomID == 0){
+                if(connectedRoomID == 0 || connectedRoomID > 100000){
                     continue;
                 }
                 Room connectedRoom = map.findRoom(connectedRoomID);
                 if(!visited.contains(connectedRoom)){
                     queue.add(connectedRoom);
                     visited.add(connectedRoom);
-                }
+	       }
             }
         }
         HashSet<Integer> visitedIDs = new HashSet<>();
