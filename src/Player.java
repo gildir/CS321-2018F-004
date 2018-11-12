@@ -209,7 +209,7 @@ public class Player {
 
         // send prefix, timestamp, source, type, ", ", and message
         this.getReplyWriter().println(
-            "[$PREFIX]" +
+            this.prefix +
             "[$TIME]" + " " +
             source.getName() + " " +
             messageType + ", " +
@@ -223,7 +223,7 @@ public class Player {
      */
     public String getMessage() {
         return
-            "[$PREFIX]" +
+            this.prefix +
             "[$TIME]" +
             " You ";
     }

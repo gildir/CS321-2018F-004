@@ -1178,7 +1178,7 @@ public class GameClient {
             BufferedReader br = new BufferedReader(new FileReader(filename));
             String line = br.readLine();
 
-            if(!line.equals("")) { remoteGameInterface.setPlayerChatPrefix(this.playerName, line); }
+            if(line != null && !line.equals("")) { remoteGameInterface.setPlayerChatPrefix(this.playerName, line); }
             br.close();
 
         } catch(IOException i) {
