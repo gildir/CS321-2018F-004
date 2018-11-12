@@ -374,6 +374,27 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
     }
     
     /**
+     * @author Group: King
+     * @param name Name of the player trying to shop
+     * @return Returns the id of the room the player has just entered a bank in 
+     * @throws RemoteException
+     */
+    public int bank(String name) throws RemoteException {
+    	return core.bank(name);
+    }
+    
+    /**
+     * Gives the central bank object commands (implimented like this for maximum encapsulation)
+     * @param cmd_id The id of the command to be used (mapped in the BankClient class)
+     * @param name The name of the user interacting with the Bank
+     * @param cmd Any extra arguments that may need to be sent to the command
+     * @return A string based on the success or failure of the command
+     */
+    public String bankCmdRunner(String cmd, String name, String args) {
+    	return core.bankCmdRunner(cmd, name, args);
+    }
+    
+    /**
      * @author Group 4: King
      * Lets player shop if in a shoppable location
      * @param name Name of the player trying to shop
@@ -383,7 +404,6 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
     public int shop(String name) throws RemoteException{
     	return core.shop(name);
     }
-   
     
     /**
      * @author Group 4: King
