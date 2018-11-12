@@ -9,7 +9,6 @@ public class AccountEditWizard extends Wizard.BlockingWizard {
 	{
 		moduleClasses.add(AccountEditWizardModules.ChangePasswordModule.class);
 		moduleClasses.add(AccountEditWizardModules.RecoveryQuestionsModule.class);
-		moduleClasses.add(AccountEditWizardModules.TestModule.class);
 	}
 
 	public AccountEditWizard(BufferedReader stdin, PrintStream stdout, GameObjectInterface obj, String playerName)

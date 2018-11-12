@@ -6,9 +6,9 @@ public class AccountEditWizardModules {
 	protected static class RecoveryQuestionsModule extends Wizard.WizardModule {
 		Wizard.SimpleWizard rqWizard;
 
-		public RecoveryQuestionsModule(BufferedReader stdin, PrintStream stdout, GameObjectInterface obj, String playerName)
-				throws NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException,
-				IllegalArgumentException, InvocationTargetException {
+		public RecoveryQuestionsModule(BufferedReader stdin, PrintStream stdout, GameObjectInterface obj,
+				String playerName) throws NoSuchMethodException, SecurityException, InstantiationException,
+				IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 			super(stdin, stdout, obj, playerName);
 			this.listName = "Recovery Question";
 
@@ -16,19 +16,20 @@ public class AccountEditWizardModules {
 			rqWizard.addModules(RecoveryQuestionsWizardModules.AddQuestionModule.class);
 			rqWizard.addModules(RecoveryQuestionsWizardModules.RemoveQuestionModule.class);
 		}
-		
+
 		@Override
 		public void run() throws Exception {
 			rqWizard.enter();
-			
+
 		}
 
 		@Override
 		public String getListName() {
 			return this.listName;
 		}
-		
+
 	}
+
 	protected static class ChangePasswordModule extends Wizard.WizardModule {
 
 		public ChangePasswordModule(BufferedReader stdin, PrintStream stdout, GameObjectInterface obj,
@@ -77,47 +78,4 @@ public class AccountEditWizardModules {
 		}
 	}
 
-	protected static class TestModule extends Wizard.WizardModule {
-
-		Wizard.SimpleWizard testWizard;
-
-		public TestModule(BufferedReader stdin, PrintStream stdout, GameObjectInterface obj, String playerName)
-				throws NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException,
-				IllegalArgumentException, InvocationTargetException {
-			super(stdin, stdout, obj, playerName);
-			this.listName = "Test";
-
-			testWizard = new Wizard.SimpleWizard(stdin, stdout, obj, playerName, "Test Submodule");
-			testWizard.addModules(TestSubModule.class);
-		}
-
-		@Override
-		public String getListName() {
-			return this.listName;
-		}
-
-		@Override
-		public void run() throws Exception {
-			testWizard.enter();
-		}
-
-		private static class TestSubModule extends Wizard.WizardModule {
-
-			public TestSubModule(BufferedReader stdin, PrintStream stdout, GameObjectInterface obj, String playerName) {
-				super(stdin, stdout, obj, playerName);
-			}
-
-			@Override
-			public String getListName() {
-				return "Test Sub Module";
-			}
-
-			@Override
-			public void run() throws Exception {
-				stdout.println("Hiiiii!!!!");
-			}
-
-		}
-
-	}
 }
