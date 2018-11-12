@@ -1,5 +1,0 @@
-Daily Log for 11-10-2018
-[11-10-2018 09:53:30] - SERVER STARTED
-[11-10-2018 09:54:29] - You see a Ghoul leave this room
-[11-10-2018 09:54:44] - You see a Ghoul enter this room
-[11-10-2018 09:55:11] - SERVER FORCIBLY TERMINATED
