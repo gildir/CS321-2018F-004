@@ -26,10 +26,9 @@ public class GameServer {
     
 // ----- NON-RMI RELATED MEMBERS ------------    
     private Thread gameThread;
-    private static Date date = new Date();
     
     public static Date getDate() {
-        return date;
+        return new Date();
     }
     
     /**
