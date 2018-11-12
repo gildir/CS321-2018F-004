@@ -129,6 +129,8 @@ Example of ignored me:
 ### User:
 > The timestamp feature is an addition to chat messages sent in the game. When a message is sent in the game, the time that the message was sent is listed to the left of the message in a 24-hour clock format (that is, from 00:00 to 23:59), according to the time of the server. This is a great way to keep track of when exactly messages were sent in the event that users may need to refer to them later. In addition, the Chat Log feature has been updated to show timestamps with the messages in the log as well.
 
+![](../images/timestamp.png)
+
 ### Dev:
 > The implementation of timestamps is done in the Player.java file. In the messagePlayer and getMessage methods in the Player.java file, a call to GameServer.java's getDate() method is used in order to receive the server time within the message, and is formatted to where the timestamp is placed before the actual message. This format can be altered by those who wish to implement different message formats or different forms of timestamps.
 
