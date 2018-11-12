@@ -93,9 +93,9 @@ public class Shop
         
         // players names
        String players = this.getPlayers();
-        if (players.isEmpty()) result += "You are here by yourself.\n";
+        if (players.isEmpty()) result += "\nYou are here by yourself.\n";
         else {
-        	result += "You are here along with:\n";
+        	result += "\nYou are here along with:";
         	result += players;
         }
         
@@ -124,7 +124,7 @@ public class Shop
 			}
 			else
 			{
-				result += " ," + p.getName();
+				result += ", " + p.getName();
 			}
 			i++;
 		}
