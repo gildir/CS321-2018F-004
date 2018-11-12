@@ -1,0 +1,628 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+AccountResponse	PlayerAccountManager.java	/^		private AccountResponse(Player p) {$/;"	m	class:PlayerAccountManager.AccountResponse	file:
+AccountResponse	PlayerAccountManager.java	/^		private AccountResponse(Responses error) {$/;"	m	class:PlayerAccountManager.AccountResponse	file:
+AccountResponse	PlayerAccountManager.java	/^	public static class AccountResponse {$/;"	c	class:PlayerAccountManager
+AddRoomTest	AddRoomTest.java	/^public class AddRoomTest {$/;"	c
+BAD_PASSWORD	Responses.java	/^	BAD_USERNAME_FORMAT, USERNAME_TAKEN, UNKNOWN_FAILURE, INTERNAL_SERVER_ERROR, NOT_FOUND, BAD_PASSWORD, SUCCESS,$/;"	e	enum:Responses	file:
+BAD_USERNAME_FORMAT	Responses.java	/^	BAD_USERNAME_FORMAT, USERNAME_TAKEN, UNKNOWN_FAILURE, INTERNAL_SERVER_ERROR, NOT_FOUND, BAD_PASSWORD, SUCCESS,$/;"	e	enum:Responses	file:
+Create	FriendsManager.java	/^	public static FriendsManager Create(File f) throws Exception {$/;"	m	class:FriendsManager
+DailyLogger	DailyLogger.java	/^    public DailyLogger(){$/;"	m	class:DailyLogger
+DailyLogger	DailyLogger.java	/^public class DailyLogger{$/;"	c
+Direction	Direction.java	/^    Direction(String name) {$/;"	m	class:Direction
+Direction	Direction.java	/^public enum Direction {$/;"	g
+DormRoom	DormRoom.java	/^    DormRoom(int id, String room_type, String title, String description){$/;"	m	class:DormRoom
+DormRoom	DormRoom.java	/^public class DormRoom extends Room{     $/;"	c
+Drag	Ghoul.java	/^	public void Drag(Player p){$/;"	m	class:Ghoul
+EAST	Direction.java	/^    NORTH("North"), SOUTH("South"), EAST("East"), WEST("West");$/;"	e	enum:Direction	file:
+EXISTS	Responses.java	/^	EXISTS, SILLY, NO_USER_NAME$/;"	e	enum:Responses	file:
+Exit	Exit.java	/^    public Exit(Direction direction, int room, String message) {$/;"	m	class:Exit
+Exit	Exit.java	/^public class Exit {$/;"	c
+FriendsManager	FriendsManager.java	/^	public FriendsManager() {$/;"	m	class:FriendsManager
+FriendsManager	FriendsManager.java	/^	public FriendsManager(HashMap<String, HashSet<String>> myAdded, HashMap<String, HashSet<String>> addedMe) {$/;"	m	class:FriendsManager
+FriendsManager	FriendsManager.java	/^public class FriendsManager {$/;"	c
+GameClient	GameClient.java	/^    public GameClient(String host) {$/;"	m	class:GameClient
+GameClient	GameClient.java	/^public class GameClient {$/;"	c
+GameCore	GameCore.java	/^    public GameCore(String playerAccountsLocation, String worldFile) throws Exception {$/;"	m	class:GameCore
+GameCore	GameCore.java	/^public class GameCore implements GameCoreInterface {$/;"	c
+GameCoreInterface	GameCoreInterface.java	/^public interface GameCoreInterface {$/;"	i
+GameObject	GameObject.java	/^	public GameObject(String playerAccountsLocation, String worldFile) throws Exception {$/;"	m	class:GameObject
+GameObject	GameObject.java	/^public class GameObject extends UnicastRemoteObject implements GameObjectInterface {$/;"	c
+GameObjectInterface	GameObjectInterface.java	/^public interface GameObjectInterface extends Remote {$/;"	i
+GameServer	GameServer.java	/^    public GameServer(String host, String worldFile) throws RemoteException {           $/;"	m	class:GameServer
+GameServer	GameServer.java	/^public class GameServer {$/;"	c
+GetIgnored	Message.java	/^    public boolean GetIgnored() {$/;"	m	class:Message
+GetMessageRecipient	Message.java	/^    public Player GetMessageRecipient() {$/;"	m	class:Message
+GetMessageSender	Message.java	/^    public Player GetMessageSender() {$/;"	m	class:Message
+GetMessageText	Message.java	/^    public String GetMessageText() {$/;"	m	class:Message
+GetRecieved	Message.java	/^    public boolean GetRecieved() {$/;"	m	class:Message
+GetTimeSent	Message.java	/^    public Date GetTimeSent() {$/;"	m	class:Message
+Ghost	Ghost.java	/^		public Ghost(Player p){$/;"	m	class:Ghost
+Ghost	Ghost.java	/^public class Ghost extends Thread{$/;"	c
+Ghoul	Ghoul.java	/^	public Ghoul(int room){$/;"	m	class:Ghoul
+Ghoul	Ghoul.java	/^public class Ghoul{$/;"	c
+GhoulLog	GhoulLog.java	/^	public GhoulLog() throws SecurityException, IOException{$/;"	m	class:GhoulLog
+GhoulLog	GhoulLog.java	/^public class GhoulLog$/;"	c
+INTERNAL_SERVER_ERROR	Responses.java	/^	BAD_USERNAME_FORMAT, USERNAME_TAKEN, UNKNOWN_FAILURE, INTERNAL_SERVER_ERROR, NOT_FOUND, BAD_PASSWORD, SUCCESS,$/;"	e	enum:Responses	file:
+Item	Item.java	/^	public Item(@JsonProperty("name") String name, @JsonProperty("weight") double weight, @JsonProperty("price") double price)$/;"	m	class:Item
+Item	Item.java	/^public class Item$/;"	c
+ItemNameComparator	Player.java	/^    private static class ItemNameComparator implements Comparator<Item> {$/;"	c	class:Player
+ItemPriceComparator	Player.java	/^    private static class ItemPriceComparator implements Comparator<Item> {$/;"	c	class:Player
+ItemWeightComparator	Player.java	/^    private static class ItemWeightComparator implements Comparator<Item> {$/;"	c	class:Player
+JsonMarshaller	JsonMarshaller.java	/^	public JsonMarshaller() {$/;"	m	class:JsonMarshaller
+JsonMarshaller	JsonMarshaller.java	/^public class JsonMarshaller {$/;"	c
+MARSHALLER	JsonMarshaller.java	/^	public static final JsonMarshaller MARSHALLER = new JsonMarshaller();$/;"	f	class:JsonMarshaller
+MAX_WHITEBOARD_LEN	Room.java	/^    private static final int MAX_WHITEBOARD_LEN = 120;$/;"	f	class:Room	file:
+Map	Map.java	/^        public Map(String worldFile) {$/;"	m	class:Map
+Map	Map.java	/^public class Map{   $/;"	c
+Message	Message.java	/^    public Message(String newMessageText, Player from, Player to) {$/;"	m	class:Message
+Message	Message.java	/^public class Message {$/;"	c
+NORTH	Direction.java	/^    NORTH("North"), SOUTH("South"), EAST("East"), WEST("West");$/;"	e	enum:Direction	file:
+NOT_FOUND	Responses.java	/^	BAD_USERNAME_FORMAT, USERNAME_TAKEN, UNKNOWN_FAILURE, INTERNAL_SERVER_ERROR, NOT_FOUND, BAD_PASSWORD, SUCCESS,$/;"	e	enum:Responses	file:
+NO_USER_NAME	Responses.java	/^	EXISTS, SILLY, NO_USER_NAME$/;"	e	enum:Responses	file:
+NPC	NPC.java	/^    public NPC(String name, int room, LinkedList<String> quests) {$/;"	m	class:NPC
+NPC	NPC.java	/^public class NPC {$/;"	c
+NextNode	addRoom.java	/^		Node NextNode;$/;"	f	class:addRoom.Node
+Node	addRoom.java	/^    private class Node<T>$/;"	c	class:addRoom
+Player	Player.java	/^	public Player(@JsonProperty("name") String name, @JsonProperty("recovery") ArrayList<String> recovery) {$/;"	m	class:Player
+Player	Player.java	/^public class Player {$/;"	c
+PlayerAccountManager	PlayerAccountManager.java	/^	public PlayerAccountManager(String folderName) throws Exception {$/;"	m	class:PlayerAccountManager
+PlayerAccountManager	PlayerAccountManager.java	/^public class PlayerAccountManager {$/;"	c
+PlayerList	PlayerList.java	/^    public PlayerList() {$/;"	m	class:PlayerList
+PlayerList	PlayerList.java	/^public class PlayerList implements Iterable<Player> {$/;"	c
+ReplyRemote	GameClient.java	/^		public ReplyRemote(String host) {$/;"	m	class:GameClient.ReplyRemote
+ReplyRemote	GameClient.java	/^    public class ReplyRemote implements Runnable {$/;"	c	class:GameClient
+ReplyRemote	GameServer.java	/^		public ReplyRemote(String host) {$/;"	m	class:GameServer.ReplyRemote
+ReplyRemote	GameServer.java	/^    public class ReplyRemote implements Runnable {$/;"	c	class:GameServer
+Responses	Responses.java	/^public enum Responses {$/;"	g
+Room	Room.java	/^    public Room(int id, String room_type, String title, String description) {$/;"	m	class:Room
+Room	Room.java	/^    public Room(int id, String room_type, String title, String description, LinkedList<NPC> npcs) {$/;"	m	class:Room
+Room	Room.java	/^public class Room {$/;"	c
+SILLY	Responses.java	/^	EXISTS, SILLY, NO_USER_NAME$/;"	e	enum:Responses	file:
+SOUTH	Direction.java	/^    NORTH("North"), SOUTH("South"), EAST("East"), WEST("West");$/;"	e	enum:Direction	file:
+SUCCESS	Responses.java	/^	BAD_USERNAME_FORMAT, USERNAME_TAKEN, UNKNOWN_FAILURE, INTERNAL_SERVER_ERROR, NOT_FOUND, BAD_PASSWORD, SUCCESS,$/;"	e	enum:Responses	file:
+SetIgnored	Message.java	/^    public void SetIgnored() {$/;"	m	class:Message
+SetReceived	Message.java	/^    public void SetReceived() {$/;"	m	class:Message
+Shop	Shop.java	/^	public Shop(String name, String desc)$/;"	m	class:Shop
+Shop	Shop.java	/^public class Shop$/;"	c
+ShopClient	ShopClient.java	/^	public ShopClient(String p, int s, GameObjectInterface remote) throws RemoteException {$/;"	m	class:ShopClient
+ShopClient	ShopClient.java	/^public class ShopClient {$/;"	c
+UNKNOWN_FAILURE	Responses.java	/^	BAD_USERNAME_FORMAT, USERNAME_TAKEN, UNKNOWN_FAILURE, INTERNAL_SERVER_ERROR, NOT_FOUND, BAD_PASSWORD, SUCCESS,$/;"	e	enum:Responses	file:
+USERNAME_TAKEN	Responses.java	/^	BAD_USERNAME_FORMAT, USERNAME_TAKEN, UNKNOWN_FAILURE, INTERNAL_SERVER_ERROR, NOT_FOUND, BAD_PASSWORD, SUCCESS,$/;"	e	enum:Responses	file:
+Venmo	Venmo.java	/^public class Venmo {$/;"	c
+WEST	Direction.java	/^    NORTH("North"), SOUTH("South"), EAST("East"), WEST("West");$/;"	e	enum:Direction	file:
+accept	GameCore.java	/^    public String accept(String challengee, String challenger){$/;"	m	class:GameCore
+accept	GameCoreInterface.java	/^    public String accept(String challenger, String challengee);$/;"	m	interface:GameCoreInterface
+accept	GameObject.java	/^    public String accept(String challenger, String challengee) throws RemoteException{$/;"	m	class:GameObject
+accept	GameObjectInterface.java	/^    public String accept(String challenger, String challengee) throws RemoteException;$/;"	m	interface:GameObjectInterface
+accountExists	PlayerAccountManager.java	/^	public boolean accountExists(String username) {$/;"	m	class:PlayerAccountManager
+accountFolder	PlayerAccountManager.java	/^	private File accountFolder;$/;"	f	class:PlayerAccountManager	file:
+accountManager	GameCore.java	/^	private final PlayerAccountManager accountManager;$/;"	f	class:GameCore	file:
+add	FriendsManager.java	/^	private boolean add(HashMap<String, HashSet<String>> addTo, String a, String b) {$/;"	m	class:FriendsManager	file:
+add	Shop.java	/^	public void add(Item k) {$/;"	m	class:Shop
+addCustomCommand	GameClient.java	/^    private void addCustomCommand(String customCommandName)$/;"	m	class:GameClient	file:
+addExit	Room.java	/^    public void addExit(Direction direction, int room, String message) {$/;"	m	class:Room
+addFilteredWord	Player.java	/^    public boolean addFilteredWord(String wordToAdd) {$/;"	m	class:Player
+addFriend	FriendsManager.java	/^	public Responses addFriend(String player, String friend) {$/;"	m	class:FriendsManager
+addFriend	GameCore.java	/^	public Responses addFriend(String name, String friend) {$/;"	m	class:GameCore
+addFriend	GameCoreInterface.java	/^	public Responses addFriend(String name, String friend);$/;"	m	interface:GameCoreInterface
+addFriend	GameObject.java	/^	public Responses addFriend(String name, String friend) throws RemoteException {$/;"	m	class:GameObject
+addFriend	GameObjectInterface.java	/^	public Responses addFriend(String name, String friend) throws RemoteException;$/;"	m	interface:GameObjectInterface
+addNodeToList	addRoom.java	/^	private void addNodeToList(Node temp) $/;"	m	class:addRoom	file:
+addObject	Room.java	/^    public void addObject(Item obj) {$/;"	m	class:Room
+addObjectToInventory	Player.java	/^    public void addObjectToInventory(Item object) {$/;"	m	class:Player
+addPlayer	PlayerList.java	/^    public void addPlayer(Player player) {$/;"	m	class:PlayerList
+addPlayer	Shop.java	/^	public void addPlayer(Player p) {$/;"	m	class:Shop
+addRoom	Map.java	/^    public void addRoom(Room room) {$/;"	m	class:Map
+addRoom	addRoom.java	/^    addRoom( String infile, String outfile) throws IOException$/;"	m	class:addRoom
+addRoom	addRoom.java	/^    addRoom( String outfile) throws IOException$/;"	m	class:addRoom
+addRoom	addRoom.java	/^    addRoom()$/;"	m	class:addRoom
+addRoom	addRoom.java	/^public class addRoom{$/;"	c
+addWhiteboardText	Room.java	/^    public boolean addWhiteboardText(String textToAdd) {$/;"	m	class:Room
+addedMe	FriendsManager.java	/^	private HashMap<String, HashSet<String>> addedMe; \/\/ Everyone thats added me$/;"	f	class:FriendsManager	file:
+angryLevel	Ghoul.java	/^	private int angryLevel; \/\/Measure of a ghoul's anger on a scale of 0(calm) to 10(furious)$/;"	f	class:Ghoul	file:
+appendFromAutomated	addRoom.java	/^	public void appendFromAutomated()$/;"	m	class:addRoom
+appendFromFile	addRoom.java	/^    public void appendFromFile()$/;"	m	class:addRoom
+appendFromUser	addRoom.java	/^    public void appendFromUser()$/;"	m	class:addRoom
+autoMapBuild	addRoom.java	/^    private void autoMapBuild()$/;"	m	class:addRoom	file:
+bribeGhoul	GameCore.java	/^	public String bribeGhoul(String playerName, String item){$/;"	m	class:GameCore
+bribeGhoul	GameCoreInterface.java	/^	public String bribeGhoul(String playerName,String item);$/;"	m	interface:GameCoreInterface
+bribeGhoul	GameObject.java	/^	public String bribeGhoul(String playerName, String item) throws RemoteException {$/;"	m	class:GameObject
+bribeGhoul	GameObjectInterface.java	/^	public String bribeGhoul(String playerName, String item) throws RemoteException;$/;"	m	interface:GameObjectInterface
+broadcast	GameCore.java	/^	public void broadcast(Player player, String message) {$/;"	m	class:GameCore
+broadcast	GameCore.java	/^	public void broadcast(Room room, String message) {$/;"	m	class:GameCore
+broadcast	GameCoreInterface.java	/^    public void broadcast(Player player, String message);    $/;"	m	interface:GameCoreInterface
+broadcast	GameCoreInterface.java	/^    public void broadcast(Room room, String message);$/;"	m	interface:GameCoreInterface
+buy	ShopClient.java	/^	public void buy(String item) throws RemoteException{$/;"	m	class:ShopClient
+buyItem	GameCore.java	/^    public String buyItem(String name, int shopId, String itemName)$/;"	m	class:GameCore
+buyItem	GameCoreInterface.java	/^    public String buyItem(String name, int shopId, String item);$/;"	m	interface:GameCoreInterface
+buyItem	GameObject.java	/^    public String buyItem(String name, int shopId, String item) throws RemoteException{$/;"	m	class:GameObject
+buyItem	GameObjectInterface.java	/^    public String buyItem(String name, int shopId, String item) throws RemoteException;$/;"	m	interface:GameObjectInterface
+canExit	Room.java	/^    public boolean canExit(Direction direction) {$/;"	m	class:Room
+challenge	GameCore.java	/^    public String challenge(String challenger, String challengee){$/;"	m	class:GameCore
+challenge	GameCoreInterface.java	/^    public String challenge(String challenger, String challengee);$/;"	m	interface:GameCoreInterface
+challenge	GameObject.java	/^    public String challenge(String challenger, String challengee) throws RemoteException{$/;"	m	class:GameObject
+challenge	GameObjectInterface.java	/^    public String challenge(String challenger, String challengee) throws RemoteException;$/;"	m	interface:GameObjectInterface
+challenger	Player.java	/^    private String challenger = " ";$/;"	f	class:Player	file:
+challengerOption	Player.java	/^    private String challengerOption = "";$/;"	f	class:Player	file:
+changeMoney	Player.java	/^    public void changeMoney(double m){$/;"	m	class:Player
+changeName	Item.java	/^	public void changeName(String name)$/;"	m	class:Item
+changePrice	Item.java	/^	public void changePrice(double price)$/;"	m	class:Item
+changeWeight	Item.java	/^	public void changeWeight(double weight)$/;"	m	class:Item
+chatLog	GameCore.java	/^    private void chatLog(Player player, int chatType, String message, String target) throws IOException {$/;"	m	class:GameCore	file:
+chest	DormRoom.java	/^    private final LinkedList<Item> chest;$/;"	f	class:DormRoom	file:
+compare	Player.java	/^	public int compare(Item ItemA, Item ItemB) {$/;"	m	class:Player.ItemNameComparator
+compare	Player.java	/^	public int compare(Item ItemA, Item ItemB) {$/;"	m	class:Player.ItemPriceComparator
+compare	Player.java	/^	public int compare(Item ItemA, Item ItemB) {$/;"	m	class:Player.ItemWeightComparator
+connectionLog	GameCore.java	/^	private void connectionLog(boolean connecting, String name) {$/;"	m	class:GameCore	file:
+copyFromFile	addRoom.java	/^    public void copyFromFile()$/;"	m	class:addRoom
+core	GameObject.java	/^    private final GameCore core;$/;"	f	class:GameObject	file:
+createAccountAndJoinGame	GameCore.java	/^	public synchronized Responses createAccountAndJoinGame(String name, String password, ArrayList<String> recovery) {$/;"	m	class:GameCore
+createAccountAndJoinGame	GameCoreInterface.java	/^	public Responses createAccountAndJoinGame(String name, String password, ArrayList<String> recovery);$/;"	m	interface:GameCoreInterface
+createAccountAndJoinGame	GameObject.java	/^	public Responses createAccountAndJoinGame(String name, String password, ArrayList<String> recovery) throws RemoteException {$/;"	m	class:GameObject
+createAccountAndJoinGame	GameObjectInterface.java	/^	public Responses createAccountAndJoinGame(String name, String password, ArrayList<String> recovery) throws RemoteException;$/;"	m	interface:GameObjectInterface
+createAccountLock	GameCore.java	/^	private final Object createAccountLock = new Object();$/;"	f	class:GameCore	file:
+createNewAccount	PlayerAccountManager.java	/^	public synchronized AccountResponse createNewAccount(String username, String password, ArrayList<String> recovery) {$/;"	m	class:PlayerAccountManager
+current	addRoom.java	/^    private Node current = head;$/;"	f	class:addRoom	file:
+currentDirection	Player.java	/^    private Direction currentDirection;$/;"	f	class:Player	file:
+currentInventory	Player.java	/^	public LinkedList<Item> currentInventory;$/;"	f	class:Player
+currentRoom	Ghoul.java	/^	private int currentRoom;$/;"	f	class:Ghoul	file:
+currentRoom	Player.java	/^    private int currentRoom;$/;"	f	class:Player	file:
+dailyLogger	GameCore.java	/^    protected DailyLogger dailyLogger;$/;"	f	class:GameCore
+date	DailyLogger.java	/^    public String date;$/;"	f	class:DailyLogger
+dateAndTimeSent	Message.java	/^    private Date dateAndTimeSent; \/\/ date and time the message was sent$/;"	f	class:Message	file:
+defineInputFileName	addRoom.java	/^    private void defineInputFileName(String name)$/;"	m	class:addRoom	file:
+defineOutputFileName	addRoom.java	/^    private void defineOutputFileName(String name)$/;"	m	class:addRoom	file:
+deleteAccount	GameCore.java	/^	public Player deleteAccount(String name) {$/;"	m	class:GameCore
+deleteAccount	GameCoreInterface.java	/^    public Player deleteAccount(String name);$/;"	m	interface:GameCoreInterface
+deleteAccount	GameObject.java	/^	public void deleteAccount(String name) throws RemoteException {$/;"	m	class:GameObject
+deleteAccount	GameObjectInterface.java	/^	public void deleteAccount(String name) throws RemoteException;$/;"	m	interface:GameObjectInterface
+deleteAccount	PlayerAccountManager.java	/^	public boolean deleteAccount(String username) {$/;"	m	class:PlayerAccountManager
+description	Room.java	/^    private final String description;$/;"	f	class:Room	file:
+description	Shop.java	/^	private String description;$/;"	f	class:Shop	file:
+direction	Exit.java	/^    private final Direction direction;$/;"	f	class:Exit	file:
+directionName	Direction.java	/^    private String directionName;$/;"	f	class:Direction	file:
+dormCountId	GameCore.java	/^	private int dormCountId;$/;"	f	class:GameCore	file:
+dormId	Player.java	/^	private int dormId;\/\/used to determine private dormroom Id$/;"	f	class:Player	file:
+draggedToSpawn	GameCore.java	/^	public String draggedToSpawn(Player player) {$/;"	m	class:GameCore
+drop	GameCore.java	/^    public String drop(String name, String target) {$/;"	m	class:GameCore
+drop	GameObject.java	/^    public String drop(String name, String target) throws RemoteException {$/;"	m	class:GameObject
+drop	GameObjectInterface.java	/^    public String drop(String name, String object) throws RemoteException;$/;"	m	interface:GameObjectInterface
+east	addRoom.java	/^    private static final String east = "EAST";$/;"	f	class:addRoom	file:
+eastConnecting	addRoom.java	/^	    private int eastConnecting = 0;$/;"	f	class:addRoom.Node	file:
+eastDescription	addRoom.java	/^	    private String eastDescription;$/;"	f	class:addRoom.Node	file:
+error	PlayerAccountManager.java	/^		public Responses error = null;$/;"	f	class:PlayerAccountManager.AccountResponse
+executeCustomCommand	GameClient.java	/^    private boolean executeCustomCommand(String commandName, ArrayList<String> parameters) {$/;"	m	class:GameClient	file:
+exitMessage	Room.java	/^    public String exitMessage(Direction direction) {$/;"	m	class:Room
+exits	Room.java	/^    private final LinkedList<Exit> exits;$/;"	f	class:Room	file:
+f	DailyLogger.java	/^    public File f;$/;"	f	class:DailyLogger
+fh	GhoulLog.java	/^	public FileHandler fh;$/;"	f	class:GhoulLog
+filename	DailyLogger.java	/^    public String filename;$/;"	f	class:DailyLogger
+filterMessage	Player.java	/^    public String filterMessage(String message) {$/;"	m	class:Player
+filteredWords	Player.java	/^    private HashSet<String> filteredWords = new HashSet<String>();$/;"	f	class:Player	file:
+findPlayer	GameCore.java	/^	public Player findPlayer(String name) {$/;"	m	class:GameCore
+findPlayer	GameCoreInterface.java	/^    public Player findPlayer(String name);$/;"	m	interface:GameCoreInterface
+findPlayer	PlayerList.java	/^    public Player findPlayer(String name) {$/;"	m	class:PlayerList
+findRoom	Map.java	/^        public Room findRoom(int roomId) {$/;"	m	class:Map
+forceUpdateData	PlayerAccountManager.java	/^	public void forceUpdateData(Player p) {$/;"	m	class:PlayerAccountManager
+friendsLock	GameCore.java	/^	private final Object friendsLock = new Object();$/;"	f	class:GameCore	file:
+friendsManager	GameCore.java	/^	private FriendsManager friendsManager;$/;"	f	class:GameCore	file:
+gameThread	GameServer.java	/^    private Thread gameThread;$/;"	f	class:GameServer	file:
+getAccount	PlayerAccountManager.java	/^	public AccountResponse getAccount(String username, String password) {$/;"	m	class:PlayerAccountManager
+getAddedMe	FriendsManager.java	/^	public HashMap<String, HashSet<String>> getAddedMe() {$/;"	m	class:FriendsManager
+getAngryLevel	Ghoul.java	/^	public int getAngryLevel(){$/;"	m	class:Ghoul
+getAnswer	GameCore.java	/^	public String getAnswer(String name, int num) {$/;"	m	class:GameCore
+getAnswer	GameCoreInterface.java	/^	public String getAnswer(String name, int num);$/;"	m	interface:GameCoreInterface
+getAnswer	GameObject.java	/^	public String getAnswer(String name, int num) throws RemoteException {$/;"	m	class:GameObject
+getAnswer	GameObjectInterface.java	/^	public String getAnswer(String name, int num) throws RemoteException;$/;"	m	interface:GameObjectInterface
+getAnswer	Player.java	/^	public String getAnswer(int num) {$/;"	m	class:Player
+getChallenger	Player.java	/^    public String getChallenger(){$/;"	m	class:Player
+getChallengerOption	Player.java	/^    public String getChallengerOption(){$/;"	m	class:Player
+getCurrentDirection	Player.java	/^    public String getCurrentDirection() {$/;"	m	class:Player
+getCurrentInventory	Player.java	/^    public LinkedList<Item> getCurrentInventory() {$/;"	m	class:Player
+getCurrentRoom	Player.java	/^    public int getCurrentRoom() {$/;"	m	class:Player
+getDescription	Room.java	/^    public String getDescription() {$/;"	m	class:Room
+getDescription	Shop.java	/^	public String getDescription() {$/;"	m	class:Shop
+getDirection	Exit.java	/^    public Direction getDirection() {$/;"	m	class:Exit
+getDirection	Player.java	/^    public Direction getDirection() {$/;"	m	class:Player
+getDormId	Player.java	/^	public int getDormId() {return this.dormId;}$/;"	m	class:Player
+getExits	Room.java	/^    public String getExits() {$/;"	m	class:Room
+getExpiredPlayers	PlayerList.java	/^    public List<String> getExpiredPlayers() {$/;"	m	class:PlayerList
+getFilteredWords	Player.java	/^    public HashSet<String> getFilteredWords() {$/;"	m	class:Player
+getHasChallenge	Player.java	/^    public boolean getHasChallenge(){$/;"	m	class:Player
+getId	Room.java	/^    public int getId() {$/;"	m	class:Room
+getIgnoredPlayersList	GameCore.java	/^    public String getIgnoredPlayersList(String name) {$/;"	m	class:GameCore
+getIgnoredPlayersList	GameCoreInterface.java	/^    public String getIgnoredPlayersList(String name);$/;"	m	interface:GameCoreInterface
+getIgnoredPlayersList	GameObject.java	/^    public String getIgnoredPlayersList(String name) throws RemoteException{$/;"	m	class:GameObject
+getIgnoredPlayersList	GameObjectInterface.java	/^    public String getIgnoredPlayersList(String name) throws RemoteException;$/;"	m	interface:GameObjectInterface
+getIgnoredPlayersList	Player.java	/^    public String getIgnoredPlayersList() {$/;"	m	class:Player
+getInBattle	Player.java	/^    public boolean getInBattle(){$/;"	m	class:Player
+getInputFromUser	addRoom.java	/^    private void getInputFromUser() $/;"	m	class:addRoom	file:
+getInv	ShopClient.java	/^	public String getInv() throws RemoteException{$/;"	m	class:ShopClient
+getInven	Shop.java	/^	public LinkedList<Item> getInven()$/;"	m	class:Shop
+getLastPlayer	Player.java	/^    public String getLastPlayer() {$/;"	m	class:Player
+getLink	Room.java	/^    public int getLink(Direction direction) {$/;"	m	class:Room
+getMessage	Exit.java	/^    public String getMessage() {$/;"	m	class:Exit
+getMoney	Player.java	/^    public double getMoney() {$/;"	m	class:Player
+getMyAdded	FriendsManager.java	/^	public HashMap<String, HashSet<String>> getMyAdded() {$/;"	m	class:FriendsManager
+getNPCs	Room.java	/^    public String getNPCs() {$/;"	m	class:Room
+getName	Item.java	/^	public String getName()$/;"	m	class:Item
+getName	NPC.java	/^    public String getName() {$/;"	m	class:NPC
+getName	Player.java	/^    public String getName() {$/;"	m	class:Player
+getObjects	Room.java	/^    public String getObjects() {$/;"	m	class:Room
+getObjects	Shop.java	/^	public String getObjects() {$/;"	m	class:Shop
+getOption	Player.java	/^    public String getOption(){$/;"	m	class:Player
+getOutputWriter	Player.java	/^    public DataOutputStream getOutputWriter() {$/;"	m	class:Player
+getPlayer	GameObject.java	/^    public Player getPlayer(String name) throws RemoteException{$/;"	m	class:GameObject
+getPlayer	GameObjectInterface.java	/^    public Player getPlayer(String name) throws RemoteException;$/;"	m	interface:GameObjectInterface
+getPlayer	PlayerAccountManager.java	/^	public AccountResponse getPlayer(String name) {$/;"	m	class:PlayerAccountManager
+getPlayers	Room.java	/^    public String getPlayers(PlayerList players) {$/;"	m	class:Room
+getPlayers	Shop.java	/^	public String getPlayers() {$/;"	m	class:Shop
+getPrice	Item.java	/^	public double getPrice()$/;"	m	class:Item
+getQuestion	GameCore.java	/^	public String getQuestion(String name, int num) {$/;"	m	class:GameCore
+getQuestion	GameCoreInterface.java	/^	public String getQuestion(String name, int num);$/;"	m	interface:GameCoreInterface
+getQuestion	GameObject.java	/^	public String getQuestion(String name, int num) throws RemoteException {$/;"	m	class:GameObject
+getQuestion	GameObjectInterface.java	/^	public String getQuestion(String name, int num) throws RemoteException;$/;"	m	interface:GameObjectInterface
+getQuestion	Player.java	/^	public String getQuestion(int num) {$/;"	m	class:Player
+getQuests	NPC.java	/^    public List<String> getQuests(){$/;"	m	class:NPC
+getReplyWriter	Player.java	/^    public PrintWriter getReplyWriter() {$/;"	m	class:Player
+getRoom	Exit.java	/^    public int getRoom() {$/;"	m	class:Exit
+getRoom	Ghoul.java	/^	public int getRoom(){$/;"	m	class:Ghoul
+getRoomType	Room.java	/^    public String getRoomType() {$/;"	m	class:Room
+getShopInv	GameCore.java	/^    public String getShopInv(int id) {$/;"	m	class:GameCore
+getShopInv	GameCoreInterface.java	/^    public String getShopInv(int id);$/;"	m	interface:GameCoreInterface
+getShopInv	GameObject.java	/^    public String getShopInv(int id) throws RemoteException{$/;"	m	class:GameObject
+getShopInv	GameObjectInterface.java	/^    public String getShopInv(int id) throws RemoteException;$/;"	m	interface:GameObjectInterface
+getShopStr	GameCore.java	/^    public String getShopStr(int id) {$/;"	m	class:GameCore
+getShopStr	GameCoreInterface.java	/^    public String getShopStr(int id);$/;"	m	interface:GameCoreInterface
+getShopStr	GameObject.java	/^	public String getShopStr(int id) throws RemoteException{$/;"	m	class:GameObject
+getShopStr	GameObjectInterface.java	/^    public String getShopStr(int id) throws RemoteException;$/;"	m	interface:GameObjectInterface
+getTitle	Room.java	/^    public String getTitle() {$/;"	m	class:Room
+getTitle	Shop.java	/^	public String getTitle() {$/;"	m	class:Shop
+getTradePartner	Player.java	/^    public String getTradePartner(){$/;"	m	class:Player
+getWeight	Item.java	/^	public double getWeight()$/;"	m	class:Item
+getWhiteboardText	Room.java	/^    public String getWhiteboardText() {$/;"	m	class:Room
+ghoul	GameCore.java	/^    private Ghoul ghoul;$/;"	f	class:GameCore	file:
+ghoulWander	GameCore.java	/^	public void ghoulWander(Ghoul g, Room room) {$/;"	m	class:GameCore
+ghoulWander	GameCoreInterface.java	/^	public void ghoulWander(Ghoul g,Room room);$/;"	m	interface:GameCoreInterface
+glLog	GhoulLog.java	/^	public void glLog(String class_Name, String method, String msg){$/;"	m	class:GhoulLog
+hasChallenge	Player.java	/^    private boolean hasChallenge = false;$/;"	f	class:Player	file:
+hasGhoul	Room.java	/^    public boolean hasGhoul = false;$/;"	f	class:Room
+hasOption	Player.java	/^    private boolean hasOption = false;$/;"	f	class:Player	file:
+hasTradeRequest	Player.java	/^    public boolean hasTradeRequest(){$/;"	m	class:Player
+hash	GameObject.java	/^	public String hash(String toHash) {$/;"	m	class:GameObject
+head	addRoom.java	/^    private Node head = null;$/;"	f	class:addRoom	file:
+heartbeat	PlayerList.java	/^    public void heartbeat(String name) {$/;"	m	class:PlayerList
+heartbeatCheck	GameCore.java	/^    public void heartbeatCheck(String name){$/;"	m	class:GameCore
+heartbeatCheck	GameCoreInterface.java	/^    public void heartbeatCheck(String name);$/;"	m	interface:GameCoreInterface
+heartbeatCheck	GameObject.java	/^    public void heartbeatCheck(String name) throws RemoteException{$/;"	m	class:GameObject
+heartbeatCheck	GameObjectInterface.java	/^    public void heartbeatCheck(String name) throws RemoteException;$/;"	m	interface:GameObjectInterface
+host	GameClient.java	/^		private String host;$/;"	f	class:GameClient.ReplyRemote	file:
+host	GameServer.java	/^		private String host;$/;"	f	class:GameServer.ReplyRemote	file:
+id	Room.java	/^    private final int id;$/;"	f	class:Room	file:
+id	ShopClient.java	/^	private Integer id;$/;"	f	class:ShopClient	file:
+ignorePlayer	GameCore.java	/^    public String ignorePlayer(String srcName, String dstName) {$/;"	m	class:GameCore
+ignorePlayer	GameCoreInterface.java	/^    public String ignorePlayer(String srcName, String dstName);$/;"	m	interface:GameCoreInterface
+ignorePlayer	GameObject.java	/^    public String ignorePlayer(String srcName, String dstName) throws RemoteException {$/;"	m	class:GameObject
+ignorePlayer	GameObjectInterface.java	/^    public String ignorePlayer(String srcName, String dstName) throws RemoteException;$/;"	m	interface:GameObjectInterface
+ignorePlayer	Player.java	/^    public boolean ignorePlayer(Player playerToIgnore) {$/;"	m	class:Player
+ignored	Message.java	/^    private boolean ignored; \/\/ whether or not this message was ignored by the recipient$/;"	f	class:Message	file:
+ignoredPlayers	Player.java	/^	private HashSet<Player> ignoredPlayers = new HashSet<Player>();$/;"	f	class:Player	file:
+inBattle	Player.java	/^    private boolean inBattle = false;$/;"	f	class:Player	file:
+inDemand	Shop.java	/^	private LinkedList<Item> inDemand;$/;"	f	class:Shop	file:
+inTrade	Player.java	/^    private boolean inTrade = false;$/;"	f	class:Player	file:
+indoorDesignation	addRoom.java	/^    private static final String indoorDesignation = "inside";$/;"	f	class:addRoom	file:
+indorOutdoor	addRoom.java	/^	    private char indorOutdoor;$/;"	f	class:addRoom.Node	file:
+initConnectionsLogger	GameCore.java	/^	private void initConnectionsLogger() throws IOException {$/;"	m	class:GameCore	file:
+inputFile	addRoom.java	/^	private FileInputStream inputFile = null;$/;"	f	class:addRoom	file:
+inputFileName	addRoom.java	/^    private String inputFileName = "";$/;"	f	class:addRoom	file:
+inputWriter	Player.java	/^    private DataInputStream inputWriter = null;$/;"	f	class:Player	file:
+instructions	Venmo.java	/^	public static String instructions() {$/;"	m	class:Venmo
+inventory	GameCore.java	/^	public String inventory(String name) {$/;"	m	class:GameCore
+inventory	GameCoreInterface.java	/^    public String inventory(String name);$/;"	m	interface:GameCoreInterface
+inventory	GameObject.java	/^    public String inventory(String name) throws RemoteException {$/;"	m	class:GameObject
+inventory	GameObjectInterface.java	/^    public String inventory(String name) throws RemoteException;   $/;"	m	interface:GameObjectInterface
+inventory	Shop.java	/^	private LinkedList<Item> inventory;$/;"	f	class:Shop	file:
+isFiltering	Player.java	/^    public boolean isFiltering(String word) {$/;"	m	class:Player
+isIgnoring	Player.java	/^    public boolean isIgnoring(Player otherPlayer) {$/;"	m	class:Player
+isInTrade	Player.java	/^    public boolean isInTrade(){$/;"	m	class:Player
+isShoppable	Map.java	/^    public boolean isShoppable(Room r) {$/;"	m	class:Map
+iterator	PlayerList.java	/^    public Iterator<Player> iterator() {$/;"	m	class:PlayerList
+joinGame	GameCore.java	/^	public Player joinGame(String name, String password) {$/;"	m	class:GameCore
+joinGame	GameCoreInterface.java	/^    public Player joinGame(String name, String password);$/;"	m	interface:GameCoreInterface
+joinGame	GameObject.java	/^	public boolean joinGame(String name, String password) throws RemoteException {$/;"	m	class:GameObject
+joinGame	GameObjectInterface.java	/^	public boolean joinGame(String name, String password) throws RemoteException;$/;"	m	interface:GameObjectInterface
+joke	GameCore.java	/^    public String joke(String filename){$/;"	m	class:GameCore
+joke	GameCoreInterface.java	/^    public String joke(String filename);$/;"	m	interface:GameCoreInterface
+joke	GameObject.java	/^   public String joke(String filename) throws RemoteException{$/;"	m	class:GameObject
+joke	GameObjectInterface.java	/^    public String joke(String filename) throws RemoteException;$/;"	m	interface:GameObjectInterface
+jsonMapper	JsonMarshaller.java	/^	private ObjectMapper jsonMapper;$/;"	f	class:JsonMarshaller	file:
+lastCommand	GameClient.java	/^    private String lastCommand;$/;"	f	class:GameClient	file:
+lastPlayer	Player.java	/^    private String lastPlayer = "";$/;"	f	class:Player	file:
+leave	GameCore.java	/^	public Player leave(String name) {$/;"	m	class:GameCore
+leave	GameCoreInterface.java	/^    public Player leave(String name);$/;"	m	interface:GameCoreInterface
+leave	GameObject.java	/^    public void leave(String name) throws RemoteException {$/;"	m	class:GameObject
+leave	GameObjectInterface.java	/^    public void leave(String name) throws RemoteException;$/;"	m	interface:GameObjectInterface
+left	GameCore.java	/^	public String left(String name) {$/;"	m	class:GameCore
+left	GameCoreInterface.java	/^    public String left(String name);$/;"	m	interface:GameCoreInterface
+left	GameObject.java	/^    public String left(String name) throws RemoteException {$/;"	m	class:GameObject
+left	GameObjectInterface.java	/^    public String left(String name) throws RemoteException;$/;"	m	interface:GameObjectInterface
+loadSayings	Ghost.java	/^		private void loadSayings() {$/;"	m	class:Ghost	file:
+logger	GhoulLog.java	/^	public Logger logger;$/;"	f	class:GhoulLog
+logger	PlayerAccountManager.java	/^	private Logger logger;$/;"	f	class:PlayerAccountManager	file:
+loginLock	GameCore.java	/^	private final Object loginLock = new Object();$/;"	f	class:GameCore	file:
+look	GameCore.java	/^	public String look(String playerName) {$/;"	m	class:GameCore
+look	GameCoreInterface.java	/^    public String look(String playerName);$/;"	m	interface:GameCoreInterface
+look	GameObject.java	/^    public String look(String playerName) throws RemoteException {$/;"	m	class:GameObject
+look	GameObjectInterface.java	/^    public String look(String name) throws RemoteException;$/;"	m	interface:GameObjectInterface
+main	AddRoomTest.java	/^	public static void main(String[] args) throws IOException {$/;"	m	class:AddRoomTest
+main	GameClient.java	/^    public static void main(String[] args) {$/;"	m	class:GameClient
+main	GameServer.java	/^    public static void main(String[] args) {$/;"	m	class:GameServer
+map	GameCore.java	/^    private final Map map;$/;"	f	class:GameCore	file:
+map	Map.java	/^        private LinkedList<Room> map;$/;"	f	class:Map	file:
+marshal	JsonMarshaller.java	/^	public String marshal(Object o) throws Exception {$/;"	m	class:JsonMarshaller
+marshalIndent	JsonMarshaller.java	/^	public String marshalIndent(Object o) throws Exception {$/;"	m	class:JsonMarshaller
+message	Exit.java	/^    private final String message;$/;"	f	class:Exit	file:
+messageText	Message.java	/^    private String messageText; \/\/ what the message actually says$/;"	f	class:Message	file:
+missedMessages	Player.java	/^    private HashSet<Message> missedMessages = new HashSet<Message>();$/;"	f	class:Player	file:
+modifyAngryLevel	Ghoul.java	/^	public void modifyAngryLevel(int amount) {$/;"	m	class:Ghoul
+money	Player.java	/^    private double money;$/;"	f	class:Player	file:
+move	GameCore.java	/^	public String move(String name, int distance) {$/;"	m	class:GameCore
+move	GameCore.java	/^    public String move(String name, Direction direction) {$/;"	m	class:GameCore
+move	GameObject.java	/^    public String move(String name, Direction direction) throws RemoteException {$/;"	m	class:GameObject
+move	GameObject.java	/^    public String move(String name, int distance) throws RemoteException {$/;"	m	class:GameObject
+move	GameObjectInterface.java	/^    public String move(String name, Direction direction)throws RemoteException;$/;"	m	interface:GameObjectInterface
+move	GameObjectInterface.java	/^    public String move(String name, int distance) throws RemoteException;$/;"	m	interface:GameObjectInterface
+myAdded	FriendsManager.java	/^	private HashMap<String, HashSet<String>> myAdded; \/\/ Everyone I have added$/;"	f	class:FriendsManager	file:
+name	Item.java	/^	String name;$/;"	f	class:Item
+name	NPC.java	/^    private final String name;$/;"	f	class:NPC	file:
+name	Player.java	/^    private String name;$/;"	f	class:Player	file:
+north	addRoom.java	/^    private static final String north = "NORTH";$/;"	f	class:addRoom	file:
+northConnecting	addRoom.java	/^	    private int northConnecting = 0;$/;"	f	class:addRoom.Node	file:
+northDescription	addRoom.java	/^	    private String northDescription;$/;"	f	class:addRoom.Node	file:
+npcs	Room.java	/^    private final LinkedList<NPC> npcs;$/;"	f	class:Room	file:
+numberOfRooms	addRoom.java	/^    private int numberOfRooms = 0;$/;"	f	class:addRoom	file:
+objects	Room.java	/^    private final LinkedList<Item> objects;$/;"	f	class:Room	file:
+offer	GameCore.java	/^    public String offer(String srcName, String dstName, String message){$/;"	m	class:GameCore
+offer	GameCoreInterface.java	/^    public String offer(String srcName, String dstName, String message); $/;"	m	interface:GameCoreInterface
+offer	GameObject.java	/^    public String offer (String srcName, String dstName, String message) throws RemoteException{$/;"	m	class:GameObject
+offer	GameObjectInterface.java	/^    public String offer (String srcName, String dstName, String object) throws RemoteException;$/;"	m	interface:GameObjectInterface
+openInputFile	addRoom.java	/^    private void openInputFile()$/;"	m	class:addRoom	file:
+openOutputFile	addRoom.java	/^    private void openOutputFile()$/;"	m	class:addRoom	file:
+option	Player.java	/^    private String option = "";$/;"	f	class:Player	file:
+outdoorDesignation	addRoom.java	/^    private static final String outdoorDesignation = "outside";$/;"	f	class:addRoom	file:
+outputFile	addRoom.java	/^    private FileOutputStream outputFile = null;$/;"	f	class:addRoom	file:
+outputFileName	addRoom.java	/^    private String outputFileName = "";$/;"	f	class:addRoom	file:
+outputWriter	Player.java	/^    private DataOutputStream outputWriter = null;$/;"	f	class:Player	file:
+p	Ghost.java	/^		Player p;$/;"	f	class:Ghost
+parseInput	GameClient.java	/^    private void parseInput(String input) {$/;"	m	class:GameClient	file:
+parseInput	ShopClient.java	/^	private void parseInput(String input) throws RemoteException {$/;"	m	class:ShopClient	file:
+parseMessage	GameClient.java	/^    private String parseMessage(ArrayList<String> msgTokens) {$/;"	m	class:GameClient	file:
+pickRPS	GameCore.java	/^    public String pickRPS(String name,  String option){$/;"	m	class:GameCore
+pickRPS	GameCoreInterface.java	/^    public String pickRPS(String name, String options);$/;"	m	interface:GameCoreInterface
+pickRPS	GameObject.java	/^    public String pickRPS(String name, String option) throws RemoteException {$/;"	m	class:GameObject
+pickRPS	GameObjectInterface.java	/^    public String pickRPS(String name, String options) throws RemoteException;$/;"	m	interface:GameObjectInterface
+pickup	GameCore.java	/^    public String pickup(String name, String target) {$/;"	m	class:GameCore
+pickup	GameObject.java	/^    public String pickup(String name, String target) throws RemoteException {$/;"	m	class:GameObject
+pickup	GameObjectInterface.java	/^    public String pickup(String name, String object) throws RemoteException;$/;"	m	interface:GameObjectInterface
+pickupAll	GameCore.java	/^    public String pickupAll(String name) {$/;"	m	class:GameCore
+pickupAll	GameObject.java	/^    public String pickupAll(String name)throws RemoteException{$/;"	m	class:GameObject
+pickupAll	GameObjectInterface.java	/^    public String pickupAll(String name)throws RemoteException;$/;"	m	interface:GameObjectInterface
+player	PlayerAccountManager.java	/^		public Player player = null;$/;"	f	class:PlayerAccountManager.AccountResponse
+player	ShopClient.java	/^	private String player;$/;"	f	class:ShopClient	file:
+playerCheckIn	PlayerList.java	/^    private final HashMap<String, Calendar> playerCheckIn;$/;"	f	class:PlayerList	file:
+playerIds	PlayerAccountManager.java	/^	private HashSet<String> playerIds;$/;"	f	class:PlayerAccountManager	file:
+playerList	GameCore.java	/^    private final PlayerList playerList;$/;"	f	class:GameCore	file:
+playerList	PlayerList.java	/^    private final LinkedList<Player> playerList;$/;"	f	class:PlayerList	file:
+playerLogger	GameCore.java	/^	private Logger playerLogger = Logger.getLogger("connections");$/;"	f	class:GameCore	file:
+playerName	GameClient.java	/^    protected String playerName;$/;"	f	class:GameClient
+playerResponse	GameCore.java	/^    public String playerResponse(String acceptingTrader, String traderToAccept){$/;"	m	class:GameCore
+playerResponse	GameCoreInterface.java	/^    public String playerResponse(String acceptingTrader, String traderToAccept);$/;"	m	interface:GameCoreInterface
+playerResponse	GameObject.java	/^    public String playerResponse(String acceptingTrader, String traderToAccept) throws RemoteException{$/;"	m	class:GameObject
+playerResponse	GameObjectInterface.java	/^    public String playerResponse(String acceptingTrader, String traderToAccept) throws RemoteException;$/;"	m	interface:GameObjectInterface
+playerlist	Shop.java	/^	private PlayerList playerlist;$/;"	f	class:Shop	file:
+pokeGhoul	GameCore.java	/^	public String pokeGhoul(String playerName) {$/;"	m	class:GameCore
+pokeGhoul	GameCoreInterface.java	/^	public String pokeGhoul(String playerName);$/;"	m	interface:GameCoreInterface
+pokeGhoul	GameObject.java	/^	public String pokeGhoul(String playerName) throws RemoteException {$/;"	m	class:GameObject
+pokeGhoul	GameObjectInterface.java	/^	public String pokeGhoul(String playerName) throws RemoteException;$/;"	m	interface:GameObjectInterface
+price	Item.java	/^	double price;$/;"	f	class:Item
+printDem	Shop.java	/^	public void printDem() {}$/;"	m	class:Shop
+printInv	Shop.java	/^	public void printInv() {}$/;"	m	class:Shop
+printMenu	ShopClient.java	/^	public void printMenu() {$/;"	m	class:ShopClient
+printMessage	Player.java	/^    public void printMessage(Player speaker, String message, String action) {$/;"	m	class:Player
+printToFile	addRoom.java	/^    private void printToFile() throws IOException {$/;"	m	class:addRoom	file:
+purge	FriendsManager.java	/^	public void purge(String player) {$/;"	m	class:FriendsManager
+pw	GameCore.java	/^    private PrintWriter pw;$/;"	f	class:GameCore	file:
+quests	NPC.java	/^    private LinkedList<String> quests;$/;"	f	class:NPC	file:
+quickReply	GameCore.java	/^    public String quickReply(String srcName, String message) {$/;"	m	class:GameCore
+quickReply	GameCoreInterface.java	/^    public String quickReply(String srcName, String message);$/;"	m	interface:GameCoreInterface
+quickReply	GameObject.java	/^    public String quickReply(String srcName, String message) throws RemoteException {$/;"	m	class:GameObject
+quickReply	GameObjectInterface.java	/^    public String quickReply(String srcName, String message) throws RemoteException;$/;"	m	interface:GameObjectInterface
+randomRoom	Map.java	/^    public Room randomRoom() {$/;"	m	class:Map
+readAndAppend	addRoom.java	/^    private void readAndAppend() throws FileNotFoundException$/;"	m	class:addRoom	file:
+readWordFilterFile	GameClient.java	/^    private void readWordFilterFile() {$/;"	m	class:GameClient	file:
+receiveMessage	Player.java	/^    public boolean receiveMessage(Message sentMessage) {$/;"	m	class:Player
+received	Message.java	/^    private boolean received; \/\/ whether or not this message has been received$/;"	f	class:Message	file:
+recipient	Message.java	/^    private Player recipient; \/\/ who the message was sent to$/;"	f	class:Message	file:
+recovery	Player.java	/^    private ArrayList<String> recovery;$/;"	f	class:Player	file:
+reject	GameCore.java	/^    public String reject(String challengee, String challenger){$/;"	m	class:GameCore
+reject	GameCoreInterface.java	/^    public String reject(String challenger, String challengee);$/;"	m	interface:GameCoreInterface
+reject	GameObject.java	/^    public String reject(String challenger, String challengee) throws RemoteException{$/;"	m	class:GameObject
+reject	GameObjectInterface.java	/^    public String reject(String challenger, String challengee) throws RemoteException;$/;"	m	interface:GameObjectInterface
+remote	ShopClient.java	/^	private GameObjectInterface remote;$/;"	f	class:ShopClient	file:
+remoteGameInterface	GameClient.java	/^    protected GameObjectInterface remoteGameInterface;$/;"	f	class:GameClient
+remoteListener	GameClient.java	/^    protected ServerSocket remoteListener;$/;"	f	class:GameClient
+remoteListener	GameServer.java	/^    protected ServerSocket remoteListener;$/;"	f	class:GameServer
+remoteObject	GameServer.java	/^    private GameObject remoteObject;$/;"	f	class:GameServer	file:
+remoteOutputThread	GameClient.java	/^    private Thread remoteOutputThread;  $/;"	f	class:GameClient	file:
+remoteOutputThread	GameServer.java	/^    private Thread remoteOutputThread;$/;"	f	class:GameServer	file:
+remove	FriendsManager.java	/^	private boolean remove(HashMap<String, HashSet<String>> removeFrom, String a, String b) {$/;"	m	class:FriendsManager	file:
+remove	Shop.java	/^	public void remove(Object k)$/;"	m	class:Shop
+removeAllObjects	Room.java	/^    public LinkedList<Item> removeAllObjects()$/;"	m	class:Room
+removeCustomCommand	GameClient.java	/^    private void removeCustomCommand() {$/;"	m	class:GameClient	file:
+removeFriend	FriendsManager.java	/^	public Responses removeFriend(String player, String friend) {$/;"	m	class:FriendsManager
+removeFriend	GameCore.java	/^	public Responses removeFriend(String name, String ex) {$/;"	m	class:GameCore
+removeFriend	GameCoreInterface.java	/^	public Responses removeFriend(String name, String ex);$/;"	m	interface:GameCoreInterface
+removeFriend	GameObject.java	/^	public Responses removeFriend(String name, String ex) throws RemoteException {$/;"	m	class:GameObject
+removeFriend	GameObjectInterface.java	/^	public Responses removeFriend(String name, String ex) throws RemoteException;$/;"	m	interface:GameObjectInterface
+removeObject	Room.java	/^    public Item removeObject(String target) {$/;"	m	class:Room
+removeObjectFromInventory	Player.java	/^    public Item removeObjectFromInventory(String target) {$/;"	m	class:Player
+removePlayer	PlayerList.java	/^    public void removePlayer(String name) {$/;"	m	class:PlayerList
+removePlayer	Shop.java	/^	public void removePlayer(Player p) {$/;"	m	class:Shop
+replyWriter	Player.java	/^    private PrintWriter replyWriter = null;$/;"	f	class:Player	file:
+requestPlayer	GameCore.java	/^    public void requestPlayer(String requestingTrader, String traderToRequest){$/;"	m	class:GameCore
+requestPlayer	GameCoreInterface.java	/^    public void requestPlayer(String requestingTrader, String traderToRequest);$/;"	m	interface:GameCoreInterface
+requestPlayer	GameObject.java	/^    public void requestPlayer(String requestingTrader, String traderToRequest) throws RemoteException{$/;"	m	class:GameObject
+requestPlayer	GameObjectInterface.java	/^    public void requestPlayer(String requestingTrader, String traderToRequest) throws RemoteException;$/;"	m	interface:GameObjectInterface
+resetPassword	GameClient.java	/^    public void resetPassword() {$/;"	m	class:GameClient
+resetPassword	GameCore.java	/^	public Responses resetPassword(String name, String password) {$/;"	m	class:GameCore
+resetPassword	GameCoreInterface.java	/^	public Responses resetPassword(String name, String pass);$/;"	m	interface:GameCoreInterface
+resetPassword	GameObject.java	/^	public Responses resetPassword(String name, String pass) throws RemoteException {$/;"	m	class:GameObject
+resetPassword	GameObjectInterface.java	/^	public Responses resetPassword(String name, String password) throws RemoteException;$/;"	m	interface:GameObjectInterface
+resetPassword	PlayerAccountManager.java	/^	public  Responses resetPassword(Player p, String password) {$/;"	m	class:PlayerAccountManager
+right	GameCore.java	/^	public String right(String name) {$/;"	m	class:GameCore
+right	GameCoreInterface.java	/^    public String right(String name);    $/;"	m	interface:GameCoreInterface
+right	GameObject.java	/^    public String right(String name) throws RemoteException {$/;"	m	class:GameObject
+right	GameObjectInterface.java	/^    public String right(String name) throws RemoteException;$/;"	m	interface:GameObjectInterface
+room	Exit.java	/^    private final int room;$/;"	f	class:Exit	file:
+room	NPC.java	/^    private int room;$/;"	f	class:NPC	file:
+roomDescription	addRoom.java	/^	    private String roomDescription;$/;"	f	class:addRoom.Node	file:
+roomID	addRoom.java	/^	    private int roomID = 1;$/;"	f	class:addRoom.Node	file:
+room_type	Room.java	/^    private final String room_type;$/;"	f	class:Room	file:
+run	GameClient.java	/^        public void run() {$/;"	m	class:GameClient.ReplyRemote
+run	GameServer.java	/^        public void run() {$/;"	m	class:GameServer.ReplyRemote
+run	Ghost.java	/^		public void run() {$/;"	m	class:Ghost
+run	ShopClient.java	/^	private void run() throws RemoteException {$/;"	m	class:ShopClient	file:
+runGame	GameClient.java	/^    private boolean runGame;$/;"	f	class:GameClient	file:
+runListener	GameClient.java	/^    private boolean runListener;$/;"	f	class:GameClient	file:
+saveFile	FriendsManager.java	/^	private File saveFile;$/;"	f	class:FriendsManager	file:
+say	GameCore.java	/^	public String say(String name, String message) {$/;"	m	class:GameCore
+say	GameCoreInterface.java	/^    public String say(String name, String message);$/;"	m	interface:GameCoreInterface
+say	GameObject.java	/^    public String say(String name, String message) throws RemoteException {$/;"	m	class:GameObject
+say	GameObjectInterface.java	/^    public String say(String name, String message) throws RemoteException;$/;"	m	interface:GameObjectInterface
+say	Player.java	/^    public void say(String playerName, String action, String message) {$/;"	m	class:Player
+sayToAll	GameCore.java	/^    public void sayToAll(String message, Player player) {$/;"	m	class:GameCore
+sayings	Ghost.java	/^		ArrayList<String> sayings;$/;"	f	class:Ghost
+sell	ShopClient.java	/^	public void sell(String item) throws RemoteException{$/;"	m	class:ShopClient
+sellItem	GameCore.java	/^    public double sellItem(String name, int shopId, String item) {$/;"	m	class:GameCore
+sellItem	GameCoreInterface.java	/^    public double sellItem(String name, int shopId, String item);$/;"	m	interface:GameCoreInterface
+sellItem	GameObject.java	/^    public double sellItem(String name, int shopId, String item) throws RemoteException{$/;"	m	class:GameObject
+sellItem	GameObjectInterface.java	/^    public double sellItem(String name, int shopId, String item) throws RemoteException;$/;"	m	interface:GameObjectInterface
+send	Venmo.java	/^	public static String send(Player from, Player to, float amount) {$/;"	m	class:Venmo
+sendMessage	Player.java	/^    public boolean sendMessage(String textOfMessage, Player intendedRecipient) {$/;"	m	class:Player
+sender	Message.java	/^    private Player sender; \/\/ who sent the message$/;"	f	class:Message	file:
+setChallenger	Player.java	/^    public void setChallenger(String name){$/;"	m	class:Player
+setChallengerOption	Player.java	/^    public void setChallengerOption(String challengerOption){$/;"	m	class:Player
+setCurrentInventory	Player.java	/^    public void setCurrentInventory(LinkedList<Item> currentInventory) {$/;"	m	class:Player
+setCurrentRoom	Player.java	/^    public void setCurrentRoom(int room) {$/;"	m	class:Player
+setDormId	Player.java	/^	public void setDormId(int i) {this.dormId = i;}$/;"	m	class:Player
+setFilteredWords	Player.java	/^    public void setFilteredWords(HashSet<String> newFilteredWords) {$/;"	m	class:Player
+setHasChallenge	Player.java	/^    public void setHasChallenge(boolean challenged){$/;"	m	class:Player
+setInBattle	Player.java	/^    public void setInBattle(boolean battle){$/;"	m	class:Player
+setInTrade	Player.java	/^    public void setInTrade(boolean val){$/;"	m	class:Player
+setLastPlayer	Player.java	/^    public void setLastPlayer(String lastPlayer) {$/;"	m	class:Player
+setMoney	Player.java	/^    public void setMoney(double m){$/;"	m	class:Player
+setName	Player.java	/^    public void setName(String name) {$/;"	m	class:Player
+setOption	Player.java	/^    public void setOption(String option){$/;"	m	class:Player
+setOutputWriter	Player.java	/^    public void setOutputWriter(DataOutputStream writer) {$/;"	m	class:Player
+setPlayerFilteredWords	GameObject.java	/^    public void setPlayerFilteredWords(String playerName, HashSet<String> filteredWords) {$/;"	m	class:GameObject
+setPlayerFilteredWords	GameObjectInterface.java	/^    public void setPlayerFilteredWords(String playerName, HashSet<String> newFilteredWords) throws RemoteException;$/;"	m	interface:GameObjectInterface
+setRecovery	Player.java	/^    public void setRecovery(ArrayList<String> recovery) {$/;"	m	class:Player
+setReplyWriter	GameObject.java	/^    public boolean setReplyWriter(String playerName, PrintWriter writer) {$/;"	m	class:GameObject
+setReplyWriter	Player.java	/^    public void setReplyWriter(PrintWriter writer) {$/;"	m	class:Player
+setRoom	Ghoul.java	/^	public void setRoom(int room){$/;"	m	class:Ghoul
+setTradePartner	Player.java	/^    public void setTradePartner(String s){$/;"	m	class:Player
+setTradeRequest	Player.java	/^    public void setTradeRequest(boolean val){$/;"	m	class:Player
+shop	GameCore.java	/^    public int shop(String name) {$/;"	m	class:GameCore
+shop	GameObject.java	/^    public int shop(String name) throws RemoteException{$/;"	m	class:GameObject
+shop	GameObjectInterface.java	/^    public int shop(String name) throws RemoteException;$/;"	m	interface:GameObjectInterface
+shoplist	GameCore.java	/^    private HashMap<Integer,Shop> shoplist;$/;"	f	class:GameCore	file:
+shopping	ShopClient.java	/^	private boolean shopping;$/;"	f	class:ShopClient	file:
+shout	GameCore.java	/^    public String shout(String name, String message) {$/;"	m	class:GameCore
+shout	GameCoreInterface.java	/^    public String shout(String name, String message);$/;"	m	interface:GameCoreInterface
+shout	GameObject.java	/^    public String shout(String name, String message) throws RemoteException {$/;"	m	class:GameObject
+shout	GameObjectInterface.java	/^    public String shout(String name, String message) throws RemoteException;$/;"	m	interface:GameObjectInterface
+showCommand	GameClient.java	/^    private void showCommand()$/;"	m	class:GameClient	file:
+showCommand	GameClient.java	/^    private void showCommand(String commandToShow)$/;"	m	class:GameClient	file:
+showCustomCommands	GameClient.java	/^    private boolean showCustomCommands()$/;"	m	class:GameClient	file:
+showIntroduction	GameClient.java	/^    private void showIntroduction()$/;"	m	class:GameClient	file:
+showPlayers	GameCore.java	/^    public String showPlayers(){$/;"	m	class:GameCore
+showPlayers	GameCoreInterface.java	/^    public String showPlayers();$/;"	m	interface:GameCoreInterface
+showPlayers	GameObject.java	/^    public String showPlayers() throws RemoteException {$/;"	m	class:GameObject
+showPlayers	GameObjectInterface.java	/^    public String showPlayers() throws RemoteException;$/;"	m	interface:GameObjectInterface
+sort	GameCore.java	/^    public String sort(String name, String modes) {$/;"	m	class:GameCore
+sort	GameObject.java	/^    public String sort(String name, String modes) throws RemoteException {$/;"	m	class:GameObject
+sort	GameObjectInterface.java	/^    public String sort(String name, String modes) throws RemoteException; $/;"	m	interface:GameObjectInterface
+sortCurrentInventory	Player.java	/^    public void sortCurrentInventory(String modes) {$/;"	m	class:Player
+south	addRoom.java	/^    private static final String south = "SOUTH";$/;"	f	class:addRoom	file:
+southConnecting	addRoom.java	/^	    private int southConnecting = 0;$/;"	f	class:addRoom.Node	file:
+southDescription	addRoom.java	/^	    private String southDescription;$/;"	f	class:addRoom.Node	file:
+speech	Ghost.java	/^		String speech = "sample speech";$/;"	f	class:Ghost
+strCenter	Shop.java	/^	private String strCenter(String str, int len) {$/;"	m	class:Shop	file:
+success	PlayerAccountManager.java	/^		public boolean success() {$/;"	m	class:PlayerAccountManager.AccountResponse
+teach	GameCore.java	/^     public String teach(String player){$/;"	m	class:GameCore
+teach	GameCoreInterface.java	/^     public String teach(String player);$/;"	m	interface:GameCoreInterface
+teach	GameObject.java	/^     public String teach(String player) throws RemoteException{$/;"	m	class:GameObject
+teach	GameObjectInterface.java	/^     public String teach(String player) throws RemoteException;$/;"	m	interface:GameObjectInterface
+title	Room.java	/^    private final String title;$/;"	f	class:Room	file:
+title	Shop.java	/^	private String title;$/;"	f	class:Shop	file:
+toString	Direction.java	/^    public String toString() {$/;"	m	class:Direction
+toString	Item.java	/^	public String toString()$/;"	m	class:Item
+toString	NPC.java	/^    public String toString(){$/;"	m	class:NPC
+toString	Player.java	/^    public String toString() {$/;"	m	class:Player
+toString	Room.java	/^    public String toString(PlayerList playerList, Player player) {$/;"	m	class:Room
+toString	Shop.java	/^	public String toString() {$/;"	m	class:Shop
+toValue	Direction.java	/^    public static Direction toValue(String string) {$/;"	m	class:Direction
+tradePartner	Player.java	/^    private String tradePartner = "";$/;"	f	class:Player	file:
+tradeRequested	Player.java	/^    private boolean tradeRequested = false;$/;"	f	class:Player	file:
+turnLeft	Player.java	/^    public void turnLeft() {$/;"	m	class:Player
+turnRight	Player.java	/^    public void turnRight() {$/;"	m	class:Player
+unIgnorePlayer	GameCore.java	/^    public String unIgnorePlayer(String srcName, String dstName) {$/;"	m	class:GameCore
+unIgnorePlayer	GameCoreInterface.java	/^    public String unIgnorePlayer(String srcName, String dstName);$/;"	m	interface:GameCoreInterface
+unIgnorePlayer	GameObject.java	/^    public String unIgnorePlayer(String srcName, String dstName) throws RemoteException {$/;"	m	class:GameObject
+unIgnorePlayer	GameObjectInterface.java	/^    public String unIgnorePlayer(String srcName, String dstName) throws RemoteException;$/;"	m	interface:GameObjectInterface
+unIgnorePlayer	Player.java	/^    public boolean unIgnorePlayer(Player playerToUnIgnore) {$/;"	m	class:Player
+unmarshal	JsonMarshaller.java	/^	public <T> T unmarshal(String obj, Class<T> type) throws Exception {$/;"	m	class:JsonMarshaller
+unmarshal	JsonMarshaller.java	/^	public <T> T unmarshal(byte[] obj, Class<T> type) throws Exception {$/;"	m	class:JsonMarshaller
+unmarshalFile	JsonMarshaller.java	/^	public <T> T unmarshalFile(String fileName, Class<T> type) throws Exception {$/;"	m	class:JsonMarshaller
+venmo	GameCore.java	/^	public String venmo(String name, ArrayList<String> tokens) {$/;"	m	class:GameCore
+venmo	GameCoreInterface.java	/^    public String venmo(String name, ArrayList<String> tokens);$/;"	m	interface:GameCoreInterface
+venmo	GameObject.java	/^	public String venmo(String name, ArrayList<String> tokens) throws RemoteException {$/;"	m	class:GameObject
+venmo	GameObjectInterface.java	/^    public String venmo(String name, ArrayList<String> tokens) throws RemoteException;$/;"	m	interface:GameObjectInterface
+viewInventory	Player.java	/^    public String viewInventory() {$/;"	m	class:Player
+viewOnlineFriends	GameCore.java	/^	public String viewOnlineFriends(String name) {$/;"	m	class:GameCore
+viewOnlineFriends	GameCoreInterface.java	/^	public String viewOnlineFriends(String name);$/;"	m	interface:GameCoreInterface
+viewOnlineFriends	GameObject.java	/^    public String viewOnlineFriends(String name) throws RemoteException {$/;"	m	class:GameObject
+viewOnlineFriends	GameObjectInterface.java	/^	String viewOnlineFriends(String name) throws RemoteException;$/;"	m	interface:GameObjectInterface
+wallet	GameCore.java	/^	public String wallet(String name) {$/;"	m	class:GameCore
+wallet	GameObject.java	/^	public String wallet(String name) throws RemoteException {$/;"	m	class:GameObject
+wallet	GameObjectInterface.java	/^    public String wallet(String name) throws RemoteException;$/;"	m	interface:GameObjectInterface
+weight	Item.java	/^	double  weight;$/;"	f	class:Item
+west	addRoom.java	/^    private static final String west = "WEST";$/;"	f	class:addRoom	file:
+westConnecting	addRoom.java	/^	    private int westConnecting = 0;$/;"	f	class:addRoom.Node	file:
+westDescription	addRoom.java	/^	    private String westDescription;$/;"	f	class:addRoom.Node	file:
+whisper	GameCore.java	/^    public String whisper(String srcName, String dstName, String message){$/;"	m	class:GameCore
+whisper	GameCoreInterface.java	/^    public String whisper(String srcName, String dstName, String message);$/;"	m	interface:GameCoreInterface
+whisper	GameObject.java	/^    public String whisper(String srcName, String dstName, String message) throws RemoteException {$/;"	m	class:GameObject
+whisper	GameObjectInterface.java	/^    public String whisper(String srcName, String dstName, String message) throws RemoteException;$/;"	m	interface:GameObjectInterface
+whiteboard	Room.java	/^    private StringBuilder whiteboard;$/;"	f	class:Room	file:
+whiteboardErase	GameCore.java	/^    public String whiteboardErase(String name) {$/;"	m	class:GameCore
+whiteboardErase	GameObject.java	/^    public String whiteboardErase(String name) throws RemoteException {$/;"	m	class:GameObject
+whiteboardErase	GameObjectInterface.java	/^    public String whiteboardErase(String name) throws RemoteException;$/;"	m	interface:GameObjectInterface
+whiteboardErase	Room.java	/^    public void whiteboardErase() {$/;"	m	class:Room
+whiteboardRead	GameCore.java	/^    public String whiteboardRead(String name) {$/;"	m	class:GameCore
+whiteboardRead	GameObject.java	/^    public String whiteboardRead(String name) throws RemoteException {$/;"	m	class:GameObject
+whiteboardRead	GameObjectInterface.java	/^    public String whiteboardRead(String name) throws RemoteException; $/;"	m	interface:GameObjectInterface
+whiteboardWrite	GameCore.java	/^    public String whiteboardWrite(String name, String text) {$/;"	m	class:GameCore
+whiteboardWrite	GameObject.java	/^    public String whiteboardWrite(String name, String text) throws RemoteException {$/;"	m	class:GameObject
+whiteboardWrite	GameObjectInterface.java	/^    public String whiteboardWrite(String name, String text) throws RemoteException;$/;"	m	interface:GameObjectInterface
+write	DailyLogger.java	/^    public void write(String message){$/;"	m	class:DailyLogger
+write	DailyLogger.java	/^    public void write(String name, String command, String args, String room){$/;"	m	class:DailyLogger
+write	DailyLogger.java	/^    public void write(String name, String command, String room){$/;"	m	class:DailyLogger
+writeFile	FriendsManager.java	/^	private void writeFile() {$/;"	m	class:FriendsManager	file:
+writeFileSink	FriendsManager.java	/^	private synchronized void writeFileSink() {$/;"	m	class:FriendsManager	file:
+writePlayerDataFile	PlayerAccountManager.java	/^	private void writePlayerDataFile(Player p) throws Exception {$/;"	m	class:PlayerAccountManager	file:

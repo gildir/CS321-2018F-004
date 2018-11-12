@@ -1,0 +1,5 @@
+Daily Log for 11-06-2018
+[11-06-2018 12:06:03] - SERVER FORCIBLY TERMINATED
+[11-06-2018 12:06:28] - SERVER STARTED
+[11-06-2018 12:08:55] - You see a student rush past and drop a Flower99 (0.5)  on the ground.
+[11-06-2018 12:26:30] - SERVER FORCIBLY TERMINATED

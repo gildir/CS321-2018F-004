@@ -1,0 +1,700 @@
+
+build.sh,0
+
+GameObjectInterface.java,5116
+public interface GameObjectInterface extends Remote {GameObjectInterface12,142
+	public String pokeGhoul(String playerName) throws RemoteException;pokeGhoul20,346
+	public String bribeGhoul(String playerName, String item) throws RemoteException;bribeGhoul30,615
+	public boolean joinGame(String name, String password) throws RemoteException;joinGame41,1107
+	public Responses createAccountAndJoinGame(String name, String password, ArrayList<String> recovery) throws RemoteException;createAccountAndJoinGame55,1671
+    public String look(String name) throws RemoteException;look63,2010
+    public String left(String name) throws RemoteException;left71,2242
+    public String right(String name) throws RemoteException;right79,2477
+    public String say(String name, String message) throws RemoteException;say88,2771
+    public String showPlayers() throws RemoteException;showPlayers95,2987
+    public String whisper(String srcName, String dstName, String message) throws RemoteException;whisper105,3319
+    public String quickReply(String srcName, String message) throws RemoteException;quickReply114,3633
+    public String ignorePlayer(String srcName, String dstName) throws RemoteException;ignorePlayer123,3962
+    public String unIgnorePlayer(String srcName, String dstName) throws RemoteException;unIgnorePlayer133,4335
+    public String getIgnoredPlayersList(String name) throws RemoteException;getIgnoredPlayersList141,4642
+    public String joke(String filename) throws RemoteException;joke150,4987
+    public String shout(String name, String message) throws RemoteException;shout161,5297
+    public void setPlayerFilteredWords(String playerName, HashSet<String> newFilteredWords) throws RemoteException;setPlayerFilteredWords168,5591
+    public String move(String name, int distance) throws RemoteException;move178,6072
+    public String move(String name, Direction direction)throws RemoteException;move180,6147
+    public String pickup(String name, String object) throws RemoteException;pickup189,6548
+    public String pickupAll(String name)throws RemoteException;pickupAll191,6626
+    public String drop(String name, String object) throws RemoteException;drop200,7002
+    public String sort(String name, String modes) throws RemoteException; sort208,7305
+    public void requestPlayer(String requestingTrader, String traderToRequest) throws RemoteException;requestPlayer215,7675
+    public String offer (String srcName, String dstName, String object) throws RemoteException;offer224,8023
+    public String playerResponse(String acceptingTrader, String traderToAccept) throws RemoteException;playerResponse232,8385
+    public String whiteboardErase(String name) throws RemoteException;whiteboardErase239,8715
+    public String whiteboardRead(String name) throws RemoteException; whiteboardRead246,9011
+    public String whiteboardWrite(String name, String text) throws RemoteException;whiteboardWrite254,9354
+    public String inventory(String name) throws RemoteException;   inventory263,9667
+    public void leave(String name) throws RemoteException;leave270,9864
+    public String venmo(String name, ArrayList<String> tokens) throws RemoteException;venmo280,10193
+    public int shop(String name) throws RemoteException;shop289,10532
+    public Player getPlayer(String name) throws RemoteException;getPlayer297,10805
+    public String wallet(String name) throws RemoteException;wallet305,11093
+    public String getShopStr(int id) throws RemoteException;getShopStr313,11295
+    public double sellItem(String name, int shopId, String item) throws RemoteException;sellItem322,11673
+    public String buyItem(String name, int shopId, String item) throws RemoteException;buyItem332,12104
+    public String getShopInv(int id) throws RemoteException;getShopInv339,12362
+	public void deleteAccount(String name) throws RemoteException;deleteAccount347,12548
+	public Responses addFriend(String name, String friend) throws RemoteException;addFriend357,12754
+	public Responses removeFriend(String name, String ex) throws RemoteException;removeFriend367,12977
+	String viewOnlineFriends(String name) throws RemoteException;viewOnlineFriends376,13215
+	public Responses resetPassword(String name, String password) throws RemoteException;resetPassword385,13444
+	public String getQuestion(String name, int num) throws RemoteException;getQuestion394,13760
+	public String getAnswer(String name, int num) throws RemoteException;getAnswer403,14056
+    public void heartbeatCheck(String name) throws RemoteException;heartbeatCheck412,14408
+    public String challenge(String challenger, String challengee) throws RemoteException;challenge421,14775
+    public String accept(String challenger, String challengee) throws RemoteException;accept430,15173
+    public String reject(String challenger, String challengee) throws RemoteException;reject439,15576
+    public String pickRPS(String name, String options) throws RemoteException;pickRPS448,15881
+     public String teach(String player) throws RemoteException;teach456,16186
+
+FriendsManager.java,1215
+public class FriendsManager {FriendsManager8,179
+	private HashMap<String, HashSet<String>> myAdded; // Everyone I have addedmyAdded9,210
+	private HashMap<String, HashSet<String>> addedMe; // Everyone thats added meaddedMe10,287
+	private File saveFile;saveFile11,366
+	public FriendsManager() {FriendsManager16,451
+	public static FriendsManager Create(File f) throws Exception {Create21,555
+	public FriendsManager(HashMap<String, HashSet<String>> myAdded, HashMap<String, HashSet<String>> addedMe) {FriendsManager42,1041
+	public Responses addFriend(String player, String friend) {addFriend54,1365
+	public Responses removeFriend(String player, String friend) {removeFriend73,1875
+	public void purge(String player) {purge90,2309
+	private boolean add(HashMap<String, HashSet<String>> addTo, String a, String b) {add107,2727
+	private boolean remove(HashMap<String, HashSet<String>> removeFrom, String a, String b) {remove121,3059
+	public HashMap<String, HashSet<String>> getMyAdded() {getMyAdded134,3348
+	public HashMap<String, HashSet<String>> getAddedMe() {getAddedMe143,3482
+	private void writeFile() {writeFile147,3565
+	private synchronized void writeFileSink() {writeFileSink156,3732
+
+Direction.java,552
+public enum Direction {Direction5,28
+    NORTH("North"), SOUTH("South"), EAST("East"), WEST("West");NORTH6,52
+    NORTH("North"), SOUTH("South"), EAST("East"), WEST("West");SOUTH6,52
+    NORTH("North"), SOUTH("South"), EAST("East"), WEST("West");EAST6,52
+    NORTH("North"), SOUTH("South"), EAST("East"), WEST("West");WEST6,52
+    private String directionName;directionName8,121
+    Direction(String name) {Direction10,160
+    public static Direction toValue(String string) {toValue14,230
+    public String toString() {toString33,869
+
+Venmo.java,172
+public class Venmo {Venmo7,109
+	public static String send(Player from, Player to, float amount) {send20,630
+	public static String instructions() {instructions52,1834
+
+Ghoul.java,468
+public class Ghoul{Ghoul8,152
+	private int angryLevel; //Measure of a ghoul's anger on a scale of 0(calm) to 10(furious)angryLevel10,173
+	private int currentRoom;currentRoom11,264
+	public Ghoul(int room){Ghoul14,348
+	public int getAngryLevel(){getAngryLevel19,428
+	public int getRoom(){getRoom23,487
+	public void setRoom(int room){setRoom26,540
+	public void modifyAngryLevel(int amount) {modifyAngryLevel30,604
+	public void Drag(Player p){Drag43,843
+
+GhoulLog.java,257
+public class GhoulLogGhoulLog5,78
+	public Logger logger;logger7,102
+	public FileHandler fh;fh8,125
+	public GhoulLog() throws SecurityException, IOException{GhoulLog9,149
+	public void glLog(String class_Name, String method, String msg){glLog26,523
+
+JsonMarshaller.java,663
+public class JsonMarshaller {JsonMarshaller8,232
+	public static final JsonMarshaller MARSHALLER = new JsonMarshaller();MARSHALLER9,262
+	private ObjectMapper jsonMapper;jsonMapper10,333
+	public JsonMarshaller() {JsonMarshaller12,368
+	public <T> T unmarshal(String obj, Class<T> type) throws Exception {unmarshal20,784
+	public <T> T unmarshalFile(String fileName, Class<T> type) throws Exception {unmarshalFile24,905
+	public <T> T unmarshal(byte[] obj, Class<T> type) throws Exception {unmarshal28,1060
+	public String marshal(Object o) throws Exception {marshal32,1176
+	public String marshalIndent(Object o) throws Exception {marshalIndent36,1275
+
+Player.java,6153
+public class Player {Player20,491
+	private int dormId;//used to determine private dormroom IddormId21,513
+	public LinkedList<Item> currentInventory;currentInventory23,653
+    private String name;name24,696
+    private int currentRoom;currentRoom25,721
+    private Direction currentDirection;currentDirection26,750
+    private PrintWriter replyWriter = null;replyWriter27,790
+    private DataOutputStream outputWriter = null;outputWriter28,834
+    private double money;money29,884
+    private DataInputStream inputWriter = null;inputWriter30,910
+    private boolean inTrade = false;inTrade31,958
+    private boolean tradeRequested = false;tradeRequested32,995
+    private String tradePartner = "";tradePartner33,1039
+    private String lastPlayer = "";lastPlayer34,1077
+    private boolean hasChallenge = false;hasChallenge35,1113
+    private boolean inBattle = false;inBattle36,1155
+    private String challenger = " ";challenger37,1193
+    private String option = "";option38,1230
+    private String challengerOption = "";challengerOption39,1262
+    private boolean hasOption = false;hasOption40,1304
+    private ArrayList<String> recovery;recovery42,1373
+	public Player(@JsonProperty("name") String name, @JsonProperty("recovery") ArrayList<String> recovery) {Player45,1423
+	public int getDormId() {return this.dormId;}getDormId56,1808
+	public void setDormId(int i) {this.dormId = i;}setDormId57,1854
+	private HashSet<Player> ignoredPlayers = new HashSet<Player>();ignoredPlayers58,1903
+    private HashSet<Message> missedMessages = new HashSet<Message>();missedMessages60,2009
+    public void say(String playerName, String action, String message) {say70,2386
+    private HashSet<String> filteredWords = new HashSet<String>();filteredWords77,2721
+    public void setFilteredWords(HashSet<String> newFilteredWords) {setFilteredWords83,2953
+    public HashSet<String> getFilteredWords() {getFilteredWords89,3136
+    public boolean addFilteredWord(String wordToAdd) {addFilteredWord98,3436
+    public boolean isFiltering(String word) {isFiltering109,3761
+    public String filterMessage(String message) {filterMessage119,4030
+    public void printMessage(Player speaker, String message, String action) {printMessage138,4534
+    public boolean ignorePlayer(Player playerToIgnore) {ignorePlayer148,4959
+    public boolean unIgnorePlayer(Player playerToUnIgnore) {unIgnorePlayer166,5613
+    public boolean isIgnoring(Player otherPlayer) {isIgnoring179,6107
+    public String getIgnoredPlayersList() {getIgnoredPlayersList188,6385
+    public boolean receiveMessage(Message sentMessage) {receiveMessage213,7307
+    public boolean sendMessage(String textOfMessage, Player intendedRecipient) {sendMessage235,7909
+    public void turnLeft() {turnLeft244,8176
+    public void turnRight() {turnRight261,8713
+    public String getLastPlayer() {getLastPlayer278,9247
+    public void setLastPlayer(String lastPlayer) {setLastPlayer282,9317
+    public void setInBattle(boolean battle){setInBattle286,9413
+    public boolean getInBattle(){getInBattle290,9485
+    public String getName() {getName295,9571
+    public void setRecovery(ArrayList<String> recovery) {setRecovery300,9663
+    public void setName(String name) {setName304,9759
+	public String getQuestion(int num) {getQuestion308,9832
+	public String getAnswer(int num) {getAnswer314,9966
+    public LinkedList<Item> getCurrentInventory() {getCurrentInventory320,10109
+    public void setCurrentInventory(LinkedList<Item> currentInventory) {setCurrentInventory325,10236
+    public void addObjectToInventory(Item object) {addObjectToInventory329,10370
+    public Item removeObjectFromInventory(String target) {removeObjectFromInventory334,10505
+    public void sortCurrentInventory(String modes) {sortCurrentInventory346,10864
+    public boolean hasTradeRequest(){hasTradeRequest374,11713
+    public void setTradeRequest(boolean val){setTradeRequest378,11789
+    public boolean isInTrade(){isInTrade382,11872
+    public void setInTrade(boolean val){setInTrade385,11934
+    public String getTradePartner(){getTradePartner389,12005
+    public void setTradePartner(String s){setTradePartner392,12077
+    public void setReplyWriter(PrintWriter writer) {setReplyWriter396,12153
+    public PrintWriter getReplyWriter() {getReplyWriter400,12252
+    public void setOutputWriter(DataOutputStream writer) {setOutputWriter404,12338
+    public DataOutputStream getOutputWriter() {getOutputWriter408,12444
+    public int getCurrentRoom() {getCurrentRoom412,12537
+    public void setCurrentRoom(int room) {setCurrentRoom417,12645
+    public String getCurrentDirection() {getCurrentDirection422,12745
+    public Direction getDirection() {getDirection426,12843
+    public String getOption(){getOption430,12926
+    public void setOption(String option){setOption434,12992
+    public String getChallengerOption(){getChallengerOption438,13071
+    public void setChallengerOption(String challengerOption){setChallengerOption442,13157
+    public double getMoney() {getMoney446,13280
+    public void setMoney(double m){setMoney450,13345
+    public String getChallenger(){getChallenger454,13412
+    public void setChallenger(String name){setChallenger458,13481
+    public boolean getHasChallenge(){getHasChallenge462,13559
+    public void setHasChallenge(boolean challenged){setHasChallenge466,13633
+    public void changeMoney(double m){changeMoney476,13890
+    public String viewInventory() {viewInventory480,13965
+    public String toString() {toString496,14369
+    private static class ItemNameComparator implements Comparator<Item> {ItemNameComparator500,14482
+	public int compare(Item ItemA, Item ItemB) {compare502,14567
+    private static class ItemWeightComparator implements Comparator<Item> {ItemWeightComparator507,14676
+	public int compare(Item ItemA, Item ItemB) {compare509,14763
+    private static class ItemPriceComparator implements Comparator<Item> {ItemPriceComparator522,14977
+	public int compare(Item ItemA, Item ItemB) {compare524,15063
+
+PlayerList.java,638
+public class PlayerList implements Iterable<Player> {PlayerList15,208
+    private final LinkedList<Player> playerList;playerList16,262
+    private final HashMap<String, Calendar> playerCheckIn;playerCheckIn17,311
+    public Iterator<Player> iterator() {iterator20,385
+    public PlayerList() {PlayerList25,514
+    public void addPlayer(Player player) {addPlayer30,634
+    public Player findPlayer(String name) {findPlayer35,790
+    public void removePlayer(String name) {removePlayer44,1022
+    public void heartbeat(String name) {heartbeat52,1234
+    public List<String> getExpiredPlayers() {getExpiredPlayers56,1343
+
+build.bat,0
+
+clean.bat,0
+
+Item.java,585
+public class ItemItem3,55
+	String name;name5,75
+	double  weight;weight6,89
+	double price;price7,106
+	public Item(@JsonProperty("name") String name, @JsonProperty("weight") double weight, @JsonProperty("price") double price)Item9,122
+	public void changeName(String name)changeName16,319
+	public void changeWeight(double weight)changeWeight21,383
+	public void changePrice(double price)changePrice26,455
+	public String getName()getName31,523
+	public double getWeight()getWeight36,575
+	public double getPrice()getPrice41,631
+	public String toString()toString46,686
+
+DormRoom.java,197
+public class DormRoom extends Room{     DormRoom4,31
+    private final LinkedList<Item> chest;chest7,82
+    DormRoom(int id, String room_type, String title, String description){DormRoom8,124
+
+GameServer.java,649
+public class GameServer {GameServer17,365
+    private GameObject remoteObject;remoteObject20,462
+    protected ServerSocket remoteListener;remoteListener23,596
+    private Thread remoteOutputThread;remoteOutputThread24,639
+    private Thread gameThread;gameThread27,733
+    public GameServer(String host, String worldFile) throws RemoteException {           GameServer34,868
+    public static void main(String[] args) {main60,2169
+    public class ReplyRemote implements Runnable {ReplyRemote93,3450
+		private String host;host94,3501
+		public ReplyRemote(String host) {ReplyRemote96,3527
+        public void run() {run101,3609
+
+GameClient.java,1614
+public class GameClient {GameClient43,1148
+    private boolean runGame;runGame45,1216
+    protected GameObjectInterface remoteGameInterface;remoteGameInterface48,1289
+    private boolean runListener;runListener51,1431
+    protected ServerSocket remoteListener;remoteListener52,1464
+    private Thread remoteOutputThread;  remoteOutputThread53,1507
+    protected String playerName;playerName56,1603
+    private String lastCommand;lastCommand58,1637
+    public GameClient(String host) {GameClient63,1738
+    private String parseMessage(ArrayList<String> msgTokens) {parseMessage223,8118
+    private void parseInput(String input) {parseInput240,8735
+    public void resetPassword() {resetPassword669,27253
+    public static void main(String[] args) {main795,31406
+    private void showCommand()showCommand808,31921
+    private void showCommand(String commandToShow)showCommand814,32036
+    private void showIntroduction()showIntroduction847,33397
+    private void addCustomCommand(String customCommandName)addCustomCommand870,34326
+    private boolean executeCustomCommand(String commandName, ArrayList<String> parameters) {executeCustomCommand947,37652
+    private void removeCustomCommand() {removeCustomCommand988,39321
+    private boolean showCustomCommands()showCustomCommands1039,41500
+    public class ReplyRemote implements Runnable {ReplyRemote1085,43254
+		private String host;host1086,43305
+		public ReplyRemote(String host) {ReplyRemote1088,43331
+        public void run() {run1093,43413
+    private void readWordFilterFile() {readWordFilterFile1140,45556
+
+PlayerAccountManager.java,1312
+public class PlayerAccountManager {PlayerAccountManager13,331
+	private File accountFolder;accountFolder14,367
+	private HashSet<String> playerIds;playerIds15,396
+	private Logger logger;logger16,432
+	public static class AccountResponse {AccountResponse18,457
+		public Player player = null;player19,496
+		public Responses error = null;error20,527
+		private AccountResponse(Player p) {AccountResponse22,561
+		private AccountResponse(Responses error) {AccountResponse26,624
+		public boolean success() {success30,697
+	public PlayerAccountManager(String folderName) throws Exception {PlayerAccountManager35,759
+	public synchronized AccountResponse createNewAccount(String username, String password, ArrayList<String> recovery) {createNewAccount52,1404
+	private void writePlayerDataFile(Player p) throws Exception {writePlayerDataFile81,2478
+	public void forceUpdateData(Player p) {forceUpdateData88,2826
+	public boolean deleteAccount(String username) {deleteAccount95,2936
+	public AccountResponse getAccount(String username, String password) {getAccount108,3296
+	public boolean accountExists(String username) {accountExists138,4534
+	public AccountResponse getPlayer(String name) {getPlayer147,4768
+	public  Responses resetPassword(Player p, String password) {resetPassword173,5680
+
+Ghost.java,280
+public class Ghost extends Thread{Ghost7,99
+		String speech = "sample speech";speech8,134
+		Player p;p9,169
+		ArrayList<String> sayings;sayings10,181
+		public Ghost(Player p){Ghost12,213
+		public void run() {run19,332
+		private void loadSayings() {loadSayings35,803
+
+ShopClient.java,699
+public class ShopClient {ShopClient12,301
+	private String player;player13,327
+	private Integer id;id14,351
+	private GameObjectInterface remote;remote15,372
+	private boolean shopping;shopping16,409
+	public ShopClient(String p, int s, GameObjectInterface remote) throws RemoteException {ShopClient18,438
+	private void run() throws RemoteException {run31,790
+	private void parseInput(String input) throws RemoteException {parseInput61,1809
+	public void printMenu() {printMenu121,3554
+	public void buy(String item) throws RemoteException{buy130,3965
+	public void sell(String item) throws RemoteException{sell135,4130
+	public String getInv() throws RemoteException{getInv145,4442
+
+clean.sh,0
+
+GameCore.java,5437
+public class GameCore implements GameCoreInterface {GameCore29,695
+	private int dormCountId;dormCountId30,748
+    private final PlayerList playerList;playerList31,774
+    private final Map map;map32,815
+    protected DailyLogger dailyLogger;dailyLogger33,842
+    private HashMap<Integer,Shop> shoplist;shoplist34,881
+    private Ghoul ghoul;ghoul35,925
+    private PrintWriter pw;pw36,950
+	private final PlayerAccountManager accountManager;accountManager39,1002
+	private final Object loginLock = new Object();loginLock40,1054
+	private final Object createAccountLock = new Object();createAccountLock41,1102
+	private Logger playerLogger = Logger.getLogger("connections");playerLogger42,1158
+	private FriendsManager friendsManager;friendsManager43,1222
+	private final Object friendsLock = new Object();friendsLock44,1262
+    public GameCore(String playerAccountsLocation, String worldFile) throws Exception {GameCore56,1594
+	public void ghoulWander(Ghoul g, Room room) {ghoulWander187,7376
+    public int shop(String name) {shop215,8186
+    public String getShopStr(int id) {getShopStr233,8614
+    public double sellItem(String name, int shopId, String item) {sellItem244,9018
+	public String bribeGhoul(String playerName, String item){bribeGhoul261,9459
+	public String pokeGhoul(String playerName) {pokeGhoul309,10792
+    public String buyItem(String name, int shopId, String itemName)buyItem343,11836
+	public String venmo(String name, ArrayList<String> tokens) {venmo382,12843
+	public String wallet(String name) {wallet426,14605
+    public String getShopInv(int id) {getShopInv440,14944
+    public String pickupAll(String name) {pickupAll450,15274
+    public String offer(String srcName, String dstName, String message){offer480,16530
+	public void broadcast(Player player, String message) {broadcast541,18661
+	public void broadcast(Room room, String message) {broadcast563,19512
+	public Player findPlayer(String name) {findPlayer584,20127
+    public void requestPlayer(String requestingTrader, String traderToRequest){requestPlayer597,20601
+	public Player joinGame(String name, String password) {joinGame641,22498
+	public synchronized Responses createAccountAndJoinGame(String name, String password, ArrayList<String> recovery) {createAccountAndJoinGame681,24125
+	public String look(String playerName) {look699,24741
+	public String left(String name) {left733,25724
+	public String right(String name) {right757,26385
+	public String say(String name, String message) {say782,27111
+	public String draggedToSpawn(Player player) {draggedToSpawn800,27730
+	public String move(String name, int distance) {move824,28758
+    public String move(String name, Direction direction) {move858,30094
+    public String pickup(String name, String target) {pickup902,32138
+    public String drop(String name, String target) {drop933,33489
+    public String whiteboardErase(String name) {whiteboardErase958,34595
+    public String whiteboardRead(String name) {whiteboardRead977,35361
+    public String whiteboardWrite(String name, String text) {whiteboardWrite1003,36341
+	public String inventory(String name) {inventory1034,37547
+    public String sort(String name, String modes) {sort1048,38041
+    public String playerResponse(String acceptingTrader, String traderToAccept){playerResponse1064,38618
+    public String challenge(String challenger, String challengee){challenge1087,39567
+    public String accept(String challengee, String challenger){accept1117,40979
+    public String reject(String challengee, String challenger){reject1145,42373
+    public String pickRPS(String name,  String option){pickRPS1174,43805
+	public Player leave(String name) {leave1259,47156
+    public String whisper(String srcName, String dstName, String message){whisper1278,47783
+    public String quickReply(String srcName, String message) {quickReply1308,49095
+    public String ignorePlayer(String srcName, String dstName) {ignorePlayer1328,49880
+    public String unIgnorePlayer(String srcName, String dstName) {unIgnorePlayer1353,50999
+    public String getIgnoredPlayersList(String name) {getIgnoredPlayersList1377,52084
+    public String joke(String filename){joke1397,52844
+    public String shout(String name, String message) {shout1425,53621
+    public void sayToAll(String message, Player player) {sayToAll1450,54610
+    private void chatLog(Player player, int chatType, String message, String target) throws IOException {chatLog1458,54952
+     public String teach(String player){teach1481,55642
+    public String showPlayers(){showPlayers1497,56462
+	private void connectionLog(boolean connecting, String name) {connectionLog1512,56848
+	private void initConnectionsLogger() throws IOException {initConnectionsLogger1523,57177
+	public Player deleteAccount(String name) {deleteAccount1558,58391
+	public Responses addFriend(String name, String friend) {addFriend1581,59030
+	public Responses removeFriend(String name, String ex) {removeFriend1599,59480
+	public String viewOnlineFriends(String name) {viewOnlineFriends1614,59865
+    public void heartbeatCheck(String name){heartbeatCheck1635,60481
+	public String getQuestion(String name, int num) {getQuestion1645,60770
+	public String getAnswer(String name, int num) {getAnswer1665,61282
+	public Responses resetPassword(String name, String password) {resetPassword1685,61732
+
+runServer.sh,0
+
+runClientLocal.sh,0
+
+GameCoreInterface.java,3266
+public interface GameCoreInterface {GameCoreInterface7,57
+	public void ghoulWander(Ghoul g,Room room);ghoulWander14,237
+	public String pokeGhoul(String playerName);pokeGhoul21,404
+	public String bribeGhoul(String playerName,String item);bribeGhoul30,623
+    public void broadcast(Player player, String message);    broadcast41,945
+    public void broadcast(Room room, String message);broadcast48,1194
+    public Player findPlayer(String name);findPlayer56,1439
+    public Player joinGame(String name, String password);joinGame66,1988
+	public Responses createAccountAndJoinGame(String name, String password, ArrayList<String> recovery);createAccountAndJoinGame79,2507
+    public String look(String playerName);look86,2797
+    public String left(String name);left93,2980
+    public String right(String name);    right100,3159
+    public String say(String name, String message);say108,3403
+    public String showPlayers();showPlayers114,3565
+    public String whisper(String srcName, String dstName, String message);whisper123,3843
+    public String ignorePlayer(String srcName, String dstName);ignorePlayer131,4131
+    public String unIgnorePlayer(String srcName, String dstName);unIgnorePlayer139,4414
+    public String getIgnoredPlayersList(String name);getIgnoredPlayersList146,4667
+    public String quickReply(String srcName, String message);quickReply155,4938
+    public String joke(String filename);joke165,5284
+    public String inventory(String name);inventory172,5504
+    public Player leave(String name);leave179,5683
+    public String venmo(String name, ArrayList<String> tokens);venmo188,5941
+    public String getShopStr(int id);getShopStr195,6113
+    public double sellItem(String name, int shopId, String item);sellItem204,6468
+    public String buyItem(String name, int shopId, String item);buyItem214,6875
+    public String getShopInv(int id);getShopInv221,7112
+    public String offer(String srcName, String dstName, String message); offer231,7445
+    public void requestPlayer(String requestingTrader, String traderToRequest);requestPlayer238,7814
+    public String playerResponse(String acceptingTrader, String traderToAccept);playerResponse246,8160
+    public String shout(String name, String message);shout254,8435
+    public Player deleteAccount(String name);deleteAccount262,8644
+    public void heartbeatCheck(String name);heartbeatCheck269,8930
+	public String getQuestion(String name, int num);getQuestion277,9177
+	public String getAnswer(String name, int num);getAnswer285,9422
+	public Responses resetPassword(String name, String pass);resetPassword293,9608
+    public String challenge(String challenger, String challengee);challenge301,9909
+    public String accept(String challenger, String challengee);accept309,10220
+    public String reject(String challenger, String challengee);reject318,10533
+    public String pickRPS(String name, String options);pickRPS326,10784
+     public String teach(String player);teach334,11018
+	public Responses addFriend(String name, String friend);addFriend344,11233
+	public Responses removeFriend(String name, String ex);removeFriend353,11402
+	public String viewOnlineFriends(String name);viewOnlineFriends361,11590
+
+AddRoomTest.java,115
+public class AddRoomTest {AddRoomTest3,29
+	public static void main(String[] args) throws IOException {main5,57
+
+Map.java,357
+public class Map{   Map15,247
+        private LinkedList<Room> map;map16,268
+        public Map(String worldFile) {Map18,307
+        public Room findRoom(int roomId) {findRoom85,3542
+    public Room randomRoom() {randomRoom94,3811
+    public void addRoom(Room room) {addRoom103,4006
+    public boolean isShoppable(Room r) {isShoppable113,4273
+
+addRoom.java,2601
+public class addRoom{addRoom18,392
+	private FileInputStream inputFile = null;inputFile21,436
+    private FileOutputStream outputFile = null;outputFile22,479
+    private String inputFileName = "";inputFileName24,532
+    private String outputFileName = "";outputFileName25,571
+    private static final String north = "NORTH";north27,616
+    private static final String east = "EAST";east28,665
+    private static final String south = "SOUTH";south29,712
+    private static final String west = "WEST";west30,761
+    private static final String outdoorDesignation = "outside";outdoorDesignation31,808
+    private static final String indoorDesignation = "inside";indoorDesignation32,872
+    private class Node<T>Node35,971
+		Node NextNode;NextNode37,1000
+	    private int roomID = 1;roomID39,1020
+	    private String roomDescription;roomDescription40,1049
+	    private char indorOutdoor;indorOutdoor41,1086
+	    private int northConnecting = 0;northConnecting43,1124
+	    private String northDescription;northDescription44,1162
+	    private int eastConnecting = 0;eastConnecting45,1200
+	    private String eastDescription;eastDescription46,1237
+	    private int southConnecting = 0;southConnecting47,1274
+	    private String southDescription;southDescription48,1312
+	    private int westConnecting = 0;westConnecting49,1350
+	    private String westDescription;westDescription50,1387
+    private int numberOfRooms = 0;numberOfRooms56,1444
+    private Node head = null;head58,1484
+    private Node current = head;current59,1514
+    addRoom()addRoom62,1571
+    addRoom( String infile, String outfile) throws IOExceptionaddRoom67,1608
+    private void readAndAppend() throws FileNotFoundExceptionreadAndAppend82,1926
+    addRoom( String outfile) throws IOExceptionaddRoom237,6874
+    private void autoMapBuild()autoMapBuild249,7106
+    private void printToFile() throws IOException {printToFile310,8426
+    private void defineInputFileName(String name)defineInputFileName396,12317
+    private void defineOutputFileName(String name)defineOutputFileName401,12416
+    private void openInputFile()openInputFile406,12517
+    private void openOutputFile()openOutputFile419,12767
+    public void copyFromFile()copyFromFile434,13049
+    public void appendFromFile()appendFromFile439,13103
+    public void appendFromUser()appendFromUser444,13159
+    private void getInputFromUser() getInputFromUser449,13239
+	private void addNodeToList(Node temp) addNodeToList517,15432
+	public void appendFromAutomated()appendFromAutomated533,15670
+
+Room.java,1989
+public class Room {Room9,134
+    private final int id;id10,154
+    private final String title;title11,180
+    private final String room_type;room_type12,212
+    private final String description;description13,248
+    private final LinkedList<Item> objects;objects14,286
+    private final LinkedList<Exit> exits;exits15,330
+    private static final int MAX_WHITEBOARD_LEN = 120;MAX_WHITEBOARD_LEN19,375
+    private StringBuilder whiteboard;whiteboard20,430
+    private final LinkedList<NPC> npcs;npcs22,549
+    public boolean hasGhoul = false;hasGhoul24,625
+    public Room(int id, String room_type, String title, String description) {Room27,668
+    public Room(int id, String room_type, String title, String description, LinkedList<NPC> npcs) {Room39,1078
+    public String toString(PlayerList playerList, Player player) {toString50,1483
+    public int getId() {getId66,2335
+    public String getExits() {getExits70,2395
+    public void addExit(Direction direction, int room, String message) {addExit80,2647
+    public boolean canExit(Direction direction) {canExit84,2786
+    public String exitMessage(Direction direction) {exitMessage93,3026
+    public int getLink(Direction direction) {getLink102,3266
+    public String getDescription() {getDescription114,3547
+    public String getTitle() {getTitle118,3628
+    public String getRoomType() {getRoomType122,3697
+    public String getObjects() {getObjects126,3773
+    public String getNPCs() {getNPCs139,4015
+    public void addObject(Item obj) {addObject148,4194
+    public Item removeObject(String target) {removeObject157,4447
+    public LinkedList<Item> removeAllObjects()removeAllObjects168,4754
+    public String getWhiteboardText() {getWhiteboardText185,5169
+    public boolean addWhiteboardText(String textToAdd) {addWhiteboardText197,5463
+    public void whiteboardErase() {whiteboardErase216,5913
+    public String getPlayers(PlayerList players) {getPlayers223,5996
+
+DailyLogger.java,419
+public class DailyLogger{DailyLogger7,183
+    public String date;date8,209
+    public String filename;filename9,233
+    public File f;f10,261
+    public DailyLogger(){DailyLogger14,349
+    public void write(String message){write35,1150
+    public void write(String name, String command, String room){write46,1601
+    public void write(String name, String command, String args, String room){write57,2153
+
+runServer.bat,0
+
+NPC.java,377
+public class NPC {NPC4,53
+    private final String name;name5,72
+    private int room;room6,103
+    private LinkedList<String> quests;quests7,125
+    public NPC(String name, int room, LinkedList<String> quests) {NPC10,166
+    public String getName() {getName17,323
+    public List<String> getQuests(){getQuests21,381
+    public String toString(){toString26,462
+
+Shop.java,968
+public class ShopShop7,111
+	private LinkedList<Item> inventory;inventory10,163
+	private LinkedList<Item> inDemand;inDemand13,259
+	private PlayerList playerlist;playerlist16,330
+	private String description;description18,363
+	private String title;title20,393
+	public Shop(String name, String desc)Shop23,420
+	public LinkedList<Item> getInven()getInven33,680
+	public void add(Item k) {add38,789
+	public void remove(Object k)remove43,891
+	public void printInv() {}printInv48,997
+	public void printDem() {}printDem51,1065
+	public void addPlayer(Player p) {addPlayer53,1094
+	public void removePlayer(Player p) {removePlayer57,1162
+	public String getDescription() {getDescription66,1389
+	public String getTitle() {getTitle74,1519
+	public String toString() {toString78,1582
+	public String getPlayers() {getPlayers118,2729
+	public String getObjects() {getObjects148,3436
+	private String strCenter(String str, int len) {strCenter206,5271
+
+Responses.java,1092
+public enum Responses {Responses2,1
+	BAD_USERNAME_FORMAT, USERNAME_TAKEN, UNKNOWN_FAILURE, INTERNAL_SERVER_ERROR, NOT_FOUND, BAD_PASSWORD, SUCCESS,BAD_USERNAME_FORMAT3,25
+	BAD_USERNAME_FORMAT, USERNAME_TAKEN, UNKNOWN_FAILURE, INTERNAL_SERVER_ERROR, NOT_FOUND, BAD_PASSWORD, SUCCESS,USERNAME_TAKEN3,25
+	BAD_USERNAME_FORMAT, USERNAME_TAKEN, UNKNOWN_FAILURE, INTERNAL_SERVER_ERROR, NOT_FOUND, BAD_PASSWORD, SUCCESS,UNKNOWN_FAILURE3,25
+	BAD_USERNAME_FORMAT, USERNAME_TAKEN, UNKNOWN_FAILURE, INTERNAL_SERVER_ERROR, NOT_FOUND, BAD_PASSWORD, SUCCESS,INTERNAL_SERVER_ERROR3,25
+	BAD_USERNAME_FORMAT, USERNAME_TAKEN, UNKNOWN_FAILURE, INTERNAL_SERVER_ERROR, NOT_FOUND, BAD_PASSWORD, SUCCESS,NOT_FOUND3,25
+	BAD_USERNAME_FORMAT, USERNAME_TAKEN, UNKNOWN_FAILURE, INTERNAL_SERVER_ERROR, NOT_FOUND, BAD_PASSWORD, SUCCESS,BAD_PASSWORD3,25
+	BAD_USERNAME_FORMAT, USERNAME_TAKEN, UNKNOWN_FAILURE, INTERNAL_SERVER_ERROR, NOT_FOUND, BAD_PASSWORD, SUCCESS,SUCCESS3,25
+	EXISTS, SILLY, NO_USER_NAMEEXISTS4,137
+	EXISTS, SILLY, NO_USER_NAMESILLY4,137
+	EXISTS, SILLY, NO_USER_NAMENO_USER_NAME4,137
+
+runClientRemote.bat,0
+
+runClientRemote.sh,0
+
+runClientLocal.bat,0
+
+Exit.java,398
+public class Exit {Exit5,28
+    private final Direction direction;direction6,48
+    private final int room;room7,87
+    private final String message;message8,115
+    public Exit(Direction direction, int room, String message) {Exit10,154
+    public Direction getDirection() {getDirection16,324
+    public int getRoom() {getRoom20,404
+    public String getMessage() {getMessage24,468
+
+Message.java,1092
+public class Message {Message4,51
+    private String messageText; // what the message actually saysmessageText6,75
+    private Player sender; // who sent the messagesender7,141
+    private Player recipient; // who the message was sent torecipient8,192
+    private boolean received; // whether or not this message has been receivedreceived9,253
+    private boolean ignored; // whether or not this message was ignored by the recipientignored10,332
+    private Date dateAndTimeSent; // date and time the message was sentdateAndTimeSent11,421
+    public Message(String newMessageText, Player from, Player to) {Message13,494
+    public String GetMessageText() {GetMessageText33,1036
+    public Player GetMessageSender() {GetMessageSender37,1108
+    public Player GetMessageRecipient() {GetMessageRecipient41,1177
+    public boolean GetRecieved() {GetRecieved45,1252
+    public boolean GetIgnored() {GetIgnored49,1319
+    public Date GetTimeSent() {GetTimeSent54,1476
+    public void SetReceived() {SetReceived59,1651
+    public void SetIgnored() {SetIgnored64,1729
+
+GameObject.java,5464
+public class GameObject extends UnicastRemoteObject implements GameObjectInterface {GameObject17,316
+    private final GameCore core;core18,401
+	public GameObject(String playerAccountsLocation, String worldFile) throws Exception {GameObject27,625
+    public boolean setReplyWriter(String playerName, PrintWriter writer) {setReplyWriter40,1074
+	public String hash(String toHash) {hash55,1551
+	public String pokeGhoul(String playerName) throws RemoteException {pokeGhoul73,2060
+	public String bribeGhoul(String playerName, String item) throws RemoteException {bribeGhoul84,2369
+	public boolean joinGame(String name, String password) throws RemoteException {joinGame101,3170
+	public Responses createAccountAndJoinGame(String name, String password, ArrayList<String> recovery) throws RemoteException {createAccountAndJoinGame124,4101
+    public String look(String playerName) throws RemoteException {look138,4628
+    public String left(String name) throws RemoteException {left149,4934
+    public String right(String name) throws RemoteException {right160,5224
+    public String say(String name, String message) throws RemoteException {say172,5580
+    public String showPlayers() throws RemoteException {showPlayers183,5885
+    public String whisper(String srcName, String dstName, String message) throws RemoteException {whisper195,6211
+    public String quickReply(String srcName, String message) throws RemoteException {quickReply207,6602
+    public String ignorePlayer(String srcName, String dstName) throws RemoteException {ignorePlayer219,7002
+    public String unIgnorePlayer(String srcName, String dstName) throws RemoteException {unIgnorePlayer232,7448
+    public String getIgnoredPlayersList(String name) throws RemoteException{getIgnoredPlayersList243,7830
+   public String joke(String filename) throws RemoteException{joke256,8243
+    public String shout(String name, String message) throws RemoteException {shout269,8607
+    public void setPlayerFilteredWords(String playerName, HashSet<String> filteredWords) {setPlayerFilteredWords275,8777
+    public String move(String name, int distance) throws RemoteException {move289,9354
+    public String move(String name, Direction direction) throws RemoteException {move303,9838
+    public String pickup(String name, String target) throws RemoteException {pickup317,10304
+    public String pickupAll(String name)throws RemoteException{pickupAll321,10431
+    public String drop(String name, String target) throws RemoteException {drop333,10854
+    public String whiteboardErase(String name) throws RemoteException {whiteboardErase342,11202
+    public String whiteboardRead(String name) throws RemoteException {whiteboardRead351,11548
+    public String whiteboardWrite(String name, String text) throws RemoteException {whiteboardWrite361,11939
+    public String inventory(String name) throws RemoteException {inventory372,12304
+    public int shop(String name) throws RemoteException{shop383,12688
+    public Player getPlayer(String name) throws RemoteException{getPlayer395,13031
+    public String sort(String name, String modes) throws RemoteException {sort406,13325
+    public String offer (String srcName, String dstName, String message) throws RemoteException{offer417,13677
+    public void requestPlayer(String requestingTrader, String traderToRequest) throws RemoteException{requestPlayer426,14134
+    public String playerResponse(String acceptingTrader, String traderToAccept) throws RemoteException{playerResponse437,14573
+    public String reject(String challenger, String challengee) throws RemoteException{reject448,15062
+    public String pickRPS(String name, String option) throws RemoteException {pickRPS459,15433
+     public String teach(String player) throws RemoteException{teach469,15796
+    public void leave(String name) throws RemoteException {leave479,16047
+	public String venmo(String name, ArrayList<String> tokens) throws RemoteException {venmo496,16525
+	public String wallet(String name) throws RemoteException {wallet505,16759
+	public String getShopStr(int id) throws RemoteException{getShopStr509,16852
+    public double sellItem(String name, int shopId, String item) throws RemoteException{sellItem520,17254
+    public String buyItem(String name, int shopId, String item) throws RemoteException{buyItem532,17734
+    public String getShopInv(int id) throws RemoteException{getShopInv541,18048
+	public void deleteAccount(String name) throws RemoteException {deleteAccount552,18284
+	public Responses addFriend(String name, String friend) throws RemoteException {addFriend568,18613
+	public Responses removeFriend(String name, String ex) throws RemoteException {removeFriend581,18890
+    public String viewOnlineFriends(String name) throws RemoteException {viewOnlineFriends593,19183
+	public String getQuestion(String name, int num) throws RemoteException {getQuestion603,19439
+	public String getAnswer(String name, int num) throws RemoteException {getAnswer614,19712
+	public Responses resetPassword(String name, String pass) throws RemoteException {resetPassword625,19952
+    public void heartbeatCheck(String name) throws RemoteException{heartbeatCheck634,20191
+    public String challenge(String challenger, String challengee) throws RemoteException{challenge645,20606
+    public String accept(String challenger, String challengee) throws RemoteException{accept655,21051
