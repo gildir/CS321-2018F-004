@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <dialogue>
-    <npc name = "whatever">
+    <npc name = "questNPC">
         <dialogue id = "tutorial_1">
             <introduction>
 Hey, you there, stranger. Seems like you are lost. Need some help?
