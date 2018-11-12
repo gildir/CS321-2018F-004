@@ -1,1 +1,0 @@
-PLAYER [Reed] SAID ("I say to you apple my good sir") to [Room 1]
