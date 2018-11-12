@@ -1645,14 +1645,14 @@ public class GameCore implements GameCoreInterface {
 	 * @return String of recovery question, null if user doesn't exist
 	 */
 	public String getQuestion(String name, int num) {
-		//PlayerAccountManager.AccountResponse resp = null;
-		//resp = this.accountManager.getPlayer(name);
-		//if(!resp.success()) {
-		//	return null;
-		//}
-		//Player player = resp.player;
-                Player player = this.playerList.findPlayer(name);
-		if (player != null) {
+        Player player = this.playerList.findPlayer(name);
+        if (player==null) {
+        	PlayerAccountManager.AccountResponse resp = this.accountManager.getPlayer(name);
+        	if(!resp.success())
+        		return null;
+        	player=resp.player;
+        }
+        if (player != null) {
 			return player.getQuestion(num);
 		} else {
 			return null;
@@ -1678,12 +1678,13 @@ public class GameCore implements GameCoreInterface {
 	 * @return String of recovery question, null if user doesn't exist
 	 */
 	public Boolean getAnswer(String name, int num, String answer) {
-		PlayerAccountManager.AccountResponse resp = null;
-		resp = this.accountManager.getPlayer(name);
-		if(!resp.success()) {
-			return null;
-		}
-		Player player = resp.player;
+        Player player = this.playerList.findPlayer(name);
+        if (player==null) {
+        	PlayerAccountManager.AccountResponse resp = this.accountManager.getPlayer(name);
+        	if(!resp.success())
+        		return null;
+        	player=resp.player;
+        }
 		if(player != null) {
 			return player.getAnswer(num).equals(hash(answer));
 		} else {
