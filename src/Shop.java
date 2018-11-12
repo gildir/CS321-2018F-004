@@ -95,7 +95,7 @@ public class Shop
        String players = this.getPlayers();
         if (players.isEmpty()) result += "\nYou are here by yourself.\n";
         else {
-        	result += "\nYou are here along with:";
+        	result += "\nYou are here along with: ";
         	result += players;
         }
         
