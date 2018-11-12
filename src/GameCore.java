@@ -1645,12 +1645,13 @@ public class GameCore implements GameCoreInterface {
 	 * @return String of recovery question, null if user doesn't exist
 	 */
 	public String getQuestion(String name, int num) {
-		PlayerAccountManager.AccountResponse resp = null;
-		resp = this.accountManager.getPlayer(name);
-		if(!resp.success()) {
-			return null;
-		}
-		Player player = resp.player;
+		//PlayerAccountManager.AccountResponse resp = null;
+		//resp = this.accountManager.getPlayer(name);
+		//if(!resp.success()) {
+		//	return null;
+		//}
+		//Player player = resp.player;
+                Player player = this.playerList.findPlayer(name);
 		if (player != null) {
 			return player.getQuestion(num);
 		} else {
