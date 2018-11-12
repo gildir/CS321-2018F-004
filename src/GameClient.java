@@ -192,6 +192,9 @@ public class GameClient {
 
             // 409 Word Filter
             readWordFilterFile();
+            // 413 Prefix
+            readPrefixFromFile();
+
 
             // Collect input for the game.
             while(runGame) {
@@ -1164,4 +1167,26 @@ public class GameClient {
     }
 
     //End Feature 409 Word Filter
+
+    //Begin 413 Prefix
+    private void readPrefixFromFile() {
+        String filename = "ChatPrefixFile-" + playerName + ".txt";
+
+        try {
+            File filteredWordsFile = new File(filename);
+            if(!filteredWordsFile.exists()) { filteredWordsFile.createNewFile(); }
+            BufferedReader br = new BufferedReader(new FileReader(filename));
+            String line = br.readLine();
+
+            if(line != null && !line.equals("")) { remoteGameInterface.setPlayerChatPrefix(this.playerName, line); }
+            br.close();
+
+        } catch(IOException i) {
+            System.err.print("\nI/O Exception thrown while attempting to read from filtered words File!\n");
+        }
+    }
+
+
+
+    //End 413 Prefix
 }

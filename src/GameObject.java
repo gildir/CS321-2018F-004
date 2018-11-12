@@ -655,4 +655,15 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
     public String accept(String challenger, String challengee) throws RemoteException{
       return core.accept(challenger, challengee);
     }
+
+    /**
+     * Sets a player's chat prompt string
+     * @param playerName - player you're setting the chat prefix for
+     * @param newPrefix - the player's new prefix.
+     * @throws RemoteException
+     */
+    public void setPlayerChatPrefix(String playerName, String newPrefix) throws RemoteException {
+        Player player = core.findPlayer(playerName);
+        player.setPrefix(newPrefix);
+    }
 }

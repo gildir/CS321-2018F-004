@@ -1397,7 +1397,7 @@ public class GameCore implements GameCoreInterface {
                     type = "SHOUTED";
                     break;
             }
-            msg = "PLAYER [" + player.getName() + "] " + type + " (" + message + ") to [" + target + "]\n";
+            msg = String.format("[%tD %<tT]", GameServer.getDate()) + " PLAYER [" + player.getName() + "] " + type + " (" + message + ") to [" + target + "]\n";
             pw.write(msg);
             pw.flush();
             pw.close();

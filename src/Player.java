@@ -209,8 +209,8 @@ public class Player {
 
         // send prefix, timestamp, source, type, ", ", and message
         this.getReplyWriter().println(
-            "[$PREFIX]" +
-            String.format("%tD %<tT", GameServer.getDate()) + " " +
+            this.prefix +
+            String.format("[%tD %<tT]", GameServer.getDate()) + " " +
             source.getName() + " " +
             messageType + ", " +
             newMessage);
@@ -223,8 +223,8 @@ public class Player {
      */
     public String getMessage() {
         return
-            "[$PREFIX]" +
-            String.format("%tD %<tT", GameServer.getDate()) +
+            this.prefix +
+            String.format("[%tD %<tT]", GameServer.getDate()) +
             " You ";
     }
 
@@ -508,16 +508,32 @@ public class Player {
 
     private static class ItemPriceComparator implements Comparator<Item> {
 	@Override
-	public int compare(Item ItemA, Item ItemB) {
-		if(ItemA.getPrice() > ItemB.getPrice()) {
-			return 1;
-		}
-		else if(ItemA.getPrice() < ItemB.getPrice()) {
-			return -1;
-		}
-		else {
-			return 0;
-		}
-	}
+        public int compare(Item ItemA, Item ItemB) {
+            if(ItemA.getPrice() > ItemB.getPrice()) {
+                return 1;
+            }
+            else if(ItemA.getPrice() < ItemB.getPrice()) {
+                return -1;
+            }
+            else {
+                return 0;
+            }
+        }
     }
+
+    //Feature 413 Prefix
+    // string to be used as a chat prefix, default value is ">>>".
+    private String prefix = ">>>";
+
+    /**
+     * Sets the chat prefix from default.
+     * @param newPrefix - New prefix to replace old.
+     */
+    public void setPrefix(String newPrefix) {
+        prefix = newPrefix;
+    }
+
+
+    //End 413 Prefix
+
 }
