@@ -3,7 +3,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 public class RoomConnectivityVerifier {
-    public static HashSet<Room> verifyConnectivity(String worldFile){
+    public static HashSet<Integer> verifyConnectivity(String worldFile){
         Map map = new Map(worldFile);
         Room startingRoom = map.findRoom(1);
         Queue<Room> queue = new LinkedList<>();
@@ -24,7 +24,11 @@ public class RoomConnectivityVerifier {
                 }
             }
         }
-        return visited;
+        HashSet<Integer> visitedIDs = new HashSet<>();
+        for(Room room: visited){
+            visitedIDs.add(room.getId());
+        }
+        return visitedIDs;
 //        HashSet<Room> allRooms = new HashSet<>();
 //        IntStream stream = IntStream.range(1, Integer.MAX_VALUE);
 //        HashSet<Integer> difference = new HashSet<>();
@@ -46,12 +50,13 @@ public class RoomConnectivityVerifier {
             System.out.println("java RoomConnectivityVerifier <worldFile>");
             System.exit(-1);
         }
-        HashSet<Room> visitedRooms = verifyConnectivity(args[0]);
-        HashSet<Integer> roomIDs = new HashSet<>();
-        for(Room room: visitedRooms){
-            roomIDs.add(room.getId());
-        }
+//        HashSet<Room> visitedRooms = verifyConnectivity(args[0]);
+//        HashSet<Integer> roomIDs = new HashSet<>();
+//        for(Room room: visitedRooms){
+//            roomIDs.add(room.getId());
+//        }
 //        System.out.println(roomIDs);
+        HashSet<Integer> roomIDs = verifyConnectivity(args[0]);
         Map map = new Map(args[0]);
         HashSet<Integer> allRoomIds = new HashSet<>();
         for(int i=1; i < Integer.MAX_VALUE; i++){
@@ -63,15 +68,20 @@ public class RoomConnectivityVerifier {
             allRoomIds.add(room.getId());
 //            if(!visitedRooms.contains(room)){
 //            try{
-            if(!roomIDs.contains(room.getId())){
-                System.out.println("room: " + room.getId() + " is unconnected");
-            }
+//            if(!roomIDs.contains(room.getId())){
+//                System.out.println("room: " + room.getId() + " is unconnected");
+//            }
         }
         if(roomIDs.equals(allRoomIds)){
             System.out.println("the rooms are all connected");
         }
         else{
             System.out.println("there are unconnected rooms");
+            for(Integer i: allRoomIds){
+                if(!roomIDs.contains(i)) {
+                    System.out.println("room " + i + " is unconnected");
+                }
+            }
         }
     }
 }
