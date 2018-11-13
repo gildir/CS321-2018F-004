@@ -1,0 +1,89 @@
+Daily Log for 11-11-2018
+[11-11-2018 10:34:05] - SERVER STARTED
+[11-11-2018 10:35:01] - You see a Ghoul leave this room
+[11-11-2018 10:35:15] - You see a Ghoul enter this room
+[11-11-2018 10:35:28] - You see a Ghoul leave this room
+[11-11-2018 10:35:42] - You see a student rush past and drop a Vape (2.0)  on the ground.
+[11-11-2018 10:35:45] - You see a Ghoul enter this room
+[11-11-2018 10:37:56] - SERVER STARTED
+[11-11-2018 10:38:42] - SERVER STARTED
+[11-11-2018 10:38:55] - You see a Ghoul enter this room
+[11-11-2018 10:39:10] - You see a Ghoul leave this room
+[11-11-2018 10:39:27] - You see a Ghoul enter this room
+[11-11-2018 10:39:42] - You see a Ghoul leave this room
+[11-11-2018 10:40:08] - You see a Ghoul leave this room
+[11-11-2018 10:40:23] - You see a Ghoul enter this room
+[11-11-2018 10:40:37] - You see a Ghoul leave this room
+[11-11-2018 10:40:46] - pat has arrived.
+[11-11-2018 10:40:46] - pat takes a look around.
+[11-11-2018 10:40:53] - You see a Ghoul enter this room
+[11-11-2018 10:40:53] - You see a Ghoul enter this room
+[11-11-2018 10:41:08] - You see bob heading off to class.
+[11-11-2018 10:41:09] - You see a Ghoul leave this room
+[11-11-2018 10:41:26] - You see a Ghoul enter this room
+[11-11-2018 10:41:42] - You see a Ghoul leave this room
+[11-11-2018 10:44:07] - SERVER FORCIBLY TERMINATED
+[11-11-2018 10:44:46] - SERVER STARTED
+[11-11-2018 10:45:14] - You see a Ghoul leave this room
+[11-11-2018 10:45:31] - SERVER FORCIBLY TERMINATED
+[11-11-2018 10:47:59] - SERVER STARTED
+[11-11-2018 10:48:14] - You see a Ghoul leave this room
+[11-11-2018 10:48:14] - You see a student rush past and drop a Neutrino (0.0)  on the ground.
+[11-11-2018 10:48:27] - You see a Ghoul enter this room
+[11-11-2018 10:48:42] - You see a student rush past and drop a Vape (2.0)  on the ground.
+[11-11-2018 10:48:44] - You see a Ghoul leave this room
+[11-11-2018 10:48:59] - You see a Ghoul enter this room
+[11-11-2018 10:49:13] - You see a Ghoul leave this room
+[11-11-2018 10:49:27] - You see a Ghoul enter this room
+[11-11-2018 10:49:43] - You see a Ghoul leave this room
+[11-11-2018 10:49:56] - You see a Ghoul enter this room
+[11-11-2018 10:52:06] - SERVER FORCIBLY TERMINATED
+[11-11-2018 10:52:29] - SERVER STARTED
+[11-11-2018 10:52:43] - You see a Ghoul enter this room
+[11-11-2018 10:53:02] - SERVER FORCIBLY TERMINATED
+[11-11-2018 10:53:11] - SERVER STARTED
+[11-11-2018 10:53:24] - You see a Ghoul enter this room
+[11-11-2018 10:53:40] - You see a Ghoul leave this room
+[11-11-2018 10:53:55] - You see a Ghoul enter this room
+[11-11-2018 10:54:11] - You see a Ghoul leave this room
+[11-11-2018 10:54:58] - You see a Ghoul enter this room
+[11-11-2018 10:55:00] - You see a student rush past and drop a Vape (2.0)  on the ground.
+[11-11-2018 10:55:15] - You see a Ghoul leave this room
+[11-11-2018 10:55:31] - You see a Ghoul enter this room
+[11-11-2018 10:55:42] - SERVER FORCIBLY TERMINATED
+[11-11-2018 11:44:11] - SERVER STARTED
+[11-11-2018 11:44:41] - You see a Ghoul leave this room
+[11-11-2018 11:44:55] - You see a Ghoul enter this room
+[11-11-2018 11:45:11] - You see a Ghoul leave this room
+[11-11-2018 11:45:21] - You see a student rush past and drop a Kettle (5.0)  on the ground.
+[11-11-2018 11:45:25] - You see a Ghoul enter this room
+[11-11-2018 11:50:09] - SERVER FORCIBLY TERMINATED
+[11-11-2018 11:50:53] - SERVER STARTED
+[11-11-2018 11:51:09] - You see a Ghoul enter this room
+[11-11-2018 11:51:21] - You see a Ghoul leave this room
+[11-11-2018 11:51:27] - You see a student rush past and drop a Flower99 (0.5)  on the ground.
+[11-11-2018 11:51:33] - You see a Ghoul enter this room
+[11-11-2018 11:51:47] - You see a Ghoul leave this room
+[11-11-2018 11:52:00] - You see a Ghoul enter this room
+[11-11-2018 11:52:04] - You see a student rush past and drop a Kettle (5.0)  on the ground.
+[11-11-2018 11:52:16] - You see a Ghoul leave this room
+[11-11-2018 11:52:32] - You see a Ghoul enter this room
+[11-11-2018 11:52:37] - You see a student rush past and drop a Iguana (6.0)  on the ground.
+[11-11-2018 11:52:44] - You see a Ghoul leave this room
+[11-11-2018 11:52:55] - SERVER FORCIBLY TERMINATED
+[11-11-2018 11:55:38] - SERVER STARTED
+[11-11-2018 11:55:52] - You see a student rush past and drop a Kettle (5.0)  on the ground.
+[11-11-2018 11:55:54] - You see a Ghoul leave this room
+[11-11-2018 11:56:09] - You see a Ghoul enter this room
+[11-11-2018 11:56:22] - You see a Ghoul leave this room
+[11-11-2018 11:56:39] - You see a Ghoul enter this room
+[11-11-2018 11:56:52] - You see a Ghoul leave this room
+[11-11-2018 11:57:07] - You see a Ghoul enter this room
+[11-11-2018 11:57:20] - You see a Ghoul leave this room
+[11-11-2018 11:57:32] - You see a Ghoul enter this room
+[11-11-2018 11:57:47] - You see a Ghoul leave this room
+[11-11-2018 11:57:54] - You see a student rush past and drop a Neutrino (0.0)  on the ground.
+[11-11-2018 11:58:01] - You see a student rush past and drop a Flower99 (0.5)  on the ground.
+[11-11-2018 11:58:02] - You see a Ghoul enter this room
+[11-11-2018 11:58:16] - You see a Ghoul leave this room
+[11-11-2018 11:58:35] - SERVER FORCIBLY TERMINATED

@@ -1,0 +1,78 @@
+Daily Log for 11-08-2018
+[11-08-2018 06:19:14] - SERVER STARTED
+[11-08-2018 06:20:31] - You see a Ghoul enter this room
+[11-08-2018 06:20:46] - You see a Ghoul leave this room
+[11-08-2018 06:20:57] - You see a student rush past and drop a Doug Fieger (173.0)  on the ground.
+[11-08-2018 06:20:59] - You see a Ghoul enter this room
+[11-08-2018 06:21:11] - You see a Ghoul leave this room
+[11-08-2018 06:21:26] - You see a student rush past and drop a Iguana (6.0)  on the ground.
+[11-08-2018 06:21:28] - You see a Ghoul enter this room
+[11-08-2018 06:21:29] - You see a student rush past and drop a Iguana (6.0)  on the ground.
+[11-08-2018 06:21:41] - You see a Ghoul leave this room
+[11-08-2018 06:21:54] - You see a Ghoul enter this room
+[11-08-2018 06:22:10] - You see a Ghoul leave this room
+[11-08-2018 06:22:27] - You see a Ghoul enter this room
+[11-08-2018 06:22:40] - You see a Ghoul leave this room
+[11-08-2018 06:22:41] - You see a student rush past and drop a Iguana (6.0)  on the ground.
+[11-08-2018 06:22:55] - You see a Ghoul enter this room
+[11-08-2018 06:23:08] - You see a Ghoul leave this room
+[11-08-2018 06:23:23] - You see a Ghoul enter this room
+[11-08-2018 06:23:36] - You see a Ghoul leave this room
+[11-08-2018 06:23:52] - You see a Ghoul enter this room
+[11-08-2018 06:23:57] - You see a student rush past and drop a Doug Fieger (173.0)  on the ground.
+[11-08-2018 06:24:08] - You see a Ghoul leave this room
+[11-08-2018 06:24:24] - You see a Ghoul enter this room
+[11-08-2018 06:24:41] - You see a Ghoul leave this room
+[11-08-2018 06:24:58] - You see a Ghoul enter this room
+[11-08-2018 06:25:13] - You see a Ghoul leave this room
+[11-08-2018 06:25:28] - You see a Ghoul enter this room
+[11-08-2018 06:25:41] - You see a Ghoul leave this room
+[11-08-2018 06:25:53] - You see a Ghoul enter this room
+[11-08-2018 06:26:09] - You see a Ghoul leave this room
+[11-08-2018 06:26:22] - You see a Ghoul enter this room
+[11-08-2018 06:26:37] - You see a Ghoul leave this room
+[11-08-2018 06:26:51] - You see a Ghoul enter this room
+[11-08-2018 06:27:07] - You see a Ghoul leave this room
+[11-08-2018 06:27:21] - You see a Ghoul enter this room
+[11-08-2018 06:27:38] - You see a Ghoul leave this room
+[11-08-2018 06:27:53] - You see a Ghoul enter this room
+[11-08-2018 06:28:06] - You see a Ghoul leave this room
+[11-08-2018 06:28:19] - You see a Ghoul enter this room
+[11-08-2018 06:28:33] - You see a Ghoul leave this room
+[11-08-2018 06:28:46] - You see a Ghoul enter this room
+[11-08-2018 06:28:59] - You see a Ghoul leave this room
+[11-08-2018 06:29:12] - You see a Ghoul enter this room
+[11-08-2018 06:29:26] - You see a Ghoul leave this room
+[11-08-2018 06:29:43] - You see a Ghoul enter this room
+[11-08-2018 06:29:59] - You see a Ghoul leave this room
+[11-08-2018 06:30:11] - You see a Ghoul enter this room
+[11-08-2018 06:30:26] - You see a Ghoul leave this room
+[11-08-2018 06:30:43] - You see a Ghoul enter this room
+[11-08-2018 06:30:55] - You see a Ghoul leave this room
+[11-08-2018 06:31:08] - You see a Ghoul enter this room
+[11-08-2018 06:31:21] - You see a Ghoul leave this room
+[11-08-2018 06:31:34] - You see a Ghoul enter this room
+[11-08-2018 06:31:47] - You see a Ghoul leave this room
+[11-08-2018 06:32:00] - You see a Ghoul enter this room
+[11-08-2018 06:32:13] - You see a Ghoul leave this room
+[11-08-2018 06:32:29] - You see a Ghoul enter this room
+[11-08-2018 06:32:44] - You see a Ghoul leave this room
+[11-08-2018 06:33:01] - You see a Ghoul enter this room
+[11-08-2018 06:33:14] - You see a Ghoul leave this room
+[11-08-2018 06:33:29] - You see a Ghoul enter this room
+[11-08-2018 06:33:43] - You see a Ghoul leave this room
+[11-08-2018 06:33:58] - You see a Ghoul enter this room
+[11-08-2018 06:34:11] - You see a Ghoul leave this room
+[11-08-2018 06:34:26] - You see a Ghoul enter this room
+[11-08-2018 06:34:41] - You see a Ghoul leave this room
+[11-08-2018 06:34:57] - You see a Ghoul enter this room
+[11-08-2018 06:35:12] - You see a Ghoul leave this room
+[11-08-2018 06:35:25] - You see a Ghoul enter this room
+[11-08-2018 06:35:41] - You see a Ghoul leave this room
+[11-08-2018 06:35:55] - You see a Ghoul enter this room
+[11-08-2018 06:36:10] - You see a Ghoul leave this room
+[11-08-2018 06:36:26] - You see a Ghoul enter this room
+[11-08-2018 06:36:39] - You see a Ghoul leave this room
+[11-08-2018 06:36:53] - You see a Ghoul enter this room
+[11-08-2018 06:37:09] - You see a Ghoul leave this room
+[11-08-2018 06:37:24] - You see a Ghoul enter this room
