@@ -600,6 +600,15 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
     }
     
     /**
+     * updates the playlist in the Shop
+     * @param name Name of the player
+     * @return void
+     */
+    public void shopLeft(String name) throws RemoteException
+    {
+    	core.shopLeft(name);
+    }
+    /**
      * Returns a Shop's inventory as a formatted string
      * @param id The shop ID
      * @return A formatted string representing the Shop's inventory
@@ -609,6 +618,15 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
     }
 
     /**
+     * Returns a Shop's "In Demand" inventory as a formatted string
+     * @param id The shop ID
+     * @return A formatted string representing the Shop's "In Demand" inventory
+     */
+    public String getShopDemInv(int id) throws RemoteException{
+        return core.getShopDemInv(id);
+    }
+	
+    /**
      * 108 In game ASCII map
      * Returns an ascii representation of nearby rooms
      * @param name Name of the player
@@ -617,6 +635,7 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
     public String showMap(String name) throws RemoteException{
        return core.showMap(name);
     }	
+
 	/**
 	 * Delete a player's account.
 	 * 

@@ -288,9 +288,22 @@ public class GameCore implements GameCoreInterface {
     	
     	// Add player to shop in room if applicable
     	if (map.isShoppable(room)) {
+    		shoplist.get(room.getId()).addPlayer(player);
     		return room.getId();
     	}
     	return -1;
+    }
+    
+    /**
+     * updates the playlist in the Shop
+     * @param name Name of the player
+     * @return void
+     */
+    public void shopLeft(String name)
+    {
+    	Player player = this.playerList.findPlayer(name);
+    	Room room = map.findRoom(player.getCurrentRoom());
+    	shoplist.get(room.getId()).removePlayer(player);
     }
 
     /**
@@ -315,13 +328,28 @@ public class GameCore implements GameCoreInterface {
     	double value = 0;
     	
     	Item removed = player.removeObjectFromInventory(item);
+
     	if (removed != null) {
-    		s.add(removed);
-    		value = removed.price;
-        	player.changeMoney(value);
+            //check to see if the item is in demand
+
+            for (Item x : s.getDemand()){
+                if (x.getName().compareToIgnoreCase(removed.getName()) == 0){
+                    //remove and replace the in demand item
+                    s.removeDemand(x);
+                    s.addDemandRand();
+
+                    value = removed.getPrice()*2; //player gets double item's price
+                    player.changeMoney(value);
+                    s.add(removed); //add sold item to shop's inv
+                    return value;
+                }
+            }
+            value = removed.getPrice();
+            
+            s.add(removed); //add sold item to shop's inv
+            
+            player.changeMoney(value);            
     	}
-    	
-    	//int value = removed.getValue();
     	return value;
     }
     
@@ -399,6 +427,7 @@ public class GameCore implements GameCoreInterface {
 		} else {
 			return null;
 		}}
+
     /**
      * 605B_buy_method
      * Allows player to sell an item to a shop, and increases their money
@@ -529,7 +558,17 @@ public class GameCore implements GameCoreInterface {
      */
     public String getShopInv(int id) {
 		Shop s = this.shoplist.get(new Integer(id));
-		return s.getObjects();
+		return s.getObjects(0);
+    }
+
+    /**
+     * Returns a Shop's "In Demand" inventory as a formatted string
+     * @param id The shop ID
+     * @return A formatted string representing the Shop's "In Demand" inventory
+     */
+    public String getShopDemInv(int id) {
+        Shop s = this.shoplist.get(new Integer(id));
+        return s.getObjects(1);
     }
     
     /**

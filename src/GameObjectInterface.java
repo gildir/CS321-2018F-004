@@ -338,6 +338,14 @@ public interface GameObjectInterface extends Remote {
      */
     public int shop(String name) throws RemoteException;
     
+    
+    /**
+     * updates the playlist in the Shop
+     * @param name Name of the player
+     * @return 
+     * @return void
+     */
+    public void shopLeft(String name) throws RemoteException;
     /**
      * Returns a player object when given the player's name
      * @param name The name of the player to find
@@ -396,6 +404,13 @@ public interface GameObjectInterface extends Remote {
      */
     public String showMap(String name) throws RemoteException;
 	
+    /**
+     * Returns a Shop's "In Demand" inventory as a formatted string
+     * @param id The shop ID
+     * @return A formatted string representing the Shop's "In Deman" inventory
+     */
+    public String getShopDemInv(int id) throws RemoteException;
+
 	/**
 	 * Delete a player's account.
 	 * 
