@@ -75,8 +75,10 @@ public class Map{
                                 map.add(newRoom);
                         }
                         mapIn.close();
-                } catch (IOException ex) {
+                } catch (IOException | IllegalArgumentException ex) {
                         Logger.getLogger(Map.class.getName()).log(Level.SEVERE, null, ex);
+                        System.out.println("[SHUTDOWN] Invalid File " + worldFile);
+	                      System.exit(-1);
                 }
         }
 

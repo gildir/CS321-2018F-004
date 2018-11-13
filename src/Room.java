@@ -14,6 +14,8 @@ public class Room {
     private final LinkedList<Item> objects;
     private final LinkedList<Exit> exits;
 
+
+
     private static final int MAX_WHITEBOARD_LEN = 120;
     private StringBuilder whiteboard;
     //list of NPCs in a room, list in case additional NPCs are added to the game
