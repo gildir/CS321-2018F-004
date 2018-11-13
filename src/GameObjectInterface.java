@@ -313,6 +313,23 @@ public interface GameObjectInterface extends Remote {
     public String venmo(String name, ArrayList<String> tokens) throws RemoteException;
 
     /**
+     * @author Group: King
+     * @param name Name of the player trying to shop
+     * @return Returns the id of the room the player has just entered a bank in 
+     * @throws RemoteException
+     */
+    public int bank(String name) throws RemoteException;
+    
+    /**
+     * Gives the central bank object commands (implimented like this for maximum encapsulation)
+     * @param cmd_id The id of the command to be used (mapped in the BankClient class)
+     * @param name The name of the user interacting with the Bank
+     * @param cmd Any extra arguments that may need to be sent to the command
+     * @return A string based on the success or failure of the command
+     */
+    public String bankCmdRunner(String cmd, String name, String args) throws RemoteException;
+    
+    /**
      * @author Team 4: King
      * Lets player shop if in a shoppable area
      * @param name Name of the player

@@ -492,7 +492,7 @@ public class GameClient {
                 	System.out.println(remoteGameInterface.venmo(this.playerName, tokens));
                     break;   
                 case "SHOP":
-                	int shopId = remoteGameInterface.shop(this.playerName); // Need to make this a serializable type
+                	int shopId = remoteGameInterface.shop(this.playerName); 
                 	if (shopId != -1) {
                 		System.out.println("You enter the shop");
                 		new ShopClient(this.playerName, shopId, remoteGameInterface);
@@ -501,6 +501,15 @@ public class GameClient {
                 		System.out.println("There is no shop here");
                 	}
                 	break;
+                case "BANK":
+                	int bankId = remoteGameInterface.bank(this.playerName); 
+                	if (bankId != -1) {
+                		new BankClient(this.playerName, remoteGameInterface);
+                		System.out.println(remoteGameInterface.look(this.playerName));  // When player leaves print look screen
+                	}
+                	else {
+                		System.out.println("There is no bank here");
+                	}
                 case "WALLET":
                 	System.out.println(remoteGameInterface.wallet(this.playerName));
                 	break;               
