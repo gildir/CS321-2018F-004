@@ -89,6 +89,8 @@ public class GameCore implements GameCoreInterface {
                     double inWeight = 0;
                     double inValue = 0;
                     String inName = "";
+			String inFlavor = "";
+			String inDisc = "";
                     Scanner scanner = new Scanner(new File("./items.csv"));
                     scanner.nextLine();
                     scanner.useDelimiter(",|\\r\\n|\\n|\\r");
@@ -97,18 +99,20 @@ public class GameCore implements GameCoreInterface {
                     {
                         inName = scanner.next();
                         inWeight = Double.parseDouble(scanner.next().replace(",", ""));
-                        inValue = Double.parseDouble(scanner.next().replace("\\r\\n|\\r|\\n", ""));
-                        Item newItem = new Item(inName, inWeight, inValue);
+			inValue = Double.parseDouble(scanner.next().replace(",", ""));
+			inDisc = scanner.next();
+                        inFlavor = scanner.next().replace("\\r\\n|\\r|\\n", "");
+                        Item newItem = new Item(inName, inWeight, inValue, inDisc, inFlavor);
                         objects.add(newItem);
 
                     }
                 }
                 catch(IOException e)
                 {
-                    objects.add(new Item("Flower", 1.0, 0.0));
-                    objects.add(new Item("Textbook", 10.3, 5.2));
-                    objects.add(new Item("Phone", 2.9, 1.0));
-                    objects.add(new Item("Newspaper", 10.0, 9.0));
+                    objects.add(new Item("Flower", 1.0, 0.0, null, null));
+                    objects.add(new Item("Textbook", 10.3, 5.2, null, null));
+                    objects.add(new Item("Phone", 2.9, 1.0, null, null));
+                    objects.add(new Item("Newspaper", 10.0, 9.0, null, null));
                 }
                 while(true) {
                     try {
@@ -156,7 +160,7 @@ public class GameCore implements GameCoreInterface {
                         while (true) {
                             try {
                                 // Ghoul move in each 10-15 seconds.
-                                Thread.sleep(12000 + rand.nextInt(5000));
+                                Thread.sleep(1200000 + rand.nextInt(500000));
 
                                 // make Ghoul walk to other room;
                                 GameCore.this.ghoulWander(ghoul, room);
@@ -471,7 +475,7 @@ public class GameCore implements GameCoreInterface {
      * @param name Name of the player enter the bank
      */	@Override
 	public String venmo(String name, ArrayList<String> tokens) {
-		// checks if the player forgot to enter enough commands
+		// checks :if the player forgot to enter enough commands
 		if (tokens.isEmpty()) return "You need to provide more arguments.\n" + Venmo.instructions();
 		
 		// Gets the object of the caller player
@@ -594,7 +598,7 @@ public class GameCore implements GameCoreInterface {
             return null;
         }
     }       
-    
+
     /**
      * Returns a string of what and who you plan to offer an item to
      * @param srcName Name of player making offer
@@ -602,31 +606,117 @@ public class GameCore implements GameCoreInterface {
      * @param message Object item being offered
      * @return Message showing status of offer
      */
-    public String offer(String srcName, String dstName, String message){
+    public String offer(String srcName, String message1, String junk, String message2){
 	Player srcPlayer = this.playerList.findPlayer(srcName);
+	String dstName = srcPlayer.getTradePartner();
 	Player dstPlayer = this.playerList.findPlayer(dstName);
 	Room room = map.findRoom(srcPlayer.getCurrentRoom());
 	String returnMessage;
-	Item object = srcPlayer.removeObjectFromInventory(message);
-	if (srcPlayer == dstPlayer)
+	Item object = srcPlayer.removeObjectFromInventory(message1);
+	Item object2 = dstPlayer.removeObjectFromInventory(message2);
+    if(!(srcPlayer.isInTrade() && srcPlayer.getTradePartner().equals(dstPlayer))){
+        returnMessage = "You must request a trade with "+ dstName +", and they must accept this request before you can trade";
+    }
+        if (srcPlayer == dstPlayer)
 		returnMessage = "So now we talking to ourselves? Is that what's hot?";
 	else if (dstPlayer != null && (dstPlayer.getCurrentRoom() != srcPlayer.getCurrentRoom()))
 	    returnMessage = "Player ain't in your room, or your life";
 	else if (object == null)
-	    returnMessage = "You ain't got that fool: " + message;
+	    returnMessage = "You ain't got that fool: " + message1;
 	else if (dstPlayer == null)
 	    returnMessage = "Player " + dstName + " not found.";
 	else if (srcPlayer == null)
 	    returnMessage = "Messge failed, check connection to server.";
 	else {
-	    dstPlayer.getReplyWriter().println(srcPlayer.getName() + " offers you an item: " + message);
-	    returnMessage = "You offer to " + dstPlayer.getName() + " an item: " + message;
+	    dstPlayer.getReplyWriter().println(srcPlayer.getName() + " offers you an item: " + message1);
+	    dstPlayer.getReplyWriter().println("for your: " + message2);
+	    dstPlayer.getReplyWriter().println("Do you accept? (Type O_Reply accept/reject to answer)");
+	    returnMessage = "You offer to " + dstPlayer.getName() + " an item: " + message1 + " for a: " + message2;
 	}
-	if (object != null)
-	    srcPlayer.addObjectToInventory(object);
+
+    //I am using the tradeRequested flag as a way to indicate that this player has sent an offer 
+    //tradeRequested and tradeReceived are set to false after the trade begins, 
+    //but tradeRequested is turned on again once an offer is made
+    //this way I can check in offerReply does not reply to an offer that was never made
+    srcPlayer.setTradeRequest(true);
+    srcPlayer.setTradeItem(object);
+    dstPlayer.setTradeItem(object2);
 	return returnMessage;
 	}
 
+    /**
+     * Returns a string message about success of offer and status of inventory
+     * @param dstName Name of player accepting or rejecting the offer
+     * @param reply whther the offer has been accepted or rejected
+     * @return Message showing status of offer reply
+     */
+    public String offerReply(String dstName, boolean reply){
+        
+        Player dstPlayer = this.playerList.findPlayer(dstName);
+
+        if (dstPlayer == null)
+            return "Player " + dstName + " not found.";
+
+        String srcName = dstPlayer.getTradePartner();
+        Player srcPlayer = this.playerList.findPlayer(srcName);
+
+        if (srcPlayer == null)
+            return "Player " + srcName + " not found";
+        if (dstPlayer != null && (dstPlayer.getCurrentRoom() != srcPlayer.getCurrentRoom()))
+            return "You must be in the same room as the player: " + srcPlayer.getCurrentRoom();
+        if( !(dstPlayer.isInTrade()) ){
+            return "You need to setup a trade to offer and receive items";
+        }
+        if(!srcPlayer.hasTradeRequest()){
+            return "You need to have been offered an item by your trade partner to respond to an offer!";
+        }
+        else{
+            Item itemRequested = dstPlayer.getTradeItem();
+            Item itemOffered = srcPlayer.getTradeItem();
+            if(itemRequested == null || itemOffered == null){
+                return "The offer items have not been found in their respective inventories";
+            }
+            if(reply){//the offer is accepted
+                srcPlayer.addObjectToInventory(itemRequested);
+                dstPlayer.addObjectToInventory(itemOffered);  
+            }
+            else{
+                srcPlayer.addObjectToInventory(itemOffered);
+                dstPlayer.addObjectToInventory(itemRequested);  
+            }
+
+            srcPlayer.getReplyWriter().println("Your inventory now: "+srcPlayer.viewInventory());
+            dstPlayer.getReplyWriter().println("Your inventory now: "+dstPlayer.viewInventory());
+
+
+            srcPlayer.setTradeRequest(false);
+            
+            srcPlayer.setInTrade(false);
+            dstPlayer.setInTrade(false);
+            srcPlayer.setTradePartner("");
+            dstPlayer.setTradePartner("");
+            srcPlayer.setTradeItem(null);
+            dstPlayer.setTradeItem(null);
+
+        }
+
+        return "";
+    }
+
+	public String examine(String srcName, String itemName)
+	{
+		Player pName = this.playerList.findPlayer(srcName);
+		Room room = map.findRoom(pName.getCurrentRoom());
+		LinkedList<Item> playerInv = pName.getCurrentInventory();
+		for(int i = 0; i < playerInv.size(); i++)
+		{
+			if(playerInv.get(i).getName().equalsIgnoreCase(itemName))
+			{
+				return playerInv.get(i).getDiscrip();
+			}
+		}
+		return "No item by the name of " + itemName + " is in your inventory.";
+	}
 	//Same functionality as bribe_ghoul, not currently used
 	//public String giveToGhoul(String object, String playerName) {
 	//	Player player = playerList.findPlayer(playerName);
@@ -730,24 +820,70 @@ public class GameCore implements GameCoreInterface {
             requestingPlayer.getReplyWriter().println("This player does not exist, choose an existing trade partner");
             return;
         }
-
-        boolean tradeInProgress = false;
-        for(Player player : this.playerList) {
-            if(player.isInTrade()) {
-                tradeInProgress = true;
-            }
+	    if(requestingPlayer.isInTrade()){
+            requestingPlayer.getReplyWriter().println("There is already a trade in progress! You can only be in one trade at a time ");
+            return;
         }
-	 if(tradeInProgress){
-            requestingPlayer.getReplyWriter().println("There is already a trade in progress. ");
+        if (playerToRequest.isInTrade()){
+            requestingPlayer.getReplyWriter().println("There is already a trade in progress! "+traderToRequest+" can only be in one trade at a time ");
             return;
         
         }
 
-        playerToRequest.setTradeRequest(true);
+        playerToRequest.setReceivedTrade(true);
+        requestingPlayer.setTradeRequest(true);
+        requestingPlayer.setTradePartner(traderToRequest);
+
         playerToRequest.getReplyWriter().println(requestingTrader + " has requested a trade. You may ignore this request or type: A_TRADE " +requestingTrader+" to proceed. ");
         requestingPlayer.getReplyWriter().println("Player has been contacted. You will receive a notification when they accept. ");
     }
 
+    /**
+     * Return string representation of trade acceptance
+     * @param acceptingTrader Name of the player who is accepting the trade
+     * @param traderToAccept Name of the player who has requested a trade
+     * @return Message of success or fail
+     */ 
+    public String playerResponse(String acceptingTrader, String traderToAccept){
+
+        Player playerToAccept = this.playerList.findPlayer(traderToAccept);
+        Player acceptingPlayer = this.playerList.findPlayer(acceptingTrader); 
+        if(playerToAccept == null){
+            return "This player cannot be found. ";
+        }
+        if(traderToAccept.equals(acceptingTrader)){
+            return "You can't trade with yourself. ";
+        }
+        if(acceptingPlayer.isInTrade()){
+            return "There is already a trade in progress! You can only be in one trade at a time ";
+        }
+        if (playerToAccept.isInTrade()){
+            return "There is already a trade in progress! "+traderToAccept+" can only be in one trade at a time ";
+        }
+        if(!acceptingPlayer.hasReceivedTrade()){
+            return "You cannot accept a trade because you have not been asked to enter any trade";
+        }
+        if(!playerToAccept.hasTradeRequest() || !playerToAccept.getTradePartner().equals(acceptingTrader)){
+            return "You cannot accept this trade because you have not been asked to enter a trade by "+ traderToAccept;
+        }
+
+        acceptingPlayer.setInTrade(true);
+        playerToAccept.setInTrade(true);
+        acceptingPlayer.setTradePartner(traderToAccept);
+        
+        acceptingPlayer.setReceivedTrade(false);
+        playerToAccept.setTradeRequest(false);
+        
+
+        playerToAccept.getReplyWriter().println(playerToAccept.getTradePartner() + " has accepted your request.");
+	playerToAccept.getReplyWriter().println("Your inventory: " + playerToAccept.viewInventory());
+	playerToAccept.getReplyWriter().println("");
+	playerToAccept.getReplyWriter().println(acceptingTrader + "'s inventory: " + acceptingPlayer.viewInventory());
+	playerToAccept.getReplyWriter().println("");
+	playerToAccept.getReplyWriter().println("To make offer type: O (your item name) for (their item name), and hit Enter");
+
+        return "You have accepted to enter a trade with " + acceptingPlayer.getTradePartner();
+    }
 
 
 	/**
@@ -994,14 +1130,6 @@ public class GameCore implements GameCoreInterface {
         return "You stop moving and begin to stand around again.";
 	}
 
-	/**
-	 * Attempts to pick up an object < target >. Will return a message on any
-	 * success or failure.
-	 * 
-	 * @param name   Name of the player to move
-	 * @param target The case-insensitive name of the object to pickup.
-	 * @return Message showing success.
-	 */
     /**
      * Attempts to pick up an object < target >. Will return a message on any success or failure.
      * @param name Name of the player to move
@@ -1058,6 +1186,61 @@ public class GameCore implements GameCoreInterface {
             return null;
         }
     }       
+
+    /**
+     * Attempts to use an item in the player's inventory. Will return a message on any success or failure.
+     * @param name Name of the player to move
+     * @param itemName name of item to use
+     * @return Message showing success. 
+     */    
+    public String useItem(String name, String itemName) {
+        Player player = this.playerList.findPlayer(name);
+        if(player != null) {
+	    Item usedItem = player.removeObjectFromInventory(itemName);
+	    if(usedItem != null) {
+		player.setTitle(usedItem.getFlavor());
+		player.setHasTitle(true);
+                this.broadcast(player, player.getName() + " used " + usedItem.getName());
+                return "You have used the item, and it magically disappears into the void.";
+            }
+            else {
+                this.broadcast(player, player.getName() + " tried to use " + itemName + ", but couldn't find it.");
+                return "You tried to use an item that you don't have.";
+            }
+        }
+        else {
+            return null;
+        }
+    }
+
+    /** 
+     * Gets the title of a player
+     * @param name name of the player
+     * @return the title given by the item used if applicable
+     */
+    public String getPlayerTitle(String name) {
+	Player player = this.playerList.findPlayer(name);
+	if(player != null) {
+		return player.getTitle();
+	}
+	else {
+		return null;
+	}
+    }
+
+    /**
+     * Removes the title from a player
+     * @param name name of player
+     */
+    public boolean removePlayerTitle(String name) {
+	Player player = this.playerList.findPlayer(name);
+	if(player != null) {
+		player.setTitle("");
+		player.setHasTitle(false);
+		return true;
+	}
+	return false;
+    }
 
     /**
      * Attempts to erase the whiteboard in the room. Will return a message on any success or failure.
@@ -1163,33 +1346,6 @@ public class GameCore implements GameCoreInterface {
         else {
             return null;
         }
-    }
-    /**
-     * Return string representation of trade acceptance
-     * @param acceptingTrader Name of the player who is accepting the trade
-     * @param traderToAccept Name of the player who has requested a trade
-     * @return Message of success or fail
-     */ 
-    public String playerResponse(String acceptingTrader, String traderToAccept){
-
-        Player playerToAccept = this.playerList.findPlayer(traderToAccept);
-        Player acceptingPlayer = this.playerList.findPlayer(acceptingTrader); 
-        if(playerToAccept == null){
-            return "This player does not exist. ";
-        }
-        if(!acceptingPlayer.hasTradeRequest()){
-            return "You cannot accept a trade because you have not been asked to enter a trade by " + traderToAccept;
-        }
-
-        acceptingPlayer.setInTrade(true);
-        acceptingPlayer.setTradeRequest(false);
-
-        acceptingPlayer.setTradePartner(traderToAccept);
-        playerToAccept.setTradePartner(acceptingTrader);
-
-        playerToAccept.getReplyWriter().println(playerToAccept.getTradePartner() + " has accepted your request.");
-
-        return "You have accepted to enter a trade with " + acceptingPlayer.getTradePartner();
     }
 
     @Override
@@ -1610,6 +1766,17 @@ public class GameCore implements GameCoreInterface {
         users.append(a.getName() + "\n");
       }
       return users.toString();
+    }
+
+    /**
+     * 108 In game ASCII map
+     * Returns an ascii representation of nearby rooms
+     * @param name Name of the player
+     * @return String representation of the map
+     */
+    public String showMap(String name){
+       int roomId = this.playerList.findPlayer(name).getCurrentRoom();
+       return map.asciiMap(roomId);
     }
 
 	/**
