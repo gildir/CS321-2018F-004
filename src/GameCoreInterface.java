@@ -239,20 +239,6 @@ public interface GameCoreInterface {
     public String getShopInv(int id);
 
     /**
-     * Returns a Shop's "In Demand" inventory as a formatted string
-     * @param id The shop ID
-     * @return A formatted string representing the Shop's "In Demand" inventory
-     */
-    public String getShopDemInv(int id);
-  
-    /**
-     * updates the playlist in the Shop
-     * @param name Name of the player
-     * @return void
-     */
-    public void shopLeft(String name);
-
-    /**
      * Returns a string representation of the offer statement.
      * @param srcName Name of player making offer
      * @param dstName Name of player receiving offer
@@ -260,13 +246,23 @@ public interface GameCoreInterface {
      * @return Message showing offer
      * @throws RemoteException.
      */
-    public String offer(String srcName, String dstName, String message); 
+    public String offer(String srcName, String message1, String junk, String message2); 
+
+    /**
+     * Returns a string message about success of offer and status of inventory
+     * @param dstName Name of player accepting or rejecting the offer
+     * @param reply whther the offer has been accepted or rejected
+     * @return Message showing status of offer reply
+     */
+    public String offerReply(String dstName, boolean reply);
 
     /**
      * Prints message to player if request can processed, contacts other player about their request
      * @param requestingTrader Name of the player who has requested the trade
      * @param traderToRequest Name of the player whom the first player has requested to trade with
      */ 
+	public String examine(String srcName, String itemName);
+
     public void requestPlayer(String requestingTrader, String traderToRequest);
 
     /**
@@ -286,6 +282,13 @@ public interface GameCoreInterface {
     public String shout(String name, String message);
 
     /**
+     * In game ASCII map
+     * Returns an ascii representation of nearby rooms
+     * @param name Name of the player
+     * @return String representation of the map
+     */
+    public String showMap(String name);
+     /*
      * Delete a player's account.
      *
      * @param name Name of the player to be deleted
@@ -387,8 +390,9 @@ public interface GameCoreInterface {
 	/**
 	 * returns a message showing all online friends
 	 * 
-	 * @param Player name
+	 * @param Player name name of player requesting list of friends
+     * @param onlineOnly true if you only want a list of online friends, else false.
 	 * @return Message showing online friends
 	 */
-	public String viewOnlineFriends(String name);
+	public String viewFriends(String name, boolean onlineOnly);
 }

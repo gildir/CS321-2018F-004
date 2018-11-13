@@ -198,7 +198,32 @@ public interface GameObjectInterface extends Remote {
      * @throws RemoteException 
      */ 
     public String drop(String name, String object) throws RemoteException;
-   
+
+    /**
+     * Attempts to use an item in the player's inventory. Will return a message on any success or failure.
+     * @param name Name of the player to move
+     * @param itemName name of item to use
+     * @return Message showing success.
+     * @throws RemoteException
+     */
+    public String useItem(String name, String object) throws RemoteException;
+
+    /**
+     *	Attempts to get the title of player.
+     *	@param name name of the player
+     *	@return title of the player given, if applicable
+     *	@throws RemoteException
+     */
+    public String getPlayerTitle(String name) throws RemoteException;
+
+    /**
+     *  Strips the title from a player
+     *  @param name name of the player
+     *  @throws RemoteException
+     */
+    public boolean removePlayerTitle(String name) throws RemoteException;
+
+	public String examine(String name, String target) throws RemoteException;  
     /**
      * Attempts to sort the player's inventory. Will return a message on any success or failure.
      * @param name Name of the player
@@ -221,7 +246,15 @@ public interface GameObjectInterface extends Remote {
      * @param object String item beig offered
      * @throws RemoteException
      */
-    public String offer (String srcName, String dstName, String object) throws RemoteException;
+    public String offer (String srcName, String message1, String junk, String message2) throws RemoteException;
+
+    /**
+     * Returns a string message about success of offer and status of inventory
+     * @param dstName Name of player accepting or rejecting the offer
+     * @param reply whther the offer has been accepted or rejected
+     * @return Message showing status of offer reply
+     */
+    public String offerReply(String dstName, boolean reply) throws RemoteException;
 
     /**
      * Return string representation of trade acceptance
@@ -305,14 +338,6 @@ public interface GameObjectInterface extends Remote {
      */
     public int shop(String name) throws RemoteException;
     
-    
-    /**
-     * updates the playlist in the Shop
-     * @param name Name of the player
-     * @return 
-     * @return void
-     */
-    public void shopLeft(String name) throws RemoteException;
     /**
      * Returns a player object when given the player's name
      * @param name The name of the player to find
@@ -362,14 +387,15 @@ public interface GameObjectInterface extends Remote {
      * @return A formatted string representing the Shop's inventory
      */
     public String getShopInv(int id) throws RemoteException;
-	
-    /**
-     * Returns a Shop's "In Demand" inventory as a formatted string
-     * @param id The shop ID
-     * @return A formatted string representing the Shop's "In Deman" inventory
-     */
-    public String getShopDemInv(int id) throws RemoteException;
 
+    /**
+     * 108 In game ASCII map
+     * Returns an ascii representation of nearby rooms
+     * @param name Name of the player
+     * @return String representation of the map
+     */
+    public String showMap(String name) throws RemoteException;
+	
 	/**
 	 * Delete a player's account.
 	 * 
@@ -401,11 +427,12 @@ public interface GameObjectInterface extends Remote {
 	/**
 	 * returns a message showing all online friends
 	 * 
-	 * @param Player name
+	 * @param Player name name of player requesting list of friends
+     * @param onlineOnly true if you only want a list of online friends, else false.
 	 * @return Message showing online friends
 	 * @throws RemoteException
 	 */
-	String viewOnlineFriends(String name) throws RemoteException;
+	public String viewFriends(String name, boolean onlineOnly) throws RemoteException;
 	
 	/**
 	 * Resets passwords.
