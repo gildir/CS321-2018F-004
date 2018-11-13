@@ -1,2 +1,25 @@
-Name,Weight,Price
-Flower99,0.5,5
+Name,Weight,Price,Description,Flavor
+Flower,0.5,5,Smells Good!,The Flower Child
+Phone,0.5,600,Not a iPhone,Old Fashioned
+Newspaper,0.5,2,Fake News,Well Read
+Gum,0.5,0.5,Already Chewed,Sticky
+Shoes,0.5,50,No Holes,Not Shoeless
+Textbook,5,100,Yawn,(Slightly) Educated
+Backpack,10,30,Backpack backpack…,Encumbered
+TV,10,100,Kinda big,Couch Potato
+Dog,100,1000,Woof!,Dog Whisperer
+Human,200,0.5,Why is this here,People Person
+Bike,10,100,Dont forget your lock,Moderately Fast
+Air,0,0,Cant live without it,Not 100% Oxygen
+Gold,10,50,Valuable,Shiny
+Waterbottle,5,10,Hydration,Hydrated
+Watch,0.5,5,Not a iWatch,Time Conscious
+Cookie,0.5,5,Yum,Sweet Tooth
+Planner,0.5,0,What to do?,Organized
+Laptop,5,1000,Not a Mac,(maybe) Tech Savvy
+Debt,200,-10000,oof!,Poor
+Sadness,200,0,Finals soon,Sad
+Job,0,10000,Who needs it?,Well Adjusted
+Patriot-Swag,5,50,This exists?,Comfy
+Pencil,0.5,2,Sharp and ready,Pencil Pusher
+Scantron,0.5,1,Test Time!,Prepared

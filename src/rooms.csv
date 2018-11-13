@@ -24,5 +24,3 @@ NORTH,100001,You are headed to your room through the north exit
 SOUTH,4,You try to head back to the Hallway
 WEST,0,You tried heading west, there is nothing there.
 EAST,0,You tried heading, east there is nothing there.
-
-

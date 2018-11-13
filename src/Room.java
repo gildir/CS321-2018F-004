@@ -29,7 +29,20 @@ public class Room {
         
         this.id = id;
         this.title = title;
+	this.room_type = room_type;
         this.description = description;
+        this.npcs = new LinkedList<>();
+    }
+
+    public Room(int id, String room_type, String title, String description, LinkedList<NPC> npcs) {
+        this.objects = new LinkedList<>();
+        this.exits = new LinkedList<>();
+        this.whiteboard = new StringBuilder(MAX_WHITEBOARD_LEN);
+        this.id = id;
+        this.title = title;
+	this.room_type = room_type;
+        this.description = description;
+
         this.room_type = room_type;
         this.npcs = new LinkedList<>();
     }
@@ -43,6 +56,7 @@ public class Room {
         this.description = description;
         this.npcs = npcs;
         this.room_type = room_type;
+
     }
     
     public String toString(PlayerList playerList, Player player) {
