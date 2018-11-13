@@ -1484,6 +1484,17 @@ public class GameCore implements GameCoreInterface {
       return users.toString();
     }
 
+    /**
+     * 108 In game ASCII map
+     * Returns an ascii representation of nearby rooms
+     * @param name Name of the player
+     * @return String representation of the map
+     */
+    public String showMap(String name){
+       int roomId = this.playerList.findPlayer(name).getCurrentRoom();
+       return map.asciiMap(roomId);
+    }
+
 	/**
 	 * Logs player connections
 	 * 

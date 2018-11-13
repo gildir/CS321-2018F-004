@@ -541,7 +541,16 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
     public String getShopInv(int id) throws RemoteException{
     	return core.getShopInv(id);
     }
-	
+
+    /**
+     * 108 In game ASCII map
+     * Returns an ascii representation of nearby rooms
+     * @param name Name of the player
+     * @return String representation of the map
+     */
+    public String showMap(String name) throws RemoteException{
+       return core.showMap(name);
+    }	
 	/**
 	 * Delete a player's account.
 	 * 

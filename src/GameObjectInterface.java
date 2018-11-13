@@ -337,6 +337,14 @@ public interface GameObjectInterface extends Remote {
      * @return A formatted string representing the Shop's inventory
      */
     public String getShopInv(int id) throws RemoteException;
+
+    /**
+     * 108 In game ASCII map
+     * Returns an ascii representation of nearby rooms
+     * @param name Name of the player
+     * @return String representation of the map
+     */
+    public String showMap(String name) throws RemoteException;
 	
 	/**
 	 * Delete a player's account.
