@@ -660,13 +660,14 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
 	/**
 	 * returns a message showing all online friends
 	 * 
-	 * @param Player name
+	 * @param Player name name of player requesting list of friends
+         * @param onlineOnly true if you only want a list of online friends, else false.
 	 * @return Message showing online friends
 	 * @throws RemoteException 
 	 */
 	@Override
-    public String viewOnlineFriends(String name) throws RemoteException {
-        return core.viewOnlineFriends(name);
+    public String viewFriends(String name, boolean onlineOnly) throws RemoteException {
+        return core.viewFriends(name, onlineOnly);
     }  
 	
 	/**
