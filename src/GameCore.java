@@ -519,8 +519,6 @@ public class GameCore implements GameCoreInterface {
 		
 		return "$" + String.format("%.02f", m);
 	}
-	
-
 
 	/**
      * Returns a Shop's inventory as a formatted string
@@ -716,15 +714,10 @@ public class GameCore implements GameCoreInterface {
 	@Override
 	public void broadcast(Player player, String message) {
 		for (Player otherPlayer : this.playerList) {
-			if(otherPlayer != player && !otherPlayer.isIgnoring(player) && otherPlayer.getCurrentRoom() == player.getCurrentRoom()) {
-                dailyLogger.write(message);
-			    String newMessage = otherPlayer.filterMessage(message);
-				otherPlayer.getReplyWriter().println(newMessage);
-				/* Can delete this. Was causing merge conflict. Functionality remains unchanged.
 			if (otherPlayer != player && otherPlayer.getCurrentRoom() == player.getCurrentRoom()) {
+                // todo This is going to log the same transmission for N times for N = number plays in this room
 				dailyLogger.write(message);
 				otherPlayer.getReplyWriter().println(message);
-				*/
 			}
 		}
 	}
@@ -739,13 +732,9 @@ public class GameCore implements GameCoreInterface {
 	public void broadcast(Room room, String message) {
 		for (Player player : this.playerList) {
 			if (player.getCurrentRoom() == room.getId()) {
-				dailyLogger.write(message);
-			    String newMessage = player.filterMessage(message);
-				player.getReplyWriter().println(newMessage);
-				/* Delete this, functionality remains unchanged
+                //todo This is going to log the same transmission for N times for N = number plays in this room
 				dailyLogger.write(message);
 				player.getReplyWriter().println(message);
-				*/
 			}
 		}
 	}
@@ -995,15 +984,11 @@ public class GameCore implements GameCoreInterface {
 	public String say(String name, String message) {
 		Player player = this.playerList.findPlayer(name);
 		if (player != null) {
-//			this.broadcast(player, player.getName() + " says, \"" + message + "\"");
-            this.sayToAll(message, player);
-            String newMessage = player.filterMessage(message);
-            try {
-                chatLog(player, 0, "\""+message+"\"", "Room " + player.getCurrentRoom());
-            } catch (IOException e) {
-                System.out.println("Failed to log chat");
-            }
-            return "You say, \"" + newMessage + "\"";
+		    for (Player otherPlayer : this.playerList)
+		        if (otherPlayer != player && otherPlayer.getCurrentRoom() == player.getCurrentRoom())
+		            otherPlayer.messagePlayer(player, "says", message);
+            chatLog(player, 0, message, "Room " + player.getCurrentRoom());
+            return player.getMessage() + "say, " + message;
 
 		} else {
 			return null;
@@ -1504,25 +1489,13 @@ public class GameCore implements GameCoreInterface {
     public String whisper(String srcName, String dstName, String message){
         Player srcPlayer = this.playerList.findPlayer(srcName);
         Player dstPlayer = this.playerList.findPlayer(dstName);
-        String returnMessage;
         if (dstPlayer == null)
-            returnMessage = "Player " + dstName + " not found.";
-        else if (srcPlayer == null)
-            returnMessage = "Message failed, check connection to server.";
-        else if (dstPlayer.isIgnoring(srcPlayer))
-            returnMessage = "Player " + dstPlayer.getName() + " is ignoring you.";
-        else {
-            dstPlayer.setLastPlayer(srcName);
-            String newMessage = dstPlayer.filterMessage(message);
-            dstPlayer.getReplyWriter().println(srcPlayer.getName() + " whispers you, " + newMessage);
-            returnMessage = "You whisper to " + dstPlayer.getName() + ", " + message;
-        }
-        try {
-                chatLog(srcPlayer, 1, message, dstPlayer.getName());
-            } catch (IOException e) {
-                System.out.println("Failed to log chat");
-            }
-        return returnMessage;
+            return "Player " + dstName + " not found.";
+        if (!dstPlayer.messagePlayer(srcPlayer, "whispers", message))
+            return "Player " + dstPlayer.getName() + " is ignoring you.";
+        dstPlayer.setLastPlayer(srcName);
+        chatLog(srcPlayer, 1, message, dstPlayer.getName());
+        return srcPlayer.getMessage() + "whisper to " + dstPlayer.getName() + ", " + message;
     }
 
     /**
@@ -1532,17 +1505,8 @@ public class GameCore implements GameCoreInterface {
      * @return Message showing success
      */
     public String quickReply(String srcName, String message) {
-        Player srcPlayer = this.playerList.findPlayer(srcName);
-        Player dstPlayer = this.playerList.findPlayer(srcPlayer.getLastPlayer());
-        String returnMessage;
-        if (dstPlayer == null)
-            returnMessage = "No whisper to reply to.";
-        else if (srcPlayer == null)
-            returnMessage = "Message failed, check connection to server.";
-        else {
-        	returnMessage = this.whisper(srcName,dstPlayer.getName(),message);
-        }
-        return returnMessage;
+        String target = this.playerList.findPlayer(srcName).getLastPlayer();
+        return whisper(srcName, target, message);
     }
 
    /**
@@ -1611,7 +1575,6 @@ public class GameCore implements GameCoreInterface {
         return returnMessage;
     }
 
-    // Feature 410: Joke
     /**
      * Tells a joke to the room. Reads local "chat config" file
      * that keeps a list of jokes, one per line. The command
@@ -1652,55 +1615,40 @@ public class GameCore implements GameCoreInterface {
         Player player = this.playerList.findPlayer(name);
         if(player != null){
             for(Player otherPlayer : this.playerList) {
-                if(otherPlayer != player && !otherPlayer.isIgnoring(player)) {
-                    String newMessage = otherPlayer.filterMessage(message);
-                    otherPlayer.getReplyWriter().println(player.getName() + " shouts, \"" + newMessage + "\"");
-                }
+                if(otherPlayer != player)
+                    otherPlayer.messagePlayer(player, "shouts", message);
             }
-            try {
-                    chatLog(player, 2, "\""+message+"\"", "Everyone");
-                } catch (IOException e) {
-                    System.out.println("Failed to log chat");
-                }
-            return "You shout, \"" + message + "\"";
+                    chatLog(player, 2, message,"Everyone");
+            return player.getMessage() + "shout, " + message;
         } else {
             return null;
         }
     }
 
-    /**
-     * 'player' says 'message' to all other players in the same room
-     * @param message message to deliver
-     * @param player speaker of the message
-     */
-    public void sayToAll(String message, Player player) {
-        for(Player otherPlayer : this.playerList) {
-            if(otherPlayer != player && !otherPlayer.isIgnoring(player) && otherPlayer.getCurrentRoom() == player.getCurrentRoom()) {
-                otherPlayer.printMessage(player, message, "says");
-            }
-        }
-    }
+    private void chatLog(Player player, int chatType, String message, String target) {
+        try {
+            pw = new PrintWriter(new FileWriter("chatlog.txt", true));
 
-    private void chatLog(Player player, int chatType, String message, String target) throws IOException {
-        pw = new PrintWriter(new FileWriter("chatlog.txt", true));
-        String type = "";
-        String msg;
-        switch(chatType) {
-            case 0:
-                type = "SAID";
-                break;
-            case 1:
-                type = "WHISPERED";
-                break;
-            case 2:
-                type = "SHOUTED";
-                break;
+            String type = "";
+            String msg;
+            switch(chatType) {
+                case 0:
+                    type = "SAID";
+                    break;
+                case 1:
+                    type = "WHISPERED";
+                    break;
+                case 2:
+                    type = "SHOUTED";
+                    break;
+            }
+            msg = String.format("[%tD %<tT]", GameServer.getDate()) + " PLAYER [" + player.getName() + "] " + type + " (" + message + ") to [" + target + "]\n";
+            pw.write(msg);
+            pw.flush();
+            pw.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        msg = "PLAYER [" + player.getName() + "] " + type + " (" + message + ") to [" + target + "]\n";
-        pw.write(msg);
-        pw.flush();
-        pw.close();
-        return;
     }
 
     @Override
