@@ -369,11 +369,12 @@ public interface GameObjectInterface extends Remote {
 	/**
 	 * returns a message showing all online friends
 	 * 
-	 * @param Player name
+	 * @param Player name name of player requesting list of friends
+     * @param onlineOnly true if you only want a list of online friends, else false.
 	 * @return Message showing online friends
 	 * @throws RemoteException
 	 */
-	String viewOnlineFriends(String name) throws RemoteException;
+	public String viewFriends(String name, boolean onlineOnly) throws RemoteException;
 	
 	/**
 	 * Resets passwords.
