@@ -38,7 +38,8 @@ public class Shop
 		this.description = desc;
 		this.title = name;
 
-
+		//items people broke this, will fix after we get all of what they changed
+		/*
 		//populate game items list from items.csv
 		this.objects = new ArrayList<Item>();
 
@@ -78,6 +79,7 @@ public class Shop
         for (int x = 0; x < 2; x++){
         	this.inDemand.add(objects.get(rand.nextInt(objects.size())));	
         }
+        */
 	}
 	
 	//get method to get inventory linkedlist
@@ -104,7 +106,7 @@ public class Shop
 	//adds a random item to inDemand list
 	public void addDemandRand(){
 		Random rand = new Random();
-		this.inDemand.add(objects.get(rand.nextInt(objects.size())));
+		//this.inDemand.add(objects.get(rand.nextInt(objects.size())));
 	}
 
 	//used to remove items form the linked list
