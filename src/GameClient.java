@@ -716,7 +716,7 @@ public class GameClient {
 	    						System.out.println();
 			    				System.out.println(question);
 			    				System.out.print("Answer:");
-			    				input = keyboardInput.readLine().toLowerCase().trim();
+			    				input = new String(System.console().readPassword()).toLowerCase().trim();
 			    				buff = remoteGameInterface.getAnswer(name, count, input);
 			    				question = remoteGameInterface.getQuestion(name, ++count);
 			    				if(buff == null) {
@@ -741,7 +741,7 @@ public class GameClient {
 									System.out.println("The server experienced an unkown failure");
 									break;
 								case INTERNAL_SERVER_ERROR:
-									System.out.println("The experianced a data error");
+									System.out.println("The experienced a data error");
 									break;
 								default:
 									System.out.println("Unkown server behavior");

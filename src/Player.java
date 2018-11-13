@@ -38,7 +38,6 @@ public class Player {
     private boolean hasOption = false;
     @JsonProperty("recovery")
     private ArrayList<String> recovery; //stored question, answer, question,...
-
     
     
 	public Player(@JsonProperty("name") String name) {
@@ -292,8 +291,7 @@ public class Player {
     }
     
     @JsonProperty("recovery")
-    public void setRecovery(@JsonProperty("recovery") ArrayList<String> recovery) {
-    	this.setMoney(5);
+    public void setRecovery(ArrayList<String> recovery) {
     	this.recovery = recovery;
     }
 
@@ -301,6 +299,7 @@ public class Player {
     public ArrayList<String> getRecovery() {
     	return this.recovery;
     }
+
     public void setName(String name) {
         this.name = name;
     }

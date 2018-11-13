@@ -361,7 +361,6 @@ public interface GameCoreInterface {
 	 */
 	public String viewOnlineFriends(String name);
 	
-	//TODO
 	public void addQuestion(String name, String question, String answer);
 	
 	public void removeQuestion(String name, int num);

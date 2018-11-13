@@ -471,4 +471,4 @@ public interface GameObjectInterface extends Remote {
  	 * @throws RemoteException
  	 */
  	public void removeQuestion(String name, int num) throws RemoteException;
- }
+}

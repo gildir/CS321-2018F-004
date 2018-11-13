@@ -60,7 +60,7 @@ public class GameCore implements GameCoreInterface {
         map = new Map(worldFile);
         this.dailyLogger = new DailyLogger();
         dailyLogger.write("SERVER STARTED");
-        playerList = new PlayerList();
+        playerList = new PlayerList(); 
         
         // Builds a list of shops mapped to their map id (can be expanded as needed)
         shoplist = new HashMap<Integer,Shop>();
