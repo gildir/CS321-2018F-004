@@ -305,7 +305,7 @@ public class GameCore implements GameCoreInterface {
     	Room room = map.findRoom(player.getCurrentRoom());
     	shoplist.get(room.getId()).removePlayer(player);
     }
-    
+
     /**
      * Returns Shop.tostring
      * @param id The shop's id in the hashmap
