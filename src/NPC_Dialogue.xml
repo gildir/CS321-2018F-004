@@ -2,7 +2,22 @@
 
 <dialogue>
     <npc name = "questNPC">
+        <dialogue_type type = "greeting">
+            <dialogue_prompt>Hello quest NPC</dialogue_prompt>
+            <dialogue_id id = "1">
+Hello adventurer
+            </dialogue_id>
+        </dialogue_type>
+
+        <dialogue_type type = "nameQuestion">
+            <dialogue_prompt>What is your name</dialogue_prompt>
+            <dialogue_id id = "1">
+My name is questNPC
+            </dialogue_id>
+        </dialogue_type>
+
         <dialogue_type type = "pickup">
+            <dialogue_prompt>Pickup</dialogue_prompt>
             <dialogue_id id = "1">
 Seems like your inventory is almost empty? Why don't you try picking some
 items on the ground?
@@ -15,6 +30,7 @@ I see that your inventory is almost full. Be aware that you can only carry
         </dialogue_type>
 
         <dialogue_type type = "tutorial">
+            <dialogue_prompt>Tutorial</dialogue_prompt>
             <dialogue_id id = "1">
 Hey, you there, stranger. Seems like you are lost. Need some help?
 

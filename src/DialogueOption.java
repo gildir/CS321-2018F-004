@@ -70,7 +70,6 @@ public class DialogueOption {
         currentDialogueId = dialogueId;
     }
 
-    //Shows every command available in game
     private String getResponseFromFile(String npcName, int playerDialogueId)
     {
         try {
@@ -90,7 +89,6 @@ public class DialogueOption {
             Element xmlDialogueElement;
             Element xmlDialogueIdElement;
 
-            //Get every commands from xml file and print them
             for (int i = 0; i < xmlNPC.getLength(); i++) {
                 xmlElement = (Element) xmlNPC.item(i);
 
@@ -102,7 +100,7 @@ public class DialogueOption {
                         xmlDialogueElement = (Element) xmlDialogueType.item(j);
                         if (tag.equals(xmlDialogueElement.getAttribute("type")))
                         {
-                            xmlDialogueId = xmlElement.getElementsByTagName("dialogue_id");
+                            xmlDialogueId = xmlDialogueElement.getElementsByTagName("dialogue_id");
 
                             for (int n = 0; n < xmlDialogueId.getLength(); n++) {
                                 xmlDialogueIdElement = (Element) xmlDialogueId.item(n);
