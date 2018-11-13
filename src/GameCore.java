@@ -118,7 +118,11 @@ public class GameCore implements GameCoreInterface {
                         Thread.sleep(rand.nextInt(60000));
                         object = objects.get(rand.nextInt(objects.size()));
                         room = map.randomRoom();
-                        room.addObject(object);
+                        try {
+							room.addObject(object);
+						}
+						catch (IndexOutOfBoundsException e){
+						}
 
 						GameCore.this.broadcast(room, "You see a student rush past and drop a " + object + " on the ground.");
 						
