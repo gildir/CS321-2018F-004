@@ -404,6 +404,13 @@ public interface GameObjectInterface extends Remote {
      */
     public String showMap(String name) throws RemoteException;
 	
+    /**
+     * Returns a Shop's "In Demand" inventory as a formatted string
+     * @param id The shop ID
+     * @return A formatted string representing the Shop's "In Deman" inventory
+     */
+    public String getShopDemInv(int id) throws RemoteException;
+
 	/**
 	 * Delete a player's account.
 	 * 
