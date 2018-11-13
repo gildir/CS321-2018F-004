@@ -664,4 +664,8 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
     public String toggleRPSChat(String player) throws RemoteException{
 	return core.toggleRPSChat(player);
     }
+
+    public String listAllPlayers() throws RemoteException{
+	return core.listAllPlayers();
+    }
 }

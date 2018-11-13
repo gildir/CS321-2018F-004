@@ -598,6 +598,9 @@ public class GameClient {
 		case "TOGGLERPSCHAT":
 		    System.out.println(remoteGameInterface.toggleRPSChat(this.playerName));
 		    break;
+		case "LISTPLAYERS":
+		    System.out.println(remoteGameInterface.listAllPlayers());
+		    break;
                 case "FRIENDS":
     				String sub;
     				if (tokens.isEmpty() || !((sub = tokens.remove(0).toUpperCase()).equals("ADD") || sub.equals("REMOVE")

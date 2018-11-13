@@ -366,4 +366,11 @@ public interface GameCoreInterface {
 	 * @return message saying the chat has been toggled on or off
 	 */
 	public String toggleRPSChat(String player);
+
+	/**
+	 * Returns a String of all players
+	 * @param nothing
+	 * @return list of players in world
+	 */
+	public String listAllPlayers();
 }

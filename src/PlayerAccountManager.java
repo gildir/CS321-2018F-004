@@ -186,4 +186,8 @@ public class PlayerAccountManager {
 		return Responses.SUCCESS;
 		
 	}
+
+	public HashSet<String> getListPlayers(){
+		return playerIds;
+	}
 }

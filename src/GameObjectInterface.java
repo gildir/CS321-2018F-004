@@ -462,4 +462,13 @@ public interface GameObjectInterface extends Remote {
       * @throws RemoteException
       */
      public String toggleRPSChat(String player) throws RemoteException;
+
+
+     /**
+      * Lists all players in the world
+      * @param nothing
+      * @return a list of players in world
+      * @throws RemoteException
+      */
+     public String listAllPlayers() throws RemoteException;
 }

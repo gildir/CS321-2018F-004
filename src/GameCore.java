@@ -1894,4 +1894,16 @@ public class GameCore implements GameCoreInterface {
 		
 	}
 
+	@Override
+	public String listAllPlayers(){
+		String allNames = "";
+		HashSet<String> allPlayerIds = accountManager.getListPlayers();
+		for(String player : allPlayerIds){
+			allNames += player + ", ";
+		}
+		allNames = allNames.substring(0, allNames.length()-2);
+		return allNames;
+	}
+
+
 }
