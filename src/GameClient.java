@@ -731,7 +731,7 @@ public class GameClient {
 		    					System.out.println();
 		    					System.out.println("Please input new password");
 		    					System.out.print(">");
-		    					password = keyboardInput.readLine().trim();
+		    					password = new String(System.console().readPassword()).trim(); //task 221 hides password
 		    					response = remoteGameInterface.resetPassword(name, password);
 		    					switch(response) {
 								case SUCCESS:
