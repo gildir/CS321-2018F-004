@@ -18,7 +18,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 @JsonIgnoreProperties({ "replyWriter", "outputWriter" })
 public class Player {
-    public LinkedList<Item> currentInventory;
+	private int dormId;//used to determine private dormroom Id
+	//public static int dormRoomCount=100002;//used to initialize private_dorm id 
+	public LinkedList<Item> currentInventory;
     private String name;
     private int currentRoom;
     private Direction currentDirection;
@@ -47,9 +49,13 @@ public class Player {
         this.recovery = recovery;
         this.currentInventory = new LinkedList<>();
         this.money = 0;
+        this.dormId = 0;
+        //this.dormRoomCount++;
     }
 
-    private HashSet<Player> ignoredPlayers = new HashSet<Player>();
+	public int getDormId() {return this.dormId;}
+	public void setDormId(int i) {this.dormId = i;}
+	private HashSet<Player> ignoredPlayers = new HashSet<Player>();
     // missed Messages - not yet in uses
     private HashSet<Message> missedMessages = new HashSet<Message>();
 
