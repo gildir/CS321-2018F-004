@@ -354,8 +354,9 @@ public interface GameCoreInterface {
 	
 	/**
 	 * returns a message showing all online friends
-         * @param name name of player requesting list of friends
-         * @param onlineOnly true if you only want a list of online friends, else false.
+	 * 
+	 * @param Player name name of player requesting list of friends
+     * @param onlineOnly true if you only want a list of online friends, else false.
 	 * @return Message showing online friends
 	 */
 	public String viewFriends(String name, boolean onlineOnly);

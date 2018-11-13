@@ -1586,9 +1586,10 @@ public class GameCore implements GameCoreInterface {
 	}
 	
 	/**
-	 * returns a message showing all online friends
-         * @param name name of player requesting list of friends
-         * @param onlineOnly true if you only want a list of online friends, else false.
+	 * Returns a message showing all online friends
+	 * 
+     * @param name name of player requesting list of friends
+     * @param onlineOnly true if you only want a list of online friends, else false.
 	 * @return Message showing online friends
 	 */
 	@Override
