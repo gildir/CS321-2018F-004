@@ -16,6 +16,8 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 import java.io.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class NPC {
     private final String name;
@@ -51,7 +53,7 @@ public class NPC {
     public boolean changeDialogueList(String dialogueTag, int changeTagId)
     {
         for (int i = 0; i < dialogueList.size(); i++) {
-            if (dialogueList.get(i).usingTag() && dialogueList.get(i).getTag() == dialogueTag)
+            if (dialogueList.get(i).usingTag() && dialogueList.get(i).getTag().equals(dialogueTag))
             {
                 dialogueList.get(i).changeDialogueId(changeTagId);
                 return true;
@@ -63,7 +65,7 @@ public class NPC {
     public boolean incrementDialogueList(String dialogueTag)
     {
         for (int i = 0; i < dialogueList.size(); i++) {
-            if (dialogueList.get(i).usingTag() && dialogueList.get(i).getTag() == dialogueTag)
+            if (dialogueList.get(i).usingTag() && dialogueList.get(i).getTag().equals(dialogueTag))
             {
                 dialogueList.get(i).changeDialogueId(dialogueList.get(i).getDialogueId() + 1);
                 return true;
@@ -75,7 +77,7 @@ public class NPC {
     public int getDialogueId(String dialogueTag)
     {
         for (int i = 0; i < dialogueList.size(); i++) {
-            if (dialogueList.get(i).usingTag() && dialogueList.get(i).getTag() == dialogueTag)
+            if (dialogueList.get(i).usingTag() && dialogueList.get(i).getTag().equals(dialogueTag))
             {
                 return dialogueList.get(i).getDialogueId();
             }
@@ -128,7 +130,7 @@ public class NPC {
                 }
             }
         } catch (ParserConfigurationException | SAXException | IOException ex) {
-            //Logger.getLogger(Map.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(NPC.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }

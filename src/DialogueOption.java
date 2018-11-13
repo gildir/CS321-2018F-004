@@ -13,6 +13,8 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 import java.io.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class DialogueOption {
 
@@ -114,7 +116,7 @@ public class DialogueOption {
                 }
             }
         } catch (ParserConfigurationException | SAXException | IOException ex) {
-            //Logger.getLogger(Map.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DialogueOption.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         return "I have nothing to tell you about that";

@@ -55,10 +55,7 @@ public class Map{
                                         LinkedList<String> quests = new LinkedList<>(Arrays.asList("quest1", "quest2", "quest3"));
                                         String questNPCName = "questNPC";
                                         ArrayList<DialogueOption> dialogue = new ArrayList<DialogueOption>();
-                                        /*
-                                        ArrayList<DialogueOption> dialogue = new ArrayList<DialogueOption>(Arrays.asList(new DialogueOption("Hello quest NPC", "Hello adventurer"),
-                                                    new DialogueOption("What is your name", "My name is " + questNPCName + "."), new DialogueOption("Tutorial","tutorial",true), new DialogueOption("Pickup","pickup",true)));
-                                        */
+
                                         HashMap<String, NPC> npcs = new HashMap<>();
                                         npcs.put(questNPCName, new NPC(questNPCName, 1, quests, dialogue));
 

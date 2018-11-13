@@ -319,7 +319,6 @@ public class Player {
         for (int i = 0; i < dialogueList.size(); i++) {
             if (dialogueList.get(i).getName().equals(npcName))
             {
-                System.err.println(updateAmount);
                 dialogueList.get(i).changeDialogueList(dialogueTag, updateAmount);
             }
         }
@@ -366,13 +365,13 @@ public class Player {
             if (dialogueList.get(i).getName().equals(npcName))
             {
                 found = true;
-                dialogueList.get(i).addToDialogueList(dialogueTag, prompt);
+                //dialogueList.get(i).addToDialogueList(dialogueTag, prompt);
             }
         }
 
         if (found == false)
         {
-            NPC npc = new NPC(npcName, -1, new LinkedList<String>(), new ArrayList<DialogueOption>(Arrays.asList(new DialogueOption(prompt, dialogueTag, true))));
+            NPC npc = new NPC(npcName, -1, new LinkedList<String>(), new ArrayList<DialogueOption>());
             dialogueList.add(npc);
         }
     }

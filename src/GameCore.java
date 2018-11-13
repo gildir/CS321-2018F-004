@@ -116,6 +116,10 @@ public class GameCore implements GameCoreInterface {
                         object = objects.get(rand.nextInt(objects.size()));
                         room = map.randomRoom();
                         room.addObject(object);
+                        room.addObject(object);
+                        room.addObject(object);
+                        room.addObject(object);
+                        room.addObject(object);
 
 						GameCore.this.broadcast(room, "You see a student rush past and drop a " + object + " on the ground.");
 						
@@ -1442,7 +1446,7 @@ public class GameCore implements GameCoreInterface {
 
                 StringBuilder sb = new StringBuilder();
                 for (int i = 0; i < npc.getDialogueList().size(); i++) {
-                    sb.append(i).append(": ");
+                    sb.append(i + 1).append(": ");
                     sb.append(npc.getDialogueList().get(i).getPrompt());
                     sb.append("\n");
                 }
