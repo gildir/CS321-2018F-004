@@ -385,26 +385,50 @@ public class GameCore implements GameCoreInterface {
 		
 		// Gets the object of the caller player
 		Player player1 = this.playerList.findPlayer(name);
-			
+		Player player2;
+		double amount;
 		// Executes the relevant commands
 		switch(tokens.remove(0).toUpperCase()) {
 			case "SEND": // sending a transaction
-				if (tokens.isEmpty()) return "Specify recipient and amount.";
+				if (tokens.isEmpty()) return "Specify recipient and amount. Type \"venmo help\" to learn more.";
 				// gets the object of the receiving player
-				Player player2 = this.playerList.findPlayer(tokens.remove(0));
+				player2 = this.playerList.findPlayer(tokens.remove(0));
 				// checks that the name is correct
-				if (player2 == null) return "Incorrect player name."; 
+				if (player2 == null) return "Incorrect player name. Type \"venmo help\" to learn more."; 
 				// checks if user entered a transaction amount
-				if (tokens.isEmpty()) return "Specify transaction amount";
+				if (tokens.isEmpty()) return "Specify transaction amount. Type \"venmo help\" to learn more.";
 				
-				float amount;
 				// checks if the player entered a valid number
 				try {
 					amount = Float.parseFloat(tokens.remove(0));
 				} catch (NumberFormatException e) {
-					return "Please enter a valid number.";
+					return "Please enter a valid number. Type \"venmo help\" to learn more.";
 				}
 				return Venmo.send(player1, player2, amount);
+			case "OFFER": // offering a transaction
+                if (tokens.isEmpty()) return "Specify recipient and amount. Type \"venmo help\" to learn more.";
+                // gets the object of the receiving player
+                player2 = this.playerList.findPlayer(tokens.remove(0));
+                // checks that the name is correct
+                if (player2 == null) return "Incorrect player name. Type \"venmo help\" to learn more."; 
+                // checks if user entered a transaction amount
+                if (tokens.isEmpty()) return "Specify transaction amount. Type \"venmo help\" to learn more.";
+                
+                // checks if the player entered a valid number
+                try {
+                    amount = Float.parseFloat(tokens.remove(0));
+                } catch (NumberFormatException e) {
+                    return "Please enter a valid number. Type \"venmo help\" to learn more.";
+                }
+                return Venmo.offer(player1, player2, amount);
+			case "ACCEPT": // accepting a transaction
+                if (tokens.isEmpty()) return "Enter the transaction ID. Type \"venmo help\" to learn more.";
+                return Venmo.accept(player1, tokens.remove(0));
+			case "REJECT": // rejecting a transaction
+                if (tokens.isEmpty()) return "Enter the transaction ID. Type \"venmo help\" to learn more.";
+                return Venmo.reject(player1, tokens.remove(0));
+			case "LIST": // listing pending transactions
+			    return Venmo.list(player1);
 			case "HELP": // prints the help menu
 				return "This is how you can use Venmo:\n" + Venmo.instructions();
 			case "DEMO": // helpful for demo purposes
