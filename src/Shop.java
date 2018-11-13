@@ -36,6 +36,10 @@ public class Shop
 	}
 	//used to add methods to the linked list
 	public void add(Item k) {
+		if(this.inventory.size() >= 10)
+		{
+			this.inventory.pop();
+		}
 		this.inventory.add(k);
 	}
 	

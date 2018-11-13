@@ -357,7 +357,7 @@ public class GameCore implements GameCoreInterface {
     	
     	if(s.getInven().contains(item))
     	{
-    		if (player.getMoney() > item.price) {
+    		if (player.getMoney() > item.getPrice() * 1.2) {
     			s.remove(item);
     		}
     		else {
@@ -368,8 +368,7 @@ public class GameCore implements GameCoreInterface {
     	
     	player.addObjectToInventory(item);
     
-    	//val = removed.getValue() * 1.2;
-    	val = item.price;
+    	val = item.getPrice() * 1.2;
     	player.changeMoney(-val);
     	return "Thank you, that will be $" + val + ".";
     }
