@@ -27,9 +27,7 @@ public class Player {
     private double money;
     private DataInputStream inputWriter = null;
     private boolean inTrade = false;
-    private Item tradeItem = null;
     private boolean tradeRequested = false;
-    private boolean tradeReceived = false;
     private String tradePartner = "";
     private String lastPlayer = "";
     private boolean hasChallenge = false;
@@ -40,10 +38,9 @@ public class Player {
     private boolean hasOption = false;
     @JsonProperty("recovery")
     private ArrayList<String> recovery;
-    private boolean hasTitle = false; //used for title and use item feature 
-    private String playerItemTitle = "";
-
-    public Player(@JsonProperty("name") String name, @JsonProperty("recovery") ArrayList<String> recovery) {
+    
+    
+	public Player(@JsonProperty("name") String name, @JsonProperty("recovery") ArrayList<String> recovery) {
         this.currentRoom = 1;
         this.currentDirection = Direction.NORTH;
         this.name = name;
@@ -368,33 +365,6 @@ public class Player {
 	}
     }
 
-    //setter for hasTitle
-    public void setHasTitle(boolean val) {
-	hasTitle = val;
-    }
-
-    //getter for hasTitle
-    public boolean checkIfHasTitle() {
-	return hasTitle;
-    }
-
-    //sets new title of player
-    public void setTitle(String newTitle) {
-	playerItemTitle = newTitle;
-    }
-
-    //gets title of player
-    public String getTitle() {
-	return playerItemTitle;
-    }
-
-    public boolean hasReceivedTrade(){
-        return tradeReceived;
-    }
-
-    public void setReceivedTrade(boolean val){
-        tradeReceived = val;
-    }
     public boolean hasTradeRequest(){
         return tradeRequested;
     }
@@ -415,13 +385,6 @@ public class Player {
     }
     public void setTradePartner(String s){
         tradePartner = s;
-    }
-
-    public void setTradeItem(Item it){
-        tradeItem = it;
-    }
-    public Item getTradeItem(){
-        return tradeItem;
     }
 
     public void setReplyWriter(PrintWriter writer) {

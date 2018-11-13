@@ -198,32 +198,7 @@ public interface GameObjectInterface extends Remote {
      * @throws RemoteException 
      */ 
     public String drop(String name, String object) throws RemoteException;
-
-    /**
-     * Attempts to use an item in the player's inventory. Will return a message on any success or failure.
-     * @param name Name of the player to move
-     * @param itemName name of item to use
-     * @return Message showing success.
-     * @throws RemoteException
-     */
-    public String useItem(String name, String object) throws RemoteException;
-
-    /**
-     *	Attempts to get the title of player.
-     *	@param name name of the player
-     *	@return title of the player given, if applicable
-     *	@throws RemoteException
-     */
-    public String getPlayerTitle(String name) throws RemoteException;
-
-    /**
-     *  Strips the title from a player
-     *  @param name name of the player
-     *  @throws RemoteException
-     */
-    public boolean removePlayerTitle(String name) throws RemoteException;
-
-	public String examine(String name, String target) throws RemoteException;  
+   
     /**
      * Attempts to sort the player's inventory. Will return a message on any success or failure.
      * @param name Name of the player
@@ -246,15 +221,7 @@ public interface GameObjectInterface extends Remote {
      * @param object String item beig offered
      * @throws RemoteException
      */
-    public String offer (String srcName, String message1, String junk, String message2) throws RemoteException;
-
-    /**
-     * Returns a string message about success of offer and status of inventory
-     * @param dstName Name of player accepting or rejecting the offer
-     * @param reply whther the offer has been accepted or rejected
-     * @return Message showing status of offer reply
-     */
-    public String offerReply(String dstName, boolean reply) throws RemoteException;
+    public String offer (String srcName, String dstName, String object) throws RemoteException;
 
     /**
      * Return string representation of trade acceptance

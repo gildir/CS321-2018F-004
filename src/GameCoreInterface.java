@@ -228,23 +228,13 @@ public interface GameCoreInterface {
      * @return Message showing offer
      * @throws RemoteException.
      */
-    public String offer(String srcName, String message1, String junk, String message2); 
-
-    /**
-     * Returns a string message about success of offer and status of inventory
-     * @param dstName Name of player accepting or rejecting the offer
-     * @param reply whther the offer has been accepted or rejected
-     * @return Message showing status of offer reply
-     */
-    public String offerReply(String dstName, boolean reply);
+    public String offer(String srcName, String dstName, String message); 
 
     /**
      * Prints message to player if request can processed, contacts other player about their request
      * @param requestingTrader Name of the player who has requested the trade
      * @param traderToRequest Name of the player whom the first player has requested to trade with
      */ 
-	public String examine(String srcName, String itemName);
-
     public void requestPlayer(String requestingTrader, String traderToRequest);
 
     /**
