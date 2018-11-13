@@ -9,7 +9,7 @@ import java.lang.IllegalArgumentException;
 public class Room {
     private final int id;
     private final String title;
-    private final String room_type;
+    private String room_type;
     private final String description;
     private final LinkedList<Item> objects;
     private final LinkedList<Exit> exits;
@@ -29,7 +29,7 @@ public class Room {
         
         this.id = id;
         this.title = title;
-	this.room_type = room_type;
+    	this.room_type = room_type;
         this.description = description;
         this.npcs = new LinkedList<>();
     }
@@ -40,24 +40,13 @@ public class Room {
         this.whiteboard = new StringBuilder(MAX_WHITEBOARD_LEN);
         this.id = id;
         this.title = title;
-	this.room_type = room_type;
+    	this.room_type = room_type;
         this.description = description;
 
         this.room_type = room_type;
         this.npcs = new LinkedList<>();
     }
 
-    public Room(int id, String room_type, String title, String description, LinkedList<NPC> npcs) {
-        this.objects = new LinkedList<>();
-        this.exits = new LinkedList<>();
-        this.whiteboard = new StringBuilder(MAX_WHITEBOARD_LEN);
-        this.id = id;
-        this.title = title;
-        this.description = description;
-        this.npcs = npcs;
-        this.room_type = room_type;
-
-    }
     
     public String toString(PlayerList playerList, Player player) {
         String result = ".-------------------------+----------------------\n";

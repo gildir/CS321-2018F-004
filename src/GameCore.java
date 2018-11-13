@@ -1176,7 +1176,7 @@ public class GameCore implements GameCoreInterface {
                 room.addObject(object);
                 this.broadcast(player, player.getName() + " rummages their inventory to find a " + target);
                 return "You drop a " + target + " into the room.";
-z            }
+            }
             else {
                 this.broadcast(player, player.getName() + " tries to drop something, but doesn't seem to find what they were looking for.");
                 return "You look around for a " + target + " in your pockets, but can't find one.";

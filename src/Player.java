@@ -19,7 +19,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonIgnoreProperties({ "replyWriter", "outputWriter" })
 public class Player {
     public LinkedList<Item> currentInventory;
-
+    private int dormId;
     private String name;
     private int currentRoom;
     private Direction currentDirection;

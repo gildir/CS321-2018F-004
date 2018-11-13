@@ -110,13 +110,13 @@ public class Map{
      * Checks that room the player is contains a shop
      * @param r The room in question
      * @return true if it's a shoppable room, false otherwise
-     */
+     *//* 
     public boolean isShoppable(Room r) {
     	if (r.getId() == 1) {	// Need to improve this if more shops are added
     		return true;
     	}
     	return false;
-    }
+    }*/ 
     
     /**
      * @author Group 4: King
