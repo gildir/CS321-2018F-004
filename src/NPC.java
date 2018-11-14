@@ -7,7 +7,7 @@ public class NPC {
     private LinkedList<String> quests;
 
 
-    public NPC(String name, int room, LinkedList<String> quests) {
+    public NPC(String name, int room) {
         this.name = name;
         this.room = room;
         this.quests = quests;

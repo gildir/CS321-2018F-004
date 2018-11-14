@@ -32,13 +32,15 @@ public class Map{
                         Room newRoom;
                         Exit newExit;
 
-                        numRooms = Integer.parseInt(mapIn.nextLine());
+                        String npcName;
+			
+			numRooms = Integer.parseInt(mapIn.nextLine());
                         numExits = 4;
 
+			mapIn.useDelimiter(",|\\n|\\r\\n");
                         for(int i = 0; i < numRooms; i++) {
 
-                                mapIn.useDelimiter(",|\\n|\\r\\n"); 
-                                id = Integer.parseInt(mapIn.next());
+				id = Integer.parseInt(mapIn.next());
                                 room_type = mapIn.next();
                                 title = mapIn.next();
                                 mapIn.useDelimiter("\\S|\\s");
@@ -48,15 +50,7 @@ public class Map{
 
                                 //                System.out.println("Adding Room " + id + " with Title " + title + ": " + description);
 
-
-                                if(id == 1){
-                                        LinkedList<String> quests = new LinkedList<>(Arrays.asList("quest1", "quest2", "quest3"));
-                                        newRoom = new Room(id, room_type, title, description, new LinkedList<>(Arrays.asList(
-                                                            new NPC("questNPC", 1, quests))));
-                                }
-                                else {
-                                        newRoom = new Room(id, room_type, title, description);
-                                }
+                                newRoom = new Room(id, room_type, title, description);
 
                                 for(int j = 0; j < numExits; j++) {
 
@@ -70,7 +64,15 @@ public class Map{
 
                                         //                    System.out.println("... Adding Exit " + exitId + " to " + link + ": " + message);
                                         newRoom.addExit(exitId, link, message);
-                                }                
+                                }               
+
+			        mapIn.useDelimiter(",|\\n|\\r\\n");	
+                                //Check if the next value is an integer, if not, then get the name of an npc to add from the next value and add it to the last room
+                                while(!mapIn.hasNextInt() && mapIn.hasNext())
+                                {
+                                        npcName = mapIn.next();
+                                        newRoom.addNPC(npcName, id);
+                                }
 
                                 map.add(newRoom);
                         }

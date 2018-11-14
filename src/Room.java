@@ -135,6 +135,16 @@ public class Room {
 		return ret;
         }
     }
+    
+    /*
+     * Adds an NPC to the current room
+     *
+     * @param name String name for the npc, also refers to file to get NPC dialogue
+     * @param id The id of the NPC's room
+     */
+    public void addNPC(String name, int id) {
+        npcs.add(new NPC(name, id));
+    }
 
     public String getNPCs() {
         if(this.npcs.isEmpty()) {
