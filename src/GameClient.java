@@ -309,7 +309,7 @@ public class GameClient {
                                     done = true;
                                 }
                                 else {
-                                    int dialogueChoice = Integer.parseInt(line);
+                                    int dialogueChoice = Integer.parseInt(line)-1;
                                     System.out.println(remoteGameInterface.selectNPCDialogueOption(this.playerName, npcName, dialogueChoice));
                                     System.out.println("Dialogue Options: enter the number of the option to select it, or done to exit.");
                                 }

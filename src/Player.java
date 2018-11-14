@@ -3,6 +3,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -36,6 +37,7 @@ public class Player {
     private String option = "";
     private String challengerOption = "";
     private boolean hasOption = false;
+    private ArrayList<NPC> dialogueList = new ArrayList<NPC>();
     @JsonProperty("recovery")
     private ArrayList<String> recovery;
     
@@ -310,6 +312,69 @@ public class Player {
 			return this.recovery.get((num * 2) + 1);
 		return null;
 	}
+
+    //Update dialogue status of this player with other npcs
+    public void updateDialogueList(String npcName, String dialogueTag, int updateAmount)
+    {
+        for (int i = 0; i < dialogueList.size(); i++) {
+            if (dialogueList.get(i).getName().equals(npcName))
+            {
+                dialogueList.get(i).changeDialogueList(dialogueTag, updateAmount);
+            }
+        }
+    }
+
+    //Get dialogue status of this player with other npcs
+    public ArrayList<NPC> getDialogueList()
+    {
+        return dialogueList;
+    }
+
+    //Overload method for getDialogueIdFromList
+    public int getDialogueIdFromList(String npcName, String dialogueTag)
+    {
+        return getDialogueIdFromList(npcName, dialogueTag, "");
+    }
+
+    //Takes the dialgoue id of specific dialogue from npc. 
+    //If no dialogue id exists, add this npc to the dialogueLIst
+    public int getDialogueIdFromList(String npcName, String dialogueTag, String prompt)
+    {
+        int result = -1;
+        for (int i = 0; i < dialogueList.size(); i++) {
+            if (dialogueList.get(i).getName().equals(npcName))
+            {
+                result = dialogueList.get(i).getDialogueId(dialogueTag);
+            }
+        }
+
+        if (result == -1)
+        {
+            addDialogueList(npcName, dialogueTag, prompt);
+            result = 1;
+        }
+
+        return result;
+    }
+
+    //Helper method used to add npc to the dialogueList
+    private void addDialogueList(String npcName, String dialogueTag, String prompt)
+    {
+        boolean found = false;
+        for (int i = 0; i < dialogueList.size(); i++) {
+            if (dialogueList.get(i).getName().equals(npcName))
+            {
+                found = true;
+                //dialogueList.get(i).addToDialogueList(dialogueTag, prompt);
+            }
+        }
+
+        if (found == false)
+        {
+            NPC npc = new NPC(npcName, -1, new LinkedList<String>(), new ArrayList<DialogueOption>());
+            dialogueList.add(npc);
+        }
+    }
 
     public LinkedList<Item> getCurrentInventory() {
         return currentInventory;

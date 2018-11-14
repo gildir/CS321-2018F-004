@@ -116,6 +116,10 @@ public class GameCore implements GameCoreInterface {
                         object = objects.get(rand.nextInt(objects.size()));
                         room = map.randomRoom();
                         room.addObject(object);
+                        room.addObject(object);
+                        room.addObject(object);
+                        room.addObject(object);
+                        room.addObject(object);
 
 						GameCore.this.broadcast(room, "You see a student rush past and drop a " + object + " on the ground.");
 						
@@ -934,8 +938,24 @@ public class GameCore implements GameCoreInterface {
     public String pickup(String name, String target) {
         Player player = this.playerList.findPlayer(name);
         if(player != null)  {
+            //Demonstration purpose only
+            Room room = map.findRoom(player.getCurrentRoom());
+            NPC npc = room.getNPCs().get("questNPC");
+            if (npc != null)
+            {
+                player.getDialogueIdFromList("questNPC", "pickup");
+                if (player.currentInventory.size() < 3)
+                {
+                    player.updateDialogueList(npc.getName(), "pickup", 1);
+                }
+                else
+                {
+                    player.updateDialogueList(npc.getName(), "pickup", 2);
+                }
+            }
+
             if (player.currentInventory.size() <10){
-                Room room = map.findRoom(player.getCurrentRoom());
+                room = map.findRoom(player.getCurrentRoom());
                 Item object = room.removeObject(target);
                 if(object != null) {
                     player.addObjectToInventory(object);
@@ -966,6 +986,22 @@ public class GameCore implements GameCoreInterface {
         Player player = this.playerList.findPlayer(name);
         if(player != null) {
             Room room = map.findRoom(player.getCurrentRoom());
+
+            //Demonstration purpose only
+            NPC npc = room.getNPCs().get("questNPC");
+            if (npc != null)
+            {
+                player.getDialogueIdFromList("questNPC", "pickup");
+                if (player.currentInventory.size() < 3)
+                {
+                    player.updateDialogueList(npc.getName(), "pickup", 1);
+                }
+                else
+                {
+                    player.updateDialogueList(npc.getName(), "pickup", 2);
+                }
+            }
+
             Item object = player.removeObjectFromInventory(target);
             if(object != null) {
                 room.addObject(object);
@@ -1461,7 +1497,7 @@ public class GameCore implements GameCoreInterface {
 
                 StringBuilder sb = new StringBuilder();
                 for (int i = 0; i < npc.getDialogueList().size(); i++) {
-                    sb.append(i).append(": ");
+                    sb.append(i + 1).append(": ");
                     sb.append(npc.getDialogueList().get(i).getPrompt());
                     sb.append("\n");
                 }
@@ -1492,7 +1528,7 @@ public class GameCore implements GameCoreInterface {
             NPC npc = room.getNPCs().get(npcName);
             if (npc != null) {
                 if (dialogueChoice < npc.getDialogueList().size() && dialogueChoice >= 0) {
-                    return npc.getDialogueList().get(dialogueChoice).getResponse();
+                    return npc.getDialogueList().get(dialogueChoice).getResponse(npcName, player.getDialogueIdFromList(npcName, npc.getDialogueList().get(dialogueChoice).getTag(), npc.getDialogueList().get(dialogueChoice).getPrompt()));
                 }
                 return "No dialogue choice by that number.";
             }
