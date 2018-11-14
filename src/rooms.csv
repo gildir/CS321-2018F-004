@@ -1,3 +1,4 @@
+
 5
 1,outside,Clock in the Main Quad,You are standing in front of the George Mason University Clock. A plaque on the clock says it was a gift from the Class of 1999
 NORTH,0,You try to walk north towards the library, but the sidewalk is closed due to construction.
@@ -24,5 +25,6 @@ NORTH,100001,You are headed to your room through the north exit
 SOUTH,4,You try to head back to the Hallway
 WEST,0,You tried heading west, there is nothing there.
 EAST,0,You tried heading, east there is nothing there.
+
 
 
