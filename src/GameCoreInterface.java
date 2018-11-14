@@ -1,6 +1,4 @@
-
 import java.rmi.RemoteException;
-
 import java.util.ArrayList;
 
 /**
@@ -187,7 +185,6 @@ public interface GameCoreInterface {
      * 
      * @author Team 4: Alaqeel
      * @param name Name of the player
-
      */    
     public String venmo(String name, ArrayList<String> tokens);
     
@@ -209,7 +206,6 @@ public interface GameCoreInterface {
     public String bankCmdRunner(String cmd, String name, String args);
     
     /**
-
      * Returns a reference to a shop 
      * @param id
      * @return the shop or null
@@ -250,8 +246,6 @@ public interface GameCoreInterface {
      * @return Message showing offer
      * @throws RemoteException.
      */
-
-  
     public String offer(String srcName, String message1, String junk, String message2); 
 
     /**
@@ -262,14 +256,12 @@ public interface GameCoreInterface {
      */
     public String offerReply(String dstName, boolean reply);
 
-
     /**
      * Prints message to player if request can processed, contacts other player about their request
      * @param requestingTrader Name of the player who has requested the trade
      * @param traderToRequest Name of the player whom the first player has requested to trade with
      */ 
 	public String examine(String srcName, String itemName);
-
 
     public void requestPlayer(String requestingTrader, String traderToRequest);
 
@@ -290,15 +282,13 @@ public interface GameCoreInterface {
     public String shout(String name, String message);
 
     /**
-
-* In game ASCII map
+     * In game ASCII map
      * Returns an ascii representation of nearby rooms
      * @param name Name of the player
      * @return String representation of the map
      */
     public String showMap(String name);
      /*
-
      * Delete a player's account.
      *
      * @param name Name of the player to be deleted
@@ -405,5 +395,4 @@ public interface GameCoreInterface {
 	 * @return Message showing online friends
 	 */
 	public String viewFriends(String name, boolean onlineOnly);
-
 }
