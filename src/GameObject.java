@@ -371,6 +371,7 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
 		return core.examine(name, target);
 	}
     /**
+
      * Attempts to erase the whiteboard in the room. Will return a message on any success or failure.
      * @param name Name of the player to erase the whiteboard
      * @return Message showing success. 
@@ -431,6 +432,7 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
     }
     
     /**
+
      * @author Group 4: King
      * Lets player shop if in a shoppable location
      * @param name Name of the player trying to shop
@@ -440,6 +442,7 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
     public int shop(String name) throws RemoteException{
     	return core.shop(name);
     }
+
     
     /**
      * @author Group 4: King
@@ -482,6 +485,7 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
      */
     public String offerReply(String dstName, boolean reply) throws RemoteException{
         return core.offerReply(dstName, reply);
+
     }
         
     /**
@@ -608,6 +612,7 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
     	return core.getShopInv(id);
     }
 
+
     /**
      * 108 In game ASCII map
      * Returns an ascii representation of nearby rooms
@@ -617,6 +622,7 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
     public String showMap(String name) throws RemoteException{
        return core.showMap(name);
     }	
+
 	/**
 	 * Delete a player's account.
 	 * 
@@ -660,14 +666,17 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
 	/**
 	 * returns a message showing all online friends
 	 * 
+
 	 * @param Player name name of player requesting list of friends
          * @param onlineOnly true if you only want a list of online friends, else false.
+
 	 * @return Message showing online friends
 	 * @throws RemoteException 
 	 */
 	@Override
     public String viewFriends(String name, boolean onlineOnly) throws RemoteException {
         return core.viewFriends(name, onlineOnly);
+
     }  
 	
 	/**

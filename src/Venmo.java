@@ -1,9 +1,11 @@
+
 import java.util.HashMap;
 import java.util.Random;
 
 /**
  * Venmo. The new and improved way to send money to other players.
  * This class employs the singleton design pattern.
+
  * 
  * @author Team 4: Alaqeel
  *
@@ -286,4 +288,5 @@ public class Venmo {
             this.id = id;
         }
     }
+
 }

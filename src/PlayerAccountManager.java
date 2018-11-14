@@ -58,6 +58,7 @@ public class PlayerAccountManager {
 		if (accountExists(lower))
 			return new AccountResponse(Responses.USERNAME_TAKEN);
 		if (!lower.matches("^[a-zA-Z 0-9]{2,15}$"))
+
 			return new AccountResponse(Responses.BAD_USERNAME_FORMAT);
 		File userDir = new File(accountFolder.getAbsolutePath() + "/" + lower);
 		try {

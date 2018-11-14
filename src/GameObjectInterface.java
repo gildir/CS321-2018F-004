@@ -224,6 +224,7 @@ public interface GameObjectInterface extends Remote {
     public boolean removePlayerTitle(String name) throws RemoteException;
 
 	public String examine(String name, String target) throws RemoteException;  
+
     /**
      * Attempts to sort the player's inventory. Will return a message on any success or failure.
      * @param name Name of the player
@@ -255,6 +256,7 @@ public interface GameObjectInterface extends Remote {
      * @return Message showing status of offer reply
      */
     public String offerReply(String dstName, boolean reply) throws RemoteException;
+
 
     /**
      * Return string representation of trade acceptance
@@ -313,6 +315,7 @@ public interface GameObjectInterface extends Remote {
     public String venmo(String name, ArrayList<String> tokens) throws RemoteException;
 
     /**
+
      * @author Group: King
      * @param name Name of the player trying to shop
      * @return Returns the id of the room the player has just entered a bank in 
@@ -330,6 +333,7 @@ public interface GameObjectInterface extends Remote {
     public String bankCmdRunner(String cmd, String name, String args) throws RemoteException;
     
     /**
+
      * @author Team 4: King
      * Lets player shop if in a shoppable area
      * @param name Name of the player
@@ -388,6 +392,7 @@ public interface GameObjectInterface extends Remote {
      */
     public String getShopInv(int id) throws RemoteException;
 
+
     /**
      * 108 In game ASCII map
      * Returns an ascii representation of nearby rooms
@@ -395,7 +400,7 @@ public interface GameObjectInterface extends Remote {
      * @return String representation of the map
      */
     public String showMap(String name) throws RemoteException;
-	
+
 	/**
 	 * Delete a player's account.
 	 * 
@@ -433,6 +438,7 @@ public interface GameObjectInterface extends Remote {
 	 * @throws RemoteException
 	 */
 	public String viewFriends(String name, boolean onlineOnly) throws RemoteException;
+
 	
 	/**
 	 * Resets passwords.

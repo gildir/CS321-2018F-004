@@ -19,6 +19,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonIgnoreProperties({ "replyWriter", "outputWriter" })
 public class Player {
     public LinkedList<Item> currentInventory;
+    private int dormId;
     private String name;
     private int currentRoom;
     private Direction currentDirection;
@@ -30,6 +31,7 @@ public class Player {
     private Item tradeItem = null;
     private boolean tradeRequested = false;
     private boolean tradeReceived = false;
+
     private String tradePartner = "";
     private String lastPlayer = "";
     private boolean hasChallenge = false;
@@ -44,15 +46,25 @@ public class Player {
     private String playerItemTitle = "";
 
     public Player(@JsonProperty("name") String name, @JsonProperty("recovery") ArrayList<String> recovery) {
+
         this.currentRoom = 1;
         this.currentDirection = Direction.NORTH;
         this.name = name;
         this.recovery = recovery;
         this.currentInventory = new LinkedList<>();
         this.money = 0;
+
+        this.dormId = 0;
+        //this.dormRoomCount++;
     }
 
-    private HashSet<Player> ignoredPlayers = new HashSet<Player>();
+
+	public int getDormId() {return this.dormId;}
+	public void setDormId(int i) {this.dormId = i;}
+	private HashSet<Player> ignoredPlayers = new HashSet<Player>();
+    // missed Messages - not yet in uses
+    private HashSet<Message> missedMessages = new HashSet<Message>();
+
 
     //Feature 409 WordFilter
 
@@ -388,6 +400,7 @@ public class Player {
     public void setReceivedTrade(boolean val){
         tradeReceived = val;
     }
+
     public boolean hasTradeRequest(){
         return tradeRequested;
     }
@@ -416,7 +429,6 @@ public class Player {
     public Item getTradeItem(){
         return tradeItem;
     }
-
     public void setReplyWriter(PrintWriter writer) {
         this.replyWriter = writer;
     }

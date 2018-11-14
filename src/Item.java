@@ -5,10 +5,12 @@ public class Item
 	String name;
 	double  weight;
 	double price;
+
 	String discrip;
 	String flavor;
 
 	public Item(@JsonProperty("name") String name, @JsonProperty("weight") double weight, @JsonProperty("price") double price, @JsonProperty("discrip") String discrip, @JsonProperty("flavor") String flavor)
+
 	{
 		this.name = name;
 		this.weight = weight;
@@ -16,6 +18,7 @@ public class Item
 		this.discrip = discrip;
 		this.flavor = flavor;
 		
+
 	}
 
 	public void changeName(String name)
@@ -48,7 +51,8 @@ public class Item
 		return this.price;
 	}
 	
-	public void setDiscrip(String discrip)
+
+  	public void setDiscrip(String discrip)
 	{
 		this.discrip = discrip;
 	}

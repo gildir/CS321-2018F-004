@@ -13,7 +13,8 @@ import java.util.Scanner;
  */
 
 public class Map{   
-        private final LinkedList<Room> map;
+
+        private LinkedList<Room> map;
 
         public Map(String worldFile) {
                 map = new LinkedList<>();
@@ -75,6 +76,7 @@ public class Map{
                                 map.add(newRoom);
                         }
                         mapIn.close();
+
                 } catch (IOException | IllegalArgumentException ex) {
                         Logger.getLogger(Map.class.getName()).log(Level.SEVERE, null, ex);
                         System.out.println("[SHUTDOWN] Invalid File " + worldFile);
@@ -93,8 +95,29 @@ public class Map{
 
     public Room randomRoom() {
         Random rand = new Random();
-        return map.get(rand.nextInt(map.size()));
+	Room ret = null;
+	do{
+        ret = map.get(rand.nextInt(map.size()));
+	}while(ret.getId() >= 100000);
+	return ret;
     }
+    
+    public void addRoom(Room room) {
+    	
+    	map.add(room);
+    }
+    /**
+     * @author Group 4: King
+     * Checks that room the player is contains a shop
+     * @param r The room in question
+     * @return true if it's a shoppable room, false otherwise
+     *//* 
+    public boolean isShoppable(Room r) {
+    	if (r.getId() == 1) {	// Need to improve this if more shops are added
+    		return true;
+    	}
+    	return false;
+    }*/ 
     
     /**
      * @author Group 4: King

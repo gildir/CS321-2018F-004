@@ -27,6 +27,7 @@ import java.util.logging.StreamHandler;
  * @author Kevin
  */
 public class GameCore implements GameCoreInterface {
+	private int dormCountId;
     private final PlayerList playerList;
     private final Map map;
     protected DailyLogger dailyLogger;
@@ -34,7 +35,6 @@ public class GameCore implements GameCoreInterface {
     private Ghoul ghoul;
     private PrintWriter pw;
     private Bank bank;
-
 	// Accounts and Login
 	private final PlayerAccountManager accountManager;
 	private final Object loginLock = new Object();
@@ -60,10 +60,15 @@ public class GameCore implements GameCoreInterface {
         this.dailyLogger = new DailyLogger();
         dailyLogger.write("SERVER STARTED");
         playerList = new PlayerList(); 
-        
+
+        dormCountId = 100002;//used for dormroom initialization
+        // Builds a list of shops mapped to their map id (can be expanded as needed)
+        shoplist = new HashMap<Integer,Shop>();
+        shoplist.put(new Integer(1), new Shop("Clocktower shop", "The shopping destination for all of your gaming needs."));      
         // Builds a list of shops mapped to their map id (can be expanded as needed)
         shoplist = new HashMap<Integer,Shop>();
         shoplist.put(new Integer(1), new Shop("Clocktower shop", "The shopping destination for all of your gaming needs."));
+
 
         // Set up empty central bank
         bank = new Bank();
@@ -91,8 +96,9 @@ public class GameCore implements GameCoreInterface {
                     double inWeight = 0;
                     double inValue = 0;
                     String inName = "";
-			String inFlavor = "";
-			String inDisc = "";
+              			String inFlavor = "";
+			              String inDisc = "";
+
                     Scanner scanner = new Scanner(new File("./items.csv"));
                     scanner.nextLine();
                     scanner.useDelimiter(",|\\r\\n|\\n|\\r");
@@ -101,20 +107,24 @@ public class GameCore implements GameCoreInterface {
                     {
                         inName = scanner.next();
                         inWeight = Double.parseDouble(scanner.next().replace(",", ""));
-			inValue = Double.parseDouble(scanner.next().replace(",", ""));
-			inDisc = scanner.next();
+
+			                  inValue = Double.parseDouble(scanner.next().replace(",", ""));
+			                  inDisc = scanner.next();
                         inFlavor = scanner.next().replace("\\r\\n|\\r|\\n", "");
                         Item newItem = new Item(inName, inWeight, inValue, inDisc, inFlavor);
+
                         objects.add(newItem);
 
                     }
                 }
                 catch(IOException e)
                 {
+
                     objects.add(new Item("Flower", 1.0, 0.0, null, null));
                     objects.add(new Item("Textbook", 10.3, 5.2, null, null));
                     objects.add(new Item("Phone", 2.9, 1.0, null, null));
                     objects.add(new Item("Newspaper", 10.0, 9.0, null, null));
+
                 }
                 while(true) {
                     try {
@@ -164,6 +174,7 @@ public class GameCore implements GameCoreInterface {
                                 // Ghoul move in each 10-15 seconds.
                                 Thread.sleep(1200000 + rand.nextInt(500000));
 
+
                                 // make Ghoul walk to other room;
                                 GameCore.this.ghoulWander(ghoul, room);
                                 room.hasGhoul = false;
@@ -200,13 +211,16 @@ public class GameCore implements GameCoreInterface {
 		// random walk.
 		while (true) {
 			int roomID = candinateRoom[rand.nextInt(4)];
-			if (roomID != 0) {
-				g.setRoom(roomID);
+
+			if (roomID != 0 && roomID < 100001) {
+
+        g.setRoom(roomID);
 				return;
 			}
 		}
     }
     
+
 
     /**
      * @author Group 4: King
@@ -277,6 +291,8 @@ public class GameCore implements GameCoreInterface {
     	
     	return "";
     }
+
+  
     
     /**
      * @author Group 4: King
@@ -295,6 +311,7 @@ public class GameCore implements GameCoreInterface {
     	return -1;
     }
 
+  
     /**
      * Returns Shop.tostring
      * @param id The shop's id in the hashmap
@@ -659,6 +676,7 @@ public class GameCore implements GameCoreInterface {
             srcPlayer.setTradeItem(null);
             dstPlayer.setTradeItem(null);
 
+
         }
 
         return "";
@@ -838,6 +856,7 @@ public class GameCore implements GameCoreInterface {
     }
 
 
+
 	/**
 	 * Allows a player to join the game. If a player with the same name
 	 * (case-insensitive) is already in the game, then this returns false.
@@ -863,6 +882,15 @@ public class GameCore implements GameCoreInterface {
 			player = resp.player;
 			this.playerList.addPlayer(player);
 
+			player.setDormId(dormCountId);
+			DormRoom dorm = new DormRoom(dormCountId,"inside","Dorm Room","Your very own, personal dorm room!");
+			dorm.addExit(Direction.valueOf("NORTH"),-100000,"You go back to the elevator");
+			dorm.addExit(Direction.valueOf("EAST"),-100000,"You go back to the elevator");
+			dorm.addExit(Direction.valueOf("SOUTH"),100000,"You go back to the elevator");
+			dorm.addExit(Direction.valueOf("WEST"),-100000,"You go back to the elevator");
+			this.map.addRoom(dorm);
+			if(player.getCurrentRoom() > 100000){player.setCurrentRoom(dormCountId);}
+			dormCountId++;
 			this.broadcast(player, player.getName() + " has arrived.");
 			connectionLog(true, player.getName());
 			return player;
@@ -1064,7 +1092,15 @@ public class GameCore implements GameCoreInterface {
         if(room.canExit(direction)) {
             this.broadcast(player, player.getName() + " has walked off to the " + direction);
             player.getReplyWriter().println(room.exitMessage(direction));
+
+            if(room.getLink(direction) == 100001)
+            {
+            	player.setCurrentRoom(player.getDormId());
+            }
+            else
+            {
             player.setCurrentRoom(room.getLink(direction));
+            }
             String logMessage = String.format("%s used command MOVE %s [moved from %s to %s]", player.getName(), direction.toString(), room.getTitle(), map.findRoom(player.getCurrentRoom()).getTitle());
 			this.broadcast(player, player.getName() + " just walked into the area.");
 			Ghost g = new Ghost(player);
@@ -1077,6 +1113,8 @@ public class GameCore implements GameCoreInterface {
         }
         return "You stop moving and begin to stand around again.";
 	}
+
+
 
     /**
      * Attempts to pick up an object < target >. Will return a message on any success or failure.
@@ -1154,6 +1192,7 @@ public class GameCore implements GameCoreInterface {
             else {
                 this.broadcast(player, player.getName() + " tried to use " + itemName + ", but couldn't find it.");
                 return "You tried to use an item that you don't have.";
+
             }
         }
         else {
@@ -1218,6 +1257,7 @@ public class GameCore implements GameCoreInterface {
         Player player = this.playerList.findPlayer(name);
         if(player != null) {
             Room room = map.findRoom(player.getCurrentRoom());
+
             String text = room.getWhiteboardText();
             dailyLogger.write(player.getName(), "WHITEBOARD READ", room.getTitle());
             this.broadcast(player, player.getName() + " reads the text on the whiteboard.");
@@ -1296,6 +1336,7 @@ public class GameCore implements GameCoreInterface {
         }
     }
 
+  
     @Override
     public String challenge(String challenger, String challengee){
       Player playerChallenger = this.playerList.findPlayer(challenger);
@@ -1625,6 +1666,7 @@ public class GameCore implements GameCoreInterface {
         } else {
             return null;
         }
+
     }
 
     private void chatLog(Player player, int chatType, String message, String target) {
@@ -1679,6 +1721,7 @@ public class GameCore implements GameCoreInterface {
       return users.toString();
     }
 
+
     /**
      * 108 In game ASCII map
      * Returns an ascii representation of nearby rooms
@@ -1689,6 +1732,7 @@ public class GameCore implements GameCoreInterface {
        int roomId = this.playerList.findPlayer(name).getCurrentRoom();
        return map.asciiMap(roomId);
     }
+
 
 	/**
 	 * Logs player connections
@@ -1794,6 +1838,8 @@ public class GameCore implements GameCoreInterface {
 	/**
 	 * Returns a message showing all online friends
 	 * 
+
+
      * @param name name of player requesting list of friends
      * @param onlineOnly true if you only want a list of online friends, else false.
 	 * @return Message showing online friends
@@ -1839,6 +1885,7 @@ public class GameCore implements GameCoreInterface {
                     message.append("You have no online friends.");
                 
 		return message.toString();
+
 	}
 
     @Override
