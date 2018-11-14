@@ -5,6 +5,9 @@ import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -180,6 +183,23 @@ public class GameCore implements GameCoreInterface {
                 awakeDayGhoul.start();
             }
 	
+	/**
+	 * Used to create a hash encrypted in SHA256 for use in encrypting passwords
+	 * 
+	 * @param toHash
+	 * @return SHA256 encrypted hash value, or "ERROR" If encryption method fails.
+	 */
+	private String hash(String toHash) {
+		try {
+			byte[] encodedhash = MessageDigest.getInstance("SHA-256").digest(toHash.getBytes(StandardCharsets.UTF_8));
+			StringBuilder sb = new StringBuilder();
+			for (byte b : encodedhash)
+				sb.append(String.format("%02X", b));
+			return sb.toString();
+		} catch (NoSuchAlgorithmException e) {
+		}
+		return "ERROR";
+	}
 
 	public void ghoulWander(Ghoul g, Room room) {
 		Random rand = new Random();
@@ -637,6 +657,7 @@ public class GameCore implements GameCoreInterface {
     @Override
 	public Player joinGame(String name, String password) {
 		synchronized (loginLock) {
+			password = hash(password);
 			// Check to see if the player of that name is already in game.
 			Player player = this.playerList.findPlayer(name);
 			if (player != null)
@@ -666,9 +687,9 @@ public class GameCore implements GameCoreInterface {
 	 */
 	@Override
 
-	public synchronized Responses createAccountAndJoinGame(String name, String password, ArrayList<String> recovery) {
+	public synchronized Responses createAccountAndJoinGame(String name, String password) {
 		synchronized (createAccountLock) {
-			PlayerAccountManager.AccountResponse resp = accountManager.createNewAccount(name, password, recovery);
+			PlayerAccountManager.AccountResponse resp = accountManager.createNewAccount(name, hash(password));
 			if (!resp.success())
 				return resp.error;
 			if (joinGame(name, password) != null)
@@ -1647,17 +1668,30 @@ public class GameCore implements GameCoreInterface {
 	 * @return String of recovery question, null if user doesn't exist
 	 */
 	public String getQuestion(String name, int num) {
-		PlayerAccountManager.AccountResponse resp = null;
-		resp = this.accountManager.getPlayer(name);
-		if(!resp.success()) {
-			return null;
-		}
-		Player player = resp.player;
-		if (player != null) {
+        Player player = this.playerList.findPlayer(name);
+        if (player==null) {
+        	PlayerAccountManager.AccountResponse resp = this.accountManager.getPlayer(name);
+        	if(!resp.success())
+        		return null;
+        	player=resp.player;
+        }
+        if (player != null) {
 			return player.getQuestion(num);
 		} else {
 			return null;
 		}
+	}
+	
+	public void addQuestion(String name, String question, String answer) {
+		//PlayerAccountManager.AccountResponse resp = this.accountManager.getPlayer(name);
+	
+		//if(!resp.success())
+			//return;
+		Player player = this.playerList.findPlayer(name);
+		if(player != null) {
+			player.addQuestion(question, hash(answer));
+		}
+		
 	}
 	
 	/**
@@ -1666,20 +1700,29 @@ public class GameCore implements GameCoreInterface {
 	 * @param num Marks which answer will be grabbed
 	 * @return String of recovery question, null if user doesn't exist
 	 */
-	public String getAnswer(String name, int num) {
-		PlayerAccountManager.AccountResponse resp = null;
-		resp = this.accountManager.getPlayer(name);
-		if(!resp.success()) {
-			return null;
-		}
-		Player player = resp.player;
+	public Boolean getAnswer(String name, int num, String answer) {
+        Player player = this.playerList.findPlayer(name);
+        if (player==null) {
+        	PlayerAccountManager.AccountResponse resp = this.accountManager.getPlayer(name);
+        	if(!resp.success())
+        		return null;
+        	player=resp.player;
+        }
 		if(player != null) {
-			return player.getAnswer(num);
+			return player.getAnswer(num).equals(hash(answer));
 		} else {
 			return null;
 		}
 	}
-	
+
+	public Responses verifyPassword(String name, String password) {
+		password = hash(password);
+		PlayerAccountManager.AccountResponse resp = this.accountManager.getAccount(name, password);
+		if (resp.success())
+			return Responses.SUCCESS;
+		return resp.error;
+	}
+
 	/**
 	 * Resets passwords.
 	 * 
@@ -1687,12 +1730,20 @@ public class GameCore implements GameCoreInterface {
 	 * @param password New password to be saved
 	 */
 	public Responses resetPassword(String name, String password) {
+		password = hash(password);
 		PlayerAccountManager.AccountResponse resp = this.accountManager.getPlayer(name);
 		if(!resp.success()) {
 			return resp.error;
 		}
 		return accountManager.resetPassword(resp.player, password);
 		
+	}
+	
+	public void removeQuestion(String name, int num) {
+		Player player = this.playerList.findPlayer(name);
+		if(player != null) {
+			player.removeQuestion(num);
+		}
 	}
 
 }
