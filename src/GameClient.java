@@ -18,7 +18,9 @@ import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.HashSet;
+
 import java.lang.System; //used for use item and title feature
+
 import org.w3c.dom.Document;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -67,7 +69,6 @@ public class GameClient {
         this.runGame = true;
         boolean nameSat = false;
         
-
 	//title feature
 	startTime = 0;
 
@@ -105,10 +106,7 @@ public class GameClient {
 					System.out.print("Username: ");
 					this.playerName = keyboardInput.readLine().trim();
 					System.out.print("Password: ");
-
-					//String pass = keyboardInput.readLine();
 					String pass = new String(System.console().readPassword()); //task 221 hides password
-
 					switch (mode) {
 					case "L":
 						nameSat = remoteGameInterface.joinGame(this.playerName, pass);
@@ -141,8 +139,8 @@ public class GameClient {
 						Responses resp = remoteGameInterface.createAccountAndJoinGame(playerName, pass, recovery);
 						switch (resp) {
 						case BAD_USERNAME_FORMAT:
-							System.out.println("This is a bad user name. Please use only spaces, numbers, and letters, with 2-15 characters.");
-
+							System.out
+									.println("This is a bad user name. Please use only spaces, numbers, and letters, with 2-15 characters.");
 							break;
 						case USERNAME_TAKEN:
 							System.out.println("Sorry but this username was already taken.");
@@ -367,15 +365,11 @@ public class GameClient {
                 case "IGNORE":
                     if(tokens.isEmpty()) {
                         System.err.println("You need to provide a player to ignore");
-
                     }
                     else {
                         System.out.println(remoteGameInterface.ignorePlayer(this.playerName, tokens.remove(0)));
-
                     }
-                    parseInput(lastCommand);
                     break;
-
                 case "IGNORELIST":
                     System.out.println(remoteGameInterface.getIgnoredPlayersList(this.playerName));
                     break;
@@ -427,7 +421,6 @@ public class GameClient {
 		   }
 		   break;
 		}
-
 
 		case "O":
 		    
@@ -485,7 +478,6 @@ public class GameClient {
 				System.out.println(remoteGameInterface.examine(this.playerName, tokens.remove(0)));
 			}
 			break;
-
                 case "PICKUP":
                     if(tokens.isEmpty()) {
                         System.err.println("You need to provide an object to pickup.");
@@ -501,9 +493,7 @@ public class GameClient {
                 	System.out.println(remoteGameInterface.venmo(this.playerName, tokens));
                     break;   
                 case "SHOP":
-
                 	int shopId = remoteGameInterface.shop(this.playerName); 
-
                 	if (shopId != -1) {
                 		System.out.println("You enter the shop");
                 		new ShopClient(this.playerName, shopId, remoteGameInterface);
@@ -521,7 +511,6 @@ public class GameClient {
                 	else {
                 		System.out.println("There is no bank here");
                 	}
-
                 case "WALLET":
                 	System.out.println(remoteGameInterface.wallet(this.playerName));
                 	break;               
@@ -626,7 +615,6 @@ public class GameClient {
                 	                	System.out.println("Please enter in valid input or use the correct format (n/w/p) -> (i/d)");	
 			    		}
 			   }
-
 	    	    }
 		    catch(IOException e) {
  	                   System.err.println("[CRITICAL ERROR] Error at reading any input properly.  Terminating the client now.");
@@ -663,7 +651,6 @@ public class GameClient {
 		case "MAP":
                     System.out.println(remoteGameInterface.showMap(this.playerName));
 		    break;
-
                 case "CHALLENGE":
                     if(tokens.isEmpty()){
                       System.err.println("You need to provide a name.");
@@ -705,7 +692,6 @@ public class GameClient {
                     System.out.println(remoteGameInterface.teach(this.playerName));
                     break;
                 case "FRIENDS":
-
                     String sub;
                     if(tokens.isEmpty())
                         sub = "";
@@ -787,7 +773,6 @@ public class GameClient {
                             break;
                     }
                     break;
-
                 default:
                     //If command does not match with any, see if it is custom command
                     if (!executeCustomCommand(command, tokens)) {
@@ -862,7 +847,6 @@ public class GameClient {
 		    					System.out.println("Please input new password");
 		    					System.out.print(">");
 		    					password = new String(System.console().readPassword()); //task 221 hides password
-
 		    					response = remoteGameInterface.resetPassword(name, password);
 		    					switch(response) {
 								case SUCCESS:
