@@ -15,10 +15,10 @@ EAST,0,You consider pressing some buttons, but decide you don't want to break an
 SOUTH,2,You head back down to the main hallway
 WEST,0,You look out the window and see Storm Troopers marching away from the Hangar
 4,inside,Millennium Falcon - Secret Compartments,You are crouched down in the secret storage under the main hallway
-NORTH,2,You crawl out of the secret compartment
-EAST,2,You crawl out of the secret compartment
-SOUTH,2,You crawl out of the secret compartment
-WEST,2,You crawl out of the secret compartment
+NORTH,-2,You crawl out of the secret compartment
+EAST,-2,You crawl out of the secret compartment
+SOUTH,-2,You crawl out of the secret compartment
+WEST,-2,You crawl out of the secret compartment
 5,inside,Millennium Falcon - Living Quarters,You are in the living quarters of the Millennium Falcon. Someone left an unfished game of Holo-Chess on the table
 NORTH,0,You walk over to the Holo Table, and mess around with the board a bit.
 EAST,2,You go back into the main hallway
@@ -106,7 +106,7 @@ SOUTH,20,You walk alongside the cannons barrel
 WEST,0,You fiddle with the controls a bit, pull an interesting lever, and accidently shoot off a laser. Hopefully you didn't hit anything important!
 22,inside,Death Star,You are in a hallway in the Death Star
 NORTH,25,You walk over to the escape pod deck
-EAST,8,You go to the main engineering hub
+EAST,14,You go to the main engineering hub
 SOUTH,21,You walk over to the laser controls
 WEST,0,Your path is blocked by a group of engineers arguing about some sort of exhaust port vulnerability
 23,inside,Death Star - External Laser Turret,You're in the control room for a defensive turret
@@ -227,7 +227,7 @@ WEST,0,You look through a door and see a large Rancor, and decide its probably b
 46,inside,Tatooine - Jabba's Palace,You are standing in the large entrance hall to Jabba the Hutt's Palace
 NORTH,47,You walk down to the throne room
 EAST,49,You go outside
-SOUTH,50,You head down to the kitchens
+SOUTH,-50,You head down to the kitchens, when a guard grabs you and throws you in a sand barge. You wake up next in the middle of the desert, next to the sarlac pit
 WEST,0,You talk to a guard, who grunts and says "No lollygaggin'!"
 47,inside,Tatooine - Jabba's Palace,You are standing in the middle of a large throne room.
 NORTH,0,You go up to the throne, but a small critter screaches at you, so you stay where you are
