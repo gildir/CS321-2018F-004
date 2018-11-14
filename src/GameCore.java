@@ -442,6 +442,57 @@ public class GameCore implements GameCoreInterface {
 		Shop s = this.shoplist.get(new Integer(id));
 		return s.getObjects();
     }
+
+    /**
+     * Picks up multiple items of the name type
+     * @param name name of the the player
+     * @param target name of the item
+     * @param amount amount of pickup
+     * @return String indicating how many items was picked up
+     */
+    public String pickup(String name, String target, int amount) {
+        Player player = this.playerList.findPlayer(name);
+        if (player != null) {
+            Room room = map.findRoom(player.getCurrentRoom());
+            for (int x = 0; x < amount; x++) {
+                if (player.currentInventory.size() < 10) {
+                    Item object = room.removeObject(target);
+                    if (object != null) {
+                        player.addObjectToInventory(object);
+                    } else {
+                        if (x == 0) {
+                            this.broadcast(player, player.getName()
+                                    + " bends over to pick up something, but doesn't seem to find what they were looking for.");
+                            return "You look around for a " + target + ", but can't find one.";
+                        } else {
+                            this.broadcast(player, player.getName() + " bends over to pick up " + amount + " " + target
+                                    + "s but only picks up " + x + " " + target + "s");
+                            return "You look around for " + amount + " " + target + "s but only picked up " + x + " "
+                                    + target + "s";
+                        }
+
+                    }
+                } else {
+                    if (x == 0) {
+                        return " your inventory is full.";
+                    } else {
+                        this.broadcast(player, player.getName() + " bends over to pick up " + amount + " " + target
+                                + "s but only picks up " + x + " " + target + "s because of inventory space");
+                        return "You look around for " + amount + " " + target + "s but only picked up " + x + " "
+                                + target + "s because your inventory is full";
+                    }
+                }
+
+            }
+            this.broadcast(player,
+                    player.getName() + " bends over to pick up " + amount + " " + target + "s that was on the ground.");
+            return "You bend over and pick up " + amount + " "+target + "s.";
+
+        } else {
+            return null;
+        }
+
+    }
     
     /**
      * Attempts to pick up all objects in the room. Will return a message on any success or failure.
