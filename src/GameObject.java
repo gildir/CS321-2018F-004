@@ -566,46 +566,6 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
     public String viewFriends(String name, boolean onlineOnly) throws RemoteException {
         return core.viewFriends(name, onlineOnly);
     }  
-	
-	/**
-	 * Gets user's recovery question
-	 *
-	 *@param name Name of user
-	 *@param num Marks which question will be grabbed
-	 */
-	public String getQuestion(String name, int num) throws RemoteException {
-		return core.getQuestion(name, num);
-	}
-	
-	public void addQuestion(String name, String question, String answer) {
-		core.addQuestion(name, question, answer);
-	}
-	
-	/**
-	 * Gets a user's recovery answer
-	 * 
-	 * @param name Name of user
-	 * @param num Marks which answer will be grabbed
-	 * @throws RemoteException
-	 */
-	public Boolean getAnswer(String name, int num, String answer) throws RemoteException {
-		return core.getAnswer(name, num, answer);
-	}
-	
-	public Responses verifyPassword(String name, String pass) throws RemoteException {
-		return core.verifyPassword(name, pass);
-	}
-
-	/**
-	 * Resets Users password
-	 * 
-	 * @param name Name of user
-	 * @param pass New password
-	 * @throws RemoteException
-	 */
-	public Responses resetPassword(String name, String pass) throws RemoteException {
-		return core.resetPassword(name, pass);
-	}
     
     @Override
     public void heartbeatCheck(String name) throws RemoteException{
@@ -632,8 +592,40 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
     public String accept(String challenger, String challengee) throws RemoteException{
       return core.accept(challenger, challengee);
     }
-    
-    public void removeQuestion(String name, int num) {
-    	core.removeQuestion(name, num);
-    }
+
+	@Override
+	public Responses removeQuestion(String name, int num) throws RemoteException {
+		return core.removeQuestion(name, num);
+	}
+
+	@Override
+	public DataResponse<ArrayList<String>> getQuestions(String name) throws RemoteException {
+		return core.getQuestions(name);
+	}
+
+	@Override
+	public Responses verifyAnswers(String name, ArrayList<String> answers) throws RemoteException {
+		return core.verifyAnswers(name, answers);
+	}
+
+	@Override
+	public Responses addRecoveryQuestion(String name, String question, String answer) throws RemoteException {
+		return core.addRecoveryQuestion(name, question, answer);
+	}
+
+	@Override
+	public DataResponse<Long> getAccountAge(String name)  throws RemoteException{
+		return core.getAccountAge(name);
+	}
+
+	@Override
+	public Responses verifyPassword(String name, String password) throws RemoteException {
+		return core.verifyPassword(name, password);
+	}
+
+	@Override
+	public Responses changePassword(String name, String password)  throws RemoteException{
+		return core.changePassword(name, password);
+	}
+
 }

@@ -5,9 +5,6 @@ import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -181,24 +178,6 @@ public class GameCore implements GameCoreInterface {
                 awakeDayGhoul.setDaemon(true);
                 objectThread.start();
                 awakeDayGhoul.start();
-            }
-	
-	/**
-	 * Used to create a hash encrypted in SHA256 for use in encrypting passwords
-	 * 
-	 * @param toHash
-	 * @return SHA256 encrypted hash value, or "ERROR" If encryption method fails.
-	 */
-	private String hash(String toHash) {
-		try {
-			byte[] encodedhash = MessageDigest.getInstance("SHA-256").digest(toHash.getBytes(StandardCharsets.UTF_8));
-			StringBuilder sb = new StringBuilder();
-			for (byte b : encodedhash)
-				sb.append(String.format("%02X", b));
-			return sb.toString();
-		} catch (NoSuchAlgorithmException e) {
-		}
-		return "ERROR";
 	}
 
 	public void ghoulWander(Ghoul g, Room room) {
@@ -657,15 +636,14 @@ public class GameCore implements GameCoreInterface {
     @Override
 	public Player joinGame(String name, String password) {
 		synchronized (loginLock) {
-			password = hash(password);
 			// Check to see if the player of that name is already in game.
 			Player player = this.playerList.findPlayer(name);
 			if (player != null)
 				return null;
-			PlayerAccountManager.AccountResponse resp = accountManager.getAccount(name, password);
+			DataResponse<Player> resp = accountManager.getPlayer(name, password);
 			if (!resp.success())
 				return null;
-			player = resp.player;
+			player = resp.data;
 			this.playerList.addPlayer(player);
 
 			this.broadcast(player, player.getName() + " has arrived.");
@@ -689,7 +667,7 @@ public class GameCore implements GameCoreInterface {
 
 	public synchronized Responses createAccountAndJoinGame(String name, String password) {
 		synchronized (createAccountLock) {
-			PlayerAccountManager.AccountResponse resp = accountManager.createNewAccount(name, hash(password));
+			DataResponse<Player> resp = accountManager.createNewAccount(name, password);
 			if (!resp.success())
 				return resp.error;
 			if (joinGame(name, password) != null)
@@ -1264,7 +1242,7 @@ public class GameCore implements GameCoreInterface {
 			this.broadcast(player, "You see " + player.getName() + " heading off to class.");
 			this.playerList.removePlayer(name);
             connectionLog(false, player.getName());
-            this.accountManager.forceUpdateData(player);
+            this.accountManager.forceUpdatePlayerFile(player);
 			return player;
 		}
 		return null;
@@ -1662,88 +1640,145 @@ public class GameCore implements GameCoreInterface {
     }
 	
 	/**
-	 * Gets recovery question
-	 * @param name User of recovery question 
-	 * @param num Marks which question will be grabbed
-	 * @return String of recovery question, null if user doesn't exist
-	 */
-	public String getQuestion(String name, int num) {
-        Player player = this.playerList.findPlayer(name);
-        if (player==null) {
-        	PlayerAccountManager.AccountResponse resp = this.accountManager.getPlayer(name);
-        	if(!resp.success())
-        		return null;
-        	player=resp.player;
-        }
-        if (player != null) {
-			return player.getQuestion(num);
-		} else {
-			return null;
-		}
-	}
-	
-	public void addQuestion(String name, String question, String answer) {
-		//PlayerAccountManager.AccountResponse resp = this.accountManager.getPlayer(name);
-	
-		//if(!resp.success())
-			//return;
-		Player player = this.playerList.findPlayer(name);
-		if(player != null) {
-			player.addQuestion(question, hash(answer));
-		}
-		
-	}
-	
-	/**
-	 * Gets recovery answer
-	 * @param name User of recovery answer
-	 * @param num Marks which answer will be grabbed
-	 * @return String of recovery question, null if user doesn't exist
-	 */
-	public Boolean getAnswer(String name, int num, String answer) {
-        Player player = this.playerList.findPlayer(name);
-        if (player==null) {
-        	PlayerAccountManager.AccountResponse resp = this.accountManager.getPlayer(name);
-        	if(!resp.success())
-        		return null;
-        	player=resp.player;
-        }
-		if(player != null) {
-			return player.getAnswer(num).equals(hash(answer));
-		} else {
-			return null;
-		}
-	}
-
-	public Responses verifyPassword(String name, String password) {
-		password = hash(password);
-		PlayerAccountManager.AccountResponse resp = this.accountManager.getAccount(name, password);
-		if (resp.success())
-			return Responses.SUCCESS;
-		return resp.error;
-	}
-
-	/**
-	 * Resets passwords.
+	 * Remove question by position in list. Returns the status of the removal.<br>
+	 * <br>
+	 * Possible Responses:<br>
+	 * NOT_FOUND<br>
+	 * INTERNAL_SERVER_ERROR<br>
+	 * FAILURE<br>
+	 * SUCCESS<br>
 	 * 
-	 * @param name Name of player getting password reset
-	 * @param password New password to be saved
+	 * @param name
+	 * @param num - which question
+	 * @return removedStatus
 	 */
-	public Responses resetPassword(String name, String password) {
-		password = hash(password);
-		PlayerAccountManager.AccountResponse resp = this.accountManager.getPlayer(name);
-		if(!resp.success()) {
-			return resp.error;
-		}
-		return accountManager.resetPassword(resp.player, password);
-		
+	@Override
+	public Responses removeQuestion(String name, int num) {
+		DataResponse<PlayerAccount> account = accountManager.getAccount(name);
+		if (!account.success())
+			return account.error;
+		return account.data.removeQuestion(name, num);
 	}
-	
-	public void removeQuestion(String name, int num) {
-		Player player = this.playerList.findPlayer(name);
-		if(player != null) {
-			player.removeQuestion(num);
-		}
+
+	/**
+	 * Returns either the questions or a status error<br>
+	 * <br>
+	 * Possible Errors:<br>
+	 * NOT_FOUND<br>
+	 * INTERNAL_SERVER_ERROR<br>
+	 * 
+	 * @param name
+	 * @return questionsStatus
+	 */
+	@Override
+	public DataResponse<ArrayList<String>> getQuestions(String name) {
+		DataResponse<PlayerAccount> account = accountManager.getAccount(name);
+		if (!account.success())
+			return new DataResponse<>(account.error);
+		return account.data.getQuestions(name);
+	}
+
+	/**
+	 * Returns whether the answers were correct or an error occurred.<br>
+	 * <br>
+	 * Possible Responses:<br>
+	 * NOT_FOUND<br>
+	 * INTERNAL_SERVER_ERROR<br>
+	 * FAILURE<br>
+	 * SUCCESS<br>
+	 * 
+	 * @param name
+	 * @param answers
+	 * @return verifiedStatus
+	 */
+	@Override
+	public Responses verifyAnswers(String name, ArrayList<String> answers) {
+		DataResponse<PlayerAccount> account = accountManager.getAccount(name);
+		if (!account.success())
+			return account.error;
+		return account.data.verifyAnswers(name, answers);
+	}
+
+	/**
+	 * Returns the status of adding a recovery question.<br>
+	 * <br>
+	 * Possible Responses:<br>
+	 * NOT_FOUND<br>
+	 * INTERAL_SERVER_ERROR<br>
+	 * FAILURE      - bad question length<br>
+	 * BAD_PASSWORD - need answer<br>
+	 * SUCCESS<br>
+	 * 
+	 * @param name
+	 * @param question
+	 * @param answer
+	 * @return addStatus
+	 */
+	@Override
+	public Responses addRecoveryQuestion(String name, String question, String answer) {
+		DataResponse<PlayerAccount> account = accountManager.getAccount(name);
+		if (!account.success())
+			return account.error;
+		return account.data.addRecoveryQuestion(name, question, answer);
+	}
+
+	/**
+	 * Returns either account age or error.<br>
+	 * <br>
+	 * Possible Errors:<br>
+	 * NOT_FOUND<br>
+	 * INTERAL_SERVER_ERROR<br>
+	 * 
+	 * @param name
+	 * @return ageStatus
+	 */
+	@Override
+	public DataResponse<Long> getAccountAge(String name) {
+		DataResponse<PlayerAccount> account = accountManager.getAccount(name);
+		if (!account.success())
+			return new DataResponse<Long>(account.error);
+		return account.data.getAccountAge(name);
+	}
+
+	/**
+	 * Returns the status of testing a password against current.<br>
+	 * <br>
+	 * Possible Responses:<br>
+	 * NOT_FOUND<br>
+	 * INTERNAL_SERVER_ERROR<br>
+	 * FAILURE<br>
+	 * SUCCESS<br>
+	 * 
+	 * @param name
+	 * @param password
+	 * @return verifyStatus
+	 */
+	@Override
+	public Responses verifyPassword(String name, String password) {
+		DataResponse<PlayerAccount> account = accountManager.getAccount(name);
+		if (!account.success())
+			return account.error;
+		return account.data.verifyPassword(name, password);
+	}
+
+	/**
+	 * Returns the status of changing a password.<br>
+	 * <br>
+	 * Possible Responses:<br>
+	 * NOT_FOUND<br>
+	 * INTERNAL_SERVER_ERROR<br>
+	 * SUCCESS<br>
+	 * 
+	 * @param name
+	 * @param newPassword
+	 * @return changeStatus
+	 */
+	@Override
+	public Responses changePassword(String name, String password) {
+		DataResponse<PlayerAccount> account = accountManager.getAccount(name);
+		if (!account.success())
+			return account.error;
+		return account.data.changePassword(name, password);
 	}
 
 }

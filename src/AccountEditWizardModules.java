@@ -10,7 +10,7 @@ public class AccountEditWizardModules {
 				String playerName) throws NoSuchMethodException, SecurityException, InstantiationException,
 				IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 			super(stdin, stdout, obj, playerName);
-			this.listName = "Recovery Question";
+			this.listName = "Recovery Questions";
 
 			rqWizard = new Wizard.SimpleWizard(stdin, stdout, obj, playerName, "Recovery Question Wizard");
 			rqWizard.addModules(RecoveryQuestionsWizardModules.AddQuestionModule.class);
@@ -63,7 +63,7 @@ public class AccountEditWizardModules {
 			}
 			stdout.print("Enter new password: ");
 			String newPass = new String(System.console().readPassword()).trim(); // task 221 hides password
-			resp = this.obj.resetPassword(user, newPass);
+			resp = this.obj.changePassword(user, newPass);
 			switch (resp) {
 			case NOT_FOUND:
 			case INTERNAL_SERVER_ERROR:

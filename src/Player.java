@@ -36,19 +36,13 @@ public class Player {
     private String option = "";
     private String challengerOption = "";
     private boolean hasOption = false;
-    @JsonProperty("recovery")
-    private ArrayList<String> recovery; //stored question, answer, question,...
-    private final long accountAge;
     
-    
-	public Player(@JsonProperty("name") String name, @JsonProperty("accountAge") long accountAge) {
+	public Player(@JsonProperty("name") String name) {
         this.currentRoom = 1;
         this.currentDirection = Direction.NORTH;
         this.name = name;
-        this.accountAge = accountAge;
         this.currentInventory = new LinkedList<>();
         this.money = 0;
-        this.recovery = new ArrayList<String>();
     }
 
     private HashSet<Player> ignoredPlayers = new HashSet<Player>();
@@ -291,56 +285,10 @@ public class Player {
     public String getName() {
         return name;
     }
-    
-    @JsonProperty("recovery")
-    public void setRecovery(ArrayList<String> recovery) {
-    	this.recovery = recovery;
-    }
-
-    @JsonProperty("recovery")
-    public ArrayList<String> getRecovery() {
-    	return this.recovery;
-    }
 
     public void setName(String name) {
         this.name = name;
     }
-	
-	public String getQuestion(int num) {
-		String q = null;
-		try {
-			q = this.recovery.get(num * 2);
-		} catch (IndexOutOfBoundsException e) {
-			return null;
-		}
-		return q;
-	}
-	
-	public void addQuestion(String question, String answer) {
-		this.recovery.add(question);
-		this.recovery.add(answer);
-		this.setRecovery(this.recovery);
-	}
-	
-	public void removeQuestion(int num) {
-		this.recovery.remove(num * 2);
-		this.money = num * 2;
-		this.recovery.remove(num * 2); //second one removes the answer
-	}
-	
-	public String getAnswer(int num) {
-		String q = null;
-		try {
-			q = this.recovery.get((num * 2) + 1);
-		} catch (IndexOutOfBoundsException e) {
-			return null;
-		}
-		return q;
-	}
-	
-	public long getAccountAge() {
-		return accountAge;
-	}
 
     public LinkedList<Item> getCurrentInventory() {
         return currentInventory;
