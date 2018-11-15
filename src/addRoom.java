@@ -58,6 +58,7 @@ public class addRoom{
 	 * O(1)
 	 */
     private class Node
+
 	{
 		Node NextNode;
 		
@@ -74,12 +75,15 @@ public class addRoom{
 	    private int westConnecting = 0;
 	    private String westDescription;
 	    
+
 	    private int x_val = 0;
 	    private int y_val = 0;
+
 		
 	}
 	
     private int numberOfRooms = 0;
+
     private Node head = null;
     private Node current = head;
     
@@ -609,6 +613,7 @@ public class addRoom{
     private void readAndAppend() throws FileNotFoundException
     {
     	File file = new File(this.inputFileName); 
+
     	  
     	BufferedReader br = new BufferedReader(new FileReader(file)); 
     	  
@@ -638,7 +643,9 @@ public class addRoom{
 				//System.out.println();
 				tempWorking += st.nextToken();
 				Node temp = new Node();
+
 				//this.numberOfRooms++;
+
 			    while (st.hasMoreTokens()) 
 			    {
 			    	
@@ -761,6 +768,7 @@ public class addRoom{
     	    
     }
     
+
     /**
    	 * <h1> Generate Grid </h1>
    	 * This method creates a grid of generic rooms.  
@@ -843,42 +851,53 @@ public class addRoom{
     			Node temp = new Node();
     			temp.roomDescription = "Room Description";
     			temp.roomID = (this.numberOfRooms+ 1);
+
     			temp.indorOutdoor = 'o';
     			temp.northDescription = "North Discription";
     			temp.eastDescription = "East Description";
     			temp.southDescription = "South Descripton";
     			temp.westDescription = "West Description";
+
     			if ( (a-1) < 1)	//If this s the top row then there is no room connected to the north
+
     			{
     				temp.northConnecting = 0;
     			}
     			else
     			{
+
     				temp.northConnecting = (((a-1)*col) + b); //Else define it as the room to the immediate north of the current room.
     			}
     			if ( (b+1) > col)	//If this is the last room in the column then this cannot be connected to the east.
+
     			{
     				temp.eastConnecting = 0;
     			}
     			else
     			{
+
     				temp.eastConnecting = (this.numberOfRooms + 2);	//Else there will be a room connected to the east.
     			}
     			if ((a+1) > rows)	//If this is the last row on the map then there will be no rooms connected to the south
+
     			{
     				temp.southConnecting = 0;
     			}
     			else
     			{
+
     				temp.southConnecting = (((a)*col) + b);	//Else there is a room to connect to the south
     			}
     			if ( (b - 1) < 1)	//If this room is in the first column then there can not be a room to the west.
+
     			{
     				temp.westConnecting = 0;
     			}
     			else
     			{
+
     				temp.westConnecting = (this.numberOfRooms); //Else there is a room and it connects to the previous room in the map.
+
     			}
     			temp.NextNode = null;
     			this.addNodeToList(temp);
@@ -889,6 +908,7 @@ public class addRoom{
     	}
     }
     
+
     /**
    	 * <h1> Generate Dugeon </h1>
    	 * This method calls the other methods that are required to maze the maze style maps.
@@ -1397,5 +1417,6 @@ public class addRoom{
     {
     	int random = (int )(Math.random() * 42 + 1);	
     	return random;
+
     }
 }
