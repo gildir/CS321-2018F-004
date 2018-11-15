@@ -48,11 +48,10 @@ public interface GameObjectInterface extends Remote {
 	 * 
 	 * @param name
 	 * @param password
-	 * @param recovery List of recovery questions and answers, ordered q1,a1,q2,a2,q3,a3
 	 * @return an enumeration representing the creation status.
 	 * @throws RemoteException
 	 */
-	public Responses createAccountAndJoinGame(String name, String password, ArrayList<String> recovery) throws RemoteException;
+	public Responses createAccountAndJoinGame(String name, String password) throws RemoteException;
 
     /**
      * Returns a look at the area of the specified player.
@@ -459,8 +458,9 @@ public interface GameObjectInterface extends Remote {
 	 * @return String of recovery question, null if user doesn't exist
 	 * @throws RemoteException
 	 */
-	public String getAnswer(String name, int num) throws RemoteException;
+	public Boolean getAnswer(String name, int num, String answer) throws RemoteException;
 
+    public Responses verifyPassword(String name, String pass) throws RemoteException;
     
     /**
      * Player check in to ensure the client has not crashed. A client needs to 
@@ -513,6 +513,23 @@ public interface GameObjectInterface extends Remote {
       * @throws Remote Exception
       */
      public String teach(String player) throws RemoteException;
+     
+   /**
+    * Adds a recovery question
+    * @param name Name of user
+    * @param question Question being added
+    * @param answer The answer
+    * @throws RemoteException
+    */
+ 	public void addQuestion(String name, String question, String answer) throws RemoteException;
+ 	
+ 	/**
+ 	 * Removes a recovery question
+ 	 * @param name Name of user
+ 	 * @param num Number of question to be removed
+ 	 * @throws RemoteException
+ 	 */
+ 	public void removeQuestion(String name, int num) throws RemoteException;
 
 	/*
      * Sets a player's chat prompt string
