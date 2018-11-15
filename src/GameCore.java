@@ -46,6 +46,7 @@ public class GameCore implements GameCoreInterface {
 	private FriendsManager friendsManager;
 	private final Object friendsLock = new Object();
     
+    private int dormCountId = 100002;//used for dormroom initialization   
     /**
 	 * Creates a new GameCoreObject. Namely, creates the map for the rooms in the
 	 * game, and establishes a new, empty, player list.
@@ -884,6 +885,16 @@ public class GameCore implements GameCoreInterface {
 			player = resp.player;
 			this.playerList.addPlayer(player);
 
+            //112a DormRoom creation
+            player.setDormId(dormCountId);
+            DormRoom dorm = new DormRoom(dormCountId,"inside","Dorm Room","Your very own, personal dorm room!");                                                                                                   dorm.addExit(Direction.valueOf("NORTH"),-100000,"You go back to the elevator");
+            dorm.addExit(Direction.valueOf("EAST"),-100000,"You go back to the elevator");
+            dorm.addExit(Direction.valueOf("SOUTH"),100000,"You go back to the elevator");
+            dorm.addExit(Direction.valueOf("WEST"),-100000,"You go back to the elevator");
+            this.map.addRoom(dorm);
+            if(player.getCurrentRoom() > 100000){player.setCurrentRoom(dormCountId);}
+            dormCountId++;
+
 			this.broadcast(player, player.getName() + " has arrived.");
 			connectionLog(true, player.getName());
 			return player;
@@ -1085,7 +1096,16 @@ public class GameCore implements GameCoreInterface {
         if(room.canExit(direction)) {
             this.broadcast(player, player.getName() + " has walked off to the " + direction);
             player.getReplyWriter().println(room.exitMessage(direction));
-            player.setCurrentRoom(room.getLink(direction));
+            //private room redirection 112a
+            if(room.getLink(direction) == 100001)
+            {    
+                player.setCurrentRoom(player.getDormId());
+            }    
+            else 
+            {    
+                player.setCurrentRoom(room.getLink(direction));
+            }    
+//            player.setCurrentRoom(room.getLink(direction));
             String logMessage = String.format("%s used command MOVE %s [moved from %s to %s]", player.getName(), direction.toString(), room.getTitle(), map.findRoom(player.getCurrentRoom()).getTitle());
 			this.broadcast(player, player.getName() + " just walked into the area.");
 			Ghost g = new Ghost(player);
