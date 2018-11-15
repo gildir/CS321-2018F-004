@@ -42,11 +42,13 @@ public class Player {
     private ArrayList<String> recovery; //stored question, answer, question,...
     private boolean hasTitle = false; //used for title and use item feature 
     private String playerItemTitle = "";
+    private final long accountAge;
 
-    public Player(@JsonProperty("name") String name) {
+    public Player(@JsonProperty("name") String name, @JsonProperty("accountAge") long accountAge) {
         this.currentRoom = 1;
         this.currentDirection = Direction.NORTH;
         this.name = name;
+        this.accountAge = accountAge;
         this.currentInventory = new LinkedList<>();
         this.money = 0;
         this.recovery = new ArrayList<String>();
@@ -330,6 +332,10 @@ public class Player {
 			return null;
 		}
 		return q;
+	}
+	
+	public long getAccountAge() {
+		return accountAge;
 	}
 
     public LinkedList<Item> getCurrentInventory() {
