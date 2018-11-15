@@ -81,8 +81,20 @@ object are on the ground and what direction you are facing.
         <help command = "OFFER">
         <description>  O or OFFER player object - Offer player an item</description>
     </help>
+        <help command = "OFFER_REPLY">
+        <description>  O_REPLY or OFFER_REPLY 'accept'/'reject' - Accept or reject an offer that has been made</description>
+    </help>
         <help command = "DROP">
         <description>  DROP object   - Tries to drop an object from your pockets in the same area</description>
+    </help>
+	<help command = "USE">
+	<description> USE object - Uses an object from your pockets and gives you a title.</description>
+    </help>
+    	<help command = "TITLE">
+	<description> TITLE - Shows you the title obtained from an object.</description>
+    </help>
+	<help command = "EXAMINE">
+	<description>  EXAMINE object - Tries to examine a object in your inventory</description>
     </help>
         <help command = "POKE_GHOUL">
         <description>  POKE_GHOUL    - Pokes the ghoul in the current room.</description>
@@ -116,6 +128,9 @@ object are on the ground and what direction you are facing.
     </help>
     <help command = "ONLINE">
         <description>  ONLINE                   - Display a list of all online players.</description>
+    </help>
+    <help command = "MAP">
+	    <description>  MAP			- Displays a map of nearby rooms.</description>
     </help>
     <help command = "FRIENDS">
         <description>  FRIENDS                   - Displays friend subcommand list.</description>

@@ -14,6 +14,8 @@ public class Room {
     private final LinkedList<Item> objects;
     private final LinkedList<Exit> exits;
 
+
+
     private static final int MAX_WHITEBOARD_LEN = 120;
     private StringBuilder whiteboard;
     //list of NPCs in a room, list in case additional NPCs are added to the game
@@ -29,8 +31,8 @@ public class Room {
         
         this.id = id;
         this.title = title;
+	this.room_type = room_type;
         this.description = description;
-        this.room_type = room_type;
         this.npcs = new LinkedList<>();
     }
 
@@ -40,9 +42,9 @@ public class Room {
         this.whiteboard = new StringBuilder(MAX_WHITEBOARD_LEN);
         this.id = id;
         this.title = title;
+	this.room_type = room_type;
         this.description = description;
         this.npcs = npcs;
-        this.room_type = room_type;
     }
     
     public String toString(PlayerList playerList, Player player) {
