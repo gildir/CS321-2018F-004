@@ -43,7 +43,7 @@ public class Player {
     private boolean hasTitle = false; //used for title and use item feature 
     private String playerItemTitle = "";
 
-    public Player(@JsonProperty("name") String name, @JsonProperty("recovery") ArrayList<String> recovery) {
+    public Player(@JsonProperty("name") String name) {
         this.currentRoom = 1;
         this.currentDirection = Direction.NORTH;
         this.name = name;
