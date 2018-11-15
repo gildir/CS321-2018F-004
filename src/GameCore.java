@@ -1085,30 +1085,30 @@ public class GameCore implements GameCoreInterface {
      * Challenge another player to rps
      * @param playerChallenger Name of the player who is initiating the challenge
      * @param playerChallenged Name of the player who is being challenged
-     * @return String of feedback from challenger's attempt to challenge
+     * @return String of feedback from player's attempt to challenge
      */ 
     @Override
     public String challenge(String playerChallenger, String playerChallenged){
-      Player challenger = this.playerList.findPlayer(playerChallenger);
-      Player challenged = this.playerList.findPlayer(playerChallenged);
-      if(challenged == null || challenger == null){
+      Player player = this.playerList.findPlayer(playerChallenger);
+      Player opponent = this.playerList.findPlayer(playerChallenged);
+      if(opponent == null || player == null){
         return "This player does not exist in the game or is not online.";
       }
-      if(challenger.getInBattle()){
+      if(player.getInBattle()){
         return "You are already in a R-P-S battle.";
       }
-      if(challenged.getInBattle()){
-        return challenged.getName() + " is already in a R-P-S battle.";
+      if(opponent.getInBattle()){
+        return opponent.getName() + " is already in a R-P-S battle.";
       }
-      if(challenger != challenged && challenger.getCurrentRoom() == challenged.getCurrentRoom()) {
-        challenged.setChallenger(playerChallenger);
-        challenger.setChallenger(playerChallenged);
-        challenged.setHasChallenge(true);
-        challenged.getReplyWriter().println(challenger.getName() + " challenges you to a R-P-S.");
+      if(player != opponent && player.getCurrentRoom() == opponent.getCurrentRoom()) {
+        opponent.setChallenger(playerChallenger);
+        player.setChallenger(playerChallenged);
+        opponent.setHasChallenge(true);
+        opponent.getReplyWriter().println(player.getName() + " challenges you to a R-P-S.  Do you accept?");
 
-        return "You challenged " + challenged.getName() + " to a R-P-S.";
+        return "You challenged " + opponent.getName() + " to a R-P-S.";
       }
-      else if(challenger == challenged)
+      else if(player == opponent)
         return "You can't challenge yourself to R-P-S.";
       else {
         return "This person is not in the same room as you or doesn't exist in the game.";
@@ -1123,10 +1123,10 @@ public class GameCore implements GameCoreInterface {
      */ 
     @Override
     public String accept(String playerChallenged, String playerChallenger, String sRounds){
-      Player challenger = this.playerList.findPlayer(playerChallenger);
-      Player challenged = this.playerList.findPlayer(playerChallenged);
+      Player player = this.playerList.findPlayer(playerChallenger);
+      Player opponent = this.playerList.findPlayer(playerChallenged);
       int rounds = 0;
-      if(challenged == null || challenger == null){
+      if(opponent == null || player == null){
         return "This player does not exist in the game or is not online.";
       }
       switch(sRounds){
@@ -1146,16 +1146,16 @@ public class GameCore implements GameCoreInterface {
       if(rounds != 1 && rounds != 3 && rounds != 5){
         return "This is an invalid number of rounds, please choose from 1, 3, or 5 rounds: ";
       }
-      if(challenged.getChallenger().equals(challenger.getName()) && challenged.getHasChallenge()){
-        if(challenger != challenged && challenger.getCurrentRoom() == challenged.getCurrentRoom()) {
-          challenger.setRounds(rounds);
-          challenged.setRounds(rounds);
-          challenger.getReplyWriter().println(challenged.getName() + " accepts your challenge to a R-P-S for " + rounds + " rounds");
-          challenged.setHasChallenge(false);
-          challenged.setInBattle(true);
-          challenger.setInBattle(true);
-          challenged.getReplyWriter().println("You accept " + challenger.getName() + "\'s challenge to a R-P-S for " + rounds + " rounds");
-          challenger.getReplyWriter().println("Entering Round\nPick rock, paper, or scissors: ");
+      if(opponent.getChallenger().equals(player.getName()) && opponent.getHasChallenge()){
+        if(player != opponent && player.getCurrentRoom() == opponent.getCurrentRoom()) {
+          player.setRounds(rounds);
+          opponent.setRounds(rounds);
+          player.getReplyWriter().println(opponent.getName() + " accepts your challenge to a R-P-S for " + rounds + " rounds");
+          opponent.setHasChallenge(false);
+          opponent.setInBattle(true);
+          player.setInBattle(true);
+          opponent.getReplyWriter().println("You accept " + player.getName() + "\'s challenge to a R-P-S for " + rounds + " rounds");
+          player.getReplyWriter().println("Entering Round\nPick rock, paper, or scissors: ");
           return "Entering Round\nPick rock, paper, or scissors: ";
         }
         else
@@ -1163,51 +1163,51 @@ public class GameCore implements GameCoreInterface {
           return "This person is not in the same room as you or doesn't exist in the game.";
         }
       }
-      else if(challenger == challenged){
+      else if(player == opponent){
         return "You can't challenge yourself to R-P-S.";
       }
       else{
-        return "You have not been challenged by " + challenger.getName();
+        return "You have not been challenged by " + player.getName();
       }
     }
     /**  
      * Reject another player's challenge to rps
      * @param playerChallenged Name of the player who is being challenged
      * @param playerChallenger Name of the player who is initiating the challenge
-     * @return String of feedback from challenger's attempt to reject the challenge
+     * @return String of feedback from player's attempt to reject the challenge
      */ 
     @Override
     public String reject(String playerChallenged, String playerChallenger){
-      Player challenger = this.playerList.findPlayer(playerChallenger);
-      Player challenged = this.playerList.findPlayer(playerChallenged);
-      if(challenged == null || challenger == null){
+      Player player = this.playerList.findPlayer(playerChallenger);
+      Player opponent = this.playerList.findPlayer(playerChallenged);
+      if(opponent == null || player == null){
         return "This player does not exist in the game or is not online.";
       }
-      if(challenged.getChallenger().equals(challenger.getName()) && challenged.getHasChallenge()){
-        if(challenger != challenged && challenger.getCurrentRoom() == challenged.getCurrentRoom()) {
-          challenged.setChallenger(" ");
-          challenger.setChallenger(" ");
-          challenged.setHasChallenge(false);
-          challenger.getReplyWriter().println(challenged.getName() + " rejects your challenge to a R-P-S");
-          return "You reject " + challenger.getName() + "\'s challenge to a R-P-S.";
+      if(opponent.getChallenger().equals(player.getName()) && opponent.getHasChallenge()){
+        if(player != opponent && player.getCurrentRoom() == opponent.getCurrentRoom()) {
+          opponent.setChallenger(" ");
+          player.setChallenger(" ");
+          opponent.setHasChallenge(false);
+          player.getReplyWriter().println(opponent.getName() + " rejects your challenge to a R-P-S");
+          return "You reject " + player.getName() + "\'s challenge to a R-P-S.";
         }
-        else if(challenger == challenged)
-          return "You can't challenge yourself to R-P-S.";
-        else {
-          return "This person is not in the same room as you or doesn't exist in the game.";
-        }
+	else{
+	  return "This person is not in the same room as you or doesn't exist in the game.";
+	}
       }
-      else if(challenger == challenged){
+      else if(player == opponent){
         return "You can't challenge yourself to R-P-S.";
       }
       else{
-        return "You have not been challenged by " + challenger.getName();
+        return "You have not been challenged by " + player.getName();
       }
     }
+    //call when want to log completed battle
     private void rpsLog(String winner, String loser, String status, String winnerPick, String loserPick){
 	    rpsLogger.info(winner + " " + status + " against " + loser + "\n" + 
               winner +  " pick " + winnerPick + ", " + loser +  " pick " + loserPick + "\n");
     }
+    //initializes rpsLogger
     private void rpsLogger(){
       try{
         rpsHandler = new FileHandler("battles.log", true);
