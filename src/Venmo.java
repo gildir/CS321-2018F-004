@@ -1,5 +1,7 @@
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -24,8 +26,11 @@ public class Venmo {
     /**
      * The pending transactions ledger (in the mail).
      */
-    private HashMap<String, HashSet<Mail>> mailbox;    
-    private PlayerAccountManager PAM;
+    private HashMap<String, HashSet<Mail>> mailbox;
+    
+    /**
+     * The list of online players in the game.
+     */
     private PlayerList playerList;
 
     /**
@@ -37,6 +42,11 @@ public class Venmo {
         mailbox = new HashMap<String, HashSet<Mail>>();
     }
     
+    /**
+     * Adds the list of players to the game.
+     * 
+     * @param l The list of online player in the game.
+     */
     public static void setup(PlayerList l) {
         if (venmo.playerList == null) venmo.playerList = l;
     }
@@ -102,25 +112,7 @@ public class Venmo {
         if (from.getMoney() < rounded) return "You don't have enough money to complete the transaction.";
 
         // Creates a transaction ID
-        String TranID;
-
-        // source: https://www.baeldung.com/java-random-string
-        // generates a random alphanumeric string of a specific length
-        // modified by (Team 4: Alaqeel) to be alphanumeric
-        int[] leftLimit = {(int) 'A', (int) 'a', (int) '0' }; 
-        int[] rightLimit = {(int) 'Z', (int) 'z', (int) '9' };
-        int len = 10; // the length of the random string
-        Random random = new Random();
-        StringBuilder buffer = new StringBuilder(len); // using a mutable object to save space
-        int randomLimitedInt;
-        for (int i = 0; i < len; i++) {
-            int ran = random.nextInt(3);
-            randomLimitedInt = leftLimit[ran] + (int) 
-                    (random.nextFloat() * (rightLimit[ran] - leftLimit[ran] + 1));
-            buffer.append((char) randomLimitedInt);
-        }
-        // stores the random string in the Transaction ID
-        TranID = buffer.toString();
+        String TranID = transactionID(5);
 
         // Takes the amount out of the sender's account
         from.changeMoney(-rounded);
@@ -198,7 +190,7 @@ public class Venmo {
         venmo.transactions.remove(TranID);
 
         // logging the offer
-        System.out.printf("[Venmo] %s - %s accepted %s's offer of $%.2f\n", TranID, to.getName(), from.getName(), amount);
+        System.out.printf("[Venmo] %s - %s accepted %s's mail of $%.2f\n", TranID, to.getName(), tran.from, amount);
 
         // Generates and returns a summary message to the recipient.
         format = "Awesome! $%.2f are now added to your wallet.\n"
@@ -317,6 +309,45 @@ public class Venmo {
         
         // destroy mailbox
         venmo.mailbox.remove(name);
+    }
+    
+    /**
+     * source: https://www.baeldung.com/java-random-string
+     * 
+     * Generates a random alphanumeric string of a specific length.
+     * Modified by (Team 4: Alaqeel) to be alphanumeric
+     * and to allow excluding some characters.
+     * 
+     * @param len The length of the string
+     * @return
+     */
+    private static String transactionID(int len) {
+        // The limits of the characters
+        int[] leftLimit = {(int) 'A', (int) 'a', (int) '0' }; 
+        int[] rightLimit = {(int) 'Z', (int) 'z', (int) '9' };
+        // The excluded characters
+        List<Character> excluded = Arrays.asList('0', 'O', 'o',  '1', 'l', 'I');
+        
+        // A mutable object to hold the randomized string
+        StringBuilder buffer = new StringBuilder(len);
+       
+        // Helper objects and variables
+        int randomLimitedInt, ran;
+        int choice = leftLimit.length;
+        Random random = new Random();
+        // The algorithm
+        for (int i = 0; i < len; i++) {
+            ran = random.nextInt(choice);
+            randomLimitedInt = leftLimit[ran] + (int) 
+                    (random.nextFloat() * (rightLimit[ran] - leftLimit[ran] + 1));
+            if (excluded.contains((char) randomLimitedInt)) {
+                i--;
+                continue;
+            }
+            buffer.append((char) randomLimitedInt);
+        }
+        // stores the random string in the Transaction ID
+        return buffer.toString();
     }
 
     /**
