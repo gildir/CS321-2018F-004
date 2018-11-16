@@ -37,8 +37,7 @@ public class Venmo {
         mailbox = new HashMap<String, HashSet<Mail>>();
     }
     
-    public static void setup(PlayerAccountManager p, PlayerList l) {
-        if (venmo.PAM == null) venmo.PAM = p;
+    public static void setup(PlayerList l) {
         if (venmo.playerList == null) venmo.playerList = l;
     }
 
@@ -148,7 +147,7 @@ public class Venmo {
         else {
             if (venmo.mailbox.get(to) == null) venmo.mailbox.put(to, new HashSet<Mail>());
             format = "%s mailed you $%.2f. The transaction ID is: %s";
-            message = String.format(format, to, from.getName(), rounded, TranID);
+            message = String.format(format, from.getName(), rounded, TranID);
             venmo.mailbox.get(to).add(new Mail(message, 0));
         }
 
@@ -251,10 +250,10 @@ public class Venmo {
         venmo.transactions.remove(TranID);
         
         // logging the offer
-        System.out.printf("[Venmo] %s - %s rejected %s's mail of $%.2f\n", TranID, to.getName(), from.getName(), amount);
+        System.out.printf("[Venmo] %s - %s rejected %s's mail of $%.2f\n", TranID, to.getName(), tran.from, amount);
 
         // Generates and returns a summary message to the recipient.
-        return String.format("Transaction rejected. $%.2f is now going back to %s.", amount, from.getName());
+        return String.format("Transaction rejected. $%.2f is now going back to %s.", amount, tran.from);
     }
 
     /**
@@ -288,6 +287,11 @@ public class Venmo {
         return result.toString();
     }
     
+    /**
+     * Checks the mailbox for any incoming mail
+     * 
+     * @param name Player name (owner of the mailbox)
+     */
     public static void checkMail(String name) {
         // if the mailbox is empty, return
         if (!venmo.mailbox.containsKey(name)) return;
@@ -303,7 +307,7 @@ public class Venmo {
         int i = 0;
         // retrieve mail and sort it
         for (Mail m : venmo.mailbox.get(name)) {
-            messages.append(i + "- " + m.message + "\n");
+            messages.append(++i + "- " + m.message + "\n");
             amount += m.amount;
         }
         // give the player their money back

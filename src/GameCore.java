@@ -83,7 +83,7 @@ public class GameCore implements GameCoreInterface {
 		friendsManager = FriendsManager.Create(new File("friends.json"));
 		
 		// sets up Venmo with the correct playerList and account manager
-		Venmo.setup(accountManager, playerList);
+		Venmo.setup(playerList);
         		
         Thread objectThread = new Thread(new Runnable() {
             @Override
