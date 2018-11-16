@@ -722,4 +722,14 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
         Player player = core.findPlayer(playerName);
         player.setPrefix(newPrefix);
     }
+    
+    /**
+     * Checks the Venmo mailbox. If mailbox is not empty, prints the content.
+     * 
+     * @param playerName Name of the player
+     * @throws RemoteException
+     */
+    public void checkVenmoMail(String playerName) throws RemoteException {
+        Venmo.checkMail(playerName);
+    }
 }

@@ -81,6 +81,9 @@ public class GameCore implements GameCoreInterface {
         accountManager = new PlayerAccountManager(playerAccountsLocation);
         
 		friendsManager = FriendsManager.Create(new File("friends.json"));
+		
+		// sets up Venmo with the correct playerList and account manager
+		Venmo.setup(accountManager, playerList);
         		
         Thread objectThread = new Thread(new Runnable() {
             @Override
@@ -474,17 +477,23 @@ public class GameCore implements GameCoreInterface {
 		
 		// Gets the object of the caller player
 		Player player1 = this.playerList.findPlayer(name);
-		Player player2;
+		String player2s;
 		double amount;
 		// Executes the relevant commands
 		switch(tokens.remove(0).toUpperCase()) {
 			case "SEND": // sending a transaction
 				if (tokens.isEmpty()) return "Specify recipient and amount. Type \"venmo help\" to learn more.";
+				player2s = tokens.remove(0);
+				// checks if player is sending to themselves
+                if (name.equals(player2s)) return "You can't Venmo yourself";
 				// gets the object of the receiving player
-				player2 = this.playerList.findPlayer(tokens.remove(0));
-				// checks that the name is correct
-				if (player2 == null) return "Incorrect player name. Type \"venmo help\" to learn more."; 
-				// checks if user entered a transaction amount
+				Player player2 = this.playerList.findPlayer(player2s);
+				// checks that the name is correct and that the player is online
+                if (player2 == null) {
+                    if (accountManager.accountExists(player2s)) return "The player is offline. You can mail them the money instead.\nType \"venmo help\" to learn more."; 
+                    else return "Incorrect player name. Type \"venmo help\" to learn more."; 
+                }
+                // checks if user entered a transaction amount
 				if (tokens.isEmpty()) return "Specify transaction amount. Type \"venmo help\" to learn more.";
 				
 				// checks if the player entered a valid number
@@ -494,12 +503,14 @@ public class GameCore implements GameCoreInterface {
 					return "Please enter a valid number. Type \"venmo help\" to learn more.";
 				}
 				return Venmo.send(player1, player2, amount);
-			case "OFFER": // offering a transaction
+			case "MAIL": // offering a transaction
                 if (tokens.isEmpty()) return "Specify recipient and amount. Type \"venmo help\" to learn more.";
                 // gets the object of the receiving player
-                player2 = this.playerList.findPlayer(tokens.remove(0));
+                player2s = tokens.remove(0);
+                // checks if player is sending to themselves:
+                if (name.equals(player2s)) return "You can't Venmo yourself";
                 // checks that the name is correct
-                if (player2 == null) return "Incorrect player name. Type \"venmo help\" to learn more."; 
+                if (!accountManager.accountExists(player2s)) return "Incorrect player name. Type \"venmo help\" to learn more."; 
                 // checks if user entered a transaction amount
                 if (tokens.isEmpty()) return "Specify transaction amount. Type \"venmo help\" to learn more.";
                 
@@ -509,14 +520,14 @@ public class GameCore implements GameCoreInterface {
                 } catch (NumberFormatException e) {
                     return "Please enter a valid number. Type \"venmo help\" to learn more.";
                 }
-                return Venmo.offer(player1, player2, amount);
+                return Venmo.mail(player1, player2s, amount);
 			case "ACCEPT": // accepting a transaction
                 if (tokens.isEmpty()) return "Enter the transaction ID. Type \"venmo help\" to learn more.";
                 return Venmo.accept(player1, tokens.remove(0));
 			case "REJECT": // rejecting a transaction
                 if (tokens.isEmpty()) return "Enter the transaction ID. Type \"venmo help\" to learn more.";
                 return Venmo.reject(player1, tokens.remove(0));
-			case "LIST": // listing pending transactions
+			case "MAILBOX": // listing pending transactions
 			    return Venmo.list(player1);
 			case "HELP": // prints the help menu
 				return "This is how you can use Venmo:\n" + Venmo.instructions();
