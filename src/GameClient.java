@@ -691,6 +691,12 @@ public class GameClient {
                 case "TEACH":
                     System.out.println(remoteGameInterface.teach(this.playerName));
                     break;
+		case "TALK":
+		    if(tokens.isEmpty()){
+			System.out.println("You need to provide a name for the NPC you are trying to talk to");
+		    }else
+		        System.out.println(remoteGameInterface.talk(this.playerName,tokens.remove(0).toUpperCase()));
+		    break;
                 case "FRIENDS":
                     String sub;
                     if(tokens.isEmpty())

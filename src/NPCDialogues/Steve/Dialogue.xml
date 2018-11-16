@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dialogues>
+	<dialogue id = "-1">
+		<intro>
+			Steve says "Sarah tells me you've been dragging your feet
+			on project Ghoul! Didn't I tell you I want that to be your
+			group's number 1 priority!"
+		</intro>
+	</dialogue>
         <dialogue id = "1">
 		<intro>
 			You walk into class, and Steve, the professor, calls you over.			

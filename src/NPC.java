@@ -43,9 +43,9 @@ public class NPC {
 
     private boolean setDialogues(String fileName){
 	try{
-	    introDialogues = new ArrayList();
-	    contDialogues = new ArrayList();
-       	    doneDialogues = new ArrayList();
+	    introDialogues = new ArrayList<>();
+	    contDialogues = new ArrayList<>();
+       	    doneDialogues = new ArrayList<>();
 
             File dialFile = new File(fileName);
 	    DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
@@ -57,18 +57,34 @@ public class NPC {
 
 	    String dialogue;
 	    Element dialogueElement;
+	    int id;
 
+	    introDialogues.add(0,null);
+            contDialogues.add(0,null);
+            doneDialogues.add(0,null);
+	    
 	    for(int i = 0; i < xmlDial.getLength(); i ++){
                 dialogueElement = (Element) xmlDial.item(i);
+		id = Integer.parseInt(dialogueElement.getAttribute("id"));
+                for(int j = introDialogues.size(); j <= id; j ++){
+                    introDialogues.add(j,null);
+                    contDialogues.add(j,null);
+                    doneDialogues.add(j,null);
+                }
 
-                dialogue = dialogueElement.getElementsByTagName("intro").item(0).getTextContent();
-	        introDialogues.add(i,dialogue);
+		if(id != -1){
+                    dialogue = dialogueElement.getElementsByTagName("intro").item(0).getTextContent();
+	            introDialogues.set(id,dialogue);
 
-	        dialogue = dialogueElement.getElementsByTagName("cont").item(0).getTextContent();
-                contDialogues.add(i,dialogue);
+	            dialogue = dialogueElement.getElementsByTagName("cont").item(0).getTextContent();
+                    contDialogues.set(id,dialogue);
 
-	        dialogue = dialogueElement.getElementsByTagName("done").item(0).getTextContent();
-                doneDialogues.add(i,dialogue);
+	            dialogue = dialogueElement.getElementsByTagName("done").item(0).getTextContent();
+                    doneDialogues.set(id,dialogue);
+		}else{
+		    dialogue = dialogueElement.getElementsByTagName("intro").item(0).getTextContent();
+                    introDialogues.set(0,dialogue);
+		}
 	    }
         } catch (IOException ex1){
             System.out.println("[WORLD CREATION] Invalid Or No Dialogue For NPC: " + name + " In Room ID: " + room);
@@ -77,5 +93,31 @@ public class NPC {
             Logger.getLogger(NPC.class.getName()).log(Level.SEVERE, null, ex2);
 	} 
 	return true;
+    }
+
+    public String talk(Player player){
+	if(!validDialogue)
+            return name + " looks at you, and says nothing";
+        int progress = player.getProgress();
+	int dialId = (progress / 3)+1;
+	String dial = "";
+	switch(progress % 3)
+	{
+            case 0:
+	        dial = introDialogues.get(dialId);
+		if(dial != null)
+                    player.advanceQuest();
+		break;
+            case 1:
+                dial = contDialogues.get(dialId);
+		break;
+            case 2:
+		dial = doneDialogues.get(dialId);
+	}
+        if(dial != null){
+            return dial;
+	}else{
+	    return introDialogues.get(0);
+	}
     }
 }

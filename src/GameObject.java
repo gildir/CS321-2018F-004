@@ -616,7 +616,18 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
      */
     public String showMap(String name) throws RemoteException{
        return core.showMap(name);
-    }	
+    }
+
+    /**
+     * Talk to an NPC in the player's room
+     * @param player Name of the player
+     * @param npc Name of the npc
+     * @return String response from the npc if found
+     */
+    public String talk(String player, String npc) throws RemoteException{
+       return core.talk(player,npc);
+    }
+    
 	/**
 	 * Delete a player's account.
 	 * 

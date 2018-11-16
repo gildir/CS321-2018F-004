@@ -1707,6 +1707,32 @@ public class GameCore implements GameCoreInterface {
        return map.asciiMap(roomId);
     }
 
+    /**
+     * Talk to an NPC in the player's room
+     * @param player Name of the player
+     * @param npc Name of the npc
+     * @return String response from the npc if found
+     */
+    public String talk(String playerName, String npcName){
+       Player player = this.playerList.findPlayer(playerName);
+       boolean found = false;
+       NPC npc = null;
+       for(NPC temp : map.findRoom(player.getCurrentRoom()).fetchNPCs()){
+           if(temp.getName().toUpperCase().equals(npcName)){
+              found = true;
+	      npc = temp;
+              break;
+	   }
+       }
+       if(!found){
+           return "NPC " + npcName + " is not located in your current room";
+       }
+       else{
+	   return npc.talk(player);
+       }
+    }
+
+
 	/**
 	 * Logs player connections
 	 * 

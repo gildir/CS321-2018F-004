@@ -154,6 +154,10 @@ public class Room {
             return this.npcs.toString();
         }
     }
+
+    public LinkedList<NPC> fetchNPCs() {
+        return npcs;
+    }
     
     public void addObject(Item obj) {
         if(this.objects.size() < 5) {

@@ -44,6 +44,7 @@ public class Player {
     private ArrayList<String> recovery;
     private boolean hasTitle = false; //used for title and use item feature 
     private String playerItemTitle = "";
+    private int questProgress;
 
     public Player(@JsonProperty("name") String name, @JsonProperty("recovery") ArrayList<String> recovery) {
         this.currentRoom = 1;
@@ -53,6 +54,7 @@ public class Player {
         this.currentInventory = new LinkedList<>();
         this.money = 0;
         this.dormId = 0;
+	this.questProgress = 0;
         //this.dormRoomCount++;
     }
 
@@ -578,5 +580,12 @@ public class Player {
 
 
     //End 413 Prefix
+    
+    public int getProgress(){
+        return questProgress;
+    }
 
+    public void advanceQuest(){
+	questProgress ++;
+    }
 }

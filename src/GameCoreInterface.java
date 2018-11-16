@@ -288,6 +288,15 @@ public interface GameCoreInterface {
      * @return String representation of the map
      */
     public String showMap(String name);
+
+    /**
+     * Talk to an NPC in the player's room
+     * @param player Name of the player
+     * @param npc Name of the npc
+     * @return String response from the npc if found
+     */
+    public String talk(String player, String npc);
+
      /*
      * Delete a player's account.
      *
