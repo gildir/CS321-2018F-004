@@ -52,7 +52,7 @@ public class Map{
                                 if(id == 1){
                                         LinkedList<String> quests = new LinkedList<>(Arrays.asList("quest1", "quest2", "quest3"));
                                         newRoom = new Room(id, room_type, title, description, new LinkedList<>(Arrays.asList(
-                                                            new NPC("questNPC", 1, quests))));
+                                                            new NPC("Slartibartfast", 1, quests))));
                                 }
                                 else {
                                         newRoom = new Room(id, room_type, title, description);
