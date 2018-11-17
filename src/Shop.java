@@ -149,7 +149,22 @@ public class Shop
 	public String getTitle() {
         return this.title;
     }
-	
+	/**
+	 * @author team 4: Mistry
+	 * @return void
+	 * Send a message to all the players in the shop that an item was bought
+	 */
+	public void ping(Player p, Item k)
+	{
+		String newMessage = p.getName() + " has bought " + k.getName() +"!";
+		for(Player pl : this.playerlist)
+		{
+			if(pl.getName() != p.getName())
+			{
+				pl.getReplyWriter().println(newMessage);
+			}
+		}
+	}
 	public String toString() {
         
 		// white spaces around the billboard
