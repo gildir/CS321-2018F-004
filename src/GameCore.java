@@ -656,21 +656,26 @@ public class GameCore implements GameCoreInterface {
      */
     @Override
 	public Player joinGame(String name, String password) {
+                // Check to see if the player of that name is already in game.
+                if (isPlayerOnline(name))
+                        return null;
+                        
 		synchronized (loginLock) {
-			password = hash(password);
-			// Check to see if the player of that name is already in game.
-			Player player = this.playerList.findPlayer(name);
-			if (player != null)
-				return null;
-			PlayerAccountManager.AccountResponse resp = accountManager.getAccount(name, password);
-			if (!resp.success())
-				return null;
-			player = resp.player;
-			this.playerList.addPlayer(player);
+                    //Fetch player file
+                    password = hash(password);
+                    PlayerAccountManager.AccountResponse resp = accountManager.getAccount(name, password);
+                    
+                    //return null if no player was found
+                    if (!resp.success())
+                            return null;
+                    
+                    //else mark player online, alert everyone, and return player
+                    Player player = resp.player;
+                    this.playerList.addPlayer(player);
 
-			this.broadcast(player, player.getName() + " has arrived.");
-			connectionLog(true, player.getName());
-			return player;
+                    this.broadcast(player, player.getName() + " has arrived.");
+                    connectionLog(true, player.getName());
+                    return player;
 		}
 	}
 
@@ -1745,5 +1750,10 @@ public class GameCore implements GameCoreInterface {
 			player.removeQuestion(num);
 		}
 	}
+
+    @Override
+    public boolean isPlayerOnline(String name) {
+        return this.playerList.findPlayer(name) != null;
+    }
 
 }

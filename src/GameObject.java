@@ -636,4 +636,9 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
     public void removeQuestion(String name, int num) {
     	core.removeQuestion(name, num);
     }
+
+    @Override
+    public boolean isPlayerOnline(String name) throws RemoteException {
+        return core.isPlayerOnline(name);
+    }
 }
