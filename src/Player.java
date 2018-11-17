@@ -19,6 +19,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonIgnoreProperties({ "replyWriter", "outputWriter" })
 public class Player {
     private int dormId;//used to determine private dormroom Id
+    public LinkedList<Item> chestImage;
     public LinkedList<Item> currentInventory;
     private String name;
     private int currentRoom;
@@ -40,19 +41,18 @@ public class Player {
     private String challengerOption = "";
     private boolean hasOption = false;
     @JsonProperty("recovery")
-    private ArrayList<String> recovery; //stored question, answer, question,...
+    private ArrayList<String> recovery;
     private boolean hasTitle = false; //used for title and use item feature 
     private String playerItemTitle = "";
-    private final long accountAge;
 
-    public Player(@JsonProperty("name") String name, @JsonProperty("accountAge") long accountAge) {
+    public Player(@JsonProperty("name") String name, @JsonProperty("recovery") ArrayList<String> recovery) {
         this.currentRoom = 1;
         this.currentDirection = Direction.NORTH;
         this.name = name;
-        this.accountAge = accountAge;
+        this.recovery = recovery;
         this.currentInventory = new LinkedList<>();
+        this.chestImage = new LinkedList<>();
         this.money = 0;
-        this.recovery = new ArrayList<String>();
     }
 
     public int getDormId() {return this.dormId;}
@@ -297,49 +297,20 @@ public class Player {
     	this.recovery = recovery;
     }
 
-    @JsonProperty("recovery")
-    public ArrayList<String> getRecovery() {
-    	return this.recovery;
-    }
-
     public void setName(String name) {
         this.name = name;
     }
 	
 	public String getQuestion(int num) {
-		String q = null;
-		try {
-			q = this.recovery.get(num * 2);
-		} catch (IndexOutOfBoundsException e) {
-			return null;
-		}
-		return q;
-	}
-	
-	public void addQuestion(String question, String answer) {
-		this.recovery.add(question);
-		this.recovery.add(answer);
-		this.setRecovery(this.recovery);
-	}
-	
-	public void removeQuestion(int num) {
-		this.recovery.remove(num * 2);
-		this.money = num * 2;
-		this.recovery.remove(num * 2); //second one removes the answer
+		if(this.recovery.size() >= num * 2)
+			return this.recovery.get(num * 2);
+		return null;
 	}
 	
 	public String getAnswer(int num) {
-		String q = null;
-		try {
-			q = this.recovery.get((num * 2) + 1);
-		} catch (IndexOutOfBoundsException e) {
-			return null;
-		}
-		return q;
-	}
-	
-	public long getAccountAge() {
-		return accountAge;
+		if(this.recovery.size() >= (num * 2) + 1)
+			return this.recovery.get((num * 2) + 1);
+		return null;
 	}
 
     public LinkedList<Item> getCurrentInventory() {
