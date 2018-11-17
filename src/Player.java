@@ -54,7 +54,6 @@ public class Player {
         this.currentInventory = new LinkedList<>();
         this.money = 0;
         this.dormId = 0;
-	this.questProgress = 0;
         //this.dormRoomCount++;
     }
 
@@ -583,6 +582,10 @@ public class Player {
     
     public int getProgress(){
         return questProgress;
+    }
+
+    public void setProgress(int progress){
+        this.questProgress = progress;
     }
 
     public void advanceQuest(){

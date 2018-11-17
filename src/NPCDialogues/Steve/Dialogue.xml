@@ -4,7 +4,7 @@
 		<intro>
 			Steve says "Sarah tells me you've been dragging your feet
 			on project Ghoul! Didn't I tell you I want that to be your
-			group's number 1 priority!"
+			group's number one priority!"
 		</intro>
 	</dialogue>
         <dialogue id = "1">
@@ -23,6 +23,8 @@
 
 			You better find a laptop and use it in this room!
 		</cont>
+		<condition>TITLE</condition>
+		<status>Tech-Savvy</status>
 		<done>
 			Due to the fact that you had no idea what you were 
 			supposed to be demoing, your demo did not go too well.
@@ -46,6 +48,13 @@
                 <done>
                         You got your notecards turned in just before the bell. Now
 			for the pull request!
-                </done>
+		</done>
+		<condition>
+INVENTORY
+                </condition>
+                <status>
+Notecard 5
+                </status>
+
 	</dialogue>
 </dialogues>

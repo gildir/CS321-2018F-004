@@ -20,6 +20,8 @@ public class NPC {
     private ArrayList<String> introDialogues;
     private ArrayList<String> contDialogues;
     private ArrayList<String> doneDialogues;
+    private ArrayList<String> conditions;
+    private ArrayList<String> status;
     private boolean validDialogue;
 
 
@@ -46,6 +48,8 @@ public class NPC {
 	    introDialogues = new ArrayList<>();
 	    contDialogues = new ArrayList<>();
        	    doneDialogues = new ArrayList<>();
+	    conditions = new ArrayList<>();
+	    status = new ArrayList<>();
 
             File dialFile = new File(fileName);
 	    DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
@@ -62,6 +66,9 @@ public class NPC {
 	    introDialogues.add(0,null);
             contDialogues.add(0,null);
             doneDialogues.add(0,null);
+	    conditions.add(0,null);
+	    status.add(0,null);
+	    
 	    
 	    for(int i = 0; i < xmlDial.getLength(); i ++){
                 dialogueElement = (Element) xmlDial.item(i);
@@ -70,6 +77,8 @@ public class NPC {
                     introDialogues.add(j,null);
                     contDialogues.add(j,null);
                     doneDialogues.add(j,null);
+		    conditions.add(j,null);
+		    status.add(j,null);
                 }
 
 		if(id != -1){
@@ -81,6 +90,12 @@ public class NPC {
 
 	            dialogue = dialogueElement.getElementsByTagName("done").item(0).getTextContent();
                     doneDialogues.set(id,dialogue);
+
+                    dialogue = dialogueElement.getElementsByTagName("condition").item(0).getTextContent();
+                    conditions.set(id,dialogue);
+
+		    dialogue = dialogueElement.getElementsByTagName("status").item(0).getTextContent();
+                    status.set(id,dialogue);
 		}else{
 		    dialogue = dialogueElement.getElementsByTagName("intro").item(0).getTextContent();
                     introDialogues.set(0,dialogue);
@@ -99,9 +114,10 @@ public class NPC {
 	if(!validDialogue)
             return name + " looks at you, and says nothing";
         int progress = player.getProgress();
-	int dialId = (progress / 3)+1;
+//	System.out.println("Getting quest " + progress);
+	int dialId = (progress / 2)+1;
 	String dial = "";
-	switch(progress % 3)
+	switch(progress % 2)
 	{
             case 0:
 	        dial = introDialogues.get(dialId);
@@ -109,15 +125,39 @@ public class NPC {
                     player.advanceQuest();
 		break;
             case 1:
-                dial = contDialogues.get(dialId);
-		break;
-            case 2:
-		dial = doneDialogues.get(dialId);
+		if(checkCondition(player, conditions.get(dialId), status.get(dialId))){
+                    dial = doneDialogues.get(dialId);
+		    player.advanceQuest();
+		}else{
+		    dial = contDialogues.get(dialId);
+		}
 	}
         if(dial != null){
             return dial;
 	}else{
 	    return introDialogues.get(0);
 	}
+    }
+ 
+    /* Checks the player's current state and returns whether they meet the condition and status checks
+     *
+     * @param player Player to check conditions for
+     * @param condition Condition to check
+     * @param status Expected status of the condition
+     *
+     * @return True if the condition has the desired status
+     */
+    public boolean checkCondition(Player player, String condition, String status){
+	System.out.println("Expected " + condition + "=" + status);
+        switch (condition){
+            case "TITLE":
+		System.out.println("Found " + player.getTitle());
+	        if(player.getTitle().equals(status))
+		    return true;
+		else
+	            return false;
+		
+	}
+	return false;
     }
 }
