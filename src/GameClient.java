@@ -578,7 +578,18 @@ public class GameClient {
                      runListener = false;
                      break;
                 case "HELP":
-                    showCommand();
+                    String categoryName = null;
+                    String commandName = null;
+                    if (!tokens.isEmpty())
+                    {
+                        categoryName = tokens.remove(0).toUpperCase();
+                    }
+
+                    if (!tokens.isEmpty())
+                    {
+                        commandName = tokens.remove(0).toUpperCase();
+                    }
+                    showCommand(categoryName, commandName);
                     break;
                 case "ADDCOMMAND":
                     if(tokens.isEmpty()) {
@@ -855,11 +866,11 @@ public class GameClient {
      */
     private void showCommand()
     {
-        showCommand(null);
+        showCommand(null, null);
     }
 
     //Shows every command available in game
-    private void showCommand(String commandToShow)
+    private void showCommand(String commandCategory, String commandToShow)
     {
         try {
             File commandFile = new File("./help.xml");
@@ -869,21 +880,52 @@ public class GameClient {
             Document document = dBuilder.parse(commandFile);
 
             document.getDocumentElement().normalize();
-            NodeList xmlCommands = document.getElementsByTagName("help");
+            NodeList xmlCategory = document.getElementsByTagName("help_category");
+            NodeList xmlCommands;
 
+            String category;
             String description;
+            String commandName;
             Element xmlElement;
+            Element xmlCommandElement;
 
             System.out.println("The game allows you to use the following commands:");
 
-            //Get every commands from xml file and print them
-            for (int i = 0; i < xmlCommands.getLength(); i++) {
-                xmlElement = (Element) xmlCommands.item(i);
+            //Get every command category from xml file first
+            for (int i = 0; i < xmlCategory.getLength(); i++) {
+                xmlElement = (Element) xmlCategory.item(i);
 
-                description = xmlElement.getElementsByTagName("description").item(0).getTextContent();
-                //If the commmand does not have description yet, do not show it.
-                if ( !description.equals("") ){
-                    System.out.println(description);
+                category = xmlElement.getAttribute("category");
+                
+                //Print every catgory if no category given or only specific given category
+                if (commandCategory == null || category.equals(commandCategory))
+                {
+                    System.out.println("In category " + category);
+
+                    xmlCommands = xmlElement.getElementsByTagName("help");
+                    //Then get every command from each category
+                    for (int j = 0; j < xmlCommands.getLength(); j++)
+                    {
+                        xmlCommandElement = (Element) xmlCommands.item(j);
+                        commandName = xmlCommandElement.getAttribute("command");
+
+                        if (commandToShow == null || commandName.equals(commandToShow))
+                        {
+                            description = xmlCommandElement.getElementsByTagName("description").item(0).getTextContent();
+                            System.out.println(description);
+                        }
+
+                        if (commandToShow != null)
+                        {
+                            break;
+                        }
+                    }
+
+                    System.out.println("");
+                    if (commandCategory != null)
+                    {
+                        break;
+                    }
                 }
             }
         } catch (ParserConfigurationException | SAXException | IOException ex) {
