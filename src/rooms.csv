@@ -12,7 +12,7 @@ WEST,1,You walk around the fountains as you head towards the clock.
 EAST,0,You look to the west and see a very long staircase just past the traffic circle. You decide against going that direction.
 3,outside,Exploratory Hall,You are standing out front of the new Exploratory Hall.
 NORTH,1,You head up the sidewalk, towards the clock.
-SOUTH,5,You head south towards the engineering building
+SOUTH,5,You try to head south, but too many students are smoking near Enterprise hall, so you stay where you are.
 WEST,0,You try to head towards the Johnson Center, but the entrance is closed for construction.
 EAST,0,You look towards Exploratory Hall, but decide to just admire the view from where you are.
 4,inside,Dorm Building,Dorm Building main hallway leading to the elevator.
@@ -26,8 +26,8 @@ SOUTH,4,You try to head back to the Hallway
 WEST,0,You tried heading west, there is nothing there.
 EAST,0,You tried heading, east there is nothing there.
 5,inside,Engineering Building,You are inside the Nguyen Engineering Building
-NORTH,3,You head north towards exploratory hall
-SOUTH,0,You try to go south, but there's nothing there
-WEST,0,You try to go west, but there's nothing there
-EAST,0,You try to go east, but there's nothing there
+NORTH,3,filler
+SOUTH,0,filler
+WEST,0,filler
+EAST,0,filler
 Steve

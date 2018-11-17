@@ -46,13 +46,15 @@ public class PlayerAccountManager {
 		logger = Logger.getLogger(PlayerAccountManager.class.getName());
 	}
 
-		/**
+	/**
          * @param username Desired username for new account
          * @param password Hashed password for account
+	 * @param recovery List of recovery questions and answers, ordered q1,a1,q2,a2,q3,a3
          * @return AccountResponse with the given status
 	 */
-	public synchronized AccountResponse createNewAccount(String username, String password) {
+	public synchronized AccountResponse createNewAccount(String username, String password, ArrayList<String> recovery) {
 		String lower = username.toLowerCase().trim();
+                
 		if (accountExists(lower))
 			return new AccountResponse(Responses.USERNAME_TAKEN);
 		if (!lower.matches("^[a-zA-Z 0-9]{2,15}$"))
@@ -60,11 +62,12 @@ public class PlayerAccountManager {
 		File userDir = new File(accountFolder.getAbsolutePath() + "/" + lower);
 		try {
 			playerIds.add(lower);
-
-      //get current system time for new account age
-			long accountAge = System.currentTimeMillis();
-			
-			Player p = new Player(username, accountAge);
+			/*String[] recoveryArray = new String[recovery.size()];
+			int count = 0;
+			for(String i : recovery)
+				recoveryArray[count++] = i;
+			count = 0;*/
+			Player p = new Player(username, recovery);
 			userDir.mkdir();
 			writePlayerDataFile(p);
 			FileOutputStream passFile = new FileOutputStream(userDir.getAbsolutePath() + "/pass.txt");
