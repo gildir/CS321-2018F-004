@@ -18,7 +18,14 @@ public interface GameObjectInterface extends Remote {
 	 * @throws RemoteException
 	 */
 	public String pokeGhoul(String playerName) throws RemoteException;
-
+    
+    /**115 Jorge team 6
+     * Invokes the chest operations
+     * @param playerName Player Name
+     * @return String chest message 
+     * @throws IOExpcetion
+     */   
+    public String chest(String playerName, String option, String ItemName) throws RemoteException;
 
 	/**
 	 * Pokes the ghoul in the current room
