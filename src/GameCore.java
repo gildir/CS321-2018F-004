@@ -1087,6 +1087,10 @@ public class GameCore implements GameCoreInterface {
      */
     @Override
 	public Player joinGame(String name, String password) {
+                // Check to see if the player of that name is already in game.
+                if (isPlayerOnline(name))
+                        return null;
+                        
 		synchronized (loginLock) {
 			// Check to see if the player of that name is already in game.
 			Player player = this.playerList.findPlayer(name);
@@ -2824,5 +2828,10 @@ public class GameCore implements GameCoreInterface {
 		return message;
 		
 	}
+
+    @Override
+    public boolean isPlayerOnline(String name) {
+        return this.playerList.findPlayer(name) != null;
+    }
 
 }
