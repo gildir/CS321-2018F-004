@@ -19,6 +19,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 @JsonIgnoreProperties({ "replyWriter", "outputWriter" })
 public class Player {
+    private int dormId;//used to determine private dormroom Id
     public LinkedList<Item> currentInventory;
     private String name;
     private int currentRoom;
@@ -28,7 +29,9 @@ public class Player {
     private double money;
     private DataInputStream inputWriter = null;
     private boolean inTrade = false;
+    private Item tradeItem = null;
     private boolean tradeRequested = false;
+    private boolean tradeReceived = false;
     private String tradePartner = "";
     private String lastPlayer = "";
     private boolean hasChallenge = false;
@@ -39,35 +42,39 @@ public class Player {
     private boolean hasOption = false;
     private ArrayList<NPC> dialogueList = new ArrayList<NPC>();
     @JsonProperty("recovery")
-    private ArrayList<String> recovery;
-    
-    
-	public Player(@JsonProperty("name") String name, @JsonProperty("recovery") ArrayList<String> recovery) {
+    private ArrayList<String> recovery; //stored question, answer, question,...
+    private boolean hasTitle = false; //used for title and use item feature 
+    private String playerItemTitle = "";
+    private final long accountAge;
+
+    public Player(@JsonProperty("name") String name, @JsonProperty("accountAge") long accountAge) {
         this.currentRoom = 1;
         this.currentDirection = Direction.NORTH;
         this.name = name;
-        this.recovery = recovery;
+        this.accountAge = accountAge;
         this.currentInventory = new LinkedList<>();
         this.money = 0;
+        this.recovery = new ArrayList<String>();
     }
 
+    public int getDormId() {return this.dormId;}
+    public void setDormId(int i) {this.dormId = i;} 
+
     private HashSet<Player> ignoredPlayers = new HashSet<Player>();
-    // missed Messages - not yet in uses
-    private HashSet<Message> missedMessages = new HashSet<Message>();
 
     //Feature 409 WordFilter
 
-    /**
+/*    *//**
      * Prints a chat statemnet from another player.
      * @param playerName - name of player making the statement
      * @param action - whether the player is saying or whispering the statement
      * @param message - the statement the other player is making
-     */
+     *//*
     public void say(String playerName, String action, String message) {
         String filteredMessage = filterMessage(message);
-        String statement = playerName + " " + action + " " + "\"" + filteredMessage + "\"" + ".";
+        String statement = playerName + " " + action + " " + filteredMessage + ".";
         getReplyWriter().println(statement);
-    }
+    }*/
 
     //Collection of words to be filtered from game chat
     private HashSet<String> filteredWords = new HashSet<String>();
@@ -111,7 +118,6 @@ public class Player {
      * @param message - message being filtered.
      * @return - new filtered message.
      */
-
     public String filterMessage(String message) {
         String newMessage = "";
         String bleep = "[BLEEEEP]";
@@ -129,26 +135,20 @@ public class Player {
         newMessage = newMessage.substring(0, (newMessage.length()-1));
 
         return newMessage;
-    }
+    }/*
 
     public void printMessage(Player speaker, String message, String action) {
         String newMessage = filterMessage(message);
-        this.getReplyWriter().println(speaker.getName() + " " + action + " \"" + newMessage + "\"");
+        this.getReplyWriter().println(speaker.getName() + " " + action + " " + newMessage);
     }
-
+*/
     /**
      * Adds a player's reference to set ignoredPlayers.
      * @param playerToIgnore
      * @return - whether player reference was successfully added to set ignorePlayer.
      */
     public boolean ignorePlayer(Player playerToIgnore) {
-        // if(!ignoredPlayers.contains(playerToIgnore)){
-        //     System.out.println(playerToIgnore.name + " has been ignored.");
         return ignoredPlayers.add(playerToIgnore);
-        // } else {
-        //     System.out.println(playerToIgnore.name + " is already being ignored.");
-        //     return false;
-        // }
     }
 
     //Feature 408. Unignore Player.
@@ -201,41 +201,43 @@ public class Player {
     }
 
     /**
-     *
-     * @param sentMessage - the Message being sent to this player.
-     * @return - whether or not the sent message was successfully added to the set of received messages.
+     * Format a message to be sent to this player.
+     * @param source Player speaking this message
+     * @param messageType Verbage of how this message is communicated
+     *                    Examples: "says", "whispers", "shouts", "offers to trade", "mimes to the party", "performs an expressionist dance illustrating"
+     * @param message The message to be communicated
+     * @return True if successful
+     *          False if ignoring
      */
+    public boolean messagePlayer(Player source, String messageType, String message ) {
+        // check source for ignore
+        for (Player p : this.ignoredPlayers)
+            if (p.equals(source))
+                return false;
 
-    public boolean receiveMessage(Message sentMessage) {
-        boolean received = false;
+        // filter message
+        String newMessage = filterMessage(message);
 
-        //put ignore detection here
-
-        /*if(recievedMessages.add(sentMessage)) {
-
-            sentMessage.SetReceived();
-            received = true;
-        }*/
-
-        // if recipient is offline, detect here
-
-        return received;
+        // send prefix, timestamp, source, type, ", ", and message
+        this.getReplyWriter().println(
+            this.prefix +
+            String.format("[%tD %<tT]", GameServer.getDate()) + " " +
+            source.getName() + " " +
+            messageType + ", " +
+            newMessage);
+        return true;
     }
 
     /**
-     *
-     * @param textOfMessage - The actual input message from the user.
-     * @param intendedRecipient - A reference to the user the message is being sent to.
-     * @return - Whether the recipient successfully received the sent message.
+     * Return a standard opening for chat messages sent by this player
+     * @return [Time Stamp][Prefix] You
      */
-    public boolean sendMessage(String textOfMessage, Player intendedRecipient) {
-
-        Message newMessage = new Message(textOfMessage, this, intendedRecipient);
-        return intendedRecipient.receiveMessage(newMessage);
-
+    public String getMessage() {
+        return
+            this.prefix +
+            String.format("[%tD %<tT]", GameServer.getDate()) +
+            " You ";
     }
-
-    /**Reeds changes end here**/
 
     public void turnLeft() {
         switch(this.currentDirection.toString()) {
@@ -297,20 +299,49 @@ public class Player {
     	this.recovery = recovery;
     }
 
+    @JsonProperty("recovery")
+    public ArrayList<String> getRecovery() {
+    	return this.recovery;
+    }
+
     public void setName(String name) {
         this.name = name;
     }
 	
 	public String getQuestion(int num) {
-		if(this.recovery.size() >= num * 2)
-			return this.recovery.get(num * 2);
-		return null;
+		String q = null;
+		try {
+			q = this.recovery.get(num * 2);
+		} catch (IndexOutOfBoundsException e) {
+			return null;
+		}
+		return q;
+	}
+	
+	public void addQuestion(String question, String answer) {
+		this.recovery.add(question);
+		this.recovery.add(answer);
+		this.setRecovery(this.recovery);
+	}
+	
+	public void removeQuestion(int num) {
+		this.recovery.remove(num * 2);
+		this.money = num * 2;
+		this.recovery.remove(num * 2); //second one removes the answer
 	}
 	
 	public String getAnswer(int num) {
-		if(this.recovery.size() >= (num * 2) + 1)
-			return this.recovery.get((num * 2) + 1);
-		return null;
+		String q = null;
+		try {
+			q = this.recovery.get((num * 2) + 1);
+		} catch (IndexOutOfBoundsException e) {
+			return null;
+		}
+		return q;
+	}
+	
+	public long getAccountAge() {
+		return accountAge;
 	}
 
     //Update dialogue status of this player with other npcs
@@ -430,6 +461,33 @@ public class Player {
 	}
     }
 
+    //setter for hasTitle
+    public void setHasTitle(boolean val) {
+	hasTitle = val;
+    }
+
+    //getter for hasTitle
+    public boolean checkIfHasTitle() {
+	return hasTitle;
+    }
+
+    //sets new title of player
+    public void setTitle(String newTitle) {
+	playerItemTitle = newTitle;
+    }
+
+    //gets title of player
+    public String getTitle() {
+	return playerItemTitle;
+    }
+
+    public boolean hasReceivedTrade(){
+        return tradeReceived;
+    }
+
+    public void setReceivedTrade(boolean val){
+        tradeReceived = val;
+    }
     public boolean hasTradeRequest(){
         return tradeRequested;
     }
@@ -450,6 +508,13 @@ public class Player {
     }
     public void setTradePartner(String s){
         tradePartner = s;
+    }
+
+    public void setTradeItem(Item it){
+        tradeItem = it;
+    }
+    public Item getTradeItem(){
+        return tradeItem;
     }
 
     public void setReplyWriter(PrintWriter writer) {
@@ -580,16 +645,32 @@ public class Player {
 
     private static class ItemPriceComparator implements Comparator<Item> {
 	@Override
-	public int compare(Item ItemA, Item ItemB) {
-		if(ItemA.getPrice() > ItemB.getPrice()) {
-			return 1;
-		}
-		else if(ItemA.getPrice() < ItemB.getPrice()) {
-			return -1;
-		}
-		else {
-			return 0;
-		}
-	}
+        public int compare(Item ItemA, Item ItemB) {
+            if(ItemA.getPrice() > ItemB.getPrice()) {
+                return 1;
+            }
+            else if(ItemA.getPrice() < ItemB.getPrice()) {
+                return -1;
+            }
+            else {
+                return 0;
+            }
+        }
     }
+
+    //Feature 413 Prefix
+    // string to be used as a chat prefix, default value is ">>>".
+    private String prefix = ">>>";
+
+    /**
+     * Sets the chat prefix from default.
+     * @param newPrefix - New prefix to replace old.
+     */
+    public void setPrefix(String newPrefix) {
+        prefix = newPrefix;
+    }
+
+
+    //End 413 Prefix
+
 }
