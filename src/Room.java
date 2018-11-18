@@ -135,7 +135,7 @@ public class Room {
 		return ret;
         }
     }
-    
+
     /*
      * Adds an NPC to the current room
      *
@@ -146,6 +146,16 @@ public class Room {
         npcs.add(new NPC(name, id));
     }
 
+    /*
+     * Returns the linked list of NPCs
+     *
+     * @return LinkedList of NPCs located in the room
+     */
+    public LinkedList<NPC> fetchNPCs() {
+        return npcs;
+    }
+
+
     public String getNPCs() {
         if(this.npcs.isEmpty()) {
             return "None.";
@@ -153,10 +163,6 @@ public class Room {
         else {
             return this.npcs.toString();
         }
-    }
-
-    public LinkedList<NPC> fetchNPCs() {
-        return npcs;
     }
     
     public void addObject(Item obj) {

@@ -49,12 +49,8 @@
                         You got your notecards turned in just before the bell. Now
 			for the pull request!
 		</done>
-		<condition>
-INVENTORY
-                </condition>
-                <status>
-Notecard 5
-                </status>
+		<condition>INVENTORY</condition>
+                <status>x5 Notecard</status>
 
 	</dialogue>
 </dialogues>

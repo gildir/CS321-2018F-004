@@ -24,7 +24,7 @@ public class Map{
                         int numRooms, numExits;
 
                         String title, description, room_type;
-                        String message;
+                        String message, npcName;
                         int id, link;
 
                         Direction exitId;
@@ -32,15 +32,14 @@ public class Map{
                         Room newRoom;
                         Exit newExit;
 
-                        String npcName;
-			
-			numRooms = Integer.parseInt(mapIn.nextLine());
+                        numRooms = Integer.parseInt(mapIn.nextLine());
                         numExits = 4;
 
 			mapIn.useDelimiter(",|\\n|\\r\\n");
+
                         for(int i = 0; i < numRooms; i++) {
 
-				id = Integer.parseInt(mapIn.next());
+                                id = Integer.parseInt(mapIn.next());
                                 room_type = mapIn.next();
                                 title = mapIn.next();
                                 mapIn.useDelimiter("\\S|\\s");
@@ -49,6 +48,7 @@ public class Map{
                                 description = mapIn.next();
 
                                 //                System.out.println("Adding Room " + id + " with Title " + title + ": " + description);
+
 
                                 newRoom = new Room(id, room_type, title, description);
 
@@ -64,17 +64,16 @@ public class Map{
 
                                         //                    System.out.println("... Adding Exit " + exitId + " to " + link + ": " + message);
                                         newRoom.addExit(exitId, link, message);
-                                }               
+                                }                
 
-			        mapIn.useDelimiter(",|\\n|\\r\\n");	
+                                mapIn.useDelimiter(",|\\n|\\r\\n");	
                                 //Check if the next value is an integer, if not, then get the name of an npc to add from the next value and add it to the last room
                                 while(!mapIn.hasNextInt() && mapIn.hasNext())
                                 {
                                         npcName = mapIn.next();
                                         newRoom.addNPC(npcName, id);
                                 }
-
-                                map.add(newRoom);
+				map.add(newRoom);
                         }
                         mapIn.close();
                 } catch (IOException | IllegalArgumentException ex) {

@@ -74,10 +74,9 @@ public interface GameCoreInterface {
 	 * 
 	 * @param name
 	 * @param password
-	 * @param recovery List of recovery questions and answers, ordered q1,a1,q2,a2,q3,a3
 	 * @return an enumeration representing the creation status.
 	 */
-	public Responses createAccountAndJoinGame(String name, String password, ArrayList<String> recovery);
+	public Responses createAccountAndJoinGame(String name, String password);
 
     /**
      * Returns a look at the area of the specified player.
@@ -326,8 +325,10 @@ public interface GameCoreInterface {
 	 * @param num Marks which answer will be grabbed
 	 * @return String of recovery question, null if user doesn't exist
 	 */
-	public String getAnswer(String name, int num);
+	public Boolean getAnswer(String name, int num, String answer);
 	
+	public Responses verifyPassword(String name, String password);
+
 	/**
 	 * Resets passwords.
 	 * 
@@ -404,4 +405,9 @@ public interface GameCoreInterface {
 	 * @return Message showing online friends
 	 */
 	public String viewFriends(String name, boolean onlineOnly);
+	
+	public void addQuestion(String name, String question, String answer);
+	
+	public void removeQuestion(String name, int num);
+  
 }

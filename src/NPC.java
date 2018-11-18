@@ -148,14 +148,29 @@ public class NPC {
      * @return True if the condition has the desired status
      */
     public boolean checkCondition(Player player, String condition, String status){
-	System.out.println("Expected " + condition + "=" + status);
-        switch (condition){
+	//System.out.println("Expected " + condition + "=" + status);
+        int temp, temp2;//Temporary integer used for checking status's
+	switch (condition){
             case "TITLE":
-		System.out.println("Found " + player.getTitle());
+		//System.out.println("Found " + player.getTitle());
 	        if(player.getTitle().equals(status))
 		    return true;
 		else
 	            return false;
+	    case "INVENTORY":
+		if(status.substring(0,1).equals("x"))
+                    temp = Integer.parseInt(status.substring(1,2));
+		else
+		    temp = 1;
+		temp2 = 0;
+		for (Item i : player.getCurrentInventory())
+		{
+                if(i.getName().equals(status.substring(3,status.length())))
+		temp2 ++;
+		}
+		if(temp2 >= temp)
+		    return true;
+		return false;
 		
 	}
 	return false;

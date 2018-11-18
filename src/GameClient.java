@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.lang.reflect.InvocationTargetException;
 import java.net.ConnectException;
 import java.net.MalformedURLException;
 import java.net.ServerSocket;
@@ -58,6 +59,8 @@ public class GameClient {
     protected String playerName;
 
     private String lastCommand;
+
+	private AccountEditWizard accountEditWizard;
     
     //used for timing the title feature
     private long startTime;
@@ -113,30 +116,10 @@ public class GameClient {
 						if (!nameSat) {
 							System.out.println("Username and password combination invalid");
 							resetPassword();
-							}
+						}
 						break;
 					case "C":
-						//prompt user for recovery questions
-						count = 0;
-						System.out.println("Please create 1st security question for password recovery");
-						System.out.print(">");
-						recovery.add(keyboardInput.readLine().trim());
-						System.out.println("Please give the answer");
-						System.out.print(">");
-						recovery.add(keyboardInput.readLine().trim());
-						System.out.println("Please create 2nd security question for password recovery");
-						System.out.print(">");
-						recovery.add(keyboardInput.readLine().trim());
-						System.out.println("Please give the answer");
-						System.out.print(">");
-						recovery.add(keyboardInput.readLine().trim());
-						System.out.println("Please create 3rd security question for password recovery");
-						System.out.print(">");
-						recovery.add(keyboardInput.readLine().trim());
-						System.out.println("Please give the answer");
-						System.out.print(">");
-						recovery.add(keyboardInput.readLine().trim());
-						Responses resp = remoteGameInterface.createAccountAndJoinGame(playerName, pass, recovery);
+						Responses resp = remoteGameInterface.createAccountAndJoinGame(playerName, pass); //removed recovery
 						switch (resp) {
 						case BAD_USERNAME_FORMAT:
 							System.out
@@ -204,6 +187,10 @@ public class GameClient {
             readPrefixFromFile();
 
 
+			accountEditWizard = new AccountEditWizard(keyboardInput, System.out, remoteGameInterface, this.playerName);
+
+			accountEditWizard = new AccountEditWizard(keyboardInput, System.out, remoteGameInterface, this.playerName);
+
             // Collect input for the game.
             while(runGame) {
                 try {
@@ -222,7 +209,20 @@ public class GameClient {
             System.err.println("[CRITICAL ERROR] There was a severe error with the RMI mechanism.");
             System.err.println("[CRITICAL ERROR] Code: " + re);
             System.exit(-1);
-        }        
+        } catch (NoSuchMethodException e) {
+            Logger.getLogger(GameClient.class.getName()).log(Level.SEVERE, null, e);
+        } catch (SecurityException e) {
+            Logger.getLogger(GameClient.class.getName()).log(Level.SEVERE, null, e);
+        } catch (InstantiationException e) {
+            Logger.getLogger(GameClient.class.getName()).log(Level.SEVERE, null, e);
+        } catch (IllegalAccessException e) {
+            Logger.getLogger(GameClient.class.getName()).log(Level.SEVERE, null, e);
+        } catch (IllegalArgumentException e) {
+            Logger.getLogger(GameClient.class.getName()).log(Level.SEVERE, null, e);
+        } catch (InvocationTargetException e) {
+            Logger.getLogger(GameClient.class.getName()).log(Level.SEVERE, null, e);
+        }
+
     }
 
     // Helper for Features 4XX - Chat System
@@ -691,7 +691,14 @@ public class GameClient {
                 case "TEACH":
                     System.out.println(remoteGameInterface.teach(this.playerName));
                     break;
-		case "TALK":
+			case "ACCOUNT":
+				try {
+					accountEditWizard.enter();
+				} catch (Exception e) {
+					System.out.println("It appears the wizards wand broke. Probably a Weasley...");
+				}
+				break;
+                case "TALK":
 		    if(tokens.isEmpty()){
 			System.out.println("You need to provide a name for the NPC you are trying to talk to");
 		    }else
@@ -809,6 +816,7 @@ public class GameClient {
     	Responses response;
     	int count;
     	boolean correct;
+    	Boolean buff;
     	//booleans for dialogue loops
     	boolean go;
     	boolean test;
@@ -830,22 +838,26 @@ public class GameClient {
 	    			System.out.print(">");
 	    			name = keyboardInput.readLine().trim();
 	    			question = remoteGameInterface.getQuestion(name, 0);
-	    			answer = remoteGameInterface.getAnswer(name, 0);
-	    			if (question != null && answer != null) {
+	    			//answer = remoteGameInterface.getAnswer(name, 0);
+	    			if (question != null) {
 	    				test = true;
 	    				while (test) {
 	    					//asks recovery question
 	    					correct = true;
-	    					for(int i = 0; i < 3; i++) {
-	    						question = remoteGameInterface.getQuestion(name, i);
-	    		    			answer = remoteGameInterface.getAnswer(name, i);
-		    					System.out.println();
+	    					count = 0;
+	    					do {
+	    						System.out.println();
 			    				System.out.println(question);
 			    				System.out.print("Answer:");
-			    				input = keyboardInput.readLine().toLowerCase().trim();
-			    				if(correct)
-			    					correct = input.equals(answer);
-	    					}
+			    				input = new String(System.console().readPassword()).toLowerCase().trim();
+			    				buff = remoteGameInterface.getAnswer(name, count, input);
+			    				question = remoteGameInterface.getQuestion(name, ++count);
+			    				if(buff == null) {
+			    					question = null;
+			    				} else {
+			    					correct = buff;
+			    				}
+	    					} while(question != null && correct);
 		    				//gets new password if recovery question answered
 		    				if(correct) {
 		    					test = false;
@@ -862,7 +874,7 @@ public class GameClient {
 									System.out.println("The server experienced an unkown failure");
 									break;
 								case INTERNAL_SERVER_ERROR:
-									System.out.println("The experianced a data error");
+									System.out.println("The experienced a data error");
 									break;
 								default:
 									System.out.println("Unkown server behavior");
@@ -891,9 +903,10 @@ public class GameClient {
 	    			} else {
 		    			test2 = true;
 		    				//Username inputed by user wasn't found, asks if they want to continue recovery process
+		    				//Alternatively, user may not have set up questions yet
 			    			while(test2) {
 			    				System.out.println();
-			    				System.out.println("Your username was not found, try again?");
+			    				System.out.println("Your username was not found or your account has no recovery questions, try again?");
 			    				System.out.print("(Y/N) >");
 			    				input = keyboardInput.readLine().toUpperCase().trim();
 			    				switch(input) {

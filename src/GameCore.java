@@ -5,6 +5,9 @@ import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -27,7 +30,6 @@ import java.util.logging.StreamHandler;
  * @author Kevin
  */
 public class GameCore implements GameCoreInterface {
-	private int dormCountId;
     private final PlayerList playerList;
     private final Map map;
     protected DailyLogger dailyLogger;
@@ -44,6 +46,7 @@ public class GameCore implements GameCoreInterface {
 	private FriendsManager friendsManager;
 	private final Object friendsLock = new Object();
     
+    private int dormCountId = 100002;//used for dormroom initialization   
     /**
 	 * Creates a new GameCoreObject. Namely, creates the map for the rooms in the
 	 * game, and establishes a new, empty, player list.
@@ -61,7 +64,7 @@ public class GameCore implements GameCoreInterface {
         this.dailyLogger = new DailyLogger();
         dailyLogger.write("SERVER STARTED");
         playerList = new PlayerList(); 
-        dormCountId = 100002;//used for dormroom initialization
+        
         // Builds a list of shops mapped to their map id (can be expanded as needed)
         shoplist = new HashMap<Integer,Shop>();
         shoplist.put(new Integer(1), new Shop("Clocktower shop", "The shopping destination for all of your gaming needs."));
@@ -187,6 +190,23 @@ public class GameCore implements GameCoreInterface {
                 awakeDayGhoul.start();
             }
 	
+	/**
+	 * Used to create a hash encrypted in SHA256 for use in encrypting passwords
+	 * 
+	 * @param toHash
+	 * @return SHA256 encrypted hash value, or "ERROR" If encryption method fails.
+	 */
+	private String hash(String toHash) {
+		try {
+			byte[] encodedhash = MessageDigest.getInstance("SHA-256").digest(toHash.getBytes(StandardCharsets.UTF_8));
+			StringBuilder sb = new StringBuilder();
+			for (byte b : encodedhash)
+				sb.append(String.format("%02X", b));
+			return sb.toString();
+		} catch (NoSuchAlgorithmException e) {
+		}
+		return "ERROR";
+	}
 
 	public void ghoulWander(Ghoul g, Room room) {
 		Random rand = new Random();
@@ -201,7 +221,7 @@ public class GameCore implements GameCoreInterface {
 		// random walk.
 		while (true) {
 			int roomID = candinateRoom[rand.nextInt(4)];
-			if (roomID != 0 && roomID < 100001) {
+			if (roomID != 0) {
 				g.setRoom(roomID);
 				return;
 			}
@@ -854,6 +874,7 @@ public class GameCore implements GameCoreInterface {
     @Override
 	public Player joinGame(String name, String password) {
 		synchronized (loginLock) {
+			password = hash(password);
 			// Check to see if the player of that name is already in game.
 			Player player = this.playerList.findPlayer(name);
 			if (player != null)
@@ -863,15 +884,16 @@ public class GameCore implements GameCoreInterface {
 				return null;
 			player = resp.player;
 			this.playerList.addPlayer(player);
-			player.setDormId(dormCountId);
-			DormRoom dorm = new DormRoom(dormCountId,"inside","Dorm Room","Your very own, personal dorm room!");
-			dorm.addExit(Direction.valueOf("NORTH"),-100000,"You go back to the elevator");
-			dorm.addExit(Direction.valueOf("EAST"),-100000,"You go back to the elevator");
-			dorm.addExit(Direction.valueOf("SOUTH"),100000,"You go back to the elevator");
-			dorm.addExit(Direction.valueOf("WEST"),-100000,"You go back to the elevator");
-			this.map.addRoom(dorm);
-			if(player.getCurrentRoom() > 100000){player.setCurrentRoom(dormCountId);}
-			dormCountId++;
+
+            //112a DormRoom creation
+            player.setDormId(dormCountId);
+            DormRoom dorm = new DormRoom(dormCountId,"inside","Dorm Room","Your very own, personal dorm room!");                                                                                                   dorm.addExit(Direction.valueOf("NORTH"),-100000,"You go back to the elevator");
+            dorm.addExit(Direction.valueOf("EAST"),-100000,"You go back to the elevator");
+            dorm.addExit(Direction.valueOf("SOUTH"),100000,"You go back to the elevator");
+            dorm.addExit(Direction.valueOf("WEST"),-100000,"You go back to the elevator");
+            this.map.addRoom(dorm);
+            if(player.getCurrentRoom() > 100000){player.setCurrentRoom(dormCountId);}
+            dormCountId++;
 
 			this.broadcast(player, player.getName() + " has arrived.");
 			connectionLog(true, player.getName());
@@ -892,9 +914,9 @@ public class GameCore implements GameCoreInterface {
 	 */
 	@Override
 
-	public synchronized Responses createAccountAndJoinGame(String name, String password, ArrayList<String> recovery) {
+	public synchronized Responses createAccountAndJoinGame(String name, String password) {
 		synchronized (createAccountLock) {
-			PlayerAccountManager.AccountResponse resp = accountManager.createNewAccount(name, password, recovery);
+			PlayerAccountManager.AccountResponse resp = accountManager.createNewAccount(name, hash(password));
 			if (!resp.success())
 				return resp.error;
 			if (joinGame(name, password) != null)
@@ -1074,14 +1096,16 @@ public class GameCore implements GameCoreInterface {
         if(room.canExit(direction)) {
             this.broadcast(player, player.getName() + " has walked off to the " + direction);
             player.getReplyWriter().println(room.exitMessage(direction));
+            //private room redirection 112a
             if(room.getLink(direction) == 100001)
-            {
-            	player.setCurrentRoom(player.getDormId());
-            }
-            else
-            {
-            player.setCurrentRoom(room.getLink(direction));
-            }
+            {    
+                player.setCurrentRoom(player.getDormId());
+            }    
+            else 
+            {    
+                player.setCurrentRoom(room.getLink(direction));
+            }    
+//            player.setCurrentRoom(room.getLink(direction));
             String logMessage = String.format("%s used command MOVE %s [moved from %s to %s]", player.getName(), direction.toString(), room.getTitle(), map.findRoom(player.getCurrentRoom()).getTitle());
 			this.broadcast(player, player.getName() + " just walked into the area.");
 			Ghost g = new Ghost(player);
@@ -1732,7 +1756,6 @@ public class GameCore implements GameCoreInterface {
        }
     }
 
-
 	/**
 	 * Logs player connections
 	 * 
@@ -1896,17 +1919,30 @@ public class GameCore implements GameCoreInterface {
 	 * @return String of recovery question, null if user doesn't exist
 	 */
 	public String getQuestion(String name, int num) {
-		PlayerAccountManager.AccountResponse resp = null;
-		resp = this.accountManager.getPlayer(name);
-		if(!resp.success()) {
-			return null;
-		}
-		Player player = resp.player;
-		if (player != null) {
+        Player player = this.playerList.findPlayer(name);
+        if (player==null) {
+        	PlayerAccountManager.AccountResponse resp = this.accountManager.getPlayer(name);
+        	if(!resp.success())
+        		return null;
+        	player=resp.player;
+        }
+        if (player != null) {
 			return player.getQuestion(num);
 		} else {
 			return null;
 		}
+	}
+	
+	public void addQuestion(String name, String question, String answer) {
+		//PlayerAccountManager.AccountResponse resp = this.accountManager.getPlayer(name);
+	
+		//if(!resp.success())
+			//return;
+		Player player = this.playerList.findPlayer(name);
+		if(player != null) {
+			player.addQuestion(question, hash(answer));
+		}
+		
 	}
 	
 	/**
@@ -1915,20 +1951,29 @@ public class GameCore implements GameCoreInterface {
 	 * @param num Marks which answer will be grabbed
 	 * @return String of recovery question, null if user doesn't exist
 	 */
-	public String getAnswer(String name, int num) {
-		PlayerAccountManager.AccountResponse resp = null;
-		resp = this.accountManager.getPlayer(name);
-		if(!resp.success()) {
-			return null;
-		}
-		Player player = resp.player;
+	public Boolean getAnswer(String name, int num, String answer) {
+        Player player = this.playerList.findPlayer(name);
+        if (player==null) {
+        	PlayerAccountManager.AccountResponse resp = this.accountManager.getPlayer(name);
+        	if(!resp.success())
+        		return null;
+        	player=resp.player;
+        }
 		if(player != null) {
-			return player.getAnswer(num);
+			return player.getAnswer(num).equals(hash(answer));
 		} else {
 			return null;
 		}
 	}
-	
+
+	public Responses verifyPassword(String name, String password) {
+		password = hash(password);
+		PlayerAccountManager.AccountResponse resp = this.accountManager.getAccount(name, password);
+		if (resp.success())
+			return Responses.SUCCESS;
+		return resp.error;
+	}
+
 	/**
 	 * Resets passwords.
 	 * 
@@ -1936,12 +1981,20 @@ public class GameCore implements GameCoreInterface {
 	 * @param password New password to be saved
 	 */
 	public Responses resetPassword(String name, String password) {
+		password = hash(password);
 		PlayerAccountManager.AccountResponse resp = this.accountManager.getPlayer(name);
 		if(!resp.success()) {
 			return resp.error;
 		}
 		return accountManager.resetPassword(resp.player, password);
 		
+	}
+	
+	public void removeQuestion(String name, int num) {
+		Player player = this.playerList.findPlayer(name);
+		if(player != null) {
+			player.removeQuestion(num);
+		}
 	}
 
 }
