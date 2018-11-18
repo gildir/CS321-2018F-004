@@ -411,6 +411,9 @@ public class GameClient {
 			}
                     }
                     break;
+		case "JOURNAL":
+		    System.out.println(remoteGameInterface.journal(this.playerName));
+		    break;
                 case "MOVE":
                     if(tokens.isEmpty()) {
                         System.err.println("You need to provide a direction to move.");

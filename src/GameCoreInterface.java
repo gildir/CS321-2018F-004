@@ -304,6 +304,13 @@ public interface GameCoreInterface {
      */
     public boolean checkNPCValidity(String playerName, String npcName);
 
+    /**
+     * Returns an the player's current quest
+     * @param name Name of the player
+     * @return String representation of current quest progress
+     */
+    public String journal(String name);
+
     /*
      * Delete a player's account.
      *

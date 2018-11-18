@@ -164,7 +164,7 @@ public class NPC {
 		if(dial != null){
 		    if(dial.isEmpty())
 			return introDialogues.get(0);
-		    if(!stat.substring(0,1).equals("TP2"))
+		    if(!cond.equals("TP2"))//TP2, condition code for teleporting without updating quest progress
                     	player.advanceQuest();
 		    switch(cond){//Set quest preconditions
 			case "RPS":
@@ -237,18 +237,6 @@ public class NPC {
                     return false;
 		}
 		else{
-		    temp = 1;//If not specified, assume only 1
-		    for (Item item : player.getCurrentInventory())
-		    {
-                        if(item.getName().equals(status))
-		            temp2 ++;//temp2 stores the number of specified item found in player inventory
-		    }
-		    if(temp2 >= temp){//If the player has the required number, remove from inventory and return true
-		        for(int i = 0; i < Integer.parseInt(status.substring(1,2)); i++){
-		   	    player.removeObjectFromInventory(status.substring(3,status.length()));
-		        }
-		        return true;
-		   }
 		   return false;
 		}
 	    case "RPS"://Quest to win x number of RPS challenges
@@ -269,17 +257,20 @@ public class NPC {
 	        }
 		return false;
             case "SWAP"://Quest to give the NPC x items to get y items
-		Scanner sc = new Scanner(status).useDelimiter(",|\\R\\N|\\N");
+		Scanner sc = new Scanner(status).useDelimiter(",|\\r\\n|\\n");
 		temp = Integer.parseInt(sc.next());//1 if item is from items.csv, 2 if it is declared in status
 		temp2 = 0;
+		tempStr = sc.next();//Store the name of the item to give
 		for (Item item : player.getCurrentInventory())
                 {
-                    if(item.getName().equals(status))
+                    if(item.getName().equals(tempStr)){
                         temp2 ++;//temp2 stores the number of specified item found in player inventory
+		    }
                 }
+
                 if(temp2 >= temp){//If the player has the required number, give the new item(s), and remove old from inventory and return true
-                    for(int i = 0; i < Integer.parseInt(status.substring(1,2)); i++){
-                        player.removeObjectFromInventory(status.substring(3,status.length()));
+                    for(int i = 0; i < temp; i++){
+                        player.removeObjectFromInventory(tempStr);
                     }
                     Item item = new Item(sc.next(),Integer.parseInt(sc.next()),Integer.parseInt(sc.next()),sc.next(),sc.next());//Create the item to give
 		    temp = Integer.parseInt(sc.next());//Number of items to give

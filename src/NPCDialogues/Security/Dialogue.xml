@@ -6,7 +6,7 @@
 		in the knee."
                 </intro>
         </dialogue>
-        <dialogue id = "9">
+        <dialogue id = "10">
 		<intro>
 		You find a security guard in an office of MRP-8. You get ready
 		for a fight, but he doesn't seem to be angry.
@@ -32,6 +32,6 @@
 		careful, because you only have 1 Kanban Board!
                 </done>
                 <condition>SWAP</condition>
-                <status>1,Job,KanbanBoard,10,0,A priceless Kanban Board,Efficient,1</status>
+                <status>1,Job,Kanban Board,10,0,A priceless Kanban Board,Efficient,1</status>
         </dialogue>
 </dialogues>

@@ -438,6 +438,13 @@ public interface GameObjectInterface extends Remote {
      * @return True if uses team 6 implementation
      */
     public boolean checkNPCValidity(String player, String npc) throws RemoteException;
+
+    /**
+     * Returns an the player's current quest
+     * @param name Name of the player
+     * @return String representation of current quest progress
+     */
+    public String journal(String name) throws RemoteException;
 	
 	/**
 	 * Delete a player's account.

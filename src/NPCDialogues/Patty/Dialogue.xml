@@ -24,7 +24,7 @@
                 <condition>null</condition>
                 <status>null</status>
 	</dialogue>
-	<dialogue id = "7">
+	<dialogue id = "8">
 		<intro></intro>
 		<cont></cont>
 		<done>
@@ -43,7 +43,7 @@
 		<condition>SUCCESS</condition>
 		<status>null</status>
 	</dialogue>
-	<dialogue id = "10">
+	<dialogue id = "11">
                 <intro></intro>
                 <cont></cont>
 		<done>
@@ -51,11 +51,11 @@
 		you, saying this will finally get the group back on track.
 
 		Congratulations, You've Won! Now you may be asking, what about
-		Sarah? Or Steve? Or any of the other NPCs sitting around?
+		Sarah? Or Steve?
 		You can play all of those quest lines and more, all you have
 		to do is purchase the $40 dlc expansion pack!
 		</done>
-                <condition>Inventory</condition>
-                <status>KanbanBoard</status>
+                <condition>SWAP</condition>
+                <status>1,Kanban Board,Trophy,1,3000,A small shiny trophy,Victorious,1</status>
         </dialogue>
 </dialogues>

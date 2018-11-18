@@ -34,7 +34,7 @@
                 <condition>PAY</condition>
                 <status>200</status>
 	</dialogue>
-	<dialogue id = "7">
+	<dialogue id = "8">
                 <intro>
                 Erik drives you to MRP-8, which is much less exciting than the
 		temple of divine productivity you were promised. He walks you
@@ -84,7 +84,7 @@
 		<condition>TP1</condition>
                 <status>10</status>
 	</dialogue>
-	<dialogue id = "9">
+	<dialogue id = "10">
 		<intro>
 		You approach Erik and ask that he give you another lesson on
 		the scriptures of DevOps. He agrees to do it for free this
@@ -101,7 +101,7 @@
 		<condition>TP2</condition>
 		<status>10</status>
 	</dialogue>
-	<dialogue id = "10">
+	<dialogue id = "11">
                 <intro>
 		You tell Erik that you finally have a Kanban Board. He
 		congradulates you, mumbles something about getting you to

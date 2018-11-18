@@ -2188,6 +2188,28 @@ public class GameCore implements GameCoreInterface {
        return false;
     }
 
+    /**
+     * Returns an the player's current quest
+     * @param name Name of the player
+     * @return String representation of current quest progress
+     */
+    public String journal(String name){
+	try{
+           int progress = this.playerList.findPlayer(name).getProgress();
+	   File questDesc = new File("./NPCDialogues/questDescriptions");
+	   Scanner sc = new Scanner(questDesc);
+	   String ret = "Current Quest Description:\n";
+	   String temp = "";
+	   for(int i = 0; i <= progress; i ++)
+	      temp = sc.nextLine();
+	   return ret + temp;
+	}catch(FileNotFoundException ex){
+	   System.out.println("[RUNTIME] No Quest Description File ./NPCDialogues/questDescriptions");
+	   return null;
+	}
+    }
+
+
 	/**
 	 * Logs player connections
 	 * 

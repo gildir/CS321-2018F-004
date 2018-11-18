@@ -24,6 +24,10 @@ object are on the ground and what direction you are facing.
     <help command = "TALK">
         <description>  TALK [npc name] - Initiates dialogue with named NPC.</description>
     </help>
+    <help command = "TALK">
+        <description>  JOURNAL         - Opens up a journal showing your current quest</description>
+    </help>
+
     <help command = "MOVE">
         <description>  MOVE direction- Tries to walk forward once toward &lt;direction&gt; times.</description>
     </help>

@@ -668,6 +668,16 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
        return core.checkNPCValidity(player, npc);
     }
 
+    /**
+     * Returns an the player's current quest
+     * @param name Name of the player
+     * @return String representation of current quest progress
+     */
+    public String journal(String name) throws RemoteException{
+       return core.journal(name);
+    }
+
+
 
 	/**
 	 * Delete a player's account.
