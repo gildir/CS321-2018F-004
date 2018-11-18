@@ -1,3 +1,4 @@
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 
 /**
@@ -73,10 +74,9 @@ public interface GameCoreInterface {
 	 * 
 	 * @param name
 	 * @param password
-	 * @param recovery List of recovery questions and answers, ordered q1,a1,q2,a2,q3,a3
 	 * @return an enumeration representing the creation status.
 	 */
-	public Responses createAccountAndJoinGame(String name, String password, ArrayList<String> recovery);
+	public Responses createAccountAndJoinGame(String name, String password);
 
     /**
      * Returns a look at the area of the specified player.
@@ -183,9 +183,26 @@ public interface GameCoreInterface {
      * Takes the player into venmo. The new and improved way to exchange money with other players.
      * 
      * @author Team 4: Alaqeel
-     * @param name Name of the player enter the bank
+     * @param name Name of the player
      */    
     public String venmo(String name, ArrayList<String> tokens);
+    
+    /**
+     * @author Group: King
+     * @param name Name of the player trying to shop
+     * @return Returns the id of the room the player has just entered a bank in 
+     * @throws RemoteException
+     */
+    public int bank(String name) throws RemoteException;
+    
+    /**
+     * Gives the central bank object commands (implimented like this for maximum encapsulation)
+     * @param cmd_id The id of the command to be used (mapped in the BankClient class)
+     * @param name The name of the user interacting with the Bank
+     * @param cmd Any extra arguments that may need to be sent to the command
+     * @return A string based on the success or failure of the command
+     */
+    public String bankCmdRunner(String cmd, String name, String args);
     
     /**
      * Returns a reference to a shop 
@@ -228,13 +245,23 @@ public interface GameCoreInterface {
      * @return Message showing offer
      * @throws RemoteException.
      */
-    public String offer(String srcName, String dstName, String message); 
+    public String offer(String srcName, String message1, String junk, String message2); 
+
+    /**
+     * Returns a string message about success of offer and status of inventory
+     * @param dstName Name of player accepting or rejecting the offer
+     * @param reply whther the offer has been accepted or rejected
+     * @return Message showing status of offer reply
+     */
+    public String offerReply(String dstName, boolean reply);
 
     /**
      * Prints message to player if request can processed, contacts other player about their request
      * @param requestingTrader Name of the player who has requested the trade
      * @param traderToRequest Name of the player whom the first player has requested to trade with
      */ 
+	public String examine(String srcName, String itemName);
+
     public void requestPlayer(String requestingTrader, String traderToRequest);
 
     /**
@@ -254,6 +281,13 @@ public interface GameCoreInterface {
     public String shout(String name, String message);
 
     /**
+     * In game ASCII map
+     * Returns an ascii representation of nearby rooms
+     * @param name Name of the player
+     * @return String representation of the map
+     */
+    public String showMap(String name);
+     /*
      * Delete a player's account.
      *
      * @param name Name of the player to be deleted
@@ -282,8 +316,10 @@ public interface GameCoreInterface {
 	 * @param num Marks which answer will be grabbed
 	 * @return String of recovery question, null if user doesn't exist
 	 */
-	public String getAnswer(String name, int num);
+	public Boolean getAnswer(String name, int num, String answer);
 	
+	public Responses verifyPassword(String name, String password);
+
 	/**
 	 * Resets passwords.
 	 * 
@@ -355,8 +391,14 @@ public interface GameCoreInterface {
 	/**
 	 * returns a message showing all online friends
 	 * 
-	 * @param Player name
+	 * @param Player name name of player requesting list of friends
+     * @param onlineOnly true if you only want a list of online friends, else false.
 	 * @return Message showing online friends
 	 */
-	public String viewOnlineFriends(String name);
+	public String viewFriends(String name, boolean onlineOnly);
+	
+	public void addQuestion(String name, String question, String answer);
+	
+	public void removeQuestion(String name, int num);
+  
 }

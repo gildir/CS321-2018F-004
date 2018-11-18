@@ -1,0 +1,11 @@
+2
+1,outdoors,hall,
+NORTH,0,wall
+SOUTH,2,fish
+EAST,1,chicken
+WEST,3,flower
+2,outdoors,bedroom,
+NORTH,0,window
+SOUTH,2,cat
+EAST,3,mirror
+WEST,1,bathroom
