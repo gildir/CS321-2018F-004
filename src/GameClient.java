@@ -412,6 +412,9 @@ public class GameClient {
                         if(dir!=null) {
                             System.out.println(remoteGameInterface.move(this.playerName, dir));
                         }
+                        else{
+                            System.out.println("Direction for the move command is invalid");
+                        }
                     }
                     break;
                 case "SHOUT":
