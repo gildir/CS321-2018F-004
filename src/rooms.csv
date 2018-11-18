@@ -4,7 +4,6 @@ NORTH,0,You try to walk north towards the library, but the sidewalk is closed du
 SOUTH,3,You walk around the grassy median and head south, past the Johnson Center.
 EAST,2,You walk around the fountains as you head towards the statue.
 WEST,4,You try to walk west towards the dorms, and the large student rally is gone! Home here I come!.
-questNPC
 2,outside,Mason Statue,There is a large statue of George Mason resting at the end of the sidewalk. The Mason statue is currently wearing a green Patriots basketball t-shirt.
 NORTH,0,You start to walk north towards the parking deck, but you really don't want to, so you stop yourself.
 SOUTH,0,You try to enter the Johnson Center, but the entrances are closed due to construction.

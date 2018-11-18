@@ -21,6 +21,9 @@ object are on the ground and what direction you are facing.
     <help command = "SAY">
         <description>  SAY message   - Says 'message' to any other players in the same area.</description>
     </help>
+    <help command = "TALK">
+        <description>  TALK [npc name] - Initiates dialogue with named NPC.</description>
+    </help>
     <help command = "MOVE">
         <description>  MOVE direction- Tries to walk forward once toward &lt;direction&gt; times.</description>
     </help>
@@ -155,5 +158,8 @@ object are on the ground and what direction you are facing.
     </help>
     <help command = "TEACH">
         <description>  TEACH                   - Teaches you the basics of how to play R-P-S.</description>
+    </help>
+    <help command = "CHEST">
+        <description>  CHEST                   - Invokes the Chest interaction subSystem Menu in the DormRoom</description>
     </help>
 </helps>

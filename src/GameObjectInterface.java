@@ -18,7 +18,14 @@ public interface GameObjectInterface extends Remote {
 	 * @throws RemoteException
 	 */
 	public String pokeGhoul(String playerName) throws RemoteException;
-
+    
+    /**115 Jorge team 6
+     * Invokes the chest operations
+     * @param playerName Player Name
+     * @return String chest message 
+     * @throws IOExpcetion
+     */   
+    public String chest(String playerName, String option, String ItemName) throws RemoteException;
 
 	/**
 	 * Pokes the ghoul in the current room
@@ -149,6 +156,24 @@ public interface GameObjectInterface extends Remote {
     public String joke(String filename) throws RemoteException;
 
 
+	/**
+	 * Initiates dialogue with NPC
+	 * @param playerName Player name
+	 * @param npcName NPC name
+	 * @return Dialogue options for player
+     * @throws RemoteException
+	 */
+    public String talkNpc(String name, String npcName) throws RemoteException;
+
+	/**
+	 * Selects dialogue option with NPC and gets response
+	 * @param playerName Player name
+	 * @param npcName NPC name
+	 * @param dialogueChoice Choice of dialogue option
+	 * @return Dialogue options for player
+	 */
+    public String selectNPCDialogueOption(String name, String npcName, int dialogueChoice) throws RemoteException;
+
 //Feature 411. Shout
     /**
      *Shouts "message" to everyone that is online
@@ -186,6 +211,9 @@ public interface GameObjectInterface extends Remote {
      * @throws RemoteException 
      */    
     public String pickup(String name, String object) throws RemoteException;
+
+    public String pickup(String name, String object, int amount) throws RemoteException;
+
 
     public String pickupAll(String name)throws RemoteException;
  
@@ -402,6 +430,14 @@ public interface GameObjectInterface extends Remote {
      * @return String response from the npc if found
      */
     public String talk(String player, String npc) throws RemoteException;
+
+    /**
+     * Checks the implementation of the given npc
+     * @param player Name of the player
+     * @param npc Name of the npc
+     * @return True if uses team 6 implementation
+     */
+    public boolean checkNPCValidity(String player, String npc) throws RemoteException;
 	
 	/**
 	 * Delete a player's account.

@@ -126,6 +126,10 @@ public class GameCore implements GameCoreInterface {
                         object = objects.get(rand.nextInt(objects.size()));
                         room = map.randomRoom();
                         room.addObject(object);
+                        room.addObject(object);
+                        room.addObject(object);
+                        room.addObject(object);
+                        room.addObject(object);
 
 						GameCore.this.broadcast(room, "You see a student rush past and drop a " + object + " on the ground.");
 						
@@ -552,6 +556,57 @@ public class GameCore implements GameCoreInterface {
 		Shop s = this.shoplist.get(new Integer(id));
 		return s.getObjects();
     }
+
+    /**
+     * Picks up multiple items of the name type
+     * @param name name of the the player
+     * @param target name of the item
+     * @param amount amount of pickup
+     * @return String indicating how many items was picked up
+     */
+    public String pickup(String name, String target, int amount) {
+        Player player = this.playerList.findPlayer(name);
+        if (player != null) {
+            Room room = map.findRoom(player.getCurrentRoom());
+            for (int x = 0; x < amount; x++) {
+                if (player.currentInventory.size() < 10) {
+                    Item object = room.removeObject(target);
+                    if (object != null) {
+                        player.addObjectToInventory(object);
+                    } else {
+                        if (x == 0) {
+                            this.broadcast(player, player.getName()
+                                    + " bends over to pick up something, but doesn't seem to find what they were looking for.");
+                            return "You look around for a " + target + ", but can't find one.";
+                        } else {
+                            this.broadcast(player, player.getName() + " bends over to pick up " + amount + " " + target
+                                    + "s but only picks up " + x + " " + target + "s");
+                            return "You look around for " + amount + " " + target + "s but only picked up " + x + " "
+                                    + target + "s";
+                        }
+
+                    }
+                } else {
+                    if (x == 0) {
+                        return " your inventory is full.";
+                    } else {
+                        this.broadcast(player, player.getName() + " bends over to pick up " + amount + " " + target
+                                + "s but only picks up " + x + " " + target + "s because of inventory space");
+                        return "You look around for " + amount + " " + target + "s but only picked up " + x + " "
+                                + target + "s because your inventory is full";
+                    }
+                }
+
+            }
+            this.broadcast(player,
+                    player.getName() + " bends over to pick up " + amount + " " + target + "s that was on the ground.");
+            return "You bend over and pick up " + amount + " "+target + "s.";
+
+        } else {
+            return null;
+        }
+
+    }
     
     /**
      * Attempts to pick up all objects in the room. Will return a message on any success or failure.
@@ -892,6 +947,7 @@ public class GameCore implements GameCoreInterface {
             dorm.addExit(Direction.valueOf("SOUTH"),100000,"You go back to the elevator");
             dorm.addExit(Direction.valueOf("WEST"),-100000,"You go back to the elevator");
 	    dorm.addNPC("HAL_9000",dormCountId);
+            dorm.setChest(player.chestImage);//point to the chest
             this.map.addRoom(dorm);
             if(player.getCurrentRoom() > 100000){player.setCurrentRoom(dormCountId);}
             dormCountId++;
@@ -1080,6 +1136,50 @@ public class GameCore implements GameCoreInterface {
 	}
 	
 
+    /**115 jorge team 6
+    *This takes the player into the chest action menu
+    * where they can move things between their pockets 
+    * and the chest in their dorm room 
+    * this should only run when the player is 
+    * in the dorm room 
+     */
+    public String chest (String name, String opt, String input)  {
+        
+        Player player = this.playerList.findPlayer(name);
+        Room droom = map.findRoom(player.getCurrentRoom());
+
+        switch (opt){
+
+            case "check"://ensure player is in his room 
+
+                if(player.getCurrentRoom() != player.getDormId()) {                                                      
+                           return ("not in dorm room");
+                            
+                 }return "ok";
+            case "menu":
+               return ((DormRoom)droom).chestMenu();
+            case "a"://adds an item to the chest 
+                Item object = player.removeObjectFromInventory(input);
+                if(object != null) {                                                               
+                      return ((DormRoom)droom).addObjectToChest(object);
+                }else{
+                    return "error";
+                }
+            case "p": //print the chest content
+                return ((DormRoom)droom).printChest();
+            case "x":
+                object = ((DormRoom)droom).removeObjectfromChest(input);
+                if(object != null) {                     
+                     player.addObjectToInventory(object);
+                     return "ok";  
+                }else{
+                    return "error";
+                }
+        }//end switch
+
+            return "chest switch error in GameCore chest()";
+    }//end chest command  
+
 
 	/**
      * Attempts to walk towards <direction> 1 time.  If unable to make it all the way,
@@ -1129,8 +1229,24 @@ public class GameCore implements GameCoreInterface {
     public String pickup(String name, String target) {
         Player player = this.playerList.findPlayer(name);
         if(player != null)  {
+            //Demonstration purpose only
+            Room room = map.findRoom(player.getCurrentRoom());
+            NPC npc = room.getNPCs().get("questNPC");
+            if (npc != null)
+            {
+                player.getDialogueIdFromList("questNPC", "pickup");
+                if (player.currentInventory.size() < 3)
+                {
+                    player.updateDialogueList(npc.getName(), "pickup", 1);
+                }
+                else
+                {
+                    player.updateDialogueList(npc.getName(), "pickup", 2);
+                }
+            }
+
             if (player.currentInventory.size() <10){
-                Room room = map.findRoom(player.getCurrentRoom());
+                room = map.findRoom(player.getCurrentRoom());
                 Item object = room.removeObject(target);
                 if(object != null) {
                     player.addObjectToInventory(object);
@@ -1161,6 +1277,22 @@ public class GameCore implements GameCoreInterface {
         Player player = this.playerList.findPlayer(name);
         if(player != null) {
             Room room = map.findRoom(player.getCurrentRoom());
+
+            //Demonstration purpose only
+            NPC npc = room.getNPCs().get("questNPC");
+            if (npc != null)
+            {
+                player.getDialogueIdFromList("questNPC", "pickup");
+                if (player.currentInventory.size() < 3)
+                {
+                    player.updateDialogueList(npc.getName(), "pickup", 1);
+                }
+                else
+                {
+                    player.updateDialogueList(npc.getName(), "pickup", 2);
+                }
+            }
+
             Item object = player.removeObjectFromInventory(target);
             if(object != null) {
                 room.addObject(object);
@@ -1519,7 +1651,9 @@ public class GameCore implements GameCoreInterface {
 	@Override
 	public Player leave(String name) {
 		Player player = this.playerList.findPlayer(name);
+        Room droom = map.findRoom(player.getDormId());
 		if (player != null) {
+            player.chestImage = ((DormRoom)droom).getChest();    
 			this.broadcast(player, "You see " + player.getName() + " heading off to class.");
 			this.playerList.removePlayer(name);
             connectionLog(false, player.getName());
@@ -1653,6 +1787,65 @@ public class GameCore implements GameCoreInterface {
       }
     }
 
+	/**
+	 * Initiates dialogue with NPC
+	 * @param playerName Player name
+	 * @param npcName NPC name
+	 * @return Dialogue options for player
+	 */
+    public String talkNpc(String name, String npcName) {
+        Player player = this.playerList.findPlayer(name);
+        if(player != null) {
+            Room room = map.findRoom(player.getCurrentRoom());
+            NPC npc = room.getNPCs().get(npcName);
+            if (npc != null) {
+
+                StringBuilder sb = new StringBuilder();
+                for (int i = 0; i < npc.getDialogueList().size(); i++) {
+                    sb.append(i + 1).append(": ");
+                    sb.append(npc.getDialogueList().get(i).getPrompt());
+                    sb.append("\n");
+                }
+
+                this.broadcast(player, player.getName() + " begins to talk to NPC: " + npcName + ".");
+                return sb.toString();
+            }
+            else {
+                return null;
+            }
+        }
+        else {
+            return null;
+        }
+    }
+
+	/**
+	 * Selects dialogue option with NPC and gets response
+	 * @param playerName Player name
+	 * @param npcName NPC name
+	 * @param dialogueChoice Choice of dialogue option
+	 * @return Dialogue options for player
+	 */
+    public String selectNPCDialogueOption(String name, String npcName, int dialogueChoice) {
+        Player player = this.playerList.findPlayer(name);
+        if(player != null) {
+            Room room = map.findRoom(player.getCurrentRoom());
+            NPC npc = room.getNPCs().get(npcName);
+            if (npc != null) {
+                if (dialogueChoice < npc.getDialogueList().size() && dialogueChoice >= 0) {
+                    return npc.getDialogueList().get(dialogueChoice).getResponse(npcName, player.getDialogueIdFromList(npcName, npc.getDialogueList().get(dialogueChoice).getTag(), npc.getDialogueList().get(dialogueChoice).getPrompt()));
+                }
+                return "No dialogue choice by that number.";
+            }
+            else {
+                return "No npc by that name is in the room.";
+            }
+        }
+        else {
+            return null;
+        }
+    }
+
     //Feature 411. Shout
     /**
      * Shouts "message" to everyone in the current area.
@@ -1748,8 +1941,8 @@ public class GameCore implements GameCoreInterface {
        Player player = this.playerList.findPlayer(playerName);
        boolean found = false;
        NPC npc = null;
-       for(NPC temp : map.findRoom(player.getCurrentRoom()).fetchNPCs()){
-           if(temp.getName().toUpperCase().equals(npcName)){
+       for(NPC temp : map.findRoom(player.getCurrentRoom()).getNPCs().values()){
+           if(temp.getName().toUpperCase().equals(npcName.toUpperCase())){
               found = true;
 	      npc = temp;
               break;
@@ -1761,6 +1954,27 @@ public class GameCore implements GameCoreInterface {
        else{
 	   return npc.talk(player);
        }
+    }
+
+    /**
+     * Checks the implementation of the given npc
+     * @param npc Name of the npc
+     * @return True if uses team 6 implementation
+     */
+    public boolean checkNPCValidity(String playerName, String npcName){
+       Player player = this.playerList.findPlayer(playerName);
+       boolean found = false;
+       NPC npc = null;
+       for(NPC temp : map.findRoom(player.getCurrentRoom()).getNPCs().values()){
+           if(temp.getName().toUpperCase().equals(npcName)){
+              found = true;
+              npc = temp;
+              break;
+           }
+       }
+       if(found)
+	  return npc.checkValidDialogue();
+       return false;
     }
 
 	/**

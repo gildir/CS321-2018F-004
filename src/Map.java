@@ -1,12 +1,14 @@
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.Scanner;
+import java.util.HashMap;
 
 /**
  * @author Kevin
@@ -50,7 +52,19 @@ public class Map{
                                 //                System.out.println("Adding Room " + id + " with Title " + title + ": " + description);
 
 
-                                newRoom = new Room(id, room_type, title, description);
+                                if(id == 1){
+                                        LinkedList<String> quests = new LinkedList<>(Arrays.asList("quest1", "quest2", "quest3"));
+                                        String questNPCName = "questNPC";
+                                        ArrayList<DialogueOption> dialogue = new ArrayList<DialogueOption>();
+
+                                        HashMap<String, NPC> npcs = new HashMap<>();
+                                        npcs.put(questNPCName, new NPC(questNPCName, 1, quests, dialogue));
+
+                                        newRoom = new Room(id, room_type, title, description, npcs);
+                                }
+                                else {
+                                        newRoom = new Room(id, room_type, title, description);
+                                }
 
                                 for(int j = 0; j < numExits; j++) {
 

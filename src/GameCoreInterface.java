@@ -296,7 +296,15 @@ public interface GameCoreInterface {
      */
     public String talk(String player, String npc);
 
-     /*
+    /**
+     * Checks the implementation of the given npc
+     * @param playerName Name of the player
+     * @param npcName Name of the npc
+     * @return True if uses team 6 implementation
+     */
+    public boolean checkNPCValidity(String playerName, String npcName);
+
+    /*
      * Delete a player's account.
      *
      * @param name Name of the player to be deleted

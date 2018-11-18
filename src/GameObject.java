@@ -2,8 +2,11 @@
 
 
 import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashSet;
 
@@ -42,6 +45,33 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
         }
         return false;
     }    
+
+	/**
+	 * implements the chst operations 
+	 * @param playerName Player name
+	 * @return String message from chest operations
+	 * @throws RemoteException
+	 */
+	public String chest(String playerName, String option, String item) throws RemoteException {
+		return core.chest(playerName,option,item);
+	}
+	/**
+	 * Used to create a hash encrypted in SHA256 for use in encrypting passwords
+	 * 
+	 * @param toHash
+	 * @return SHA256 encrypted hash value, or "ERROR" If encryption method fails.
+	 */
+	public String hash(String toHash) {
+		try {
+			byte[] encodedhash = MessageDigest.getInstance("SHA-256").digest(toHash.getBytes(StandardCharsets.UTF_8));
+			StringBuilder sb = new StringBuilder();
+			for (byte b : encodedhash)
+				sb.append(String.format("%02X", b));
+			return sb.toString();
+		} catch (NoSuchAlgorithmException e) {
+		}
+		return "ERROR";
+	}
 
 	/**
 	 * Pokes the ghoul in the current room
@@ -229,6 +259,28 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
      return core.joke(filename);
    }
 
+	/**
+	 * Initiates dialogue with NPC
+	 * @param playerName Player name
+	 * @param npcName NPC name
+	 * @return Dialogue options for player
+     * @throws RemoteException
+	 */
+    public String talkNpc(String name, String npcName) throws RemoteException {
+        return core.talkNpc(name, npcName);
+    }
+
+	/**
+	 * Selects dialogue option with NPC and gets response
+	 * @param playerName Player name
+	 * @param npcName NPC name
+	 * @param dialogueChoice Choice of dialogue option
+	 * @return Dialogue options for player
+	 */
+    public String selectNPCDialogueOption(String name, String npcName, int dialogueChoice) throws RemoteException {
+        return core.selectNPCDialogueOption(name, npcName, dialogueChoice);
+    }
+
     //Feature 411. Shout
     /**
      *Shouts "message" to everyone that is online
@@ -289,6 +341,12 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
     public String pickup(String name, String target) throws RemoteException {
         return core.pickup(name, target);
     }
+
+    @Override
+    public String pickup(String name, String object, int amount) throws RemoteException{
+        return core.pickup(name, object, amount);
+    }
+
 
     public String pickupAll(String name)throws RemoteException{
         return core.pickupAll(name);
@@ -599,6 +657,17 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
     public String talk(String player, String npc) throws RemoteException{
        return core.talk(player,npc);
     }
+
+    /**
+     * Checks the implementation of the given npc
+     * @param player Name of the player
+     * @param npc Name of the npc
+     * @return True if uses team 6 implementation
+     */
+    public boolean checkNPCValidity(String player, String npc) throws RemoteException{
+       return core.checkNPCValidity(player, npc);
+    }
+
 
 	/**
 	 * Delete a player's account.
