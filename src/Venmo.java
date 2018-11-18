@@ -326,7 +326,7 @@ public class Venmo {
         int[] leftLimit = {(int) 'A', (int) 'a', (int) '0' }; 
         int[] rightLimit = {(int) 'Z', (int) 'z', (int) '9' };
         // The excluded characters
-        List<Character> excluded = Arrays.asList('0', 'O', 'o',  '1', 'l', 'I');
+        List<Character> excluded = Arrays.asList('0', 'O', 'D', 'Q', '1', 'l', 'I', 'J', '5', 'S', 'B', '8', 'U', 'V', 'Z', '2');
         
         // A mutable object to hold the randomized string
         StringBuilder buffer = new StringBuilder(len);
