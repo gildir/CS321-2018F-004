@@ -1,2 +1,0 @@
-[11/18/18 14:15:20] PLAYER [blah2] SAID (i see that apple) to [Room 1]
-[11/18/18 14:15:29] PLAYER [blah2] SAID (i honk that apple) to [Room 1]
