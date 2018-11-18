@@ -561,7 +561,7 @@ public class GameCore implements GameCoreInterface {
      * Picks up multiple items of the name type
      * @param name name of the the player
      * @param target name of the item
-     * @param amount amount of pickup
+     * @param amount amount of items to pickup
      * @return String indicating how many items was picked up
      */
     public String pickup(String name, String target, int amount) {
@@ -1476,13 +1476,13 @@ public class GameCore implements GameCoreInterface {
       if(playerChallengee == null || playerChallenger == null){
         return "This player does not exist in the game.";
       }
-      if(playerChallenger.getInBattle() == true){
+      if(playerChallenger.getInBattle()){
         return "You are already in a R-P-S battle.";
       }
       if(playerChallengee.getInBattle()){
         return "This player is already in a R-P-S battle";
       }
-      if(playerChallengee.getInBattle() == true){
+      if(playerChallengee.getInBattle()){
         return playerChallengee.getName() + " is already in a R-P-S battle.";
       }
       if(playerChallenger != playerChallengee && playerChallenger.getCurrentRoom() == playerChallengee.getCurrentRoom()) {
