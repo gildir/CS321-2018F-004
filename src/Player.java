@@ -45,6 +45,7 @@ public class Player {
     private String playerItemTitle = "";
     private final long accountAge;
     private int questProgress;
+    private int rpsVictoryCount;
 
     public Player(@JsonProperty("name") String name, @JsonProperty("accountAge") long accountAge) {
         this.currentRoom = 1;
@@ -55,6 +56,7 @@ public class Player {
         this.money = 0;
         this.recovery = new ArrayList<String>();
         this.questProgress = 0;
+	this.rpsVictoryCount = 0;
     }
 
     public int getDormId() {return this.dormId;}
@@ -526,6 +528,18 @@ public class Player {
 
     public void setHasChallenge(boolean challenged){
         hasChallenge = challenged;
+    }
+
+    public void setRpsVictoryCount(int count){
+	rpsVictoryCount = count;
+    }
+
+    public void addRpsVictory(){
+	rpsVictoryCount ++;
+    }
+
+    public int getRpsVictoryCount(){
+	return rpsVictoryCount;
     }
     
     /**

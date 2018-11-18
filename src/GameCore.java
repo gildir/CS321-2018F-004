@@ -1442,13 +1442,15 @@ public class GameCore implements GameCoreInterface {
             case "ROCK":
               if (challengee.getOption().equals("PAPER")) {
                 message = challengee.getName() + " wins with " + challengee.getOption();
+		challengee.addRpsVictory();
               }
               else if (challengee.getOption().equals("ROCK")){
                 message = "It is a tie.";
               }
               else {
                 message = player.getName() + " wins with " + player.getOption();
-              }
+                player.addRpsVictory();
+	      }
               challengee.getReplyWriter().println(message);
               player.setInBattle(false);
               player.setChallenger(" ");
@@ -1460,13 +1462,15 @@ public class GameCore implements GameCoreInterface {
             case "PAPER":
               if (challengee.getOption().equals("SCISSORS")) {
                 message = challengee.getName() + " wins with " + challengee.getOption();
+		challengee.addRpsVictory();
               }
               else if (challengee.getOption().equals("PAPER")){
                 message = "It is a tie.";
               }
               else {
                 message = player.getName() + " wins with " + player.getOption();
-              }
+                player.addRpsVictory();
+	      }
               challengee.getReplyWriter().println(message);
               player.setInBattle(false);
               player.setChallenger(" ");
@@ -1478,12 +1482,14 @@ public class GameCore implements GameCoreInterface {
             case "SCISSORS":
               if (challengee.getOption().equals("ROCK")) {
                 message = challengee.getName() + " wins with " + challengee.getOption();
+		challengee.addRpsVictory();
               }
               else if (challengee.getOption().equals("SCISSORS")){
                 message = "It is a tie";
               }
               else {
                 message = player.getName() + " wins with " + player.getOption();
+		player.addRpsVictory();
               }
               challengee.getReplyWriter().println(message);
               player.setInBattle(false);

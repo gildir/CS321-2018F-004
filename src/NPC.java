@@ -121,8 +121,11 @@ public class NPC {
 	{
             case 0:
 	        dial = introDialogues.get(dialId);
-		if(dial != null)
+		if(dial != null){
                     player.advanceQuest();
+		    if(conditions.get(dialId).equals("RPS"))
+			player.setRpsVictoryCount(0);
+		}
 		break;
             case 1:
 		if(checkCondition(player, conditions.get(dialId), status.get(dialId))){
@@ -171,7 +174,10 @@ public class NPC {
 		if(temp2 >= temp)
 		    return true;
 		return false;
-		
+	    case "RPS":
+	       	if(player.getRpsVictoryCount() >= Integer.parseInt(status))
+		    return true;
+		return false;
 	}
 	return false;
     }
