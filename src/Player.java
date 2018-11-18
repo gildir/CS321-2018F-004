@@ -86,6 +86,8 @@ public class Player {
      * @param newFilteredWords - collection of words to be filtered from this player's chat
      */
     public void setFilteredWords(HashSet<String> newFilteredWords) {
+        filteredWords = new HashSet<String>();
+
         for(String word : newFilteredWords) {
             filteredWords.add(word.toLowerCase());
         }

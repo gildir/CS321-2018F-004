@@ -1400,9 +1400,6 @@ public class GameClient {
             while (line != null) {
                 String word = line.toLowerCase();
                 words.add(word);
-                //words.add("\"" + word + "\"");
-                //words.add("\"" + word);
-                //words.add(word + "\"");
                 line = br.readLine();
             }
 
