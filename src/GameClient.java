@@ -19,6 +19,7 @@ import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.HashSet;
+import java.util.Scanner;
 
 import java.lang.System; //used for use item and title feature
 
@@ -372,6 +373,35 @@ public class GameClient {
                             }
                         }                        
                         System.out.println(remoteGameInterface.say(this.playerName, message));
+                    }
+                    break;
+                case "TALK":
+                    if(tokens.isEmpty()) {
+                        System.err.println("You need to provide an NPC's name to talk to.");
+                    } 
+                    else {
+                        boolean done = false;
+                        String npcName = tokens.remove(0);
+                        String output = remoteGameInterface.talkNpc(this.playerName, npcName);
+                        if (output == null) {
+                            System.out.println("Named NPC not in room");
+                        }
+                        else {
+                            System.out.println("Dialogue Options: enter the number of the option to select it, or done to exit.");
+                            System.out.print(output);
+                            Scanner scan = new Scanner(System.in);
+                            while (!done) {
+                                String line = scan.nextLine();
+                                if (line.equalsIgnoreCase("done")) {
+                                    done = true;
+                                }
+                                else {
+                                    int dialogueChoice = Integer.parseInt(line)-1;
+                                    System.out.println(remoteGameInterface.selectNPCDialogueOption(this.playerName, npcName, dialogueChoice));
+                                    System.out.println("Dialogue Options: enter the number of the option to select it, or done to exit.");
+                                }
+                            }
+                    }
                     }
                     break;
                 case "MOVE":
