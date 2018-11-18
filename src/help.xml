@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<!--
+Note to devs:
+    Please try to make help command description to be short as possible
+    and make them under 80 chars.
+-->
+
 <helps>
     <introduction>
         <description>
@@ -20,13 +26,13 @@ object are on the ground and what direction you are facing.
             <description>  LOOK          - Shows you the area around you</description>
         </help>
         <help command = "MOVE">
-            <description>  MOVE direction- Tries to walk forward once toward &lt;direction&gt; times.</description>
+            <description>  MOVE direction - Tries to walk forward once toward &lt;direction&gt; times.</description>
         </help>
         <help command = "WHITEBOARD">
             <description>  WHITEBOARD    - WRITE, READ, or ERASE what is written on the whiteboard.</description>
         </help>
         <help command = "MAP">
-            <description>  MAP			- Displays a map of nearby rooms.</description>
+            <description>  MAP           - Displays a map of nearby rooms.</description>
         </help>
     </help_category>
     <help_category category = "SYSTEM">
@@ -40,13 +46,13 @@ object are on the ground and what direction you are facing.
             <description>  REDO          - Repeats the last command you entered.</description>
         </help>
         <help command = "ADDCOMMAND">
-            <description>  ADDCOMMAND name- Add a custom command.</description>
+            <description>  ADDCOMMAND name - Add a custom command.</description>
         </help>
         <help command = "REMOVECOMMAND">
-            <description>  REMOVECOMMAND  - Remove a configured custom command.</description>
+            <description>  REMOVECOMMAND - Remove a configured custom command.</description>
         </help>
         <help command = "CUSTOMHELP">
-            <description>  CUSTOMHELP     - Show every configured custom commands.</description>
+            <description>  CUSTOMHELP    - Show every configured custom commands.</description>
         </help>
     </help_category>
     <help_category category = "ITEM">
@@ -60,7 +66,7 @@ object are on the ground and what direction you are facing.
             <description>  INVENTORY     - Shows you what objects you have collected.</description>
         </help>
         <help command = "CHEST">
-            <description>  CHEST                   - Invokes the Chest interaction subSystem Menu in the DormRoom</description>
+            <description>  CHEST         - Invokes the Chest interaction subSystem Menu in the DormRoom</description>
         </help>
         <help command = "SHOP">
             <description>  SHOP          - Tries to enter a shop if you are near one.</description>
@@ -84,16 +90,17 @@ object are on the ground and what direction you are facing.
             <description>  O or OFFER player object - Offer player an item</description>
         </help>
         <help command = "OFFER_REPLY">
-            <description>  O_REPLY or OFFER_REPLY 'accept'/'reject' - Accept or reject an offer that has been made</description>
+            <description>  O_REPLY or OFFER_REPLY 'accept'/'reject' - Accept or reject an offer that 
+                                             has been made</description>
         </help>
         <help command = "USE">
-            <description> USE object - Uses an object from your pockets and gives you a title.</description>
+            <description>  USE object    - Uses an object from your pockets and gives you a title.</description>
         </help>
         <help command = "DROP">
             <description>  DROP object   - Tries to drop an object from your pockets in the same area</description>
         </help>
         <help command = "TITLE">
-            <description> TITLE - Shows you the title obtained from an object.</description>
+            <description>  TITLE         - Shows you the title obtained from an object.</description>
         </help>
         <help command = "EXAMINE">
             <description>  EXAMINE object - Tries to examine a object in your inventory</description>
@@ -145,7 +152,7 @@ object are on the ground and what direction you are facing.
             <description>  SAY message   - Says 'message' to any other players in the same area.</description>
         </help>
         <help command = "ACCOUNT">
-            <description>  ACCOUNT                   - Enters account edit wizard</description>
+            <description>  ACCOUNT       - Enters account edit wizard</description>
         </help>
     </help_category>
     <help_category category = "BATTLE">
