@@ -1,0 +1,53 @@
+Daily Log for 11-18-2018
+[11-18-2018 01:09:31] - SERVER STARTED
+[11-18-2018 01:10:57] - SERVER FORCIBLY TERMINATED
+[11-18-2018 01:10:59] - SERVER STARTED
+[11-18-2018 01:11:18] - blah2 has arrived.
+[11-18-2018 01:11:18] - blah2 takes a look around.
+[11-18-2018 01:12:53] - You see a student rush past and drop a Pencil (0.5)  on the ground.
+[11-18-2018 01:12:53] - You see a student rush past and drop a Pencil (0.5)  on the ground.
+[11-18-2018 01:15:06] - SERVER FORCIBLY TERMINATED
+[11-18-2018 01:15:29] - SERVER STARTED
+[11-18-2018 01:15:44] - blah2 has arrived.
+[11-18-2018 01:15:44] - blah2 takes a look around.
+[11-18-2018 01:17:57] - You see a student rush past and drop a Gum (0.5)  on the ground.
+[11-18-2018 01:17:57] - You see a student rush past and drop a Gum (0.5)  on the ground.
+[11-18-2018 01:24:48] - SERVER FORCIBLY TERMINATED
+[11-18-2018 01:25:04] - SERVER STARTED
+[11-18-2018 01:25:17] - blah2 has arrived.
+[11-18-2018 01:25:17] - blah2 takes a look around.
+[11-18-2018 01:25:24] - You see a student rush past and drop a Human (200.0)  on the ground.
+[11-18-2018 01:25:24] - You see a student rush past and drop a Human (200.0)  on the ground.
+[11-18-2018 01:26:44] - SERVER FORCIBLY TERMINATED
+[11-18-2018 01:26:54] - SERVER STARTED
+[11-18-2018 01:27:08] - blah2 has arrived.
+[11-18-2018 01:27:08] - blah2 takes a look around.
+[11-18-2018 01:29:03] - SERVER FORCIBLY TERMINATED
+[11-18-2018 01:29:12] - SERVER STARTED
+[11-18-2018 01:29:22] - blah2 has arrived.
+[11-18-2018 01:29:22] - blah2 takes a look around.
+[11-18-2018 01:29:42] - You see a student rush past and drop a Cookie (0.5)  on the ground.
+[11-18-2018 01:29:42] - You see a student rush past and drop a Cookie (0.5)  on the ground.
+[11-18-2018 01:31:20] - SERVER FORCIBLY TERMINATED
+[11-18-2018 01:31:37] - SERVER STARTED
+[11-18-2018 01:32:07] - blah2 has arrived.
+[11-18-2018 01:32:07] - blah2 takes a look around.
+[11-18-2018 01:34:09] - SERVER FORCIBLY TERMINATED
+[11-18-2018 01:34:16] - SERVER STARTED
+[11-18-2018 01:34:37] - blah2 has arrived.
+[11-18-2018 01:34:37] - blah2 takes a look around.
+[11-18-2018 01:35:46] - You see a student rush past and drop a Planner (0.5)  on the ground.
+[11-18-2018 01:35:46] - You see a student rush past and drop a Planner (0.5)  on the ground.
+[11-18-2018 01:36:17] - SERVER FORCIBLY TERMINATED
+[11-18-2018 01:36:19] - SERVER STARTED
+[11-18-2018 01:36:22] - SERVER FORCIBLY TERMINATED
+[11-18-2018 01:36:34] - SERVER STARTED
+[11-18-2018 01:36:54] - blah2 has arrived.
+[11-18-2018 01:36:54] - blah2 takes a look around.
+[11-18-2018 01:37:28] - You see a student rush past and drop a Laptop (5.0)  on the ground.
+[11-18-2018 01:37:28] - You see a student rush past and drop a Laptop (5.0)  on the ground.
+[11-18-2018 01:48:52] - SERVER FORCIBLY TERMINATED
+[11-18-2018 01:49:00] - SERVER STARTED
+[11-18-2018 01:49:12] - blah2 has arrived.
+[11-18-2018 01:49:12] - blah2 takes a look around.
+[11-18-2018 01:51:20] - SERVER FORCIBLY TERMINATED
