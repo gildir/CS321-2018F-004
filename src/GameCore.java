@@ -162,9 +162,9 @@ public class GameCore implements GameCoreInterface {
                                     	 //daysPlayed = ((System.currentTimeMillis() - player.getAccountAge())/30000); //testing/demo alternative to the line above (day shortened to 30 seconds)
                                     	 if(daysPlayed!=player.getTotalPay()) //determines if player needs payment
                                     	 {
-                                    		 
+                                    		 player.getReplyWriter().println("Collecting your owed allowance of $" + String.format("%.2f", ((daysPlayed-player.getTotalPay())*10.0))); //prints how much player is getting
                                     		 player.changeMoney((daysPlayed-player.getTotalPay())*10.0); //calculates allowance owed to player
-                                    		 player.setTotalPay(daysPlayed);
+                                    		 player.setTotalPay(daysPlayed); //update TotalPay
                                     	 }
                                     	}
                                      
