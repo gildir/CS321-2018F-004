@@ -45,6 +45,10 @@ public class PlayerAccountManager {
 		System.out.printf("Found %d player accounts\n", playerIds.size());
 		logger = Logger.getLogger(PlayerAccountManager.class.getName());
 	}
+	
+	protected void shutdown() {
+		
+	}
 
 		/**
          * @param username Desired username for new account
