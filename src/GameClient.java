@@ -546,7 +546,25 @@ public class GameClient {
                         System.err.println("You need to provide an object to pickup.");
                     }
                     else {
-                        System.out.println(remoteGameInterface.pickup(this.playerName, tokens.remove(0)));
+                        String itemName = tokens.remove(0);
+                        if(tokens.isEmpty())
+                        {
+                            System.out.println(remoteGameInterface.pickup(this.playerName, itemName));
+                        }
+                        else
+                        {
+                            String numberOfItemsString = tokens.remove(0);
+                            if(IsNumber(numberOfItemsString))
+                            {
+                                int numberOfItems = Integer.parseInt(numberOfItemsString);
+                                System.out.println(remoteGameInterface.pickup(this.playerName,itemName,numberOfItems));
+                            }
+                            else
+                            {
+                                System.out.println("third parameter must be a number");
+                            }
+                            System.out.println();
+                        }
                     }
                     break;
                 case "INVENTORY":
@@ -1364,6 +1382,11 @@ public class GameClient {
         } catch(IOException i) {
             System.err.print("\nI/O Exception thrown while attempting to read from filtered words File!\n");
         }
+    }
+
+    private static boolean IsNumber(String Number)
+    {
+        return Number.chars().allMatch(Character::isDigit);
     }
 
     //End Feature 409 Word Filter
