@@ -25,10 +25,8 @@ hs_err_pid*
 /src/players/
 
 # Requested Files
-/src/FilteredWordsList.txt
-/src/FilteredWordsList-blah.txt
-/src/FilteredWordsList-blah2.txt
-/src/FilteredWordsList-reed.txt
+/src/FilteredWordsList*
+/src/ChatPrefixFile*
 /src/ghoulLog.txt
 /src/chatlog.txt
 /src/friends.json
