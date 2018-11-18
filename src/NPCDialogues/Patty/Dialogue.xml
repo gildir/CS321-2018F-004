@@ -23,5 +23,39 @@
                 <done></done>
                 <condition>null</condition>
                 <status>null</status>
+	</dialogue>
+	<dialogue id = "7">
+		<intro></intro>
+		<cont></cont>
+		<done>
+		You find Patty and summarize your meeting with Erik. You
+		leave out the part where you gave a rambling madman 200
+		dollars to give you nonsensical advice.
+
+		"A Kanban Board?" Patty asks. "I've heard of them, but never
+		seen one! Of course, now that you mention it, that would 
+		solve all our problems! Can you get me one? I promise it will
+		be worth your time."
+
+		Now you have to find a Kanban Board. I guess you should ask if
+		MRP-8 has a spare one...
+		</done>
+		<condition>SUCCESS</condition>
+		<status>null</status>
+	</dialogue>
+	<dialogue id = "10">
+                <intro></intro>
+                <cont></cont>
+		<done>
+		You hand over the Kanban Board to Patty, who excitedly thanks
+		you, saying this will finally get the group back on track.
+
+		Congratulations, You've Won! Now you may be asking, what about
+		Sarah? Or Steve? Or any of the other NPCs sitting around?
+		You can play all of those quest lines and more, all you have
+		to do is purchase the $40 dlc expansion pack!
+		</done>
+                <condition>Inventory</condition>
+                <status>KanbanBoard</status>
         </dialogue>
 </dialogues>

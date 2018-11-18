@@ -18,6 +18,7 @@ import org.xml.sax.SAXException;
 import java.io.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.Scanner;
 
 public class NPC {
     private final String name;
@@ -148,8 +149,14 @@ public class NPC {
 //	System.out.println("Getting quest " + progress);
 	int dialId = (progress / 2)+1;
 	String dial = "";//Short for dialogue
+	String cond = "";//Condition
+	String stat = "";//Status
 	if(validQuests.indexOf(dialId) == -1)
 	    return introDialogues.get(0);
+	else{
+            cond = conditions.get(dialId);//Condition
+            stat = status.get(dialId);//Status
+	}
 	switch(progress % 2)
 	{
             case 0:
@@ -157,14 +164,16 @@ public class NPC {
 		if(dial != null){
 		    if(dial.isEmpty())
 			return introDialogues.get(0);
-                    player.advanceQuest();
-		    switch(conditions.get(dialId)){//Set quest preconditions
+		    if(!stat.substring(0,1).equals("TP2"))
+                    	player.advanceQuest();
+		    switch(cond){//Set quest preconditions
 			case "RPS":
 			    player.setRpsVictoryCount(0);
 			    break;
-			case "TP0"://Teleport player quests
+			case "TP0"://Teleport player quests, 0 is return to NPC, 1 is don't return, and 2 is continuous teleport
 			case "TP1":
-			    player.setCurrentRoom(Integer.parseInt(status.get(dialId)));
+			case "TP2":
+			    player.setCurrentRoom(Integer.parseInt(stat));
 			    break;
 			case "POKE"://Poke the ghoul x times
 			    player.setPokeCount(0);
@@ -173,13 +182,15 @@ public class NPC {
 		}
 		break;
             case 1:
-		if(checkCondition(player, conditions.get(dialId), status.get(dialId))){
+		if(checkCondition(player, cond, stat)){
                     dial = doneDialogues.get(dialId);
 		    if(dial.isEmpty())
                         return introDialogues.get(0);
 		    player.advanceQuest();
 		}else{
 		    dial = contDialogues.get(dialId);
+		    if(cond.equals("TP2"))
+	                player.setCurrentRoom(Integer.parseInt(stat));
 		    if(dial.isEmpty())
                         return introDialogues.get(0);
 		}
@@ -199,6 +210,8 @@ public class NPC {
     public boolean checkCondition(Player player, String condition, String status){
 	//System.out.println("Expected " + condition + "=" + status);
         int temp, temp2;//Temporary integer used for checking status's
+	String tempStr;//Temporary string
+
 	switch (condition){
             case "TITLE"://Quest to use the specified item
 		//System.out.println("Found " + player.getTitle());
@@ -245,16 +258,39 @@ public class NPC {
 	    case "SUCCESS"://Automatic progression
 	    case "TP0"://Teleported, return to same NPC
 		return true;
-            case "POKE":
+            case "POKE"://Quest to poke the ghoul x number of times
 		if(Integer.parseInt(status) <= player.getPokeCount())
 		    return true;
 		return false;
-            case "PAY":
+            case "PAY"://Quest to pay the NPC x money
 		if(player.getMoney() >= Integer.parseInt(status)){
 		    player.changeMoney(-1 * Integer.parseInt(status));
 		    return true;
 	        }
 		return false;
+            case "SWAP"://Quest to give the NPC x items to get y items
+		Scanner sc = new Scanner(status).useDelimiter(",|\\R\\N|\\N");
+		temp = Integer.parseInt(sc.next());//1 if item is from items.csv, 2 if it is declared in status
+		temp2 = 0;
+		for (Item item : player.getCurrentInventory())
+                {
+                    if(item.getName().equals(status))
+                        temp2 ++;//temp2 stores the number of specified item found in player inventory
+                }
+                if(temp2 >= temp){//If the player has the required number, give the new item(s), and remove old from inventory and return true
+                    for(int i = 0; i < Integer.parseInt(status.substring(1,2)); i++){
+                        player.removeObjectFromInventory(status.substring(3,status.length()));
+                    }
+                    Item item = new Item(sc.next(),Integer.parseInt(sc.next()),Integer.parseInt(sc.next()),sc.next(),sc.next());//Create the item to give
+		    temp = Integer.parseInt(sc.next());//Number of items to give
+		    temp2 = 5 - player.getCurrentInventory().size();
+		    if(temp2 < temp)//If there is not enough space left, give the player the number of objects that fit
+			temp = temp2;
+		    for(int i = 0; i < temp; i ++)
+			player.addObjectToInventory(item);
+		    return true;
+		}
+
             default:
 		return false;
 	}

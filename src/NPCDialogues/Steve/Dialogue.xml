@@ -24,7 +24,7 @@
 		You better find a laptop and use it in this room!
 		</cont>
 		<condition>TITLE</condition>
-		<status>Tech-Savvy</status>
+		<status>(maybe) Tech Savvy</status>
 		<done>
 		Due to the fact that you had no idea what you were 
 		supposed to be demoing, your demo did not go too well.

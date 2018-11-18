@@ -1,4 +1,4 @@
-9
+13
 1,outside,Clock in the Main Quad,You are standing in front of the George Mason University Clock. A plaque on the clock says it was a gift from the Class of 1999
 NORTH,7,You walk north into SUB-1
 SOUTH,3,You walk around the grassy median and head south, past the Johnson Center.
@@ -8,12 +8,12 @@ WEST,4,You try to walk west towards the dorms, and the large student rally is go
 NORTH,0,You start to walk north towards the parking deck, but you really don't want to, so you stop yourself.
 SOUTH,0,You try to enter the Johnson Center, but the entrances are closed due to construction.
 WEST,1,You walk around the fountains as you head towards the clock.
-EAST,0,You look to the west and see a very long staircase just past the traffic circle. You decide against going that direction.
+EAST,9,You look to the west and go towards MRP-8
 3,outside,Exploratory Hall,You are standing out front of the new Exploratory Hall.
 NORTH,1,You head up the sidewalk, towards the clock.
 SOUTH,5,You walk to the Engineering Building
 WEST,6,You go into the Johnson Center
-EAST,0,You look towards Exploratory Hall, but decide to just admire the view from where you are.
+EAST,12,You walk into Exploratory Hall
 4,inside,Dorm Building,Dorm Building main hallway leading to the elevator.
 NORTH,100000,You head north, into the elevator. 
 SOUTH,0,You try to head south, back to the Hallway.
@@ -47,3 +47,26 @@ NORTH,0,You admire the secret room
 SOUTH,0,You sit on the nice sofa in the secret room
 EAST,0,You search for another secret room, but this world is not meta enough for a secret room inside a secret room
 WEST,7,You leave the secret room
+9,inside,MRP-8,Factory entrance
+NORTH,0,fill
+SOUTH,0,fill
+EAST,0,fill
+WEST,2,fill
+Stacy
+10,inside,MRP-8,Factory Overhang
+NORTH,0,fill
+SOUTH,9,fill
+WEST,0,fill
+EAST,-11,fill
+11,inside,MRP-8,Office
+NORTH,0,fill
+SOUTH,0,fill
+WEST,10,fill
+EAST,0,fill
+Security
+12,inside,Exploratory Hall,You are standing under the skeleton of a large animal
+NORTH,0,fill
+SOUTH,0,fill
+EAST,0,fill
+WEST,3,fill
+Erik

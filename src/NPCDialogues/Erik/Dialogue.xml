@@ -82,6 +82,38 @@
                 </cont>
                 <done></done>
 		<condition>TP1</condition>
-                <status></status>
+                <status>10</status>
+	</dialogue>
+	<dialogue id = "9">
+		<intro>
+		You approach Erik and ask that he give you another lesson on
+		the scriptures of DevOps. He agrees to do it for free this
+		time, as you're a returning customer. You tune out his
+		monologue of gibberish this time, and wait until he disappears
+		to start looking for a Kanban Board.
+		</intro>
+		<cont>
+		Once again, you ask Erik to take you to MRP-8. He is more
+		enthusiastic this time, and seems to believe you are starting
+		to get the hang of his teachings.
+		</cont>
+		<done></done>
+		<condition>TP2</condition>
+		<status>10</status>
+	</dialogue>
+	<dialogue id = "10">
+                <intro>
+		You tell Erik that you finally have a Kanban Board. He
+		congradulates you, mumbles something about getting you to
+		write a book, and tells you to give it to Patty so you don't
+		break it.
+                </intro>
+                <cont>
+                You should give the Kanban Board to Patty like Erik told you.
+                </cont>
+                <done></done>
+                <condition>null</condition>
+                <status>null</status>
         </dialogue>
+
 </dialogues>
