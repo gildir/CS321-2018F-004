@@ -284,7 +284,70 @@ public class GameClient {
 
         try {
             switch(command) {
+                
+                case "CHEST": //115 chest implementation
+                    //this command will only work when the player is in his dormRoom
 
+                        if (remoteGameInterface.chest(this.playerName,"check","").equals("not in dorm room")) {
+                            System.out.println("You must be in your dorm to use this command.");
+                            return;
+                        }
+                        //from here on player is in the dormroom
+                        
+                        //System.out.println(remoteGameInterface.chest(this.playerName));   
+                        InputStreamReader keyRdr = new InputStreamReader(System.in);
+                        BufferedReader keyIn = new BufferedReader(keyRdr);
+                        boolean valid = true;
+                        try {
+                                while(valid) {
+                                    /* print the menu */
+                                    //this.broadcast( player, droom.chestMenu() );
+                                    System.out.println(remoteGameInterface.chest(this.playerName,"menu","") );
+                                    input = keyIn.readLine();
+                                    input.toLowerCase();
+                                    switch(input) {
+                                            case "a":// add item to chest 
+                                                    System.out.println("Enter object name to transfer into the chest");
+                                                    input = keyIn.readLine();
+                                                    //Item object = player.removeObjectFromInventory(input);
+                                                    //if(object != null) {
+                                                    if(remoteGameInterface.chest(this.playerName,"a",input).equals("Item added")){
+                                                        System.out.println( "You placed a " + input +" in the chest");
+                                                    }else{
+                                                       System.out.println("Object not found in your inventory"); 
+                                                       System.out.println("please type the exact name"); 
+                                                    }    
+                                                    break;
+                                            case "x"://extract item from chest into pocket
+                                                    //System.out.println("xxxxxx");
+                                                    System.out.println("Enter object name to transfer from the chest");
+                                                    input = keyIn.readLine();
+                                                    //System.out.println(remoteGameInterface.chest(this.playerName,"x",input)); 
+                                                    if(remoteGameInterface.chest(this.playerName,"x",input).equals("ok")){
+                                                        System.out.println( "You placed a " + input +" in your pockets");
+                                                    }else{
+                                                       System.out.println("Object not found in your inventory"); 
+                                                       System.out.println("please type the exact name"); 
+                                                    }    
+                                                    break;
+                                            case "p"://print chest content
+                                                    System.out.println(remoteGameInterface.chest(this.playerName,"p", ""));  
+                                                    break;
+                                            case "q":// quit this sub menu 
+                                                    System.out.println("exiting chest menu......done"); 
+                                                    valid = false;
+                                                    break;
+                                            default:
+                                                    System.out.println("Please enter a valid input value");
+                                    }//end switch 
+                              }//end while 
+                        }//end try blc
+                        catch(IOException e) { 
+                              System.err.println("[CRITICAL ERROR] Error at reading any input properly.  Terminating the client now.");
+                              System.exit(-1);
+                        }    
+
+                    break;//end chest case              
                 case "LOOK":
                     System.out.println(remoteGameInterface.look(this.playerName));   
                     break;

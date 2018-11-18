@@ -156,4 +156,7 @@ object are on the ground and what direction you are facing.
     <help command = "TEACH">
         <description>  TEACH                   - Teaches you the basics of how to play R-P-S.</description>
     </help>
+    <help command = "CHEST">
+        <description>  CHEST                   - Invokes the Chest interaction subSystem Menu in the DormRoom</description>
+    </help>
 </helps>
