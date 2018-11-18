@@ -39,6 +39,7 @@ public class Player {
     @JsonProperty("recovery")
     private ArrayList<String> recovery; //stored question, answer, question,...
     private final long accountAge;
+    private double rewardAmount; //task 229, keeps track of how much money players will be rewarded every 10 minutes
     
     
 	public Player(@JsonProperty("name") String name, @JsonProperty("accountAge") long accountAge) {
@@ -49,6 +50,7 @@ public class Player {
         this.currentInventory = new LinkedList<>();
         this.money = 0;
         this.recovery = new ArrayList<String>();
+        this.rewardAmount = 0.1; //Task 229, This is the default starting amount (also set when player leaves in GameCore)
     }
 
     private HashSet<Player> ignoredPlayers = new HashSet<Player>();
@@ -490,6 +492,14 @@ public class Player {
 
     public void setHasChallenge(boolean challenged){
         hasChallenge = challenged;
+    }
+    
+    public double getRewardAmount() {
+    	return this.rewardAmount;
+    }
+    
+    public void setRewardAmount(double d) {
+    	this.rewardAmount = d;
     }
     
     /**

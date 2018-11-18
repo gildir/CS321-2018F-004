@@ -145,6 +145,34 @@ public class GameCore implements GameCoreInterface {
                  hbThread.setName("heartbeatChecker");
                  hbThread.start();
         
+               //Thread that rewards money to all players every 10 minutes (600,000 ms)
+                 //Team 3, task 229
+                 Thread rewardThread = new Thread(new Runnable() {
+                     @Override
+                     public void run() {
+                             while(true) {
+                                 try {
+                                     Thread.sleep(600000); //10 minutes
+                                     //Thread.sleep(10000); //10 seconds for testing and demo (comment the above line)
+                                     //add money to each player's account
+                                     for (Player player : playerList) {
+                                    	    System.out.println("Player being given money: " + player);
+                                    	    player.changeMoney(player.getRewardAmount());
+                                    	    player.setRewardAmount(player.getRewardAmount() + .01); //amount player is rewarded increments by 1 cent
+                                    	    
+                                    	}
+                                     
+                                 } catch (InterruptedException ex) {
+                                 }
+                             }
+                         }
+                     });
+                 
+                 rewardThread.setDaemon(true);
+                 rewardThread.setName("reward");
+                 rewardThread.start();
+                 
+                 
                 // new thread awake and control the action of Ghoul.
                 // team5 added in 10/13/2018
                 Thread awakeDayGhoul = new Thread(new Runnable() {
@@ -1262,6 +1290,7 @@ public class GameCore implements GameCoreInterface {
 		Player player = this.playerList.findPlayer(name);
 		if (player != null) {
 			this.broadcast(player, "You see " + player.getName() + " heading off to class.");
+			player.setRewardAmount(0.1);//task 229, clear reward increment
 			this.playerList.removePlayer(name);
             connectionLog(false, player.getName());
             this.accountManager.forceUpdateData(player);
