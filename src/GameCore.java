@@ -89,6 +89,8 @@ public class GameCore implements GameCoreInterface {
                     double inWeight = 0;
                     double inValue = 0;
                     String inName = "";
+                    String inFlavor = "";
+                    String inDisc = "";
                     Scanner scanner = new Scanner(new File("./items.csv"));
                     scanner.nextLine();
                     scanner.useDelimiter(",|\\r\\n|\\n|\\r");
@@ -97,18 +99,20 @@ public class GameCore implements GameCoreInterface {
                     {
                         inName = scanner.next();
                         inWeight = Double.parseDouble(scanner.next().replace(",", ""));
-                        inValue = Double.parseDouble(scanner.next().replace("\\r\\n|\\r|\\n", ""));
-                        Item newItem = new Item(inName, inWeight, inValue);
+                        inValue = Double.parseDouble(scanner.next().replace(",", ""));
+                        inDisc = scanner.next();
+                        inFlavor = scanner.next().replace("\\r\\n|\\r|\\n", "");
+                        Item newItem = new Item(inName, inWeight, inValue, inDisc, inFlavor);
                         objects.add(newItem);
 
                     }
                 }
                 catch(IOException e)
                 {
-                    objects.add(new Item("Flower", 1.0, 0.0));
-                    objects.add(new Item("Textbook", 10.3, 5.2));
-                    objects.add(new Item("Phone", 2.9, 1.0));
-                    objects.add(new Item("Newspaper", 10.0, 9.0));
+                    objects.add(new Item("Flower", 1.0, 0.0, null, null));
+                    objects.add(new Item("Textbook", 10.3, 5.2, null, null));
+                    objects.add(new Item("Phone", 2.9, 1.0, null, null));
+                    objects.add(new Item("Newspaper", 10.0, 9.0, null, null));
                 }
                 while(true) {
                     try {

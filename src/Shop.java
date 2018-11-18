@@ -47,6 +47,9 @@ public class Shop
             double inWeight = 0;
             double inValue = 0;
             String inName = "";
+            String inDisc = "";
+            String inFlavor = "";
+
             Scanner scanner = new Scanner(new File("./items.csv"));
             scanner.nextLine();
             scanner.useDelimiter(",|\\r\\n|\\n|\\r");
@@ -56,8 +59,10 @@ public class Shop
                 inName = scanner.next();
                 inWeight = Double.parseDouble(scanner.next().replace(",", ""));
                 inValue = Double.parseDouble(scanner.next().replace("\\r\\n|\\r|\\n", ""));
+                inDisc = scanner.next();
+                inFlavor = scanner.next().replace("\\r\\n|\\r|\\n", "");
 
-                Item newItem = new Item(inName, inWeight, inValue);
+                Item newItem = new Item(inName, inWeight, inValue, inDisc, inFlavor);
 
                 this.objects.add(newItem);
             }
@@ -65,10 +70,10 @@ public class Shop
         //if borked, populate with original items
         catch(IOException e)
         {
-            this.objects.add(new Item("Flower", 1.0, 0.0));
-            this.objects.add(new Item("Textbook", 10.3, 5.2));
-            this.objects.add(new Item("Phone", 2.9, 1.0));
-            this.objects.add(new Item("Newspaper", 10.0, 9.0));
+            this.objects.add(new Item("Flower", 1.0, 0.0, null, null));
+            this.objects.add(new Item("Textbook", 10.3, 5.2, null, null));
+            this.objects.add(new Item("Phone", 2.9, 1.0, null, null));
+            this.objects.add(new Item("Newspaper", 10.0, 9.0, null, null));
         }
 
 
