@@ -22,6 +22,7 @@ public class NPC {
     private ArrayList<String> doneDialogues;
     private ArrayList<String> conditions;
     private ArrayList<String> status;
+    private LinkedList<Integer> validQuests;
     private boolean validDialogue;
 
 
@@ -50,6 +51,8 @@ public class NPC {
        	    doneDialogues = new ArrayList<>();
 	    conditions = new ArrayList<>();
 	    status = new ArrayList<>();
+
+	    validQuests = new LinkedList<>();
 
             File dialFile = new File(fileName);
 	    DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
@@ -82,6 +85,8 @@ public class NPC {
                 }
 
 		if(id != -1){
+		    validQuests.add(id);
+
                     dialogue = dialogueElement.getElementsByTagName("intro").item(0).getTextContent();
 	            introDialogues.set(id,dialogue);
 
@@ -116,7 +121,9 @@ public class NPC {
         int progress = player.getProgress();
 //	System.out.println("Getting quest " + progress);
 	int dialId = (progress / 2)+1;
-	String dial = "";
+	String dial = "";//Short for dialogue
+	if(validQuests.indexOf(dialId) == -1)
+	    return introDialogues.get(0);
 	switch(progress % 2)
 	{
             case 0:
@@ -135,11 +142,7 @@ public class NPC {
 		    dial = contDialogues.get(dialId);
 		}
 	}
-        if(dial != null){
-            return dial;
-	}else{
-	    return introDialogues.get(0);
-	}
+        return dial;
     }
  
     /* Checks the player's current state and returns whether they meet the condition and status checks
@@ -178,6 +181,8 @@ public class NPC {
 	       	if(player.getRpsVictoryCount() >= Integer.parseInt(status))
 		    return true;
 		return false;
+	    case "SUCCESS":
+		return true;
 	}
 	return false;
     }

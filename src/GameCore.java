@@ -891,6 +891,7 @@ public class GameCore implements GameCoreInterface {
             dorm.addExit(Direction.valueOf("EAST"),-100000,"You go back to the elevator");
             dorm.addExit(Direction.valueOf("SOUTH"),100000,"You go back to the elevator");
             dorm.addExit(Direction.valueOf("WEST"),-100000,"You go back to the elevator");
+	    dorm.addNPC("HAL_9000",dormCountId);
             this.map.addRoom(dorm);
             if(player.getCurrentRoom() > 100000){player.setCurrentRoom(dormCountId);}
             dormCountId++;

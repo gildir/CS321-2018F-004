@@ -46,12 +46,31 @@
 		talk to Steve yet.
                 </cont>
                 <done>
-                       You got your notecards turned in just before the bell. Now
+                You got your notecards turned in just before the bell. Now
 		for the pull request! You should go talk to your computer in
 		your dorm room.
 		</done>
 		<condition>INVENTORY</condition>
                 <status>x5 Notecard</status>
-
 	</dialogue>
+	<dialogue id = "4">
+                <intro></intro>
+                <cont></cont>
+                <done>
+                "This is unacceptable." Steve says as you walk over.
+		"Sarah tells me that your group hasn't been able to meet
+		any of the deadlines on the critical path for Project Ghoul.
+		What's more, I don't even see any of your features for this
+		sprint in the dev branch! What has your group been doing?
+		You need to get your priorities straight, and stop holding
+		back other groups with your sloppy work!"
+
+		You try to explain how Sarah deleted all your changes for the
+		last sprint, but he doesn't seem to believe you. You should
+		probably tell the rest of your team what's going on, so they
+		can get all the necessary work done.
+                </done>
+                <condition>SUCCESS</condition>
+                <status>null</status>
+        </dialogue>
 </dialogues>

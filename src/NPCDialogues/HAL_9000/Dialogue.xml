@@ -32,9 +32,15 @@
 		Tempting, but you decide to be the better man. Go find and beat
 		3 other players in Rock-Paper-Scissors.
                 </cont>
-                <done>
+		<done>
+		You got your pull request accepted, and merged succesfully!
+
+		A few hours later, HAL informs you of the bad news. Some fool
+		named Sarah has deleted all of your changes, just so her pull
+		request could get through! Go find her and give her a piece of
+		your mind!
 	        </done>
 		<condition>RPS</condition>
-		<status>3</condition>
+		<status>3</status>
         </dialogue>
 </dialogues>
