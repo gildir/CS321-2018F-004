@@ -4,32 +4,22 @@
 
 //import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.ArrayList;
-import java.util.Scanner;
-import java.io.IOException;
-import java.io.File;
-import java.util.Random;
-
 public class Shop
 {
 	//Max of 10 items in this list
 	private LinkedList<Item> inventory;
 	
-	//List of objects that want to be in demand for the shop
+	//List of objects that want to be indemand for the shop
 	private LinkedList<Item> inDemand;
 	
 	// List of players in this shop
 	private PlayerList playerlist;
 
-	// List of all items in the game
-	private ArrayList<Item> objects;
-
 	private String description;
 
 	private String title;
-
-
-		
+	
+	
 	public Shop(String name, String desc)
 	{
 		this.inventory = new LinkedList<Item>();
@@ -37,7 +27,6 @@ public class Shop
 		this.playerlist = new PlayerList();
 		this.description = desc;
 		this.title = name;
-
 
 		//populate game items list from items.csv
 		this.objects = new ArrayList<Item>();
@@ -76,7 +65,6 @@ public class Shop
             this.objects.add(new Item("Newspaper", 10.0, 9.0, null, null));
         }
 
-
         Random rand = new Random();
 
         //populate inDemand with initial items (2 items for now)
@@ -90,13 +78,6 @@ public class Shop
 	{
 		return this.inventory;
 	}
-
-	//get method to get inventory linkedlist
-	public LinkedList<Item> getDemand()
-	{
-		return this.inDemand;
-	}
-
 	//used to add methods to the linked list
 	public void add(Item k) {
 		if(this.inventory.size() >= 10)
@@ -105,25 +86,12 @@ public class Shop
 		}
 		this.inventory.add(k);
 	}
-
-	//adds a random item to inDemand list
-	public void addDemandRand(){
-		Random rand = new Random();
-		this.inDemand.add(objects.get(rand.nextInt(objects.size())));
-	}
-
+	
 	//used to remove items form the linked list
 	public void remove(Object k)
 	{
 		this.inventory.remove(k);
 	}
-
-	//removes item from inDemand
-	public void removeDemand(Item k)
-	{
-		this.inDemand.remove(k);
-	}
-
 	//prints the inventory of the shop class
 	public void printInv() {}
 	
@@ -148,7 +116,7 @@ public class Shop
 	}
 	
 	/**
-	 * @author Team 4: Alaqeel, Mistry
+	 * @author Team 4: Alaqeel
 	 * @return The shop name
 	 */
 	public String getTitle() {
@@ -169,24 +137,26 @@ public class Shop
         result += "\n";
         
         // catalog
-        result += this.getObjects(0);
+        result += this.getObjects();
         
         // players names
-       String players = this.getPlayers();
-        if (players.isEmpty()) result += "\nYou are here by yourself.\n";
-        else {
-        	result += "\nYou are here along with: ";
-        	result += players;
-        }
+//        String players = this.getPlayers();
+//        if (players.length() > 1) result += "You are here by yourself.\n";
+//        else {
+//        	result += "You are here along with:\n";
+//        	result += players;
+//        }
+//        result += players;
         
         result += "\n";
+        result += "Players in the area: " + this.getPlayers() + "\n";
 
         result += "How can we help you?\n";
         return result;
     }
 	
 	/**
-	 * @author Team 4: Alaqeel, Mistry
+	 * @author Team 4: Alaqeel
 	 * 
 	 * returns a list of the players, separated by comma and using the Oxford comma.
 	 * 
@@ -198,52 +168,37 @@ public class Shop
 		
 		int i = 0;
 		for (Player p : this.playerlist) {
-			if(i == 0)
-			{
-				result += p.getName();
-			}
-			else
-			{
-				result += ", " + p.getName();
-			}
+			result += String.format("%s, ", p.toString());
 			i++;
 		}
-		if(i == 1)
-		{
-			return "";
+		
+		// removes the comma at the end of the line
+		if (i > 0) result = result.substring(0, result.length()-2);
+		
+		// fixes the oxford comma
+		if (i > 1) {
+			String temp = result.substring(0, result.lastIndexOf(", "));
+			temp += " and ";
+			temp += result.substring(result.lastIndexOf(", ")+2);
+			return temp + "\n";
 		}
-		return result + "!\n";
+		return result + "\n";
+		
 	}
 	
+	
 	/**
-	 * @author Team 4: Alaqeel/Keesling
+	 * @author Team 4: Alaqeel
 	 * 
 	 * Iterates through the list of the objects and creates a table populated with object names and prices.
-	 * @param listType specify list type, 0=inventory 1=inDemand.
 	 * @return table of the objects
 	 */
-	public String getObjects(int listType) {
-		LinkedList<Item> list = new LinkedList<Item>();
-
-		// Choose which list type
-		if (listType == 0){
-			list = this.inventory;
-		}
-		else if (listType == 1){
-			list = this.inDemand;
-		}
-
-		// If list is empty
-		if (list.size() == 0) {
-			if (listType == 0){
-				return "\nWe usually have a huge catalog.\n"
+	public String getObjects() {
+		
+		if (inventory.size() == 0) {
+			return "We usually have a huge catalog.\n"
 					+ "Unfortunately, we are currently out of stock.\n"
-					+ "Please come again soon!";	
-			}
-			else if (listType == 1){
-				return "\nThere's nothing in demand!\n"
-					+ "If the shop runs out of an item, check back to see if it's in demand.";
-			}
+					+ "Please come again soon!";
 		}
 		
 		int itemLen = 15, countLen = 2, f1 = 3, f2 = 2, priceField = f1 + f2 + 2;
@@ -257,39 +212,20 @@ public class Shop
 		String separator = "";
 		for (int s = 0; s < menuWidth; s++) separator += "-";
 		
-
-		String menu = "";
-
-		// Menu header changes per list type
-		if (listType == 0){
-			menu += "We sell:\n";
-			menu += "...................\n";
-			menu += String.format(headerFormat, "#", "Item", "Price");
-			
-			menu += separator + "\n";
-		}
-		else if (listType ==1){
-			menu += "Items in demand:\n";
-			menu += "...................\n";
-			menu += String.format(headerFormat, "#", "Item", "Our Offer");
-			
-			menu += separator + "\n";
-		}
-
+		
+		// menu header
+		String menu = "We sell:\n";
+		menu += "...................\n";
+		menu += String.format(headerFormat, "#", "Item", "Price");
+		
+		menu += separator + "\n";
+		
 		// adding menu items
 		int i = 1;
-		for (Item obj : list) {
-			double price = 0;
-
-			// inv get 20% markup
-			if (listType == 0){
-				price = obj.getPrice() + (obj.getPrice()*.2);
-			}
-			// inDem gives offers double item price
-			else if (listType == 1){
-				price = obj.getPrice()*2;
-			}
+		for (Item obj : inventory) {
+			double price = obj.price; // TODO: replace with price getter
 			
+			if (this.inDemand.contains(obj)) price *= 1.2; // change price according to demand list
 			String item = obj.toString();
 			
 			// handles items with long names
