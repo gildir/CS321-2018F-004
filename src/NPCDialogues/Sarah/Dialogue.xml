@@ -26,9 +26,7 @@
 		No more time to talk, Steve wants to talk about the project
 		timeline.
                 </cont>
-		<done>
-		null
-                </done>
+		<done></done>
                 <condition>null</condition>
                 <status>null</status>
         </dialogue>

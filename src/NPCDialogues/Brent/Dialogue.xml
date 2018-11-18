@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dialogues>
+        <dialogue id = "-1">
+                <intro>
+                "Sorry can't talk right now, I'm a bit too busy"
+                </intro>
+        </dialogue>
+        <dialogue id = "5">
+                <intro>
+                You walk up to Brent, who is hunched over his laptop and
+		busily typing away. You quickly tell him how the changes
+		from last sprint got deleted, and he is going to have to
+		rewrite them all.
+
+		"I'll get on that, I've just got to finish this method for
+		Sarah first."
+
+		It appears that Sarah called him and strong armed him into
+		doing the work that she wanted done, even though it wasn't
+		assigned for this sprint. Your team appears to be backed
+		up on both last week's and this week's sprints.
+
+		You should talk to Patty to get a plan together to get all
+		your stories done on time.
+                </intro>
+                <cont></cont>
+                <done></done>
+                <condition>null</condition>
+                <status>null</status>
+        </dialogue>
+</dialogues>
+

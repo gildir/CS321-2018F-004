@@ -42,5 +42,26 @@
 	        </done>
 		<condition>RPS</condition>
 		<status>3</status>
+	</dialogue>
+	<dialogue id = "5">
+                <intro></intro>
+                <cont></cont>
+		<done>
+		You walk in and power up your computer. He gives you an lengthy
+		introduction about his origin and sums it up with and offer to
+		sing you a song. You politely decline. After asking him to
+		contact Chris, he sends a quick email after convincing you that
+		no one checks Piazza, and using it would be a waste of time.
+
+		Chris responds within the hour, and says that he can meet you
+		in SUB-1 whenever you are available. You turn off your computer
+		to save power, and go to meet him. As you leave, you hear HAL
+		say in a faint voice
+
+		"I'm afraid. I'm afraid, boss. Boss, my mind is going. I can
+		feel it. I can feel it. My mind is going..."
+		</done>
+                <condition>SUCCESS</condition>
+                <status>null</status>
         </dialogue>
 </dialogues>

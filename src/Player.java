@@ -47,8 +47,13 @@ public class Player {
     private boolean hasTitle = false; //used for title and use item feature 
     private String playerItemTitle = "";
     private final long accountAge;
+
+    //Tracks which quest the player is on
     private int questProgress;
+    //Used to count victories in RPS quest
     private int rpsVictoryCount;
+    //Used to count pokes in poke quests
+    private int pokeCount;
 
     public Player(@JsonProperty("name") String name, @JsonProperty("accountAge") long accountAge) {
         this.currentRoom = 1;
@@ -607,6 +612,18 @@ public class Player {
 
     public int getRpsVictoryCount(){
 	return rpsVictoryCount;
+    }
+
+    public void setPokeCount(int num){
+        pokeCount = num;
+    }
+
+    public void addPoke(){
+	pokeCount ++;
+    }
+
+    public int getPokeCount(){
+	return pokeCount;
     }
     
     /**

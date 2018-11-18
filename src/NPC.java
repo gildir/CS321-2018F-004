@@ -155,17 +155,33 @@ public class NPC {
             case 0:
 	        dial = introDialogues.get(dialId);
 		if(dial != null){
+		    if(dial.isEmpty())
+			return introDialogues.get(0);
                     player.advanceQuest();
-		    if(conditions.get(dialId).equals("RPS"))
-			player.setRpsVictoryCount(0);
+		    switch(conditions.get(dialId)){//Set quest preconditions
+			case "RPS":
+			    player.setRpsVictoryCount(0);
+			    break;
+			case "TP0"://Teleport player quests
+			case "TP1":
+			    player.setCurrentRoom(Integer.parseInt(status.get(dialId)));
+			    break;
+			case "POKE"://Poke the ghoul x times
+			    player.setPokeCount(0);
+			    break;
+		    }
 		}
 		break;
             case 1:
 		if(checkCondition(player, conditions.get(dialId), status.get(dialId))){
                     dial = doneDialogues.get(dialId);
+		    if(dial.isEmpty())
+                        return introDialogues.get(0);
 		    player.advanceQuest();
 		}else{
 		    dial = contDialogues.get(dialId);
+		    if(dial.isEmpty())
+                        return introDialogues.get(0);
 		}
 	}
         return dial;
@@ -184,34 +200,64 @@ public class NPC {
 	//System.out.println("Expected " + condition + "=" + status);
         int temp, temp2;//Temporary integer used for checking status's
 	switch (condition){
-            case "TITLE":
+            case "TITLE"://Quest to use the specified item
 		//System.out.println("Found " + player.getTitle());
 	        if(player.getTitle().equals(status))
 		    return true;
 		else
 	            return false;
-	    case "INVENTORY":
-		if(status.substring(0,1).equals("x"))
-                    temp = Integer.parseInt(status.substring(1,2));
-		else
-		    temp = 1;
+	    case "INVENTORY"://Quest to get x number of items and give it to the NPC
 		temp2 = 0;
-		for (Item i : player.getCurrentInventory())
-		{
-                if(i.getName().equals(status.substring(3,status.length())))
-		temp2 ++;
+		if(status.substring(0,1).equals("x")){//The first character as an x denotes the next character is the number of items needed
+                    temp = Integer.parseInt(status.substring(1,2));//temp stores number of items needed
+		    for (Item item : player.getCurrentInventory())
+                    {
+                        if(item.getName().equals(status.substring(3,status.length())))
+                            temp2 ++;//temp2 stores the number of specified item found in player inventory
+                    }
+                    if(temp2 >= temp){//If the player has the required number, remove from inventory and return true
+                        for(int i = 0; i < Integer.parseInt(status.substring(1,2)); i++){
+                            player.removeObjectFromInventory(status.substring(3,status.length()));
+                        }
+                        return true;
+                    }
+                    return false;
 		}
-		if(temp2 >= temp)
-		    return true;
-		return false;
-	    case "RPS":
+		else{
+		    temp = 1;//If not specified, assume only 1
+		    for (Item item : player.getCurrentInventory())
+		    {
+                        if(item.getName().equals(status))
+		            temp2 ++;//temp2 stores the number of specified item found in player inventory
+		    }
+		    if(temp2 >= temp){//If the player has the required number, remove from inventory and return true
+		        for(int i = 0; i < Integer.parseInt(status.substring(1,2)); i++){
+		   	    player.removeObjectFromInventory(status.substring(3,status.length()));
+		        }
+		        return true;
+		   }
+		   return false;
+		}
+	    case "RPS"://Quest to win x number of RPS challenges
 	       	if(player.getRpsVictoryCount() >= Integer.parseInt(status))
 		    return true;
 		return false;
-	    case "SUCCESS":
+	    case "SUCCESS"://Automatic progression
+	    case "TP0"://Teleported, return to same NPC
 		return true;
+            case "POKE":
+		if(Integer.parseInt(status) <= player.getPokeCount())
+		    return true;
+		return false;
+            case "PAY":
+		if(player.getMoney() >= Integer.parseInt(status)){
+		    player.changeMoney(-1 * Integer.parseInt(status));
+		    return true;
+	        }
+		return false;
+            default:
+		return false;
 	}
-	return false;
     }
 
     public boolean changeDialogueList(String dialogueTag, int changeTagId)

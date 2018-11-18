@@ -412,6 +412,7 @@ public class GameCore implements GameCoreInterface {
 			try {
 				GhoulLog myLog = new GhoulLog();
 				myLog.glLog("GameCore","pokeGhoul", "Player" + " " + playerName + " has just poked the Ghoul");
+				player.addPoke();
 			} catch (Exception e){
 				e.printStackTrace();
 			}

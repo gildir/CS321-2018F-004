@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dialogues>
+        <dialogue id = "-1">
+                <intro>
+                "Hey now that you're here, we should do a quick daily standup!
+		Its really important to function as a team."
+
+		You make a poor excuse, and quickly walk away.
+                </intro>
+        </dialogue>
+        <dialogue id = "5">
+                <intro></intro>
+                <cont>
+                You talk to Patty, who informs you that the project is going
+		south because the different teams have no communication, and
+		your own team never does the daily standups. You decide that
+		daily standups are unnecessary, but should probably get some
+		communiction going with other teams. Sarah is unlikely to
+		cooperate, but if you can get Chris to work with you, the
+		next merge should be a lot easier. Maybe you could contact
+		him over Piazza?
+                </cont>
+                <done></done>
+                <condition>null</condition>
+                <status>null</status>
+        </dialogue>
+</dialogues>
