@@ -39,9 +39,12 @@ public class Player {
     private boolean inBattle = false;
     private String challenger = " ";
     private String option = "";
+    public boolean toggleChat = false;
     private String challengerOption = "";
     private boolean hasOption = false;
     private ArrayList<NPC> dialogueList = new ArrayList<NPC>();
+    private int rounds = 0;
+    private int wins = 0;
     @JsonProperty("recovery")
     private ArrayList<String> recovery; //stored question, answer, question,...
     private boolean hasTitle = false; //used for title and use item feature 
@@ -577,6 +580,20 @@ public class Player {
     public void setChallengerOption(String challengerOption){
         this.challengerOption = challengerOption;
     }
+    public void setRounds(int round){
+        this.rounds = round;
+    }
+
+    public int getRounds(){
+        return this.rounds;
+    }
+
+    public void setWins(int wins){
+        this.wins = wins;
+    }
+    public int getWins(){
+        return this.wins;
+    }
     
     public double getMoney() {
         return this.money;
@@ -707,6 +724,22 @@ public class Player {
 
 
     //End 413 Prefix
+    /*
+     * This toggles the R-P-S resolutions of other players in the same room
+     */
+    public String toggleResolution(){
+	if (toggleChat == false){
+		toggleChat = true;
+		return "You have turned off RPS resolutions in your area";
+	}
+	else{
+		toggleChat = false;
+		return "You have turned on RPS resolutions in your area";
+	}
+
+
+    }
+
 
     public int getProgress(){
         return questProgress;
