@@ -39,8 +39,7 @@ public class Player {
     @JsonProperty("recovery")
     private ArrayList<String> recovery; //stored question, answer, question,...
     private final long accountAge;
-    private long lastLogin; //Time last logged in, for task 228
-    
+    private long totalPay; //used to calculate missed allowance payments for task 228
     
 	public Player(@JsonProperty("name") String name, @JsonProperty("accountAge") long accountAge) {
         this.currentRoom = 1;
@@ -50,7 +49,8 @@ public class Player {
         this.currentInventory = new LinkedList<>();
         this.money = 0;
         this.recovery = new ArrayList<String>();
-        this.lastLogin = accountAge; //initial login is when account is created
+        this.totalPay = 0; //for task 228
+        
     }
 
     private HashSet<Player> ignoredPlayers = new HashSet<Player>();
@@ -494,18 +494,12 @@ public class Player {
         hasChallenge = challenged;
     }
     
-    public long getLastLogin() {
-    	return this.lastLogin;
+    public long getTotalPay() {
+    	return this.totalPay;
     }
     
-    public void setLastLogin(long l) {
-    	this.lastLogin = l; //use updateLastLogin instead
-    }
-    
-    public long updateLastLogin(){
-    	long l = this.lastLogin;
-    	this.lastLogin = System.currentTimeMillis();
-    	return l;
+    public void setTotalPay(long l) {
+    	this.totalPay = l;
     }
     
     /**

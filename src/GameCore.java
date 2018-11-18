@@ -155,15 +155,16 @@ public class GameCore implements GameCoreInterface {
                                 	 Thread.sleep(600000); //checks to update all player allowance every 10 minutes
                                      //Thread.sleep(5000); //checks every 5 seconds (for testing/demo uncomment this and comment line above)
                                      
-                                     long daysMissed = 0; //will be used to calculate each players allowance
+                                     long daysPlayed = 0; //will be used to calculate each players allowance
                                      //calculate each players given allowance
                                      for (Player player : playerList) {
-                                    	 daysMissed = ((System.currentTimeMillis() - player.getLastLogin())/86400000); //Calculates how many days worth of allowance to give
-                                    	 //daysMissed = ((System.currentTimeMillis() - player.getLastLogin())/30000); //testing/demo alternative to the line above (day shortened to 30 seconds)
-                                    	 if(daysMissed>0)
+                                    	 daysPlayed = ((System.currentTimeMillis() - player.getAccountAge())/86400000); //helps calculate how many days worth of allowance to give
+                                    	 //daysPlayed = ((System.currentTimeMillis() - player.getAccountAge())/30000); //testing/demo alternative to the line above (day shortened to 30 seconds)
+                                    	 if(daysPlayed!=player.getTotalPay()) //determines if player needs payment
                                     	 {
-                                    		 player.changeMoney((daysMissed)*10.0); //calculates allowance owed to player
-                                    		 player.updateLastLogin();
+                                    		 
+                                    		 player.changeMoney((daysPlayed-player.getTotalPay())*10.0); //calculates allowance owed to player
+                                    		 player.setTotalPay(daysPlayed);
                                     	 }
                                     	}
                                      
