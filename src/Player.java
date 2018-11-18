@@ -39,7 +39,8 @@ public class Player {
     @JsonProperty("recovery")
     private ArrayList<String> recovery; //stored question, answer, question,...
     private final long accountAge;
-    private double rewardAmount; //task 229, keeps track of how much money players will be rewarded every 10 minutes
+    private double rewardAmount; //task 229, keeps track of how much money players will be rewarded every reward interval while logged in
+    private long rewardProgress; //task 229, keeps track of how much time must elapse before a reward.
     
     
 	public Player(@JsonProperty("name") String name, @JsonProperty("accountAge") long accountAge) {
@@ -51,6 +52,7 @@ public class Player {
         this.money = 0;
         this.recovery = new ArrayList<String>();
         this.rewardAmount = 0.1; //Task 229, This is the default starting amount (also set when player leaves in GameCore)
+        this.rewardProgress = 0; //Task 229, value resets to 0 on leave (in GameCore leaveGame)
     }
 
     private HashSet<Player> ignoredPlayers = new HashSet<Player>();
@@ -500,6 +502,14 @@ public class Player {
     
     public void setRewardAmount(double d) {
     	this.rewardAmount = d;
+    }
+    
+    public long getRewardProgress() {
+    	return this.rewardProgress;
+    }
+    
+    public void setRewardProgress(long l) {
+    	this.rewardProgress = l;
     }
     
     /**
