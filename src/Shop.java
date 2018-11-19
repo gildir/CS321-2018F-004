@@ -133,7 +133,7 @@ public class Shop
 	
 	public void removePlayer(Player p) {
 		// Why does add take a player object and remove take a name?? --IK
-		playerlist.removePlayer(p.getName()); 
+		playerlist.removePlayer(p.getName());  
 	}
 
 	/**
@@ -169,10 +169,10 @@ public class Shop
         result += this.getObjects(0);
         
         // players names
-        String players = this.getPlayers();
-        if (players.length() > 1) result += "\nYou are here by yourself.\n";
+       String players = this.getPlayers();
+        if (players.isEmpty()) result += "\nYou are here by yourself.\n";
         else {
-        	result += "\nYou are here along with:\n";
+        	result += "\nYou are here along with: ";
         	result += players;
         }
         
