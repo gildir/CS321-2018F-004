@@ -122,7 +122,7 @@ public class ShopClient {
 		System.out.println("\nTo buy an item, enter \"buy [item name]\"");
 		System.out.println("To sell an item, enter \"sell [item name]\"");
 		System.out.println("To see our inventory, enter \"inv\"");
-		System.out.println("To see what item is currently in demand, enter \"dem\"");
+		System.out.println("To see what items are in demand, enter \"dem\"");
 		System.out.println("To exit the shop, enter \"leave\"\n");
 	}
 	
