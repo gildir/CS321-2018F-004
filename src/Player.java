@@ -47,6 +47,7 @@ public class Player {
     private boolean hasTitle = false; //used for title and use item feature 
     private String playerItemTitle = "";
     private final long accountAge;
+    private ArrayList<Chatroom> chats = new ArrayList<Chatroom>();
 
     public Player(@JsonProperty("name") String name, @JsonProperty("accountAge") long accountAge) {
         this.currentRoom = 1;
@@ -281,6 +282,18 @@ public class Player {
 
     public void setLastPlayer(String lastPlayer) {
         this.lastPlayer = lastPlayer;
+    }
+    
+    public ArrayList<Chatroom> getChats() {
+        return chats;
+    }
+
+    public void addChat(Chatroom newChat) {
+        chats.add(newChat);
+    }
+    
+    public void removeChat(Chatroom newChat) {
+        chats.remove(newChat);
     }
 
     public void setInBattle(boolean battle){

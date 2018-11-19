@@ -37,6 +37,7 @@ public class GameCore implements GameCoreInterface {
     private Ghoul ghoul;
     private PrintWriter pw;
     private Bank bank;
+    private ArrayList<Chatroom> chatrooms = new ArrayList<Chatroom>();
 
 	// Accounts and Login
 	private final PlayerAccountManager accountManager;
@@ -1684,6 +1685,176 @@ public class GameCore implements GameCoreInterface {
     public String quickReply(String srcName, String message) {
         String target = this.playerList.findPlayer(srcName).getLastPlayer();
         return whisper(srcName, target, message);
+    }
+    
+    /**
+     * Create a new chatroom
+     * @param playerName Name of the player creating the chatroom
+     * @param chatName Name of the chatroom
+     * @return Message showing success
+     * @throws RemoteException
+     */
+    public String makeChat(String playerName, String chatName) {
+    	for (Chatroom chat:chatrooms) {
+    		if (chat.getName().equals(chatName)) {
+    			return "This chatroom already exists.";
+    		}
+    	}
+    	Chatroom newChat = new Chatroom(playerName, chatName);
+    	chatrooms.add(newChat);
+    	this.playerList.findPlayer(playerName).addChat(newChat);
+    	return "Chatroom " + chatName + " created.";
+    }
+    
+    /**
+     * Invite a player to your current chatroom.
+     * @param srcPlayer Name of player sending the invite
+     * @param dstPlayer Name of player receiving the invite
+     * @return Message showing success
+     * @throws RemoteException
+     */
+    public String invChat(String srcPlayer, String dstPlayer, String chatName) {
+    	Player sender = this.playerList.findPlayer(srcPlayer);
+    	Player invitee = this.playerList.findPlayer(dstPlayer);
+        if (invitee == null) {
+            return "Player " + dstPlayer + " not found.";
+        }
+        if (srcPlayer.equals(dstPlayer)) {
+        	return "You can't invite yourself to a chat.";
+        }
+        for (Chatroom chat: sender.getChats()) {
+        	if (chat.getName().equals(chatName)) {
+            	if (chat.getMembers().contains(dstPlayer)) {
+            		return dstPlayer + " is already in the chatroom [" + chatName + "]";
+            	}
+            	if (chat.getInvited().contains(dstPlayer)) {
+            		return dstPlayer + " is already invited to the chatroom [" + chatName + "]";
+            	}
+            	String message = "Hey! Feel free to join the chatroom [" + chatName + "]";
+            	whisper(srcPlayer, dstPlayer, message);
+            	chat.addInvited(dstPlayer);
+                return "You invited " + dstPlayer + " to join [" + chatName + "]";
+        	}
+        }
+    	for (Chatroom chat:chatrooms) {
+    		if (chat.getName().equals(chatName)) {
+    			return "You are not in the chatroom [" + chatName + "]";
+    		}
+    	}
+    	return "You are trying to invite " + dstPlayer + " to a non-existent chatroom [" + chatName + "]";
+    }
+    
+    /**
+     * Join a player's chatroom
+     * @param srcPlayer Name of player joining
+     * @param dstPlayer Name of player in the target chatroom
+     * @return Message showing success
+     * @throws RemoteException
+     */
+    public String joinChat(String srcPlayer, String chatName) {
+    	Player joining = this.playerList.findPlayer(srcPlayer);
+    	Chatroom chatToJoin = null;
+    	for (Chatroom chat:chatrooms) {
+    		if (chat.getName().equals(chatName)) {
+    			chatToJoin = chat;
+    		}
+    	}
+    	if (chatToJoin == null) {
+    		return "Chatroom [" + chatName + "] does not exist.";
+    	}
+    	if (chatToJoin.getMembers().contains(srcPlayer)) {
+    		return "You are already in chatroom [" + chatName + "]";
+    	}
+    	if (!chatToJoin.getInvited().contains(srcPlayer)) {
+    		return "You were not invited to join chatroom [" + chatName + "]";
+    	}
+    	chatToJoin.addMember(srcPlayer);
+    	joining.addChat(chatToJoin);
+        return "You joined chatroom [" + chatName + "]";
+    }
+    
+    /**
+     * Leave a chatroom
+     * @param srcPlayer Name of player leaving
+     * @param chatName Name of chatroom to leave
+     * @return Message showing success
+     * @throws RemoteException
+     */
+    public String leaveChat(String srcPlayer, String chatName) {
+    	Player leaving = this.playerList.findPlayer(srcPlayer);
+    	Chatroom chatToLeave = null;
+    	for (Chatroom chat:chatrooms) {
+    		if (chat.getName().equals(chatName)) {
+    			chatToLeave = chat;
+    		}
+    	}
+    	if (chatToLeave == null) {
+    		return "Chatroom [" + chatName + "] does not exist.";
+    	}
+    	if (!chatToLeave.getMembers().contains(srcPlayer)) {
+    		return "You are not in chatroom [" + chatName + "]";
+    	}
+    	chatToLeave.removeMember(srcPlayer);
+    	leaving.removeChat(chatToLeave);
+    	if (chatToLeave.getMembers().size() == 0) {
+    		chatrooms.remove(chatToLeave);
+    		chatToLeave = null;
+    	}
+        return "You left chatroom [" + chatName + "]";
+    }
+    
+    /**
+     * Check if chatroom exists
+     * @return boolean showing success
+     * @throws RemoteException
+     */
+    public boolean checkChat(String ogcommand) {
+    	for (Chatroom chat:chatrooms) {
+    		if (chat.getName().equals(ogcommand)) {
+    			return true;
+    		}
+    	}
+    	return false;
+    }
+    
+    /**
+     * Message a chatroom
+     * @param srcPlayer Name of player sending the message
+     * @param message The message to be sent
+     * @param chatName The name of the chat to send the message to
+     * @return Message showing success
+     * @throws RemoteException
+     */
+    public String messageChat(String srcPlayer, String message, String chatName) {
+		Player player = this.playerList.findPlayer(srcPlayer);
+		Chatroom chatToMessage = null;
+    	for (Chatroom messageChat:player.getChats()) {
+    		if (messageChat.getName().equals(chatName)) {
+    			chatToMessage = messageChat;
+    		}
+    	}
+    	if (chatToMessage == null) {
+        	for (Chatroom chat:chatrooms) {
+        		if (chat.getName().equals(chatName)) {
+        			return "You are not in the chatroom [" + chatName + "]";
+        		}
+        	}
+    		return "You are trying to message a non-existent chatroom [" + chatName + "]";
+    	}
+		if (player != null) {
+			Player otherPlayer = null;
+		    for (String otherName : chatToMessage.getMembers()) {
+		    	otherPlayer = this.playerList.findPlayer(otherName);
+		        if (otherPlayer != player) {
+		            otherPlayer.messagePlayer(player, "messages chatroom [" + chatName + "]", message);
+		        }
+		    }
+            chatLog(player, 0, message, "Chatroom " + chatName);
+            return player.getMessage() + "message, " + message + " to chatroom [" + chatName + "]";
+
+		} else {
+			return null;
+		}
     }
 
    /**

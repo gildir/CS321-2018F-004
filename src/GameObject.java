@@ -209,6 +209,77 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
     public String quickReply(String srcName, String message) throws RemoteException {
         return core.quickReply(srcName, message);
     }
+    
+    /**
+     * Create a new chatroom
+     * @param playerName Name of the player creating the chatroom
+     * @param chatName Name of the chatroom
+     * @return Message showing success
+     * @throws RemoteException
+     */
+    @Override
+    public String makeChat(String playerName, String chatName) throws RemoteException {
+        return core.makeChat(playerName, chatName);
+    }
+    
+    /**
+     * Invite a player to your current chatroom.
+     * @param srcPlayer Name of player sending the invite
+     * @param dstPlayer Name of player receiving the invite
+     * @return Message showing success
+     * @throws RemoteException
+     */
+    @Override
+    public String invChat(String srcPlayer, String dstPlayer, String chatName) throws RemoteException {
+        return core.invChat(srcPlayer, dstPlayer, chatName);
+    }
+    
+    /**
+     * Join a chatroom
+     * @param srcPlayer Name of player joining
+     * @param chatName Name of chatroom to join
+     * @return Message showing success
+     * @throws RemoteException
+     */
+    @Override
+    public String joinChat(String srcPlayer, String chatName) throws RemoteException {
+        return core.joinChat(srcPlayer, chatName);
+    }
+    
+    /**
+     * Leave a chatroom
+     * @param srcPlayer Name of player leaving
+     * @param chatName Name of chatroom to leave
+     * @return Message showing success
+     * @throws RemoteException
+     */
+    @Override
+    public String leaveChat(String srcPlayer, String chatName) throws RemoteException {
+        return core.leaveChat(srcPlayer, chatName);
+    }
+    
+    /**
+     * Check if chatroom exists
+     * @return boolean showing success
+     * @throws RemoteException
+     */
+    @Override
+    public boolean checkChat(String command) throws RemoteException {
+        return core.checkChat(command);
+    }
+    
+    /**
+     * Message a chatroom
+     * @param srcPlayer Name of player sending the message
+     * @param message The message to be sent
+     * @param chatName The name of the chat to send the message to
+     * @return Message showing success
+     * @throws RemoteException
+     */
+    @Override
+    public String messageChat(String srcPlayer, String message, String chatName) throws RemoteException {
+    	return core.messageChat(srcPlayer, message, chatName);
+    }
 
     /**
      * Player ignores further messages from another Player
