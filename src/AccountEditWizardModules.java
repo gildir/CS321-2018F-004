@@ -2,7 +2,11 @@ import java.io.BufferedReader;
 import java.io.PrintStream;
 import java.lang.reflect.InvocationTargetException;
 
+/**
+ * List of primary modules for the account edit wizard
+ */
 public class AccountEditWizardModules {
+
 	protected static class RecoveryQuestionsModule extends Wizard.WizardModule {
 		Wizard.SimpleWizard rqWizard;
 

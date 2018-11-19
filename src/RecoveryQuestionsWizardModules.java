@@ -2,6 +2,9 @@ import java.io.BufferedReader;
 import java.io.PrintStream;
 import java.util.ArrayList;
 
+/**
+ * All modules used by the recovery questions sub-wizard
+ */
 public class RecoveryQuestionsWizardModules {
 	protected static class AddQuestionModule extends Wizard.WizardModule {
 

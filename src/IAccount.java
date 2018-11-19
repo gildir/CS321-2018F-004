@@ -1,6 +1,10 @@
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 
+/**
+ * Interface for anything accessing player account functions, aka the gameobject
+ * and gamecore
+ */
 public interface IAccount {
 	public static interface Server {
 		public Responses removeQuestion(String name, int num);

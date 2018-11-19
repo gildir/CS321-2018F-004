@@ -83,9 +83,8 @@ public class GameClient {
             String strName = "rmi://"+host+"/GameService";
             remoteGameInterface = (GameObjectInterface) Naming.lookup(strName);
 
-            // Start by remotely executing the joinGame method.  
-            //   Lets the player choose a name and checks it with the server.  If the name is
-            //    already taken or the user doesn't like their input, they can choose again.
+            // User may either log in or create an account
+            // Account names are trimmed and unique ignoring case
 			int loginFailCount=0;
             while(nameSat == false) {
 				try {

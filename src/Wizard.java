@@ -6,13 +6,101 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
+/**
+ * Standard wizard that displays a list of options for the user to select from
+ */
 public abstract class Wizard {
+
+	private BufferedReader stdin;
+	private GameObjectInterface obj;
+	private String playerName;
+	private PrintStream stdout;
+	private TextMenu mainMenu;
+
+	/**
+	 * @param stdin
+	 * @param stdout
+	 * @param obj
+	 * @param playerName
+	 * @param wizardName
+	 * @throws NoSuchMethodException
+	 * @throws SecurityException
+	 * @throws InstantiationException
+	 * @throws IllegalAccessException
+	 * @throws IllegalArgumentException
+	 * @throws InvocationTargetException
+	 */
+	public Wizard(BufferedReader stdin, PrintStream stdout, GameObjectInterface obj, String playerName,
+			String wizardName) throws NoSuchMethodException, SecurityException, InstantiationException,
+			IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+		this.stdin = stdin;
+		this.stdout = stdout;
+		this.obj = obj;
+		this.playerName = playerName;
+
+		mainMenu = new Wizard.TextMenu(wizardName, stdin, stdout);
+	}
+
+	/**
+	 * Use this instead of System.out
+	 * 
+	 * @return printStream
+	 */
+	protected PrintStream out() {
+		return this.stdout;
+	}
+
+	/**
+	 * Add modules using this.. Returns self for factor like usage
+	 * 
+	 * @param classes
+	 * @return wizard
+	 * @throws NoSuchMethodException
+	 * @throws SecurityException
+	 * @throws InstantiationException
+	 * @throws IllegalAccessException
+	 * @throws IllegalArgumentException
+	 * @throws InvocationTargetException
+	 */
+	public Wizard addModules(Class<?>... classes) throws NoSuchMethodException, SecurityException,
+			InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+		for (Class<?> c : classes) {
+			Constructor<?> con = c.getConstructor(BufferedReader.class, PrintStream.class, GameObjectInterface.class,
+					String.class);
+			Wizard.WizardModule m = (Wizard.WizardModule) con.newInstance(stdin, stdout, obj, playerName);
+			mainMenu.add(m.getListName(), m::run);
+		}
+		return this;
+	}
+
+	/**
+	 * This displays the wizard
+	 * 
+	 * @throws IOException
+	 */
+	public void enter() throws IOException {
+		if (mainMenu.actions.size() == 0) {
+			stdout.println("Sorry, currently there are no spells this wizard can perform.");
+			leave();
+			return;
+		}
+		mainMenu.display();
+		leave();
+	}
+
+	/**
+	 * To be filled out. Any actions to take on wizard exit
+	 */
+	protected abstract void leave();
 
 	@FunctionalInterface
 	public static interface Action {
 		public void run() throws java.lang.Exception;
 	}
 
+	/**
+	 * Abstract module to be added to a wizard. This would be an option in a list
+	 */
 	protected abstract static class WizardModule {
 		protected String listName;
 		protected BufferedReader stdin;
@@ -20,6 +108,12 @@ public abstract class Wizard {
 		protected GameObjectInterface obj;
 		protected String playerName;
 
+		/**
+		 * @param stdin
+		 * @param stdout
+		 * @param obj
+		 * @param playerName
+		 */
 		public WizardModule(BufferedReader stdin, PrintStream stdout, GameObjectInterface obj, String playerName) {
 			this.stdin = stdin;
 			this.stdout = stdout;
@@ -27,11 +121,25 @@ public abstract class Wizard {
 			this.playerName = playerName;
 		}
 
+		/**
+		 * To be filled out. What to do when the option is selected
+		 * 
+		 * @throws java.lang.Exception
+		 */
 		public abstract void run() throws java.lang.Exception;
 
+		/**
+		 * To be filled out. What to display in the wizard list
+		 * 
+		 * @return
+		 */
 		public abstract String getListName();
 	}
 
+	/**
+	 * The meat of the wizard. This contains the actions and the logic for selection
+	 * actions
+	 */
 	public static class TextMenu {
 		private String name;
 		private int count = 0;
@@ -40,12 +148,24 @@ public abstract class Wizard {
 		private BufferedReader stdin;
 		private PrintStream stdout;
 
+		/**
+		 * @param name
+		 * @param stdin
+		 * @param stdout
+		 */
 		public TextMenu(String name, BufferedReader stdin, PrintStream stdout) {
 			this.name = name;
 			this.stdin = stdin;
 			this.stdout = stdout;
 		}
 
+		/**
+		 * Adds an item to the menu
+		 * 
+		 * @param name
+		 * @param action
+		 * @return
+		 */
 		public TextMenu add(String name, Action action) {
 			names.add(name);
 			actions.add(action);
@@ -53,6 +173,11 @@ public abstract class Wizard {
 			return this;
 		}
 
+		/**
+		 * Displays the options and waits for a selection
+		 * 
+		 * @throws IOException
+		 */
 		public void display() throws IOException {
 			while (true) {
 				printHeader();
@@ -96,52 +221,25 @@ public abstract class Wizard {
 		}
 	}
 
-	private BufferedReader stdin;
-	private GameObjectInterface obj;
-	private String playerName;
-	private PrintStream stdout;
-	private TextMenu mainMenu;
-
-	public Wizard(BufferedReader stdin, PrintStream stdout, GameObjectInterface obj, String playerName,
-			String wizardName) throws NoSuchMethodException, SecurityException, InstantiationException,
-			IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-		this.stdin = stdin;
-		this.stdout = stdout;
-		this.obj = obj;
-		this.playerName = playerName;
-
-		mainMenu = new Wizard.TextMenu(wizardName, stdin, stdout);
-	}
-
-	protected PrintStream out() {
-		return this.stdout;
-	}
-
-	public Wizard addModules(Class<?>... classes) throws NoSuchMethodException, SecurityException,
-			InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-		for (Class<?> c : classes) {
-			Constructor<?> con = c.getConstructor(BufferedReader.class, PrintStream.class, GameObjectInterface.class,
-					String.class);
-			Wizard.WizardModule m = (Wizard.WizardModule) con.newInstance(stdin, stdout, obj, playerName);
-			mainMenu.add(m.getListName(), m::run);
-		}
-		return this;
-	}
-
-	public void enter() throws IOException {
-		if (mainMenu.actions.size() == 0) {
-			stdout.println("Sorry, currently there are no spells this wizard can perform.");
-			leave();
-			return;
-		}
-		mainMenu.display();
-		leave();
-	}
-
-	protected abstract void leave();
-
+	/**
+	 * Type of wizard that acts completely as expected. If wizard wasn't abstract it
+	 * would be this
+	 */
 	public static class SimpleWizard extends Wizard {
 
+		/**
+		 * @param stdin
+		 * @param stdout
+		 * @param obj
+		 * @param playerName
+		 * @param wizardName
+		 * @throws NoSuchMethodException
+		 * @throws SecurityException
+		 * @throws InstantiationException
+		 * @throws IllegalAccessException
+		 * @throws IllegalArgumentException
+		 * @throws InvocationTargetException
+		 */
 		public SimpleWizard(BufferedReader stdin, PrintStream stdout, GameObjectInterface obj, String playerName,
 				String wizardName) throws NoSuchMethodException, SecurityException, InstantiationException,
 				IllegalAccessException, IllegalArgumentException, InvocationTargetException {
@@ -154,10 +252,28 @@ public abstract class Wizard {
 
 	}
 
+	/**
+	 * This type of wizard will steal System.out and replace it with a buffer. It
+	 * will then pass the real stdout to any subwizards. When leaving it prints the
+	 * buffer and returns stdout
+	 */
 	public static class BlockingWizard extends Wizard {
 		private StringBuilder bufferedString = new StringBuilder();
 		private PrintStream bufferedStream;
 
+		/**
+		 * @param stdin
+		 * @param stdout
+		 * @param obj
+		 * @param playerName
+		 * @param wizardName
+		 * @throws NoSuchMethodException
+		 * @throws SecurityException
+		 * @throws InstantiationException
+		 * @throws IllegalAccessException
+		 * @throws IllegalArgumentException
+		 * @throws InvocationTargetException
+		 */
 		public BlockingWizard(BufferedReader stdin, PrintStream stdout, GameObjectInterface obj, String playerName,
 				String wizardName) throws NoSuchMethodException, SecurityException, InstantiationException,
 				IllegalAccessException, IllegalArgumentException, InvocationTargetException {
