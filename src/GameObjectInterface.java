@@ -415,15 +415,17 @@ public interface GameObjectInterface extends Remote {
     * Prompts a message that someone is challenging them to a R-P-S
     * @param challenger is the name of the player challenging someone in the area
     * @param challenge is the name of the player being challenge
+    * @param rounds is the number of rounds for battle
     * @return Message showing success
     * @throws RemoteException
     */
-    public String challenge(String challenger, String challengee) throws RemoteException;
+    public String challenge(String challenger, String challengee, String rounds) throws RemoteException;
 
     /**
     * Prompts a message that they are accepting a challnge from someone to a R-P-S
     * @param challenger is the name of the player challenging someone in the area
     * @param challenge is the name of the player accepting
+    * @param rounds is the number of rounds for battle
     * @return Message showing success
     * @throws RemoteException
     */

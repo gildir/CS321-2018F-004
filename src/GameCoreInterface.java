@@ -296,14 +296,16 @@ public interface GameCoreInterface {
       * Challenge someone to R-P-S
       * @param challenger is the name of the player challenging to R-P-S
       * @param challenge is the name of the player being challenge
+      * @param rounds is the number of rounds for battle
       * @return String message of the challenge
       */
-    public String challenge(String challenger, String challengee);
+    public String challenge(String challenger, String challengee, String rounds);
 
     /**
       * Accept someones challenge to R-P-S
       * @param challenger is the name of the player challenging to R-P-S
       * @param challenge is the name of the player accepting
+      * @param rounds is the number of rounds for battle
       * @return String message of the acceptence
       */
     public String accept(String challenger, String challengee, String rounds);

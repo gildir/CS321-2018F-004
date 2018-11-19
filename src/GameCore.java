@@ -1083,11 +1083,16 @@ public class GameCore implements GameCoreInterface {
     }
 
     @Override
-    public String challenge(String challenger, String challengee){
+    public String challenge(String challenger, String challengee, String sRounds){
       Player playerChallenger = this.playerList.findPlayer(challenger);
       Player playerChallengee = this.playerList.findPlayer(challengee);
+      int rounds = 0;
       if(playerChallengee == null || playerChallenger == null){
         return "This player does not exist in the game.";
+      }
+      if(playerChallengee.getHasChallenge()){
+        playerChallengee.getReplyWriter().println("You have a challenge that has not been responded to yet");
+        return "This Player already has a challenge that needs to be responded to";
       }
       if(playerChallenger.getInBattle() == true){
         return "You are already in a R-P-S battle.";
@@ -1099,12 +1104,30 @@ public class GameCore implements GameCoreInterface {
         return playerChallengee.getName() + " is already in a R-P-S battle.";
       }
       if(playerChallenger != playerChallengee && playerChallenger.getCurrentRoom() == playerChallengee.getCurrentRoom()) {
+        switch(sRounds){
+        case "1":
+        case "ONE":
+            rounds = 1;
+            break;
+        case "3":
+        case "THREE":
+            rounds = 3;
+            break;
+        case "5":
+        case "FIVE":
+            rounds = 5;
+        }
+        if(rounds != 1 && rounds != 3 && rounds != 5){
+            return "This is an invalid number of rounds, please choose from 1, 3, or 5 rounds: ";
+        }
+
         playerChallengee.setChallenger(challenger);
         playerChallenger.setChallenger(challengee);
         playerChallengee.setHasChallenge(true);
-        playerChallengee.getReplyWriter().println(playerChallenger.getName() + " challenges you to a R-P-S.");
+        playerChallengee.setRounds(rounds);
+        playerChallengee.getReplyWriter().println(playerChallenger.getName() + " challenges you to a R-P-S Battle for " + rounds + " rounds");
 
-        return "You challenged " + playerChallengee.getName() + " to a R-P-S.";
+        return "You challenged " + playerChallengee.getName() + " to a R-P-S Battle for " + rounds + " rounds";
       }
       else if(playerChallenger == playerChallengee)
         return "You can't challenge yourself to R-P-S.";
@@ -1137,6 +1160,11 @@ public class GameCore implements GameCoreInterface {
       }
       if(rounds != 1 && rounds != 2 && rounds != 3){
         return "This is an invalid number of rounds, please choose from 1, 3, or 5 rounds: ";
+      }
+      //System.out.println(sRounds + " rounds " + playerChallengee.getRounds());
+      //System.out.println(sRounds.equals(playerChallengee.getRounds()));
+      if(!(playerChallengee.getRounds() == rounds) ){
+        return "You did not accept the challenge for the same amount of rounds, either accept with " + playerChallengee.getRounds() + " rounds or reject the challenge";
       }
       if(playerChallengee.getChallenger().equals(playerChallenger.getName()) && playerChallengee.getHasChallenge() == true){
         if(playerChallenger != playerChallengee && playerChallenger.getCurrentRoom() == playerChallengee.getCurrentRoom()) {

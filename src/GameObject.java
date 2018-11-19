@@ -639,16 +639,18 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
     /**Prompts a message that someone is challenging them to a R-P-S
      * @param challenger is the name of the player challenging someone in the area
      * @param challenge is the name of the player being challenge
+     * @param rounds is the number of rounds for battle
      * @return Message showing success
      * @throws RemoteException
      */
-    public String challenge(String challenger, String challengee) throws RemoteException{
-      return core.challenge(challenger, challengee);
+    public String challenge(String challenger, String challengee, String rounds) throws RemoteException{
+      return core.challenge(challenger, challengee, rounds);
     }
 
     /**Prompts a message that someone is accepting a challenge to a R-P-S
      * @param challenger is the name of the player challenging someone in the area
      * @param challenge is the name of the player accepting
+     * @param rounds is the number of rounds for battle
      * @return Message showing success
      * @throws RemoteException
      */
