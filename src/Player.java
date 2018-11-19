@@ -3,6 +3,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -19,6 +20,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonIgnoreProperties({ "replyWriter", "outputWriter" })
 public class Player {
     private int dormId;//used to determine private dormroom Id
+    public LinkedList<Item> chestImage;
     public LinkedList<Item> currentInventory;
     private String name;
     private int currentRoom;
@@ -37,8 +39,12 @@ public class Player {
     private boolean inBattle = false;
     private String challenger = " ";
     private String option = "";
+    public boolean toggleChat = false;
     private String challengerOption = "";
     private boolean hasOption = false;
+    private ArrayList<NPC> dialogueList = new ArrayList<NPC>();
+    private int rounds = 0;
+    private int wins = 0;
     @JsonProperty("recovery")
     private ArrayList<String> recovery; //stored question, answer, question,...
     private boolean hasTitle = false; //used for title and use item feature 
@@ -51,6 +57,7 @@ public class Player {
         this.name = name;
         this.accountAge = accountAge;
         this.currentInventory = new LinkedList<>();
+        this.chestImage = new LinkedList<>();
         this.money = 0;
         this.recovery = new ArrayList<String>();
     }
@@ -342,6 +349,69 @@ public class Player {
 		return accountAge;
 	}
 
+    //Update dialogue status of this player with other npcs
+    public void updateDialogueList(String npcName, String dialogueTag, int updateAmount)
+    {
+        for (int i = 0; i < dialogueList.size(); i++) {
+            if (dialogueList.get(i).getName().equals(npcName))
+            {
+                dialogueList.get(i).changeDialogueList(dialogueTag, updateAmount);
+            }
+        }
+    }
+
+    //Get dialogue status of this player with other npcs
+    public ArrayList<NPC> getDialogueList()
+    {
+        return dialogueList;
+    }
+
+    //Overload method for getDialogueIdFromList
+    public int getDialogueIdFromList(String npcName, String dialogueTag)
+    {
+        return getDialogueIdFromList(npcName, dialogueTag, "");
+    }
+
+    //Takes the dialgoue id of specific dialogue from npc. 
+    //If no dialogue id exists, add this npc to the dialogueLIst
+    public int getDialogueIdFromList(String npcName, String dialogueTag, String prompt)
+    {
+        int result = -1;
+        for (int i = 0; i < dialogueList.size(); i++) {
+            if (dialogueList.get(i).getName().equals(npcName))
+            {
+                result = dialogueList.get(i).getDialogueId(dialogueTag);
+            }
+        }
+
+        if (result == -1)
+        {
+            addDialogueList(npcName, dialogueTag, prompt);
+            result = 1;
+        }
+
+        return result;
+    }
+
+    //Helper method used to add npc to the dialogueList
+    private void addDialogueList(String npcName, String dialogueTag, String prompt)
+    {
+        boolean found = false;
+        for (int i = 0; i < dialogueList.size(); i++) {
+            if (dialogueList.get(i).getName().equals(npcName))
+            {
+                found = true;
+                //dialogueList.get(i).addToDialogueList(dialogueTag, prompt);
+            }
+        }
+
+        if (found == false)
+        {
+            NPC npc = new NPC(npcName, -1, new LinkedList<String>(), new ArrayList<DialogueOption>());
+            dialogueList.add(npc);
+        }
+    }
+
     public LinkedList<Item> getCurrentInventory() {
         return currentInventory;
     }
@@ -501,6 +571,20 @@ public class Player {
     public void setChallengerOption(String challengerOption){
         this.challengerOption = challengerOption;
     }
+    public void setRounds(int round){
+        this.rounds = round;
+    }
+
+    public int getRounds(){
+        return this.rounds;
+    }
+
+    public void setWins(int wins){
+        this.wins = wins;
+    }
+    public int getWins(){
+        return this.wins;
+    }
     
     public double getMoney() {
         return this.money;
@@ -607,5 +691,21 @@ public class Player {
 
 
     //End 413 Prefix
+    /*
+     * This toggles the R-P-S resolutions of other players in the same room
+     */
+    public String toggleResolution(){
+	if (toggleChat == false){
+		toggleChat = true;
+		return "You have turned off RPS resolutions in your area";
+	}
+	else{
+		toggleChat = false;
+		return "You have turned on RPS resolutions in your area";
+	}
+
+
+    }
+
 
 }

@@ -18,7 +18,14 @@ public interface GameObjectInterface extends Remote {
 	 * @throws RemoteException
 	 */
 	public String pokeGhoul(String playerName) throws RemoteException;
-
+    
+    /**115 Jorge team 6
+     * Invokes the chest operations
+     * @param playerName Player Name
+     * @return String chest message 
+     * @throws IOExpcetion
+     */   
+    public String chest(String playerName, String option, String ItemName) throws RemoteException;
 
 	/**
 	 * Pokes the ghoul in the current room
@@ -149,6 +156,24 @@ public interface GameObjectInterface extends Remote {
     public String joke(String filename) throws RemoteException;
 
 
+	/**
+	 * Initiates dialogue with NPC
+	 * @param playerName Player name
+	 * @param npcName NPC name
+	 * @return Dialogue options for player
+     * @throws RemoteException
+	 */
+    public String talkNpc(String name, String npcName) throws RemoteException;
+
+	/**
+	 * Selects dialogue option with NPC and gets response
+	 * @param playerName Player name
+	 * @param npcName NPC name
+	 * @param dialogueChoice Choice of dialogue option
+	 * @return Dialogue options for player
+	 */
+    public String selectNPCDialogueOption(String name, String npcName, int dialogueChoice) throws RemoteException;
+
 //Feature 411. Shout
     /**
      *Shouts "message" to everyone that is online
@@ -186,6 +211,9 @@ public interface GameObjectInterface extends Remote {
      * @throws RemoteException 
      */    
     public String pickup(String name, String object) throws RemoteException;
+
+    public String pickup(String name, String object, int amount) throws RemoteException;
+
 
     public String pickupAll(String name)throws RemoteException;
  
@@ -486,7 +514,7 @@ public interface GameObjectInterface extends Remote {
     * @return Message showing success
     * @throws RemoteException
     */
-    public String accept(String challenger, String challengee) throws RemoteException;
+    public String accept(String challenger, String challengee, String rounds) throws RemoteException;
 
     /**
      * Prompts a messaging that they are rejectin a challenge from someone to R-P-S
@@ -538,6 +566,14 @@ public interface GameObjectInterface extends Remote {
      * @throws RemoteException
      */
     public void setPlayerChatPrefix(String playerName, String newPrefix) throws RemoteException;
+
+     /**
+      * Toggles the RPS resolutions of other players in the same room
+      * @param Player is the name of the Player who wants to toggle the RPS chat
+      * @return Message showing success
+      * @throws RemoteException
+      */
+     public String toggleRPSChat(String player) throws RemoteException;
     
     /**
      * Checks the Venmo mailbox. If mailbox is not empty, prints the content.

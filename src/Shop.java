@@ -27,6 +27,50 @@ public class Shop
 		this.playerlist = new PlayerList();
 		this.description = desc;
 		this.title = name;
+
+		//populate game items list from items.csv
+		this.objects = new ArrayList<Item>();
+
+        try
+        {
+            double inWeight = 0;
+            double inValue = 0;
+            String inName = "";
+            String inDisc = "";
+            String inFlavor = "";
+
+            Scanner scanner = new Scanner(new File("./items.csv"));
+            scanner.nextLine();
+            scanner.useDelimiter(",|\\r\\n|\\n|\\r");
+
+            while(scanner.hasNext())
+            {
+                inName = scanner.next();
+                inWeight = Double.parseDouble(scanner.next().replace(",", ""));
+                inValue = Double.parseDouble(scanner.next().replace("\\r\\n|\\r|\\n", ""));
+                inDisc = scanner.next();
+                inFlavor = scanner.next().replace("\\r\\n|\\r|\\n", "");
+
+                Item newItem = new Item(inName, inWeight, inValue, inDisc, inFlavor);
+
+                this.objects.add(newItem);
+            }
+        }
+        //if borked, populate with original items
+        catch(IOException e)
+        {
+            this.objects.add(new Item("Flower", 1.0, 0.0, null, null));
+            this.objects.add(new Item("Textbook", 10.3, 5.2, null, null));
+            this.objects.add(new Item("Phone", 2.9, 1.0, null, null));
+            this.objects.add(new Item("Newspaper", 10.0, 9.0, null, null));
+        }
+
+        Random rand = new Random();
+
+        //populate inDemand with initial items (2 items for now)
+        for (int x = 0; x < 2; x++){
+        	this.inDemand.add(objects.get(rand.nextInt(objects.size())));	
+        }
 	}
 	
 	//get method to get inventory linkedlist

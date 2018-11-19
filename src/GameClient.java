@@ -19,6 +19,7 @@ import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.HashSet;
+import java.util.Scanner;
 
 import java.lang.System; //used for use item and title feature
 
@@ -287,7 +288,70 @@ public class GameClient {
 
         try {
             switch(command) {
+                
+                case "CHEST": //115 chest implementation
+                    //this command will only work when the player is in his dormRoom
 
+                        if (remoteGameInterface.chest(this.playerName,"check","").equals("not in dorm room")) {
+                            System.out.println("You must be in your dorm to use this command.");
+                            return;
+                        }
+                        //from here on player is in the dormroom
+                        
+                        //System.out.println(remoteGameInterface.chest(this.playerName));   
+                        InputStreamReader keyRdr = new InputStreamReader(System.in);
+                        BufferedReader keyIn = new BufferedReader(keyRdr);
+                        boolean valid = true;
+                        try {
+                                while(valid) {
+                                    /* print the menu */
+                                    //this.broadcast( player, droom.chestMenu() );
+                                    System.out.println(remoteGameInterface.chest(this.playerName,"menu","") );
+                                    input = keyIn.readLine();
+                                    input.toLowerCase();
+                                    switch(input) {
+                                            case "a":// add item to chest 
+                                                    System.out.println("Enter object name to transfer into the chest");
+                                                    input = keyIn.readLine();
+                                                    //Item object = player.removeObjectFromInventory(input);
+                                                    //if(object != null) {
+                                                    if(remoteGameInterface.chest(this.playerName,"a",input).equals("Item added")){
+                                                        System.out.println( "You placed a " + input +" in the chest");
+                                                    }else{
+                                                       System.out.println("Object not found in your inventory"); 
+                                                       System.out.println("please type the exact name"); 
+                                                    }    
+                                                    break;
+                                            case "x"://extract item from chest into pocket
+                                                    //System.out.println("xxxxxx");
+                                                    System.out.println("Enter object name to transfer from the chest");
+                                                    input = keyIn.readLine();
+                                                    //System.out.println(remoteGameInterface.chest(this.playerName,"x",input)); 
+                                                    if(remoteGameInterface.chest(this.playerName,"x",input).equals("ok")){
+                                                        System.out.println( "You placed a " + input +" in your pockets");
+                                                    }else{
+                                                       System.out.println("Object not found in your inventory"); 
+                                                       System.out.println("please type the exact name"); 
+                                                    }    
+                                                    break;
+                                            case "p"://print chest content
+                                                    System.out.println(remoteGameInterface.chest(this.playerName,"p", ""));  
+                                                    break;
+                                            case "q":// quit this sub menu 
+                                                    System.out.println("exiting chest menu......done"); 
+                                                    valid = false;
+                                                    break;
+                                            default:
+                                                    System.out.println("Please enter a valid input value");
+                                    }//end switch 
+                              }//end while 
+                        }//end try blc
+                        catch(IOException e) { 
+                              System.err.println("[CRITICAL ERROR] Error at reading any input properly.  Terminating the client now.");
+                              System.exit(-1);
+                        }    
+
+                    break;//end chest case              
                 case "LOOK":
                     System.out.println(remoteGameInterface.look(this.playerName));   
                     break;
@@ -312,6 +376,35 @@ public class GameClient {
                             }
                         }                        
                         System.out.println(remoteGameInterface.say(this.playerName, message));
+                    }
+                    break;
+                case "TALK":
+                    if(tokens.isEmpty()) {
+                        System.err.println("You need to provide an NPC's name to talk to.");
+                    } 
+                    else {
+                        boolean done = false;
+                        String npcName = tokens.remove(0);
+                        String output = remoteGameInterface.talkNpc(this.playerName, npcName);
+                        if (output == null) {
+                            System.out.println("Named NPC not in room");
+                        }
+                        else {
+                            System.out.println("Dialogue Options: enter the number of the option to select it, or done to exit.");
+                            System.out.print(output);
+                            Scanner scan = new Scanner(System.in);
+                            while (!done) {
+                                String line = scan.nextLine();
+                                if (line.equalsIgnoreCase("done")) {
+                                    done = true;
+                                }
+                                else {
+                                    int dialogueChoice = Integer.parseInt(line)-1;
+                                    System.out.println(remoteGameInterface.selectNPCDialogueOption(this.playerName, npcName, dialogueChoice));
+                                    System.out.println("Dialogue Options: enter the number of the option to select it, or done to exit.");
+                                }
+                            }
+                    }
                     }
                     break;
                 case "MOVE":
@@ -486,7 +579,25 @@ public class GameClient {
                         System.err.println("You need to provide an object to pickup.");
                     }
                     else {
-                        System.out.println(remoteGameInterface.pickup(this.playerName, tokens.remove(0)));
+                        String itemName = tokens.remove(0);
+                        if(tokens.isEmpty())
+                        {
+                            System.out.println(remoteGameInterface.pickup(this.playerName, itemName));
+                        }
+                        else
+                        {
+                            String numberOfItemsString = tokens.remove(0);
+                            if(IsNumber(numberOfItemsString))
+                            {
+                                int numberOfItems = Integer.parseInt(numberOfItemsString);
+                                System.out.println(remoteGameInterface.pickup(this.playerName,itemName,numberOfItems));
+                            }
+                            else
+                            {
+                                System.out.println("third parameter must be a number");
+                            }
+                            System.out.println();
+                        }
                     }
                     break;
                 case "INVENTORY":
@@ -664,10 +775,19 @@ public class GameClient {
                     break;
                 case "ACCEPT":
                     if(tokens.isEmpty()){
-                      System.err.println("You need to provide a name.");
+                      System.err.println("You need to provide a name and number of rounds.");
                     }
                     else{
-                      System.out.println(remoteGameInterface.accept(this.playerName, tokens.remove(0)));
+                        if(tokens.size() < 2){
+                          System.err.println("You need to provide the number of rounds.");
+                        }
+                        else{
+
+                            String option1 = tokens.remove(0);
+                            String option2 = tokens.remove(0);
+                            //System.out.println(option1 + " \t\t" + option2);
+                            System.out.println(remoteGameInterface.accept(this.playerName, option1, option2));//tokens.remove(0), tokens.remove(0)));
+                        }
                     }
                     break;
                 case "REJECT":
@@ -694,13 +814,16 @@ public class GameClient {
                 case "TEACH":
                     System.out.println(remoteGameInterface.teach(this.playerName));
                     break;
-			case "ACCOUNT":
-				try {
-					accountEditWizard.enter();
-				} catch (Exception e) {
-					System.out.println("It appears the wizards wand broke. Probably a Weasley...");
-				}
-				break;
+	        case "ACCOUNT":
+		    try {
+			accountEditWizard.enter();
+		    } catch (Exception e) {
+			System.out.println("It appears the wizards wand broke. Probably a Weasley...");
+		    }
+		    break;
+		case "TOGGLERPSCHAT":
+		    System.out.println(remoteGameInterface.toggleRPSChat(this.playerName));
+		    break;
                 case "FRIENDS":
                     String sub;
                     if(tokens.isEmpty())
@@ -797,7 +920,6 @@ public class GameClient {
             Logger.getLogger(GameClient.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
     /**
      * Prompts the user through a dialogue tree to give them the option to reset their password
      */
@@ -1304,6 +1426,11 @@ public class GameClient {
         } catch(IOException i) {
             System.err.print("\nI/O Exception thrown while attempting to read from filtered words File!\n");
         }
+    }
+
+    private static boolean IsNumber(String Number)
+    {
+        return Number.chars().allMatch(Character::isDigit);
     }
 
     //End Feature 409 Word Filter
