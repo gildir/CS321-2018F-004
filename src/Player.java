@@ -35,7 +35,6 @@ public class Player {
     private boolean tradeReceived = false;
     private String tradePartner = "";
     private String lastPlayer = "";
-    private ArrayList<Chatroom> chats;
     private boolean hasChallenge = false;
     private boolean inBattle = false;
     private String challenger = " ";
@@ -58,7 +57,6 @@ public class Player {
         this.chestImage = new LinkedList<>();
         this.money = 0;
         this.recovery = new ArrayList<String>();
-        this.chats = new ArrayList<Chatroom>();
     }
 
     public int getDormId() {return this.dormId;}
@@ -285,18 +283,6 @@ public class Player {
         this.lastPlayer = lastPlayer;
     }
     
-    public ArrayList<Chatroom> getChats() {
-        return chats;
-    }
-
-    public void addChat(Chatroom newChat) {
-        chats.add(newChat);
-    }
-    
-    public void removeChat(Chatroom newChat) {
-        chats.remove(newChat);
-    }
-
     public void setInBattle(boolean battle){
 	inBattle = battle;
     }
