@@ -1149,16 +1149,16 @@ public class GameCore implements GameCoreInterface {
         case "ONE":
             rounds = 1;
             break;
-        case "2":
-        case "TWO":
-            rounds = 2;
-            break;
         case "3":
         case "THREE":
             rounds = 3;
             break;
+        case "5":
+        case "FIVE":
+            rounds = 5;
+            break;
       }
-      if(rounds != 1 && rounds != 2 && rounds != 3){
+      if(rounds != 1 && rounds != 3 && rounds != 5){
         return "This is an invalid number of rounds, please choose from 1, 3, or 5 rounds: ";
       }
       //System.out.println(sRounds + " rounds " + playerChallengee.getRounds());
@@ -1260,7 +1260,7 @@ public class GameCore implements GameCoreInterface {
                 challengee.setWins(challengee.getWins()+1);
                 this.broadcast(map.findRoom(player.getCurrentRoom()), winner);
 		        rpsLog(player.getName(), challengee.getName(), "wins", player.getOption(), challengee.getOption());
-      		pickRPSToggle = false;  		
+      		  		
 		      }		      
               else if (challengee.getOption().equals("ROCK")){
                 challengee.getReplyWriter().println("You chose ROCK.");
@@ -1269,7 +1269,7 @@ public class GameCore implements GameCoreInterface {
                 winner = player.getName() + " challenged " + challengee.getName() + " to a Rock Paper Scissors Battle: It is a tie this round.";
                 this.broadcast(map.findRoom(player.getCurrentRoom()), winner);
 		rpsLog(player.getName(), challengee.getName(), "ties", player.getOption(), challengee.getOption());
-              	pickRPSToggle = false;
+              	
 	      }
               else {
                 challengee.getReplyWriter().println("You chose SCISSORS.");
@@ -1279,7 +1279,7 @@ public class GameCore implements GameCoreInterface {
                 player.setWins(player.getWins()+1);
                 this.broadcast(map.findRoom(player.getCurrentRoom()), winner);
 		rpsLog(challengee.getName(), player.getName(), "wins", challengee.getOption(), player.getOption());
-              	pickRPSToggle = false;
+              	
               }
               if(player.getRounds() > 0){
                 player.setOption("");
@@ -1295,14 +1295,17 @@ public class GameCore implements GameCoreInterface {
                 if(p1Win > p2Win){
                     String winner2 = player.getName() + " challenged " + challengee.getName() + " to a Rock Paper Scissors Battle: " + player.getName() + " won the tournament with a final score of " + p1Win + " - " + p2Win + ".";
                     this.broadcast(map.findRoom(player.getCurrentRoom()), winner2);
+		    pickRPSToggle = false;
                 }
                 else if(p2Win > p1Win){
                     String winner2 = player.getName() + " challenged " + challengee.getName() + " to a Rock Paper Scissors Battle: " + player.getName() + " won the tournament with a final score of " + p1Win + " - " + p2Win + ".";
                     this.broadcast(map.findRoom(player.getCurrentRoom()), winner2);
+		    pickRPSToggle = false;
                 }
                 else{
                     String noWinner = player.getName() + " challenged " + challengee.getName() + " to a Rock Paper Scissors Battle: They tied in the tournament with a final score of " + p1Win + " - " + p2Win + ".";
-                    this.broadcast(map.findRoom(player.getCurrentRoom()), noWinner);   
+                    this.broadcast(map.findRoom(player.getCurrentRoom()), noWinner);
+		    pickRPSToggle = false;
                 }
 
                 player.setInBattle(false);
@@ -1325,7 +1328,7 @@ public class GameCore implements GameCoreInterface {
                 challengee.setWins(challengee.getWins()+1);
                 this.broadcast(map.findRoom(player.getCurrentRoom()), winner);
 		rpsLog(challengee.getName(), player.getName(), "wins", challengee.getOption(), player.getOption());
-              	pickRPSToggle = false;
+              	
 	      }
               else if (challengee.getOption().equals("PAPER")){
                 challengee.getReplyWriter().println("You chose PAPER.");
@@ -1334,7 +1337,7 @@ public class GameCore implements GameCoreInterface {
                 winner = player.getName() + " challenged " + challengee.getName() + " to a Rock Paper Scissors Battle: It is a tie this round.";
                 this.broadcast(map.findRoom(player.getCurrentRoom()), winner);
 		rpsLog(player.getName(), challengee.getName(), "ties", player.getOption(), challengee.getOption());
-              	pickRPSToggle = false;
+              
 	      }
               else {
                 challengee.getReplyWriter().println("You chose ROCK.");
@@ -1344,7 +1347,7 @@ public class GameCore implements GameCoreInterface {
                 player.setWins(player.getWins()+1);
                 this.broadcast(map.findRoom(player.getCurrentRoom()), winner);
 		rpsLog(player.getName(), challengee.getName(), "wins", player.getOption(), challengee.getOption());
-              	pickRPSToggle = false;
+              	
               }
               if(player.getRounds() > 0){
 
@@ -1361,14 +1364,17 @@ public class GameCore implements GameCoreInterface {
                 if(p1Win > p2Win){
                     String winner2 = player.getName() + " challenged " + challengee.getName() + " to a Rock Paper Scissors Battle: " + player.getName() + " won the tournament with a final score of " + p1Win + " - " + p2Win + ".";
                     this.broadcast(map.findRoom(player.getCurrentRoom()), winner2);
-                }
+                    pickRPSToggle = false;
+		}
                 else if(p2Win > p1Win){
                     String winner2 = player.getName() + " challenged " + challengee.getName() + " to a Rock Paper Scissors Battle: " + player.getName() + " won the tournament with a final score of " + p1Win + " - " + p2Win + ".";
                     this.broadcast(map.findRoom(player.getCurrentRoom()), winner2);
+		    pickRPSToggle = false;
                 }
                 else{
                     String noWinner = player.getName() + " challenged " + challengee.getName() + " to a Rock Paper Scissors Battle: They tied in the tournament with a final score of " + p1Win + " - " + p2Win + ".";
-                    this.broadcast(map.findRoom(player.getCurrentRoom()), noWinner);   
+                    this.broadcast(map.findRoom(player.getCurrentRoom()), noWinner);
+		    pickRPSToggle = false;
                 }
 
                 player.setInBattle(false);
@@ -1391,7 +1397,7 @@ public class GameCore implements GameCoreInterface {
                 challengee.setWins(challengee.getWins()+1);
                 this.broadcast(map.findRoom(player.getCurrentRoom()), winner);
 		rpsLog(challengee.getName(), player.getName(), "wins", challengee.getOption(), player.getOption());
-              	pickRPSToggle = false;
+              	
 	      }
               else if (challengee.getOption().equals("SCISSORS")){
                 challengee.getReplyWriter().println("You chose SCISSORS.");
@@ -1400,7 +1406,7 @@ public class GameCore implements GameCoreInterface {
                 winner = player.getName() + " challenged " + challengee.getName() + " to a Rock Paper Scissors Battle: It is a tie this round.";
                 this.broadcast(map.findRoom(player.getCurrentRoom()), winner);
 		rpsLog(challengee.getName(), player.getName(), "ties", challengee.getOption(), player.getOption());
-              	pickRPSToggle = false;
+           
 	      }
               else {
                 challengee.getReplyWriter().println("You chose PAPER.");
@@ -1410,7 +1416,7 @@ public class GameCore implements GameCoreInterface {
                 player.setWins(player.getWins()+1);
                 this.broadcast(map.findRoom(player.getCurrentRoom()), winner);
 		rpsLog(player.getName(), challengee.getName(), "wins", player.getOption(), challengee.getOption());
-              	pickRPSToggle = false;
+              	
               }
               if(player.getRounds() > 0){
 
@@ -1427,14 +1433,17 @@ public class GameCore implements GameCoreInterface {
                 if(p1Win > p2Win){
                     String winner2 = player.getName() + " challenged " + challengee.getName() + " to a Rock Paper Scissors Battle: " + player.getName() + " won the tournament with a final score of " + p1Win + " - " + p2Win + ".";
                     this.broadcast(map.findRoom(player.getCurrentRoom()), winner2);
+		    pickRPSToggle = false;
                 }
                 else if(p2Win > p1Win){
                     String winner2 = player.getName() + " challenged " + challengee.getName() + " to a Rock Paper Scissors Battle: " + player.getName() + " won the tournament with a final score of " + p1Win + " - " + p2Win + ".";
                     this.broadcast(map.findRoom(player.getCurrentRoom()), winner2);
+		    pickRPSToggle = false;
                 }
                 else{
                     String noWinner = player.getName() + " challenged " + challengee.getName() + " to a Rock Paper Scissors Battle: They tied in the tournament with a final score of " + p1Win + " - " + p2Win + ".";
-                    this.broadcast(map.findRoom(player.getCurrentRoom()), noWinner);   
+                    this.broadcast(map.findRoom(player.getCurrentRoom()), noWinner);
+		    pickRPSToggle = false;
                 }
 
                 player.setInBattle(false);
