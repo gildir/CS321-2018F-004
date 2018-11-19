@@ -53,8 +53,6 @@ public class BankClient {
 				    ln +
 				    "|  Welcome to the Patriot Center Bank!     |\n" +
 				    "|  (Formerly the Eagle Arena Bank)         |\n" +
-				    ln +
-				    "|  Commands:                               |\n" +
 				    ln + 
 				    "|  VIEW - - - - View your account balances |\n" +
 				    ln + 

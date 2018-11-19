@@ -33,9 +33,6 @@ public class ShopClient {
 		// Display shop specific greeting
 		System.out.println(remote.getShopStr(this.id));
 
-        // Display instructions
-        this.printMenu();
-
         // Copy and pasted from GameClient
         // Set up for keyboard input for local commands.
         InputStreamReader keyboardReader = new InputStreamReader(System.in);
@@ -125,7 +122,8 @@ public class ShopClient {
 	
 	public void printMenu() {
 		String ln =         "+----------------------------------+\n";
-        System.out.println(
+        System.out.printf(
+                        ln                                           +
                             "| BUY [item] - - - Buy an item     |\n" +
                         ln                                           +
                             "| SELL [item]  - - Sell an item    |\n" +
@@ -152,10 +150,10 @@ public class ShopClient {
 	public void sell(String item) throws RemoteException {
 		double val = remote.sellItem(this.player, this.id, item);
 		if (val != 0) {
-			System.out.printf("You have sold %s for $%.2f.\n", item, val);
+			System.out.printf("Here's $%.2f for your %s.\n", val, item);
 		}
 		else {
-			System.out.println(item + " isn't in your inventory.");
+			System.out.println("Hey! I don't see no " + item + ". You can't fool me!");
 		}
 	}
 	

@@ -483,7 +483,7 @@ public class GameCore implements GameCoreInterface {
     		if (ii.name.compareToIgnoreCase(itemName) == 0) 
     			item = ii;
 
-    	if (item == null)  return item.getName() + " isn't in stock!";    	
+    	if (item == null)  return "Sorry, " + itemName + " isn't in stock.";    	
     	
     	if(s.getInven().contains(item))
     	{
@@ -492,7 +492,7 @@ public class GameCore implements GameCoreInterface {
     			s.ping(player, item);
     		}
     		else {
-    			return "Not enough money!";
+    			return "Not enough money bub, don't try to low ball us.";
     		}
     	}
     	
