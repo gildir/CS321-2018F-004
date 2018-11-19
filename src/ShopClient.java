@@ -104,7 +104,7 @@ public class ShopClient {
             case "D":
             case "DEM":
             case "DEMAND":
-            	System.out.println("Method not yet in use");
+            	System.out.println(this.getDemInv());
             	break;
             	
             case "Q":
