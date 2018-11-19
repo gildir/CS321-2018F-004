@@ -147,6 +147,9 @@ object are on the ground and what direction you are facing.
         <help command = "ACCOUNT">
             <description>  ACCOUNT                   - Enters account edit wizard</description>
         </help>
+         <help command = "TOGGLERPSCHAT">
+	    <description> TOGGLERPSCHAT		-Toggles the win resolutions of R-P-S battles in your area.</description>
+        </help>
     </help_category>
     <help_category category = "BATTLE">
         <help command = "CHALLENGE">

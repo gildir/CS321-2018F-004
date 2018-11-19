@@ -783,10 +783,19 @@ public class GameClient {
                     break;
                 case "ACCEPT":
                     if(tokens.isEmpty()){
-                      System.err.println("You need to provide a name.");
+                      System.err.println("You need to provide a name and number of rounds.");
                     }
                     else{
-                      System.out.println(remoteGameInterface.accept(this.playerName, tokens.remove(0)));
+                        if(tokens.size() < 2){
+                          System.err.println("You need to provide the number of rounds.");
+                        }
+                        else{
+
+                            String option1 = tokens.remove(0);
+                            String option2 = tokens.remove(0);
+                            //System.out.println(option1 + " \t\t" + option2);
+                            System.out.println(remoteGameInterface.accept(this.playerName, option1, option2));//tokens.remove(0), tokens.remove(0)));
+                        }
                     }
                     break;
                 case "REJECT":
@@ -813,13 +822,16 @@ public class GameClient {
                 case "TEACH":
                     System.out.println(remoteGameInterface.teach(this.playerName));
                     break;
-			case "ACCOUNT":
-				try {
-					accountEditWizard.enter();
-				} catch (Exception e) {
-					System.out.println("It appears the wizards wand broke. Probably a Weasley...");
-				}
-				break;
+	        case "ACCOUNT":
+		    try {
+			accountEditWizard.enter();
+		    } catch (Exception e) {
+			System.out.println("It appears the wizards wand broke. Probably a Weasley...");
+		    }
+		    break;
+		case "TOGGLERPSCHAT":
+		    System.out.println(remoteGameInterface.toggleRPSChat(this.playerName));
+		    break;
                 case "FRIENDS":
                     String sub;
                     if(tokens.isEmpty())
@@ -916,7 +928,6 @@ public class GameClient {
             Logger.getLogger(GameClient.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
     /**
      * Prompts the user through a dialogue tree to give them the option to reset their password
      */
