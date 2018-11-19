@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.lang.reflect.InvocationTargetException;
 import java.net.ConnectException;
 import java.net.MalformedURLException;
 import java.net.ServerSocket;
@@ -18,6 +19,8 @@ import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.HashSet;
+
+import java.lang.System; //used for use item and title feature
 
 import org.w3c.dom.Document;
 import javax.xml.parsers.DocumentBuilder;
@@ -56,7 +59,12 @@ public class GameClient {
     protected String playerName;
 
     private String lastCommand;
+
+	private AccountEditWizard accountEditWizard;
     
+    //used for timing the title feature
+    private long startTime;
+
     /** 
      * Main class for running the game client.
      */
@@ -64,6 +72,9 @@ public class GameClient {
         this.runGame = true;
         boolean nameSat = false;
         
+	//title feature
+	startTime = 0;
+
         //please modify the xml to add more commands
         showIntroduction();
         showCommand();
@@ -98,41 +109,21 @@ public class GameClient {
 					System.out.print("Username: ");
 					this.playerName = keyboardInput.readLine().trim();
 					System.out.print("Password: ");
-					String pass = keyboardInput.readLine();
+					String pass = new String(System.console().readPassword()); //task 221 hides password
 					switch (mode) {
 					case "L":
 						nameSat = remoteGameInterface.joinGame(this.playerName, pass);
 						if (!nameSat) {
 							System.out.println("Username and password combination invalid");
 							resetPassword();
-							}
+						}
 						break;
 					case "C":
-						//prompt user for recovery questions
-						count = 0;
-						System.out.println("Please create 1st security question for password recovery");
-						System.out.print(">");
-						recovery.add(keyboardInput.readLine().trim());
-						System.out.println("Please give the answer");
-						System.out.print(">");
-						recovery.add(keyboardInput.readLine().trim());
-						System.out.println("Please create 2nd security question for password recovery");
-						System.out.print(">");
-						recovery.add(keyboardInput.readLine().trim());
-						System.out.println("Please give the answer");
-						System.out.print(">");
-						recovery.add(keyboardInput.readLine().trim());
-						System.out.println("Please create 3rd security question for password recovery");
-						System.out.print(">");
-						recovery.add(keyboardInput.readLine().trim());
-						System.out.println("Please give the answer");
-						System.out.print(">");
-						recovery.add(keyboardInput.readLine().trim());
-						Responses resp = remoteGameInterface.createAccountAndJoinGame(playerName, pass, recovery);
+						Responses resp = remoteGameInterface.createAccountAndJoinGame(playerName, pass); //removed recovery
 						switch (resp) {
 						case BAD_USERNAME_FORMAT:
 							System.out
-									.println("This is a bad user name. Please use only spaces, numbers, and letters.");
+									.println("This is a bad user name. Please use only spaces, numbers, and letters, with 2-15 characters.");
 							break;
 						case USERNAME_TAKEN:
 							System.out.println("Sorry but this username was already taken.");
@@ -192,7 +183,17 @@ public class GameClient {
 
             // 409 Word Filter
             readWordFilterFile();
+            // 413 Prefix
+            readPrefixFromFile();
 
+
+			accountEditWizard = new AccountEditWizard(keyboardInput, System.out, remoteGameInterface, this.playerName);
+
+			accountEditWizard = new AccountEditWizard(keyboardInput, System.out, remoteGameInterface, this.playerName);
+			
+			// check venmo mailbox. Team4: Alaqeel
+			remoteGameInterface.checkVenmoMail(this.playerName);
+			
             // Collect input for the game.
             while(runGame) {
                 try {
@@ -211,7 +212,20 @@ public class GameClient {
             System.err.println("[CRITICAL ERROR] There was a severe error with the RMI mechanism.");
             System.err.println("[CRITICAL ERROR] Code: " + re);
             System.exit(-1);
-        }        
+        } catch (NoSuchMethodException e) {
+            Logger.getLogger(GameClient.class.getName()).log(Level.SEVERE, null, e);
+        } catch (SecurityException e) {
+            Logger.getLogger(GameClient.class.getName()).log(Level.SEVERE, null, e);
+        } catch (InstantiationException e) {
+            Logger.getLogger(GameClient.class.getName()).log(Level.SEVERE, null, e);
+        } catch (IllegalAccessException e) {
+            Logger.getLogger(GameClient.class.getName()).log(Level.SEVERE, null, e);
+        } catch (IllegalArgumentException e) {
+            Logger.getLogger(GameClient.class.getName()).log(Level.SEVERE, null, e);
+        } catch (InvocationTargetException e) {
+            Logger.getLogger(GameClient.class.getName()).log(Level.SEVERE, null, e);
+        }
+
     }
 
     // Helper for Features 4XX - Chat System
@@ -223,13 +237,11 @@ public class GameClient {
     private String parseMessage(ArrayList<String> msgTokens) {
         //TODO: Note - Tokenizer currently trims out multiple spaces - bug or feature?
         StringBuilder msgBuilder = new StringBuilder();
-        msgBuilder.append("\"");
         while (!msgTokens.isEmpty()) {
             msgBuilder.append(msgTokens.remove(0));
             if (!msgTokens.isEmpty())
                 msgBuilder.append(" ");
         }
-        msgBuilder.append("\"");
         return msgBuilder.toString();
     }
 
@@ -239,7 +251,22 @@ public class GameClient {
      */
     private void parseInput(String input) {
         boolean reply;
-        
+       
+	//removes player titles after a certain time
+	if(startTime != 0) {
+		long timeElapsed = System.nanoTime() - startTime;
+		double timeElapsedInSeconds = ((double)timeElapsed) / 1000000000.0;
+		if(timeElapsedInSeconds > 20.0) {
+			try {
+				remoteGameInterface.removePlayerTitle(this.playerName);
+				startTime = 0;
+			}
+			catch(RemoteException e) {
+				System.out.println("Title removing went wrong");
+			}
+		}
+	}
+
         // First, tokenize the raw input.
         StringTokenizer commandTokens = new StringTokenizer(input);
         ArrayList<String> tokens = new ArrayList<>();
@@ -369,23 +396,91 @@ public class GameClient {
                     parseInput(lastCommand);
                     break;
 
-		
+		case "USE":
+		    if(tokens.isEmpty()) {
+			System.err.println("You need to provide an item to use.");
+		    }
+		    else if(tokens.size() != 1) {
+			System.err.println("You can only use one item at a time.");
+		    }
+		    else {
+		    	System.out.println(remoteGameInterface.useItem(this.playerName, tokens.remove(0).toLowerCase()));
+			startTime = System.nanoTime();
+		    }
+		    break;
+	
+		case "TITLE": {
+		   if(!tokens.isEmpty()) {
+			System.err.println("What are you even trying to do?");
+		   }
+		   else {
+			String title = remoteGameInterface.getPlayerTitle(this.playerName);
+			if(title.equals("")) {
+				System.out.println("You do not have a title");
+			}
+			else {
+				System.out.println(this.playerName + " the " + title);
+			}
+		   }
+		   break;
+		}
+
 		case "O":
 		    
 		case "OFFER":
 
 		    if (tokens.isEmpty()){
-			System.err.println("You need to provide a player to offer.");
-		    }
-		    else if (tokens.size() < 2) { 
 			System.err.println("You need to provide an item to offer.");
 		    }
+		    else if (tokens.size() < 2) { 
+			System.err.println("You need to type for.");
+		    }
+		    else if (tokens.size() < 3) {
+			System.err.println("You need to pick an item from their inventory");
+		    }
 		    else {
-			String dstPlayerName = tokens.remove(0).toLowerCase();
-			System.out.println(remoteGameInterface.offer(this.playerName, dstPlayerName, tokens.remove(0)));
+			String message1 = tokens.remove(0).toLowerCase();
+			String junk = tokens.remove(0).toLowerCase();
+			//String message2 = tokens.remove(0).toLowerCase();
+			System.out.println(remoteGameInterface.offer(this.playerName, message1, junk, tokens.remove(0)));
 		    }
 		    break;
 
+        case "O_REPLY":
+
+        case "OFFER_REPLY:":
+
+            if (tokens.isEmpty()){
+                System.err.println("You need to provide a response. Type 'accept' or 'reject'");
+            }
+            String response = tokens.remove(0).toLowerCase();
+            if ( !(response.equals("accept") || response.equals("reject")) ){ 
+                System.err.println("Your response must be to accept or reject");
+            }
+            else{
+                if(response.equals("accept")){
+                    System.out.println(remoteGameInterface.offerReply(this.playerName, true));
+                }
+                else if(response.equals("reject")){
+                    System.out.println(remoteGameInterface.offerReply(this.playerName, false));
+                }
+            }
+            break;
+
+		case "EXAMINE":
+			if(tokens.isEmpty())
+			{
+				System.err.println("You need to provide a item to look at");
+			}
+			else if(tokens.size() != 1)
+			{
+				System.err.println("Only one item can be examined at a time.");
+			}
+			else
+			{
+				System.out.println(remoteGameInterface.examine(this.playerName, tokens.remove(0)));
+			}
+			break;
                 case "PICKUP":
                     if(tokens.isEmpty()) {
                         System.err.println("You need to provide an object to pickup.");
@@ -405,7 +500,6 @@ public class GameClient {
                 	if (shopId != -1) {
                 		System.out.println("You enter the shop");
                 		new ShopClient(this.playerName, shopId, remoteGameInterface);
-                		remoteGameInterface.shopLeft(this.playerName);
                 	}
                 	else {
                 		System.out.println("There is no shop here");
@@ -523,7 +617,7 @@ public class GameClient {
                         		default:
                 	                	System.out.println("Please enter in valid input or use the correct format (n/w/p) -> (i/d)");	
 			    		}
-			    	}
+			   }
 	    	    }
 		    catch(IOException e) {
  	                   System.err.println("[CRITICAL ERROR] Error at reading any input properly.  Terminating the client now.");
@@ -532,6 +626,7 @@ public class GameClient {
 		    System.out.println(remoteGameInterface.sort(this.playerName, mode));
 		    break;		    
                 case "QUIT":
+		    remoteGameInterface.removePlayerTitle(this.playerName);
                     remoteGameInterface.leave(this.playerName);
                     runListener = false;
                     break;
@@ -556,6 +651,9 @@ public class GameClient {
                 case "CUSTOMHELP":
                     showCustomCommands();
                     break;
+		case "MAP":
+                    System.out.println(remoteGameInterface.showMap(this.playerName));
+		    break;
                 case "CHALLENGE":
                     if(tokens.isEmpty()){
                       System.err.println("You need to provide a name.");
@@ -596,68 +694,95 @@ public class GameClient {
                 case "TEACH":
                     System.out.println(remoteGameInterface.teach(this.playerName));
                     break;
+			case "ACCOUNT":
+				try {
+					accountEditWizard.enter();
+				} catch (Exception e) {
+					System.out.println("It appears the wizards wand broke. Probably a Weasley...");
+				}
+				break;
                 case "FRIENDS":
-    				String sub;
-    				if (tokens.isEmpty() || !((sub = tokens.remove(0).toUpperCase()).equals("ADD") || sub.equals("REMOVE")
-    						|| sub.equals("ONLINE"))) {
-    					System.out.println("\nProvide FRIENDS subcommand");
-    					System.out.println("  ADD name     - Adds a player to your friends list");
-    					System.out.println("  REMOVE name  - Removes a player from your friends list");
-    					System.out.println("  ONLINE       - lists your friends who are currently online");
-    					break;
-    				}
-    				if (tokens.isEmpty() && !sub.equals("ONLINE")) {
-    					System.out.println("Please provide a name for this command");
-    					break;
-    				} else if (tokens.isEmpty()) {
-    					System.out.println(remoteGameInterface.viewOnlineFriends(this.playerName));
-    					break;
-    				}
-    				String name = tokens.remove(0);
-    				while (!tokens.isEmpty())
-    					name += " " + tokens.remove(0);
-    				switch (sub) {
-    				case "ADD":
-    					switch (remoteGameInterface.addFriend(this.playerName, name)) {
-    					case INTERNAL_SERVER_ERROR:
-    						System.out.println("There was an internal server error with your account");
-    						break;
-    					case NOT_FOUND:
-    						System.out.println("The player you were trying to add could not be found");
-    						break;
-    					case EXISTS:
-    						System.out.println("You already have this friend added");
-    						break;
-    					case SILLY:
-    						System.out.println("Sorry, you cannot add yourself as a friend. Go make some");
-    						break;
-    					case SUCCESS:
-    						System.out.println(name + " was added to your friends list!");
-    						break;
-    					default:
-    						System.out.println("Unknown server behavior");
-    					}
-    					break;
-    				case "REMOVE":
-    					switch (remoteGameInterface.removeFriend(this.playerName, name)) {
-    					case INTERNAL_SERVER_ERROR:
-    						System.out.println("There was an internal server error with your account");
-    						break;
-    					case NOT_FOUND:
-    						System.out.println("This player was not on your friends list");
-    						break;
-    					case SILLY:
-    						System.out.println("Removing yourself? Who am I to judge");
-    						break;
-    					case SUCCESS:
-    						System.out.println(name + " was removed from your friends list");
-    						break;
-    					default:
-    						System.out.println("Unknown server behavior");
-    					}
-    					break;
-    				}
-    				break;
+                    String sub;
+                    if(tokens.isEmpty())
+                        sub = "";
+                    else
+                        sub = tokens.remove(0).toUpperCase();
+
+                    if (sub.isEmpty()){
+                            System.out.println("\nProvide FRIENDS subcommand");
+                            System.out.println("  ADD name     - Adds a player to your friends list");
+                            System.out.println("  ALL          - List all your friends");
+                            System.out.println("  REMOVE name  - Removes a player from your friends list");
+                            System.out.println("  ONLINE       - Lists your friends who are currently online");
+                            break;
+                    }
+
+                    String name;
+                    if(tokens.isEmpty())
+                        name = "";
+                    else
+                        name = tokens.remove(0);
+                    
+                    while (!tokens.isEmpty())
+                            name += " " + tokens.remove(0);
+
+                    switch (sub) {
+                    case "ONLINE":
+                        System.out.println(remoteGameInterface.viewFriends(this.playerName, true));
+                        break;
+                    case "ALL":
+                        System.out.println(remoteGameInterface.viewFriends(this.playerName, false));
+                        break;        
+                    case "ADD":
+                        if(name.isEmpty()){
+                            System.out.println("You need to provide the name of the player you want to add");
+                            break;
+                        }
+
+                            switch (remoteGameInterface.addFriend(this.playerName, name)) {
+                            case INTERNAL_SERVER_ERROR:
+                                    System.out.println("There was an internal server error with your account");
+                                    break;
+                            case NOT_FOUND:
+                                    System.out.println("The player you were trying to add could not be found");
+                                    break;
+                            case EXISTS:
+                                    System.out.println("You already have this friend added");
+                                    break;
+                            case SILLY:
+                                    System.out.println("Sorry, you cannot add yourself as a friend. Go make some");
+                                    break;
+                            case SUCCESS:
+                                    System.out.println(name + " was added to your friends list!");
+                                    break;
+                            default:
+                                    System.out.println("Unknown server behavior");
+                            }
+                            break;
+                    case "REMOVE":
+                        if(name.isEmpty()){
+                            System.out.println("You need to provide the name of the player you want to remove");
+                            break;
+                        }
+                            switch (remoteGameInterface.removeFriend(this.playerName, name)) {
+                            case INTERNAL_SERVER_ERROR:
+                                    System.out.println("There was an internal server error with your account");
+                                    break;
+                            case NOT_FOUND:
+                                    System.out.println("This player was not on your friends list");
+                                    break;
+                            case SILLY:
+                                    System.out.println("Removing yourself? Who am I to judge");
+                                    break;
+                            case SUCCESS:
+                                    System.out.println(name + " was removed from your friends list");
+                                    break;
+                            default:
+                                    System.out.println("Unknown server behavior");
+                            }
+                            break;
+                    }
+                    break;
                 default:
                     //If command does not match with any, see if it is custom command
                     if (!executeCustomCommand(command, tokens)) {
@@ -688,6 +813,7 @@ public class GameClient {
     	Responses response;
     	int count;
     	boolean correct;
+    	Boolean buff;
     	//booleans for dialogue loops
     	boolean go;
     	boolean test;
@@ -709,29 +835,33 @@ public class GameClient {
 	    			System.out.print(">");
 	    			name = keyboardInput.readLine().trim();
 	    			question = remoteGameInterface.getQuestion(name, 0);
-	    			answer = remoteGameInterface.getAnswer(name, 0);
-	    			if (question != null && answer != null) {
+	    			//answer = remoteGameInterface.getAnswer(name, 0);
+	    			if (question != null) {
 	    				test = true;
 	    				while (test) {
 	    					//asks recovery question
 	    					correct = true;
-	    					for(int i = 0; i < 3; i++) {
-	    						question = remoteGameInterface.getQuestion(name, i);
-	    		    			answer = remoteGameInterface.getAnswer(name, i);
-		    					System.out.println();
+	    					count = 0;
+	    					do {
+	    						System.out.println();
 			    				System.out.println(question);
 			    				System.out.print("Answer:");
-			    				input = keyboardInput.readLine().toLowerCase().trim();
-			    				if(correct)
-			    					correct = input.equals(answer);
-	    					}
+			    				input = new String(System.console().readPassword()).toLowerCase().trim();
+			    				buff = remoteGameInterface.getAnswer(name, count, input);
+			    				question = remoteGameInterface.getQuestion(name, ++count);
+			    				if(buff == null) {
+			    					question = null;
+			    				} else {
+			    					correct = buff;
+			    				}
+	    					} while(question != null && correct);
 		    				//gets new password if recovery question answered
 		    				if(correct) {
 		    					test = false;
 		    					System.out.println();
 		    					System.out.println("Please input new password");
 		    					System.out.print(">");
-		    					password = keyboardInput.readLine().trim();
+		    					password = new String(System.console().readPassword()); //task 221 hides password
 		    					response = remoteGameInterface.resetPassword(name, password);
 		    					switch(response) {
 								case SUCCESS:
@@ -741,7 +871,7 @@ public class GameClient {
 									System.out.println("The server experienced an unkown failure");
 									break;
 								case INTERNAL_SERVER_ERROR:
-									System.out.println("The experianced a data error");
+									System.out.println("The experienced a data error");
 									break;
 								default:
 									System.out.println("Unkown server behavior");
@@ -770,9 +900,10 @@ public class GameClient {
 	    			} else {
 		    			test2 = true;
 		    				//Username inputed by user wasn't found, asks if they want to continue recovery process
+		    				//Alternatively, user may not have set up questions yet
 			    			while(test2) {
 			    				System.out.println();
-			    				System.out.println("Your username was not found, try again?");
+			    				System.out.println("Your username was not found or your account has no recovery questions, try again?");
 			    				System.out.print("(Y/N) >");
 			    				input = keyboardInput.readLine().toUpperCase().trim();
 			    				switch(input) {
@@ -1176,4 +1307,26 @@ public class GameClient {
     }
 
     //End Feature 409 Word Filter
+
+    //Begin 413 Prefix
+    private void readPrefixFromFile() {
+        String filename = "ChatPrefixFile-" + playerName + ".txt";
+
+        try {
+            File filteredWordsFile = new File(filename);
+            if(!filteredWordsFile.exists()) { filteredWordsFile.createNewFile(); }
+            BufferedReader br = new BufferedReader(new FileReader(filename));
+            String line = br.readLine();
+
+            if(line != null && !line.equals("")) { remoteGameInterface.setPlayerChatPrefix(this.playerName, line); }
+            br.close();
+
+        } catch(IOException i) {
+            System.err.print("\nI/O Exception thrown while attempting to read from filtered words File!\n");
+        }
+    }
+
+
+
+    //End 413 Prefix
 }
