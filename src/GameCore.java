@@ -450,6 +450,7 @@ public class GameCore implements GameCoreInterface {
     	{
     		if (player.getMoney() > item.getPrice() * 1.2) {
     			s.remove(item);
+    			s.ping(player, item);
     		}
     		else {
     			return "Not enough money!!!";
