@@ -31,12 +31,21 @@ public class PlayerAccountManager {
 		}
 	});
 
+	/**
+	 * Marks an account for removal
+	 * @param name account to be marked for removal
+	 */
 	public void markAccount(String name) {
 		synchronized (accountLock) {
 			accountsMarkedToRemove.add(name);
 		}
 	}
 
+	/**
+	 * Constructor for PlayerAccountManager
+	 * @param folderName folder to store accounts
+	 * @throws Exception
+	 */
 	public PlayerAccountManager(String folderName) throws Exception {
 		accountFolder = new File(folderName);
 		if (accountFolder.exists() && !accountFolder.isDirectory())
@@ -91,6 +100,11 @@ public class PlayerAccountManager {
 		}
 	}
 
+	/**
+	 * Writes player data to a file for a player p
+	 * @param p player for whom a file is being written.
+	 * @throws Exception
+	 */
 	private void writePlayerDataFile(Player p) throws Exception {
 		File userDir = new File(accountFolder.getAbsolutePath() + "/" + p.getName().toLowerCase());
 		FileOutputStream dataFile = new FileOutputStream(userDir.getAbsolutePath() + "/data.json");
@@ -98,6 +112,11 @@ public class PlayerAccountManager {
 		dataFile.close();
 	}
 
+	/**
+	 * writes account data to a file for player's account a
+	 * @param a player's account
+	 * @throws Exception
+	 */
 	private void writeAccountDataFile(PlayerAccount a) throws Exception {
 		File userDir = new File(accountFolder.getAbsolutePath() + "/" + a.getName().toLowerCase());
 		FileOutputStream accountFile = new FileOutputStream(userDir.getAbsolutePath() + "/account.json");
@@ -105,6 +124,10 @@ public class PlayerAccountManager {
 		accountFile.close();
 	}
 
+	/**
+	 * public method to update a player file
+	 * @param p the player having their file updated
+	 */
 	public void forceUpdatePlayerFile(Player p) {
 		try {
 			writePlayerDataFile(p);
@@ -112,6 +135,10 @@ public class PlayerAccountManager {
 		}
 	}
 
+	/**
+	 * public method to update a player's account file
+	 * @param a the player account being updated
+	 */
 	public void forceUpdateAccountFile(PlayerAccount a) {
 		try {
 			writeAccountDataFile(a);
@@ -119,6 +146,11 @@ public class PlayerAccountManager {
 		}
 	}
 
+	/**
+	 * Deletes account of given user
+	 * @param username username of user to have their account deleted
+	 * @return
+	 */
 	public boolean deleteAccount(String username) {
 		username = username.toLowerCase();
 		if (!playerIds.contains(username))
@@ -203,6 +235,11 @@ public class PlayerAccountManager {
 		return new DataResponse<PlayerAccount>(a);
 	}
 
+	/**
+	 * Returns true if an account under the given username exists, false if otherwise
+	 * @param username username of account being searched for
+	 * @return if an account exists under the given username
+	 */
 	public boolean accountExists(String username) {
 		return playerIds.contains(username);
 	}
