@@ -191,7 +191,10 @@ public class GameClient {
 			accountEditWizard = new AccountEditWizard(keyboardInput, System.out, remoteGameInterface, this.playerName);
 
 			accountEditWizard = new AccountEditWizard(keyboardInput, System.out, remoteGameInterface, this.playerName);
-
+			
+			// check venmo mailbox. Team4: Alaqeel
+			remoteGameInterface.checkVenmoMail(this.playerName);
+			
             // Collect input for the game.
             while(runGame) {
                 try {

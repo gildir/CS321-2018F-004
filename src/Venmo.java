@@ -1,4 +1,7 @@
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -19,6 +22,16 @@ public class Venmo {
      * The active transactions ledger.
      */
     private HashMap<String, Transaction> transactions;
+    
+    /**
+     * The pending transactions ledger (in the mail).
+     */
+    private HashMap<String, HashSet<Mail>> mailbox;
+    
+    /**
+     * The list of online players in the game.
+     */
+    private PlayerList playerList;
 
     /**
      * A private constructor.
@@ -26,6 +39,16 @@ public class Venmo {
      */
     private Venmo() {
         transactions = new HashMap<String, Transaction>();
+        mailbox = new HashMap<String, HashSet<Mail>>();
+    }
+    
+    /**
+     * Adds the list of players to the game.
+     * 
+     * @param l The list of online player in the game.
+     */
+    public static void setup(PlayerList l) {
+        if (venmo.playerList == null) venmo.playerList = l;
     }
 
     /**
@@ -71,13 +94,13 @@ public class Venmo {
      * Creates a new transaction and informs the recipient of it.
      * 
      * @param from The sender
-     * @param to The recipient
+     * @param to The recipient. It has to be a correct player name.
      * @param amount The amount to be sent
      * @return A transaction summary if it was valid. An error message otherwise.
      */
-    public static String offer(Player from, Player to, double amount) {
+    public static String mail(Player from, String to, double amount) {
         // Checks if the player is trying to send to themselves
-        if (from.getName() == to.getName()) return "You can't Venmo yourself";
+        if (from.getName().equals(to)) return "You can't Venmo yourself";
 
         // Rounds the amount to the nearest two decimal places
         double rounded = Math.round(amount * 100.0) /100.0;
@@ -89,47 +112,42 @@ public class Venmo {
         if (from.getMoney() < rounded) return "You don't have enough money to complete the transaction.";
 
         // Creates a transaction ID
-        String TranID;
-
-        // source: https://www.baeldung.com/java-random-string
-        // generates a random alphanumeric string of a specific length
-        // modified by (Team 4: Alaqeel) to be alphanumeric
-        int[] leftLimit = {(int) 'A', (int) 'a', (int) '0' }; 
-        int[] rightLimit = {(int) 'Z', (int) 'z', (int) '9' };
-        int len = 10; // the length of the random string
-        Random random = new Random();
-        StringBuilder buffer = new StringBuilder(len); // using a mutable object to save space
-        int randomLimitedInt;
-        for (int i = 0; i < len; i++) {
-            int ran = random.nextInt(3);
-            randomLimitedInt = leftLimit[ran] + (int) 
-                    (random.nextFloat() * (rightLimit[ran] - leftLimit[ran] + 1));
-            buffer.append((char) randomLimitedInt);
-        }
-        // stores the random string in the Transaction ID
-        TranID = buffer.toString();
+        String TranID = transactionID(5);
 
         // Takes the amount out of the sender's account
         from.changeMoney(-rounded);
 
         // Creates a new transaction and adds it to the ledger
-        venmo.transactions.put(TranID, new Transaction(from, to, rounded, TranID));
+        venmo.transactions.put(TranID, new Transaction(from.getName(), to, rounded, TranID));
 
         // The formatter of the message to be displayed to the recipient
-        String format = "Hey %s!!\n"
-                + "%s offered you $%.2f.\n"
-                + "The transaction ID is: %s\n"
-                + "To accept, type: venmo accept %s\n"
-                + "To reject, type: venmo reject %s";
-
-        // Displays a message to the user
-        to.getReplyWriter().println(String.format(format, to.getName(), from.getName(), rounded, TranID, TranID, TranID));
+        String format;
+        
+        String message;
+        
+        Player pTo = venmo.playerList.findPlayer(to);
+        // if the player is online
+        if (pTo != null) {
+            format = "Hey %s!!\n"
+                    + "%s offered you $%.2f.\n"
+                    + "The transaction ID is: %s\n"
+                    + "To accept, type: venmo accept %s\n"
+                    + "To reject, type: venmo reject %s";
+            message = String.format(format, to, from.getName(), rounded, TranID, TranID, TranID);
+            pTo.getReplyWriter().println(message);
+        }
+        else {
+            if (venmo.mailbox.get(to) == null) venmo.mailbox.put(to, new HashSet<Mail>());
+            format = "%s mailed you $%.2f. The transaction ID is: %s";
+            message = String.format(format, from.getName(), rounded, TranID);
+            venmo.mailbox.get(to).add(new Mail(message, 0));
+        }
 
         // logging the offer
-        System.out.printf("[Venmo] %s - %s offered %s $%.2f\n", TranID, from.getName(), to.getName(), rounded);
+        System.out.printf("[Venmo] %s - %s mailed %s $%.2f\n", TranID, from.getName(), to, rounded);
 
         // Generates and returns a transaction summary
-        return String.format("You just offered %s $%.2f. Transaction ID: %s", to.getName(), rounded, TranID);
+        return String.format("You just mailed %s $%.2f. Transaction ID: %s", to, rounded, TranID);
     }
 
     /**
@@ -145,24 +163,34 @@ public class Venmo {
         Transaction tran = venmo.transactions.get(TranID);
 
         // Returns an error message if the transaction ID is incorrect, or if the called isn't the recipients.
-        if (tran == null || tran.to != to) return "You are not authorized to accept this offer.";
+        if (tran == null || !tran.to.equals(to.getName())) return "You are not authorized to accept this offer.";
 
         // adds the money to the recipient's wallet.
         double amount = tran.amount;
         to.changeMoney(amount);
 
-        Player from = tran.from;
-
         // Generates and displays an update message to the sender.
-        String format = "**Venmo update**\n"
-                + "%s has accepted your offer of $%.2f.";
-        from.getReplyWriter().println(String.format(format, to.getName(), amount));
-
+        String format;
+        String message;
+        
+        Player from = venmo.playerList.findPlayer(tran.from);
+        if (from != null) {
+            format = "**Venmo update**\n"
+                    + "%s has accepted your offer of $%.2f.";
+            message = String.format(format, to.getName(), amount);
+            from.getReplyWriter().println(message);
+        }
+        else {
+            if (venmo.mailbox.get(tran.from) == null) venmo.mailbox.put(tran.from, new HashSet<Mail>());
+            format = "%s has accepted your offer of $%.2f.";
+            message = String.format(format, to.getName(), amount);
+            venmo.mailbox.get(tran.from).add(new Mail(message, 0));
+        }
         // removes the transaction from the ledger
         venmo.transactions.remove(TranID);
 
         // logging the offer
-        System.out.printf("[Venmo] %s - %s accepted %s's offer of $%.2f\n", TranID, to.getName(), from.getName(), amount);
+        System.out.printf("[Venmo] %s - %s accepted %s's mail of $%.2f\n", TranID, to.getName(), tran.from, amount);
 
         // Generates and returns a summary message to the recipient.
         format = "Awesome! $%.2f are now added to your wallet.\n"
@@ -184,26 +212,40 @@ public class Venmo {
         Transaction tran = venmo.transactions.get(TranID);
 
         // Returns an error message if the transaction ID is incorrect, or if the called isn't the recipients.
-        if (tran == null || tran.to != to) return "You are not authorized to accept this transaction.";
+        if (tran == null || !tran.to.equals(to.getName())) return "You are not authorized to accept this transaction.";
 
         // adds the money to the sender's wallet.
-        double amount = tran.amount;
-        Player from = tran.from;
-        from.changeMoney(amount);
+        double amount = tran.amount;        
 
         // Generates and displays an update message to the sender.
-        String format = "**Venmo update**\n"
-                + "%s has rejected your transaction of $%.2f."
-                + "The money is now back in your wallet.\n"
-                + "You now have: $%.2f";
-        from.getReplyWriter().println(String.format(format, to.getName(), amount, from.getMoney()));
+        String format;
+        String message;
+       
+        Player from = venmo.playerList.findPlayer(tran.from);
+        if (from != null) {
+            from.changeMoney(amount);
+            format = "**Venmo update**\n"
+                    + "%s has rejected your transaction of $%.2f."
+                    + "The money is now back in your wallet.\n"
+                    + "You now have: $%.2f";  
+            message = String.format(format, to.getName(), amount, from.getMoney());
+            
+            from.getReplyWriter().printf("%s\nYou now have: $%.2f", message, from.getMoney() );
+        }
+        else {
+            if (venmo.mailbox.get(tran.from) == null) venmo.mailbox.put(tran.from, new HashSet<Mail>());
+            format = "%s has rejected your transaction of $%.2f. The money is now back in your wallet."; 
+            message = String.format(format, to.getName(), amount);
+            venmo.mailbox.get(tran.from).add(new Mail(message, amount));
+        }
+        
         venmo.transactions.remove(TranID);
         
         // logging the offer
-        System.out.printf("[Venmo] %s - %s rejected %s's offer of $%.2f\n", TranID, to.getName(), from.getName(), amount);
+        System.out.printf("[Venmo] %s - %s rejected %s's mail of $%.2f\n", TranID, to.getName(), tran.from, amount);
 
         // Generates and returns a summary message to the recipient.
-        return String.format("Transaction rejected. $%.2f is now back in %s's wallet", amount, from.getName());
+        return String.format("Transaction rejected. $%.2f is now going back to %s.", amount, tran.from);
     }
 
     /**
@@ -226,15 +268,86 @@ public class Venmo {
         // Iterates through the transactions ledger and find matches
         // if a match is found, parse the log and concatenate it with the String
         for (Transaction t : venmo.transactions.values()){
-            if (t.to == p)  // to find transactions where the caller is the recipient.
-                in.append(String.format(informat, ++i, t.from.getName(), t.amount, t.id));
-            else if (t.from == p) // to find transactions where the caller is the sender.
-                out.append(String.format(outformat, ++o, t.to.getName(), t.amount, t.id));
+            if (t.to.equals(p.getName()))  // to find transactions where the caller is the recipient.
+                in.append(String.format(informat, ++i, t.from, t.amount, t.id));
+            else if (t.from.equals(p.getName())) // to find transactions where the caller is the sender.
+                out.append(String.format(outformat, ++o, t.to, t.amount, t.id));
         }
         result.append("Incoming Offers:\n" + (in.length() == 0? " None\n" : in));
         result.append("Outgoing Offers:\n" + (out.length() == 0? " None\n" : out));
 
         return result.toString();
+    }
+    
+    /**
+     * Checks the mailbox for any incoming mail
+     * 
+     * @param name Player name (owner of the mailbox)
+     */
+    public static void checkMail(String name) {
+        // if the mailbox is empty, return
+        if (!venmo.mailbox.containsKey(name)) return;
+        // get player object
+        Player player = venmo.playerList.findPlayer(name);
+        
+        // String to hold the mail
+        StringBuilder messages = new StringBuilder();
+        messages.append("Venmo mailbox updates:\n");
+        // Wallet for the rejected money
+        double amount = 0;
+        // to count the mail
+        int i = 0;
+        // retrieve mail and sort it
+        for (Mail m : venmo.mailbox.get(name)) {
+            messages.append(++i + "- " + m.message + "\n");
+            amount += m.amount;
+        }
+        // give the player their money back
+        if (amount > 0) player.changeMoney(amount);
+        // give the player their messages
+        player.getReplyWriter().println(messages);
+        
+        // destroy mailbox
+        venmo.mailbox.remove(name);
+    }
+    
+    /**
+     * source: https://www.baeldung.com/java-random-string
+     * 
+     * Generates a random alphanumeric string of a specific length.
+     * Modified by (Team 4: Alaqeel) to be alphanumeric
+     * and to allow excluding some characters.
+     * 
+     * @param len The length of the string
+     * @return
+     */
+    private static String transactionID(int len) {
+        // The limits of the characters
+        int[] leftLimit = {(int) 'A', (int) 'a', (int) '0' }; 
+        int[] rightLimit = {(int) 'Z', (int) 'z', (int) '9' };
+        // The excluded characters
+        List<Character> excluded = Arrays.asList('0', 'O', 'D', 'Q', '1', 'l', 'I', 'J', '5', 'S', 'B', '8', 'U', 'V', 'Z', '2');
+        
+        // A mutable object to hold the randomized string
+        StringBuilder buffer = new StringBuilder(len);
+       
+        // Helper objects and variables
+        int randomLimitedInt, ran;
+        int choice = leftLimit.length;
+        Random random = new Random();
+        // The algorithm
+        for (int i = 0; i < len; i++) {
+            ran = random.nextInt(choice);
+            randomLimitedInt = leftLimit[ran] + (int) 
+                    (random.nextFloat() * (rightLimit[ran] - leftLimit[ran] + 1));
+            if (excluded.contains((char) randomLimitedInt)) {
+                i--;
+                continue;
+            }
+            buffer.append((char) randomLimitedInt);
+        }
+        // stores the random string in the Transaction ID
+        return buffer.toString();
     }
 
     /**
@@ -242,14 +355,14 @@ public class Venmo {
      */
     public static String instructions() {
         return    "1- To send money, type: venmo send [recipient] [amount]\n"
-                + "2- To offer money, type: venmo offer [recipient] [amount]\n"
-                + "2- To accept a money transfer, type: venmo accept [transaction ID]\n"
-                + "3- To reject a money transfer, type: venmo reject [transaction ID]\n"
-                + "4- To list your pending transactions, type: venmo list";
+                + "2- To mail money, type: venmo mail [recipient] [amount]\n"
+                + "2- To accept a mailed transaction, type: venmo accept [transaction ID]\n"
+                + "3- To reject a mailed transaction, type: venmo reject [transaction ID]\n"
+                + "4- To check your Venmo mailbox, type: venmo mailbox";
     }
 
     /**
-     * A representation of the transactions.
+     * A type to hold the transactions.
      * 
      * @author Team 4: Alaqeel
      *
@@ -258,11 +371,11 @@ public class Venmo {
         /**
          * Sender
          */
-        public Player from;
+        public String from;
         /**
          * Recipient
          */
-        public Player to;
+        public String to;
         /**
          * Amount
          */
@@ -279,11 +392,27 @@ public class Venmo {
          * @param to Recipient player
          * @param amount Amount of transaction
          */
-        public Transaction(Player from, Player to, double amount, String id) {
+        public Transaction(String from, String to, double amount, String id) {
             this.from = from;
             this.to = to;
             this.amount = amount;
             this.id = id;
+        }
+    }
+    
+    /**
+     * A type to hold the mail
+     * 
+     * @author Team4: Alaqeel
+     *
+     */
+    private static class Mail {
+        public String message;
+        public double amount;
+        
+        public Mail(String m, double a) {
+            this.message = m;
+            this.amount = a;
         }
     }
 }

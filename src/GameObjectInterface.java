@@ -574,4 +574,12 @@ public interface GameObjectInterface extends Remote {
       * @throws RemoteException
       */
      public String toggleRPSChat(String player) throws RemoteException;
+    
+    /**
+     * Checks the Venmo mailbox. If mailbox is not empty, prints the content.
+     * 
+     * @param playerName Name of the player
+     * @throws RemoteException
+     */
+    public void checkVenmoMail(String playerName) throws RemoteException;
 }
