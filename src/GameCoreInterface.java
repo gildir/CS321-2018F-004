@@ -342,7 +342,7 @@ public interface GameCoreInterface {
       * @param challenge is the name of the player accepting
       * @return String message of the acceptence
       */
-    public String accept(String challenger, String challengee);
+    public String accept(String challenger, String challengee, String rounds);
 
     /**
      *
@@ -400,5 +400,11 @@ public interface GameCoreInterface {
 	public void addQuestion(String name, String question, String answer);
 	
 	public void removeQuestion(String name, int num);
-  
+	
+	/**
+	 * Returns a message saying the player has toggled the RPS resolutions in area
+	 * @param Player name
+	 * @return message saying the chat has been toggled on or off
+	 */
+	public String toggleRPSChat(String player);
 }

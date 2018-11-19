@@ -3,7 +3,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -24,6 +26,7 @@ import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 import java.util.logging.StreamHandler;
+import java.util.logging.FileHandler;
 
 /**
  *
@@ -37,6 +40,9 @@ public class GameCore implements GameCoreInterface {
     private Ghoul ghoul;
     private PrintWriter pw;
     private Bank bank;
+    private final Logger rpsLogger = Logger.getLogger("battles");
+    private FileHandler rpsHandler;
+    private boolean pickRPSToggle = false;
 
 	// Accounts and Login
 	private final PlayerAccountManager accountManager;
@@ -77,6 +83,7 @@ public class GameCore implements GameCoreInterface {
         pw.close();
 
         initConnectionsLogger();
+	rpsLogger();
         
         accountManager = new PlayerAccountManager(playerAccountsLocation);
         
@@ -128,6 +135,10 @@ public class GameCore implements GameCoreInterface {
                         Thread.sleep(rand.nextInt(60000));
                         object = objects.get(rand.nextInt(objects.size()));
                         room = map.randomRoom();
+                        room.addObject(object);
+                        room.addObject(object);
+                        room.addObject(object);
+                        room.addObject(object);
                         room.addObject(object);
 
 						GameCore.this.broadcast(room, "You see a student rush past and drop a " + object + " on the ground.");
@@ -563,6 +574,57 @@ public class GameCore implements GameCoreInterface {
 		Shop s = this.shoplist.get(new Integer(id));
 		return s.getObjects();
     }
+
+    /**
+     * Picks up multiple items of the name type
+     * @param name name of the the player
+     * @param target name of the item
+     * @param amount amount of pickup
+     * @return String indicating how many items was picked up
+     */
+    public String pickup(String name, String target, int amount) {
+        Player player = this.playerList.findPlayer(name);
+        if (player != null) {
+            Room room = map.findRoom(player.getCurrentRoom());
+            for (int x = 0; x < amount; x++) {
+                if (player.currentInventory.size() < 10) {
+                    Item object = room.removeObject(target);
+                    if (object != null) {
+                        player.addObjectToInventory(object);
+                    } else {
+                        if (x == 0) {
+                            this.broadcast(player, player.getName()
+                                    + " bends over to pick up something, but doesn't seem to find what they were looking for.");
+                            return "You look around for a " + target + ", but can't find one.";
+                        } else {
+                            this.broadcast(player, player.getName() + " bends over to pick up " + amount + " " + target
+                                    + "s but only picks up " + x + " " + target + "s");
+                            return "You look around for " + amount + " " + target + "s but only picked up " + x + " "
+                                    + target + "s";
+                        }
+
+                    }
+                } else {
+                    if (x == 0) {
+                        return " your inventory is full.";
+                    } else {
+                        this.broadcast(player, player.getName() + " bends over to pick up " + amount + " " + target
+                                + "s but only picks up " + x + " " + target + "s because of inventory space");
+                        return "You look around for " + amount + " " + target + "s but only picked up " + x + " "
+                                + target + "s because your inventory is full";
+                    }
+                }
+
+            }
+            this.broadcast(player,
+                    player.getName() + " bends over to pick up " + amount + " " + target + "s that was on the ground.");
+            return "You bend over and pick up " + amount + " "+target + "s.";
+
+        } else {
+            return null;
+        }
+
+    }
     
     /**
      * Attempts to pick up all objects in the room. Will return a message on any success or failure.
@@ -767,8 +829,24 @@ public class GameCore implements GameCoreInterface {
 		for (Player player : this.playerList) {
 			if (player.getCurrentRoom() == room.getId()) {
                 //todo This is going to log the same transmission for N times for N = number plays in this room
+				if(pickRPSToggle == false){
+				dailyLogger.write(message);
+			    String newMessage = player.filterMessage(message);
+				player.getReplyWriter().println(newMessage);
+				/* Delete this, functionality remains unchanged
 				dailyLogger.write(message);
 				player.getReplyWriter().println(message);
+				*/
+				}
+				else{
+					if(player.toggleChat == false){
+						dailyLogger.write(message);
+						String newMessage = player.filterMessage(message);
+						player.getReplyWriter().println(newMessage);
+
+					}
+				}
+
 			}
 		}
 	}
@@ -902,6 +980,7 @@ public class GameCore implements GameCoreInterface {
             dorm.addExit(Direction.valueOf("EAST"),-100000,"You go back to the elevator");
             dorm.addExit(Direction.valueOf("SOUTH"),100000,"You go back to the elevator");
             dorm.addExit(Direction.valueOf("WEST"),-100000,"You go back to the elevator");
+            dorm.setChest(player.chestImage);//point to the chest
             this.map.addRoom(dorm);
             if(player.getCurrentRoom() > 100000){player.setCurrentRoom(dormCountId);}
             dormCountId++;
@@ -1090,6 +1169,50 @@ public class GameCore implements GameCoreInterface {
 	}
 	
 
+    /**115 jorge team 6
+    *This takes the player into the chest action menu
+    * where they can move things between their pockets 
+    * and the chest in their dorm room 
+    * this should only run when the player is 
+    * in the dorm room 
+     */
+    public String chest (String name, String opt, String input)  {
+        
+        Player player = this.playerList.findPlayer(name);
+        Room droom = map.findRoom(player.getCurrentRoom());
+
+        switch (opt){
+
+            case "check"://ensure player is in his room 
+
+                if(player.getCurrentRoom() != player.getDormId()) {                                                      
+                           return ("not in dorm room");
+                            
+                 }return "ok";
+            case "menu":
+               return ((DormRoom)droom).chestMenu();
+            case "a"://adds an item to the chest 
+                Item object = player.removeObjectFromInventory(input);
+                if(object != null) {                                                               
+                      return ((DormRoom)droom).addObjectToChest(object);
+                }else{
+                    return "error";
+                }
+            case "p": //print the chest content
+                return ((DormRoom)droom).printChest();
+            case "x":
+                object = ((DormRoom)droom).removeObjectfromChest(input);
+                if(object != null) {                     
+                     player.addObjectToInventory(object);
+                     return "ok";  
+                }else{
+                    return "error";
+                }
+        }//end switch
+
+            return "chest switch error in GameCore chest()";
+    }//end chest command  
+
 
 	/**
      * Attempts to walk towards <direction> 1 time.  If unable to make it all the way,
@@ -1139,8 +1262,24 @@ public class GameCore implements GameCoreInterface {
     public String pickup(String name, String target) {
         Player player = this.playerList.findPlayer(name);
         if(player != null)  {
+            //Demonstration purpose only
+            Room room = map.findRoom(player.getCurrentRoom());
+            NPC npc = room.getNPCs().get("questNPC");
+            if (npc != null)
+            {
+                player.getDialogueIdFromList("questNPC", "pickup");
+                if (player.currentInventory.size() < 3)
+                {
+                    player.updateDialogueList(npc.getName(), "pickup", 1);
+                }
+                else
+                {
+                    player.updateDialogueList(npc.getName(), "pickup", 2);
+                }
+            }
+
             if (player.currentInventory.size() <10){
-                Room room = map.findRoom(player.getCurrentRoom());
+                room = map.findRoom(player.getCurrentRoom());
                 Item object = room.removeObject(target);
                 if(object != null) {
                     player.addObjectToInventory(object);
@@ -1171,6 +1310,22 @@ public class GameCore implements GameCoreInterface {
         Player player = this.playerList.findPlayer(name);
         if(player != null) {
             Room room = map.findRoom(player.getCurrentRoom());
+
+            //Demonstration purpose only
+            NPC npc = room.getNPCs().get("questNPC");
+            if (npc != null)
+            {
+                player.getDialogueIdFromList("questNPC", "pickup");
+                if (player.currentInventory.size() < 3)
+                {
+                    player.updateDialogueList(npc.getName(), "pickup", 1);
+                }
+                else
+                {
+                    player.updateDialogueList(npc.getName(), "pickup", 2);
+                }
+            }
+
             Item object = player.removeObjectFromInventory(target);
             if(object != null) {
                 room.addObject(object);
@@ -1368,7 +1523,8 @@ public class GameCore implements GameCoreInterface {
         playerChallengee.setChallenger(challenger);
         playerChallenger.setChallenger(challengee);
         playerChallengee.setHasChallenge(true);
-        playerChallengee.getReplyWriter().println(playerChallenger.getName() + " challenges you to a R-P-S");
+        playerChallengee.getReplyWriter().println(playerChallenger.getName() + " challenges you to a R-P-S.");
+
         return "You challenged " + playerChallengee.getName() + " to a R-P-S.";
       }
       else if(playerChallenger == playerChallengee)
@@ -1379,19 +1535,41 @@ public class GameCore implements GameCoreInterface {
     }
 
     @Override
-    public String accept(String challengee, String challenger){
+    public String accept(String challengee, String challenger, String sRounds){
       Player playerChallenger = this.playerList.findPlayer(challenger);
       Player playerChallengee = this.playerList.findPlayer(challengee);
+      int rounds = 0;
       if(playerChallengee == null || playerChallenger == null){
         return "This player does not exist in the game.";
       }
+      switch(sRounds){
+        case "1":
+        case "ONE":
+            rounds = 1;
+            break;
+        case "3":
+        case "THREE":
+            rounds = 3;
+            break;
+        case "5":
+        case "FIVE":
+            rounds = 5;
+            break;
+      }
+      if(rounds != 1 && rounds != 3 && rounds != 5){
+        return "This is an invalid number of rounds, please choose from 1, 3, or 5 rounds: ";
+      }
       if(playerChallengee.getChallenger().equals(playerChallenger.getName()) && playerChallengee.getHasChallenge() == true){
         if(playerChallenger != playerChallengee && playerChallenger.getCurrentRoom() == playerChallengee.getCurrentRoom()) {
-          playerChallenger.getReplyWriter().println(playerChallengee.getName() + " accepts your challenge to a R-P-S. \nPick rock, paper, or scissors: ");
+          playerChallenger.setRounds(rounds);
+          playerChallengee.setRounds(rounds);
+          playerChallenger.getReplyWriter().println(playerChallengee.getName() + " accepts your challenge to a R-P-S for " + rounds + " rounds");
           playerChallengee.setHasChallenge(false);
           playerChallengee.setInBattle(true);
           playerChallenger.setInBattle(true);
-          return "You accept " + playerChallenger.getName() + "\'s challenge to a R-P-S. \nPick rock, paper, or scissors: ";
+          playerChallengee.getReplyWriter().println("You accept " + playerChallenger.getName() + "\'s challenge to a R-P-S for " + rounds + " rounds");
+          playerChallenger.getReplyWriter().println("Entering Round\nPick rock, paper, or scissors: ");
+          return "Entering Round\nPick rock, paper, or scissors: ";
         }
         else
         {
@@ -1434,81 +1612,249 @@ public class GameCore implements GameCoreInterface {
         return "You have not been challenged by " + playerChallenger.getName();
       }
     }
+    private void rpsLog(String winner, String loser, String status, String winnerPick, String loserPick){
+	    rpsLogger.info(winner + " " + status + " against " + loser + "\n" + 
+              winner +  " pick " + winnerPick + ", " + loser +  " pick " + loserPick + "\n");
+    }
+    private void rpsLogger() throws IOException {
+       rpsHandler = new FileHandler("battles.log", true);
+       SimpleFormatter simpleformat = new SimpleFormatter();
+       rpsHandler.setFormatter(simpleformat);
+       rpsLogger.setLevel(Level.ALL);
+       rpsLogger.setUseParentHandlers(false);
+       rpsLogger.addHandler(rpsHandler);
+    }
 
     @Override
     public String pickRPS(String name,  String option){
       Player player = this.playerList.findPlayer(name);
       Player challengee = this.playerList.findPlayer(player.getChallenger());
+      pickRPSToggle = true;
 
-      if(player.getInBattle() == true){
+      if(player.getInBattle() == true && player.getRounds() > 0){
         if(player.getOption().equals("ROCK") || player.getOption().equals("PAPER") || player.getOption().equals("SCISSORS")){
           return "You already pick rock, paper or scissors. You picked " + player.getOption();
         }
         player.setOption(option);
         challengee.setChallengerOption(option);
-        String message = "You picked " + option;
+        String winner = "";
 
         if(challengee.getOption().equals("ROCK") || challengee.getOption().equals("PAPER") || challengee.getOption().equals("SCISSORS")){
+          player.setRounds(player.getRounds() - 1);
+          challengee.setRounds(challengee.getRounds()-1);
           switch(player.getOption()) {
             case "ROCK":
+              player.getReplyWriter().println("You chose ROCK.");
               if (challengee.getOption().equals("PAPER")) {
-                message = challengee.getName() + " wins with " + challengee.getOption();
-              }
+                challengee.getReplyWriter().println("You chose PAPER.");
+                player.getReplyWriter().println(challengee.getName() + " chose PAPER: You lose.");
+                challengee.getReplyWriter().println(player.getName() + " chose ROCK: You win.");
+                winner = player.getName() + " challenged " + challengee.getName() + " to a Rock Paper Scissors Battle: " + challengee.getName() + " won this round.";
+                challengee.setWins(challengee.getWins()+1);
+                this.broadcast(map.findRoom(player.getCurrentRoom()), winner);
+		rpsLog(player.getName(), challengee.getName(), "wins", player.getOption(), challengee.getOption());
+	      }		      
               else if (challengee.getOption().equals("ROCK")){
-                message = "It is a tie.";
-              }
+                challengee.getReplyWriter().println("You chose ROCK.");
+                player.getReplyWriter().println(challengee.getName() + " chose ROCK: It is a tie.");
+                challengee.getReplyWriter().println(player.getName() + " chose ROCK: It is a tie.");
+                winner = player.getName() + " challenged " + challengee.getName() + " to a Rock Paper Scissors Battle: It is a tie this round.";
+                this.broadcast(map.findRoom(player.getCurrentRoom()), winner);
+		rpsLog(player.getName(), challengee.getName(), "ties", player.getOption(), challengee.getOption());
+              	
+	      }
               else {
-                message = player.getName() + " wins with " + player.getOption();
+                challengee.getReplyWriter().println("You chose SCISSORS.");
+                player.getReplyWriter().println(challengee.getName() + " chose SCISSORS: You win.");
+                challengee.getReplyWriter().println(player.getName() + " chose ROCK: You lose.");
+                winner = player.getName() + " challenged " + challengee.getName() + " to a Rock Paper Scissors Battle: " + player.getName() + " won this round.";
+                player.setWins(player.getWins()+1);
+                this.broadcast(map.findRoom(player.getCurrentRoom()), winner);
+		rpsLog(challengee.getName(), player.getName(), "wins", challengee.getOption(), player.getOption());
+              	
               }
-              challengee.getReplyWriter().println(message);
-              player.setInBattle(false);
-              player.setChallenger(" ");
-              player.setOption("");
-              challengee.setChallenger(" ");
-              challengee.setInBattle(false);
-              challengee.setOption("");
+              if(player.getRounds() > 0){
+                player.setOption("");
+                challengee.setOption("");
+                challengee.getReplyWriter().println("You are entering the next round with a score of " + challengee.getWins() + " to " + player.getWins() + "\nPick rock, paper, or scissors: ");
+                player.getReplyWriter().println("You are entering the next round with a score of " + player.getWins() + " to " + challengee.getWins() + "\nPick rock, paper, or scissors: ");
+                //player.setRounds(player.getRounds() - 1);
+              }
+              else{
+
+                int p1Win = player.getWins();
+                int p2Win = challengee.getWins();
+                if(p1Win > p2Win){
+                    String winner2 = player.getName() + " challenged " + challengee.getName() + " to a Rock Paper Scissors Battle: " + player.getName() + " won the tournament with a final score of " + p1Win + " - " + p2Win + ".";
+                    this.broadcast(map.findRoom(player.getCurrentRoom()), winner2);
+		    pickRPSToggle = false;
+                }
+                else if(p2Win > p1Win){
+                    String winner2 = player.getName() + " challenged " + challengee.getName() + " to a Rock Paper Scissors Battle: " + player.getName() + " won the tournament with a final score of " + p1Win + " - " + p2Win + ".";
+                    this.broadcast(map.findRoom(player.getCurrentRoom()), winner2);
+		    pickRPSToggle = false;
+                }
+                else{
+                    String noWinner = player.getName() + " challenged " + challengee.getName() + " to a Rock Paper Scissors Battle: They tied in the tournament with a final score of " + p1Win + " - " + p2Win + ".";
+                    this.broadcast(map.findRoom(player.getCurrentRoom()), noWinner);
+		    pickRPSToggle = false;
+                }
+
+                player.setInBattle(false);
+                player.setChallenger(" ");
+                player.setOption("");
+                player.setWins(0);
+                challengee.setChallenger(" ");
+                challengee.setInBattle(false);
+                challengee.setOption("");
+                challengee.setWins(0);
+              }
               break;
             case "PAPER":
+              player.getReplyWriter().println("You chose PAPER.");
               if (challengee.getOption().equals("SCISSORS")) {
-                message = challengee.getName() + " wins with " + challengee.getOption();
-              }
+                challengee.getReplyWriter().println("You chose SCISSORS.");
+                player.getReplyWriter().println(challengee.getName() + " chose SCISSORS: You lose.");
+                challengee.getReplyWriter().println(player.getName() + " chose PAPER: You win.");
+                winner = player.getName() + " challenged " + challengee.getName() + " to a Rock Paper Scissors Battle: " + challengee.getName() + " won this round.";
+                challengee.setWins(challengee.getWins()+1);
+                this.broadcast(map.findRoom(player.getCurrentRoom()), winner);
+		rpsLog(challengee.getName(), player.getName(), "wins", challengee.getOption(), player.getOption());
+              	
+	      }
               else if (challengee.getOption().equals("PAPER")){
-                message = "It is a tie.";
-              }
+                challengee.getReplyWriter().println("You chose PAPER.");
+                player.getReplyWriter().println(challengee.getName() + " chose PAPER: It is a tie.");
+                challengee.getReplyWriter().println(player.getName() + " chose PAPER: It is a tie.");
+                winner = player.getName() + " challenged " + challengee.getName() + " to a Rock Paper Scissors Battle: It is a tie this round.";
+                this.broadcast(map.findRoom(player.getCurrentRoom()), winner);
+		rpsLog(player.getName(), challengee.getName(), "ties", player.getOption(), challengee.getOption());
+              
+	      }
               else {
-                message = player.getName() + " wins with " + player.getOption();
+                challengee.getReplyWriter().println("You chose ROCK.");
+                player.getReplyWriter().println(challengee.getName() + " chose ROCK: You win.");
+                challengee.getReplyWriter().println(player.getName() + " chose PAPER: You lose.");
+                winner = player.getName() + " challenged " + challengee.getName() + " to a Rock Paper Scissors Battle: " + player.getName() + " won this round.";
+                player.setWins(player.getWins()+1);
+                this.broadcast(map.findRoom(player.getCurrentRoom()), winner);
+		rpsLog(player.getName(), challengee.getName(), "wins", player.getOption(), challengee.getOption());
+              	
               }
-              challengee.getReplyWriter().println(message);
-              player.setInBattle(false);
-              player.setChallenger(" ");
-              player.setOption("");
-              challengee.setChallenger(" ");
-              challengee.setInBattle(false);
-              player.setOption("");
+              if(player.getRounds() > 0){
+
+                player.setOption("");
+                challengee.setOption("");
+                challengee.getReplyWriter().println("You are entering the next round with a score of " + challengee.getWins() + " to " + player.getWins() + "\nPick rock, paper, or scissors: ");
+                player.getReplyWriter().println("You are entering the next round with a score of " + player.getWins() + " to " + challengee.getWins() + "\nPick rock, paper, or scissors: ");
+                //player.setRounds(player.getRounds() - 1);
+              }
+              else{
+
+                int p1Win = player.getWins();
+                int p2Win = challengee.getWins();
+                if(p1Win > p2Win){
+                    String winner2 = player.getName() + " challenged " + challengee.getName() + " to a Rock Paper Scissors Battle: " + player.getName() + " won the tournament with a final score of " + p1Win + " - " + p2Win + ".";
+                    this.broadcast(map.findRoom(player.getCurrentRoom()), winner2);
+                    pickRPSToggle = false;
+		}
+                else if(p2Win > p1Win){
+                    String winner2 = player.getName() + " challenged " + challengee.getName() + " to a Rock Paper Scissors Battle: " + player.getName() + " won the tournament with a final score of " + p1Win + " - " + p2Win + ".";
+                    this.broadcast(map.findRoom(player.getCurrentRoom()), winner2);
+		    pickRPSToggle = false;
+                }
+                else{
+                    String noWinner = player.getName() + " challenged " + challengee.getName() + " to a Rock Paper Scissors Battle: They tied in the tournament with a final score of " + p1Win + " - " + p2Win + ".";
+                    this.broadcast(map.findRoom(player.getCurrentRoom()), noWinner);
+		    pickRPSToggle = false;
+                }
+
+                player.setInBattle(false);
+                player.setChallenger(" ");
+                player.setOption("");
+                player.setWins(0);
+                challengee.setChallenger(" ");
+                challengee.setInBattle(false);
+                challengee.setOption("");
+                challengee.setWins(0);
+              }
               break;
             case "SCISSORS":
+              player.getReplyWriter().println("You chose SCISSORS.");
               if (challengee.getOption().equals("ROCK")) {
-                message = challengee.getName() + " wins with " + challengee.getOption();
-              }
+                challengee.getReplyWriter().println("You chose ROCK.");
+                player.getReplyWriter().println(challengee.getName() + " chose ROCK: You lose.");
+                challengee.getReplyWriter().println(player.getName() + " chose SCISSORS: You win.");
+                winner = player.getName() + " challenged " + challengee.getName() + " to a Rock Paper Scissors Battle: " + challengee.getName() + " won this round.";
+                challengee.setWins(challengee.getWins()+1);
+                this.broadcast(map.findRoom(player.getCurrentRoom()), winner);
+		rpsLog(challengee.getName(), player.getName(), "wins", challengee.getOption(), player.getOption());
+              	
+	      }
               else if (challengee.getOption().equals("SCISSORS")){
-                message = "It is a tie";
-              }
+                challengee.getReplyWriter().println("You chose SCISSORS.");
+                player.getReplyWriter().println(challengee.getName() + " chose SCISSORS: It is a tie.");
+                challengee.getReplyWriter().println(player.getName() + " chose SCISSORS: It is a tie.");
+                winner = player.getName() + " challenged " + challengee.getName() + " to a Rock Paper Scissors Battle: It is a tie this round.";
+                this.broadcast(map.findRoom(player.getCurrentRoom()), winner);
+		rpsLog(challengee.getName(), player.getName(), "ties", challengee.getOption(), player.getOption());
+           
+	      }
               else {
-                message = player.getName() + " wins with " + player.getOption();
+                challengee.getReplyWriter().println("You chose PAPER.");
+                player.getReplyWriter().println(challengee.getName() + " chose PAPER: You win.");
+                challengee.getReplyWriter().println(player.getName() + " chose SCISSORS: You lose.");
+                winner = player.getName() + " challenged " + challengee.getName() + " to a Rock Paper Scissors Battle: " + player.getName() + " won this round.";
+                player.setWins(player.getWins()+1);
+                this.broadcast(map.findRoom(player.getCurrentRoom()), winner);
+		rpsLog(player.getName(), challengee.getName(), "wins", player.getOption(), challengee.getOption());
+              	
               }
-              challengee.getReplyWriter().println(message);
-              player.setInBattle(false);
-              player.setChallenger(" ");
-              player.setOption("");
-              challengee.setChallenger(" ");
-              challengee.setInBattle(false);
-              challengee.setOption("");
+              if(player.getRounds() > 0){
+
+                player.setOption("");
+                challengee.setOption("");
+                challengee.getReplyWriter().println("You are entering the next round with a score of " + challengee.getWins() + " to " + player.getWins() + "\nPick rock, paper, or scissors: ");
+                player.getReplyWriter().println("You are entering the next round with a score of " + player.getWins() + " to " + challengee.getWins() + "\nPick rock, paper, or scissors: ");
+                //player.setRounds(player.getRounds() - 1);
+              }
+              else{
+
+                int p1Win = player.getWins();
+                int p2Win = challengee.getWins();
+                if(p1Win > p2Win){
+                    String winner2 = player.getName() + " challenged " + challengee.getName() + " to a Rock Paper Scissors Battle: " + player.getName() + " won the tournament with a final score of " + p1Win + " - " + p2Win + ".";
+                    this.broadcast(map.findRoom(player.getCurrentRoom()), winner2);
+		    pickRPSToggle = false;
+                }
+                else if(p2Win > p1Win){
+                    String winner2 = player.getName() + " challenged " + challengee.getName() + " to a Rock Paper Scissors Battle: " + player.getName() + " won the tournament with a final score of " + p1Win + " - " + p2Win + ".";
+                    this.broadcast(map.findRoom(player.getCurrentRoom()), winner2);
+		    pickRPSToggle = false;
+                }
+                else{
+                    String noWinner = player.getName() + " challenged " + challengee.getName() + " to a Rock Paper Scissors Battle: They tied in the tournament with a final score of " + p1Win + " - " + p2Win + ".";
+                    this.broadcast(map.findRoom(player.getCurrentRoom()), noWinner);
+		    pickRPSToggle = false;
+                }
+
+                player.setInBattle(false);
+                player.setChallenger(" ");
+                player.setOption("");
+                player.setWins(0);
+                challengee.setChallenger(" ");
+                challengee.setInBattle(false);
+                challengee.setOption("");
+                challengee.setWins(0);
+              }
               break;
             default:
               break;
           }
         }
-        return message;
+        //player.setRounds(player.getRounds() - 1);
+        //challengee.setRounds(challengee.getRounds()-1);
+        return ""; 
       }
       else
         return "You are not in a R-P-S challenge.";
@@ -1523,7 +1869,9 @@ public class GameCore implements GameCoreInterface {
 	@Override
 	public Player leave(String name) {
 		Player player = this.playerList.findPlayer(name);
+        Room droom = map.findRoom(player.getDormId());
 		if (player != null) {
+            player.chestImage = ((DormRoom)droom).getChest();    
 			this.broadcast(player, "You see " + player.getName() + " heading off to class.");
 			this.playerList.removePlayer(name);
             connectionLog(false, player.getName());
@@ -1655,6 +2003,65 @@ public class GameCore implements GameCoreInterface {
       catch (FileNotFoundException e){
         return ("File not found. Please add a joke.");
       }
+    }
+
+	/**
+	 * Initiates dialogue with NPC
+	 * @param playerName Player name
+	 * @param npcName NPC name
+	 * @return Dialogue options for player
+	 */
+    public String talkNpc(String name, String npcName) {
+        Player player = this.playerList.findPlayer(name);
+        if(player != null) {
+            Room room = map.findRoom(player.getCurrentRoom());
+            NPC npc = room.getNPCs().get(npcName);
+            if (npc != null) {
+
+                StringBuilder sb = new StringBuilder();
+                for (int i = 0; i < npc.getDialogueList().size(); i++) {
+                    sb.append(i + 1).append(": ");
+                    sb.append(npc.getDialogueList().get(i).getPrompt());
+                    sb.append("\n");
+                }
+
+                this.broadcast(player, player.getName() + " begins to talk to NPC: " + npcName + ".");
+                return sb.toString();
+            }
+            else {
+                return null;
+            }
+        }
+        else {
+            return null;
+        }
+    }
+
+	/**
+	 * Selects dialogue option with NPC and gets response
+	 * @param playerName Player name
+	 * @param npcName NPC name
+	 * @param dialogueChoice Choice of dialogue option
+	 * @return Dialogue options for player
+	 */
+    public String selectNPCDialogueOption(String name, String npcName, int dialogueChoice) {
+        Player player = this.playerList.findPlayer(name);
+        if(player != null) {
+            Room room = map.findRoom(player.getCurrentRoom());
+            NPC npc = room.getNPCs().get(npcName);
+            if (npc != null) {
+                if (dialogueChoice < npc.getDialogueList().size() && dialogueChoice >= 0) {
+                    return npc.getDialogueList().get(dialogueChoice).getResponse(npcName, player.getDialogueIdFromList(npcName, npc.getDialogueList().get(dialogueChoice).getTag(), npc.getDialogueList().get(dialogueChoice).getPrompt()));
+                }
+                return "No dialogue choice by that number.";
+            }
+            else {
+                return "No npc by that name is in the room.";
+            }
+        }
+        else {
+            return null;
+        }
     }
 
     //Feature 411. Shout
@@ -1981,6 +2388,18 @@ public class GameCore implements GameCoreInterface {
 		if(player != null) {
 			player.removeQuestion(num);
 		}
+	}
+
+	/**
+	 * Toggles the RPS resolution of other players in same room
+	 * @param name of Player that wants to toggle
+	 */
+	@Override
+	public String toggleRPSChat(String player){
+		Player playerToggle = this.playerList.findPlayer(player);
+		String message = playerToggle.toggleResolution();
+		return message;
+		
 	}
 
 }
