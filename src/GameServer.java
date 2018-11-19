@@ -42,7 +42,22 @@ public class GameServer {
                 } catch(Exception e) {
                 	e.printStackTrace();
                 }
-            } 
+                if (System.getProperty("os.name").toLowerCase().contains("windows")) {
+                	System.out.println("Killing rmi windows style...");
+                	try {
+	                	Runtime.getRuntime().exec("taskkill /F /pid rmiregistry.exe");
+	                } catch(Exception e) {
+	                	System.out.println("Failed to kill");
+	                } 
+                } else {
+                	System.out.println("Killing rmi linux style...");
+                	try {
+                		Runtime.getRuntime().exec("pkill rmiregistry");
+                	} catch(Exception e) {
+                		System.out.println("Failed to kill");
+                	}
+                }
+            }
         });
     	try {
 		   System.out.println("host:" + host);
