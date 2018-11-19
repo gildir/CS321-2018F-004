@@ -6,9 +6,9 @@ public class Chatroom {
 	private String chatName = "";
 	
 	public Chatroom(Player player, String chatName) {
-		members = new ArrayList<Player>();
-		invited = new ArrayList<Player>();
-		members.add(player);
+		this.members = new ArrayList<Player>();
+		this.invited = new ArrayList<Player>();
+		this.addMember(player);
 		this.setName(chatName);
 	}
 	
