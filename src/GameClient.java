@@ -278,8 +278,8 @@ public class GameClient {
         }
 
         String message = "";
-        String ogcommand = tokens.remove(0);
-        String command = ogcommand.toUpperCase();
+
+        String command = tokens.remove(0).toUpperCase();
         //for redo old messages
         String commandCheck = input.toUpperCase();
 
@@ -935,13 +935,13 @@ public class GameClient {
                     }
                     break;
                 default:
-                	if (remoteGameInterface.checkChat(ogcommand)) {
+                	if (remoteGameInterface.checkChat(command)) {
                         if (tokens.isEmpty()) {
                             System.err.println("You need to provide a message.");
                         }
                         else {
                             message = parseMessage(tokens);
-                            System.out.println(remoteGameInterface.messageChat(this.playerName, message, ogcommand));
+                            System.out.println(remoteGameInterface.messageChat(this.playerName, message, command));
                         }
                 	}
                     //If command does not match with any, see if it is custom command

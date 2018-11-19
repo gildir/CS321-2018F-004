@@ -1695,15 +1695,16 @@ public class GameCore implements GameCoreInterface {
      * @throws RemoteException
      */
     public String makeChat(String playerName, String chatName) {
+    	Player creator = this.playerList.findPlayer(playerName);
     	for (Chatroom chat:chatrooms) {
-    		if (chat.getName().equals(chatName)) {
+    		if (chat.getName().equals(chatName.toUpperCase())) {
     			return "This chatroom already exists.";
     		}
     	}
-    	Chatroom newChat = new Chatroom(playerName, chatName);
+    	Chatroom newChat = new Chatroom(creator, chatName.toUpperCase());
     	chatrooms.add(newChat);
-    	this.playerList.findPlayer(playerName).addChat(newChat);
-    	return "Chatroom " + chatName + " created.";
+    	creator.addChat(newChat);
+    	return "Chatroom " + chatName.toUpperCase() + " created.";
     }
     
     /**
@@ -1723,25 +1724,25 @@ public class GameCore implements GameCoreInterface {
         	return "You can't invite yourself to a chat.";
         }
         for (Chatroom chat: sender.getChats()) {
-        	if (chat.getName().equals(chatName)) {
-            	if (chat.getMembers().contains(dstPlayer)) {
-            		return dstPlayer + " is already in the chatroom [" + chatName + "]";
+        	if (chat.getName().equals(chatName.toUpperCase())) {
+            	if (chat.getMembers().contains(invitee)) {
+            		return dstPlayer + " is already in the chatroom [" + chatName.toUpperCase() + "]";
             	}
-            	if (chat.getInvited().contains(dstPlayer)) {
-            		return dstPlayer + " is already invited to the chatroom [" + chatName + "]";
+            	if (chat.getInvited().contains(invitee)) {
+            		return dstPlayer + " is already invited to the chatroom [" + chatName.toUpperCase() + "]";
             	}
-            	String message = "Hey! Feel free to join the chatroom [" + chatName + "]";
+            	String message = "Hey! Feel free to join the chatroom [" + chatName.toUpperCase() + "]";
             	whisper(srcPlayer, dstPlayer, message);
-            	chat.addInvited(dstPlayer);
-                return "You invited " + dstPlayer + " to join [" + chatName + "]";
+            	chat.addInvited(invitee);
+                return "You invited " + dstPlayer + " to join [" + chatName.toUpperCase() + "]";
         	}
         }
     	for (Chatroom chat:chatrooms) {
-    		if (chat.getName().equals(chatName)) {
-    			return "You are not in the chatroom [" + chatName + "]";
+    		if (chat.getName().equals(chatName.toUpperCase())) {
+    			return "You are not in the chatroom [" + chatName.toUpperCase() + "]";
     		}
     	}
-    	return "You are trying to invite " + dstPlayer + " to a non-existent chatroom [" + chatName + "]";
+    	return "You are trying to invite " + dstPlayer + " to a non-existent chatroom [" + chatName.toUpperCase() + "]";
     }
     
     /**
@@ -1755,22 +1756,23 @@ public class GameCore implements GameCoreInterface {
     	Player joining = this.playerList.findPlayer(srcPlayer);
     	Chatroom chatToJoin = null;
     	for (Chatroom chat:chatrooms) {
-    		if (chat.getName().equals(chatName)) {
+    		if (chat.getName().equals(chatName.toUpperCase())) {
     			chatToJoin = chat;
     		}
     	}
     	if (chatToJoin == null) {
-    		return "Chatroom [" + chatName + "] does not exist.";
+    		return "Chatroom [" + chatName.toUpperCase() + "] does not exist.";
     	}
-    	if (chatToJoin.getMembers().contains(srcPlayer)) {
-    		return "You are already in chatroom [" + chatName + "]";
+    	if (chatToJoin.getMembers().contains(joining)) {
+    		return "You are already in chatroom [" + chatName.toUpperCase() + "]";
     	}
-    	if (!chatToJoin.getInvited().contains(srcPlayer)) {
-    		return "You were not invited to join chatroom [" + chatName + "]";
+    	if (!chatToJoin.getInvited().contains(joining)) {
+    		return "You were not invited to join chatroom [" + chatName.toUpperCase() + "]";
     	}
-    	chatToJoin.addMember(srcPlayer);
+    	chatToJoin.addMember(joining);
+    	chatToJoin.removeInvited(joining);
     	joining.addChat(chatToJoin);
-        return "You joined chatroom [" + chatName + "]";
+        return "You joined chatroom [" + chatName.toUpperCase() + "]";
     }
     
     /**
@@ -1784,23 +1786,23 @@ public class GameCore implements GameCoreInterface {
     	Player leaving = this.playerList.findPlayer(srcPlayer);
     	Chatroom chatToLeave = null;
     	for (Chatroom chat:chatrooms) {
-    		if (chat.getName().equals(chatName)) {
+    		if (chat.getName().equals(chatName.toUpperCase())) {
     			chatToLeave = chat;
     		}
     	}
     	if (chatToLeave == null) {
-    		return "Chatroom [" + chatName + "] does not exist.";
+    		return "Chatroom [" + chatName.toUpperCase() + "] does not exist.";
     	}
-    	if (!chatToLeave.getMembers().contains(srcPlayer)) {
-    		return "You are not in chatroom [" + chatName + "]";
+    	if (!chatToLeave.getMembers().contains(leaving)) {
+    		return "You are not in chatroom [" + chatName.toUpperCase() + "]";
     	}
-    	chatToLeave.removeMember(srcPlayer);
+    	chatToLeave.removeMember(leaving);
     	leaving.removeChat(chatToLeave);
     	if (chatToLeave.getMembers().size() == 0) {
     		chatrooms.remove(chatToLeave);
     		chatToLeave = null;
     	}
-        return "You left chatroom [" + chatName + "]";
+        return "You left chatroom [" + chatName.toUpperCase() + "]";
     }
     
     /**
@@ -1808,9 +1810,9 @@ public class GameCore implements GameCoreInterface {
      * @return boolean showing success
      * @throws RemoteException
      */
-    public boolean checkChat(String ogcommand) {
+    public boolean checkChat(String command) {
     	for (Chatroom chat:chatrooms) {
-    		if (chat.getName().equals(ogcommand)) {
+    		if (chat.getName().equals(command)) {
     			return true;
     		}
     	}
@@ -1829,28 +1831,26 @@ public class GameCore implements GameCoreInterface {
 		Player player = this.playerList.findPlayer(srcPlayer);
 		Chatroom chatToMessage = null;
     	for (Chatroom messageChat:player.getChats()) {
-    		if (messageChat.getName().equals(chatName)) {
+    		if (messageChat.getName().equals(chatName.toUpperCase())) {
     			chatToMessage = messageChat;
     		}
     	}
     	if (chatToMessage == null) {
         	for (Chatroom chat:chatrooms) {
-        		if (chat.getName().equals(chatName)) {
-        			return "You are not in the chatroom [" + chatName + "]";
+        		if (chat.getName().equals(chatName.toUpperCase())) {
+        			return "You are not in the chatroom [" + chatName.toUpperCase() + "]";
         		}
         	}
-    		return "You are trying to message a non-existent chatroom [" + chatName + "]";
+    		return "You are trying to message a non-existent chatroom [" + chatName.toUpperCase() + "]";
     	}
 		if (player != null) {
-			Player otherPlayer = null;
-		    for (String otherName : chatToMessage.getMembers()) {
-		    	otherPlayer = this.playerList.findPlayer(otherName);
+		    for (Player otherPlayer : chatToMessage.getMembers()) {
 		        if (otherPlayer != player) {
-		            otherPlayer.messagePlayer(player, "messages chatroom [" + chatName + "]", message);
+		            otherPlayer.messagePlayer(player, "messages chatroom [" + chatName.toUpperCase() + "]", message);
 		        }
 		    }
             chatLog(player, 0, message, "Chatroom " + chatName);
-            return player.getMessage() + "message, " + message + " to chatroom [" + chatName + "]";
+            return player.getMessage() + "message, " + message + " to chatroom [" + chatName.toUpperCase() + "]";
 
 		} else {
 			return null;

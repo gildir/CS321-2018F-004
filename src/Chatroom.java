@@ -1,14 +1,14 @@
 import java.util.ArrayList;
 
 public class Chatroom {
-	private ArrayList<String> members = null;
-	private ArrayList<String> invited = null;
+	private ArrayList<Player> members = null;
+	private ArrayList<Player> invited = null;
 	private String chatName = "";
 	
-	public Chatroom(String playerName, String chatName) {
-		members = new ArrayList<String>();
-		invited = new ArrayList<String>();
-		members.add(playerName);
+	public Chatroom(Player player, String chatName) {
+		members = new ArrayList<Player>();
+		invited = new ArrayList<Player>();
+		members.add(player);
 		this.setName(chatName);
 	}
 	
@@ -20,24 +20,28 @@ public class Chatroom {
         this.chatName = chatName;
     }
     
-    public ArrayList<String> getMembers() {
+    public ArrayList<Player> getMembers() {
         return members;
     }
 
-    public void addMember(String playerName) {
-		members.add(playerName);
+    public void addMember(Player player) {
+		members.add(player);
     }
     
-    public void removeMember(String playerName) {
-		members.remove(playerName);
+    public void removeMember(Player player) {
+		members.remove(player);
     }
     
-    public ArrayList<String> getInvited() {
+    public ArrayList<Player> getInvited() {
         return invited;
     }
 
-    public void addInvited(String playerName) {
-		invited.add(playerName);
+    public void addInvited(Player player) {
+		invited.add(player);
+    }
+    
+    public void removeInvited(Player player) {
+		invited.remove(player);
     }
 
 }

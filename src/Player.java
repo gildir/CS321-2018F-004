@@ -35,6 +35,7 @@ public class Player {
     private boolean tradeReceived = false;
     private String tradePartner = "";
     private String lastPlayer = "";
+    private ArrayList<Chatroom> chats;
     private boolean hasChallenge = false;
     private boolean inBattle = false;
     private String challenger = " ";
@@ -47,7 +48,6 @@ public class Player {
     private boolean hasTitle = false; //used for title and use item feature 
     private String playerItemTitle = "";
     private final long accountAge;
-    private ArrayList<Chatroom> chats = new ArrayList<Chatroom>();
 
     public Player(@JsonProperty("name") String name, @JsonProperty("accountAge") long accountAge) {
         this.currentRoom = 1;
@@ -58,6 +58,7 @@ public class Player {
         this.chestImage = new LinkedList<>();
         this.money = 0;
         this.recovery = new ArrayList<String>();
+        this.chats = new ArrayList<Chatroom>();
     }
 
     public int getDormId() {return this.dormId;}
