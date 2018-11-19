@@ -66,8 +66,7 @@ public class Shop
             }
         }
         //if borked, populate with original items
-        catch(IOException e)
-        {
+        catch(IOException e) {
             this.objects.add(new Item("Flower", 1.0, 0.0, null, null));
             this.objects.add(new Item("Textbook", 10.3, 5.2, null, null));
             this.objects.add(new Item("Phone", 2.9, 1.0, null, null));
@@ -77,27 +76,24 @@ public class Shop
         Random rand = new Random();
 
         //populate inDemand with initial items (2 items for now)
-        for (int x = 0; x < 2; x++){
+        for (int x = 0; x < 2; x++) {
         	this.inDemand.add(objects.get(rand.nextInt(objects.size())));	
         }
 	}
 	
 	//get method to get inventory linkedlist
-	public LinkedList<Item> getInven()
-	{
+	public LinkedList<Item> getInven() {
 		return this.inventory;
 	}
 
 	//get method to get inventory linkedlist
-	public LinkedList<Item> getDemand()
-	{
+	public LinkedList<Item> getDemand() {
 		return this.inDemand;
 	}
 
 	//used to add methods to the linked list
 	public void add(Item k) {
-		if(this.inventory.size() >= 10)
-		{
+		if(this.inventory.size() >= 10) {
 			this.inventory.pop();
 		}
 		this.inventory.add(k);
@@ -110,27 +106,21 @@ public class Shop
 	}
 	
 	//used to remove items form the linked list
-	public void remove(Object k)
-	{
+	public void remove(Object k) {
 		this.inventory.remove(k);
 	}
 
 	//removes item from inDemand
-	public void removeDemand(Item k)
-	{
+	public void removeDemand(Item k) {
 		this.inDemand.remove(k);
 	}
-
-	//prints the inventory of the shop class
-	public void printInv() {}
 	
-	//Prints the list of object in demand
-	public void printDem() {}
-	
+	//adds a player to the shop's player list
 	public void addPlayer(Player p) {
 		playerlist.addPlayer(p);
 	}	
 	
+	//remoces a player from the shop's player list
 	public void removePlayer(Player p) {
 		// Why does add take a player object and remove take a name?? --IK
 		playerlist.removePlayer(p.getName());  
@@ -151,24 +141,22 @@ public class Shop
 	public String getTitle() {
         return this.title;
     }
+
 	/**
 	 * @author team 4: Mistry
 	 * @return void
 	 * Send a message to all the players in the shop that an item was bought
 	 */
-	public void ping(Player p, Item k)
-	{
+	public void ping(Player p, Item k) {
 		String newMessage = p.getName() + " has bought " + k.getName() +"!";
-		for(Player pl : this.playerlist)
-		{
-			if(pl.getName() != p.getName())
-			{
+		for(Player pl : this.playerlist) {
+			if(pl.getName() != p.getName()) {
 				pl.getReplyWriter().println(newMessage);
 			}
 		}
 	}
+
 	public String toString() {
-        
 		// white spaces around the billboard
 		String billboard = "Welcome to " + this.getTitle(); 
 		
@@ -210,20 +198,19 @@ public class Shop
 		
 		int i = 0;
 		for (Player p : this.playerlist) {
-			if(i == 0)
-			{
+			if(i == 0) {
 				result += p.getName();
 			}
-			else
-			{
+			else {
 				result += ", " + p.getName();
 			}
+
 			i++;
 		}
-		if(i == 1)
-		{
+		if(i == 1) {
 			return "";
 		}
+		
 		return result + "!\n";
 	}
 	
@@ -231,7 +218,7 @@ public class Shop
 	/**
 	 * @author Team 4: Alaqeel/Keesling
 	 * 
-	 * Iterates through the list of the objects and creates a table populated with object names and prices.
+	 * Iterates through the list of the objects and creates a table populated with item names and prices.
 	 * @param listType specify list type, 0=inventory 1=inDemand.
 	 * @return table of the objects
 	 */
@@ -239,21 +226,21 @@ public class Shop
 		LinkedList<Item> list = new LinkedList<Item>();
 
 		// Choose which list type
-		if (listType == 0){
+		if (listType == 0) {
 			list = this.inventory;
 		}
-		else if (listType == 1){
+		else if (listType == 1) {
 			list = this.inDemand;
 		}
 
 		// If list is empty
 		if (list.size() == 0) {
-			if (listType == 0){
+			if (listType == 0) {
 				return "\nWe usually have a huge catalog.\n"
 					+ "Unfortunately, we are currently out of stock.\n"
 					+ "Please come again soon!";	
 			}
-			else if (listType == 1){
+			else if (listType == 1) {
 				return "\nThere's nothing in demand!\n"
 					+ "If the shop runs out of an item, check back to see if it's in demand.";
 			}
@@ -274,14 +261,14 @@ public class Shop
 		String menu = "";
 
 		// Menu header changes per list type
-		if (listType == 0){
+		if (listType == 0) {
 			menu += "We sell:\n";
 			menu += "...................\n";
 			menu += String.format(headerFormat, "#", "Item", "Price");
 			
 			menu += separator + "\n";
 		}
-		else if (listType ==1){
+		else if (listType ==1) {
 			menu += "Items in demand:\n";
 			menu += "...................\n";
 			menu += String.format(headerFormat, "#", "Item", "Our Offer");
@@ -291,29 +278,29 @@ public class Shop
 
 		// adding menu items
 		int i = 1;
-		for (Item obj : list) {
+		for (Item item : list) {
 			double price = 0;
 
 			// inv get 20% markup
 			if (listType == 0){
-				price = obj.getPrice() + (obj.getPrice()*.2);
+				price = item.getPrice() + (item.getPrice()*.2);
 			}
 			// inDem gives offers double item price
 			else if (listType == 1){
-				price = obj.getPrice()*2;
+				price = item.getPrice()*2;
 			}
 			
-			String item = obj.toString();
+			String itemName = item.getName();
 			
 			// handles items with long names
-			if (item.length() > itemLen) {
-				menu += String.format(format, i++, item.substring(0,itemLen), price);
-				for (int j = 1; j <= item.length() % 15; j--) {
-					menu += String.format(format, "", item.substring((itemLen*j)+1 ,itemLen*(j+1)), "");
+			if (itemName.length() > itemLen) {
+				menu += String.format(format, i++, itemName.substring(0,itemLen), price);
+				for (int j = 1; j <= itemName.length() % 15; j--) {
+					menu += String.format(format, "", itemName.substring((itemLen*j)+1 ,itemLen*(j+1)), "");
 				}
 			}
 			// names that aren't long
-			else menu += String.format(format, i++, item, price);
+			else menu += String.format(format, i++, itemName, price);
 		}
 		
 		menu += separator + "\n";

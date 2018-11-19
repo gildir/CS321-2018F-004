@@ -48,27 +48,27 @@ public class BankClient {
 	}
 	
 	private void printMenu() {
-		String ln = "+-----------------------------------------+\n";
+		String ln = "+------------------------------------------+\n";
 		System.out.println(
-				ln +
-				"|  Welcome to the Patriot Center Bank!    |\n" +
-				"|  (Formerly the Eagle Arena Bank)        |\n" +
-				ln +
-				"|  Commands:                              |\n" +
-				ln + 
-				"|  VIEW  -     View your account balances |\n" +
-				ln + 
-				"|  DEPOSIT X - Deposits $X or any number  |\n" +
-				"|              that you input             |\n" +
-				ln + 
-				"|  WITHDRAW X - Withdraws $X, or any      |\n" +
-				"|               number that you input     |\n" +
-				ln +
-				"|  LEAVE  -    Exit the bank and return   |\n" +
-				"|              to the game                |\n" +
-				ln +
-				"|  HELP   -    Display this menu          |\n" +
-				ln
+				    ln +
+				    "|  Welcome to the Patriot Center Bank!     |\n" +
+				    "|  (Formerly the Eagle Arena Bank)         |\n" +
+				    ln +
+				    "|  Commands:                               |\n" +
+				    ln + 
+				    "|  VIEW - - - - View your account balances |\n" +
+				    ln + 
+				    "|  DEPOSIT X  - Deposits $X or any number  |\n" +
+				    "|               that you input             |\n" +
+				    ln + 
+				    "|  WITHDRAW X - Withdraws $X or any amount |\n" +
+				    "|               that you input             |\n" +
+				    ln +
+				    "|  LEAVE  - - - Exit the bank and return   |\n" +
+				    "|               to the game                |\n" +
+				    ln +
+				    "|  HELP - - - - Display this menu          |\n" +
+				    ln
 		);
 	}
 	
