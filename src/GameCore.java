@@ -128,10 +128,10 @@ public class GameCore implements GameCoreInterface {
                     objects.add(new Item("Newspaper", 10.0, 9.0, null, null));
                 }
                 while(true) {
+		    room = map.randomRoom();
                     try {
                         Thread.sleep(rand.nextInt(60000));
                         object = objects.get(rand.nextInt(objects.size()));
-                        room = map.randomRoom();
                         room.addObject(object);
                         room.addObject(object);
                         room.addObject(object);
@@ -141,7 +141,11 @@ public class GameCore implements GameCoreInterface {
 						GameCore.this.broadcast(room, "You see a student rush past and drop a " + object + " on the ground.");
 						
                     } catch (InterruptedException ex) {
-                        Logger.getLogger(GameObject.class.getName()).log(Level.SEVERE, null, ex);}
+                        Logger.getLogger(GameObject.class.getName()).log(Level.SEVERE, null, ex);
+		    }  catch (IndexOutOfBoundsException e){
+                        GameCore.this.broadcast(room, "You see a student rush past.");
+                    }
+
                 }}});
 
                 Thread hbThread = new Thread(new Runnable() {

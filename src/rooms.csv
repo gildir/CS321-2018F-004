@@ -1,72 +1,308 @@
-13
+60
 1,outside,Clock in the Main Quad,You are standing in front of the George Mason University Clock. A plaque on the clock says it was a gift from the Class of 1999
-NORTH,7,You walk north into SUB-1
-SOUTH,3,You walk around the grassy median and head south, past the Johnson Center.
-EAST,2,You walk around the fountains as you head towards the statue.
-WEST,4,You try to walk west towards the dorms, and the large student rally is gone! Home here I come!.
+NORTH,42,You walk towards Fenwick.
+SOUTH,3,You walk around the grassy median and head south,past the Johnson Center.
+EAST,30,You walk towards the plaza
+WEST,4,You try to walk west towards the southside,skyline,and the dorms,and the large student rally is gone!,Home here I come!.
 2,outside,Mason Statue,There is a large statue of George Mason resting at the end of the sidewalk. The Mason statue is currently wearing a green Patriots basketball t-shirt.
-NORTH,0,You start to walk north towards the parking deck, but you really don't want to, so you stop yourself.
-SOUTH,0,You try to enter the Johnson Center, but the entrances are closed due to construction.
-WEST,1,You walk around the fountains as you head towards the clock.
-EAST,9,You look to the west and go towards MRP-8
-3,outside,Exploratory Hall,You are standing out front of the new Exploratory Hall.
-NORTH,1,You head up the sidewalk, towards the clock.
-SOUTH,5,You walk to the Engineering Building
-WEST,6,You go into the Johnson Center
-EAST,12,You walk into Exploratory Hall
-4,inside,Dorm Building,Dorm Building main hallway leading to the elevator.
-NORTH,100000,You head north, into the elevator. 
-SOUTH,0,You try to head south, back to the Hallway.
-WEST,0,You tried heading west, there is nothing there.
-EAST,1,You head back to the clock tower
-100000,inside,Elevator, You can now go to your private room, type move north.
+NORTH,38,You walk towards SUB I.
+SOUTH,46,You walk into the Center for the Arts.
+WEST,30,You walk around the fountains as you head towards North Plaza.
+EAST,0,You look to the west and see a very long staircase just past the traffic circle. You decide against going that direction.
+3,outside,Outside of Exploratory Hall,You are standing out front of the new Exploratory Hall.
+NORTH,1,You head up the sidewalk,towards the clock.
+SOUTH,9,You try to head south,but too many students are smoking near Enterprise hall,so you stay where you are.
+WEST,19,You try to head towards the South Plaza
+EAST,8,You look towards Exploratory Hall,but decide to just admire the view from where you are.
+4,outside,southside/skyline underpass,You're underneath an underpass between skyline and southside
+NORTH,7,You head to skyline fitness.
+SOUTH,6,You head to southside.
+WEST,5,You head to the dorms.
+EAST,1,You head to the clock tower.
+5,inside,Dorm Building,Dorm Building main hallway leading to the elevator.
+NORTH,100000,You head north,into the elevator.
+SOUTH,0,You try to head south,back to the Hallway.
+WEST,0,You tried heading west,there is nothing there.
+EAST,4,You head back to the southside/skyline underpass
+6,inside,Southside - a dining hall,You're southside hopefully you can find some decent food
+NORTH,4,You leave southside.
+SOUTH,0,You get stuck looking at food.
+WEST,0,You get stuck looking at food.
+EAST,0,You get stuck looking at food.
+7,inside,Skyline - a gym,You're in the skyline gym
+NORTH,0,You get scared off by some gym equipment
+SOUTH,4,You leave skyline
+WEST,0,You get scared off by some gym equipment
+EAST,0,You get scared off by some gym equipment
+8,inside,Exploratory Hall,You're in Exploratory hall and see some periodic tables
+NORTH,0,You trip over a table.
+SOUTH,0,You walk into a wall.
+WEST,3,You leave Exploratory Hall.
+EAST,0,You walk into a wall.
+9,outside,Enterprise Hall Underpass,You're between the two sides of Enterprise and choking on smoke
+NORTH,3,You walk towards Exploratory Hall.
+SOUTH,12,You walk along Research Hall.
+WEST,11,You walk to side 'b' of Enterprise Hall.
+EAST,10,You walk to side 'a' of Enterprise Hall.
+10,inside,Side 'a' of Enterprise Hall,You're in one side of enterprise hall
+NORTH,0,You walk into a wall.
+SOUTH,0,You walk into a wall.
+WEST,9,You walk out of Enterprise Hall.
+EAST,0,trip over a bench.
+11,inside,Side 'b' of Enterprise Hall,You're in one side of Enterprise hall
+NORTH,0,You walk into a wall.
+SOUTH,0,You walk into a wall.
+WEST,0,trip over a bench.
+EAST,9,You walk out of Enterprise Hall.
+12,outside,Path along Research Hall,You're walking along the side of Research hall
+NORTH,9,You walk towards Enterprise Hall.
+SOUTH,13,You walk towards the Engineering building.
+WEST,15,You walk towards the School of Art.
+EAST,14,You walk towards Research Hall.
+13,inside,Engineering Building,You're in the engineering and see some nice windows
+NORTH,12,You walk towards Research Hall.
+SOUTH,0,You walk into a window.
+WEST,15,You walk towards the School of Art.
+EAST,50,You walk into one of the classrooms
+14,inside,Research Hall,You're in Research hall and confused about what happens here
+NORTH,0,You walk into a wall.
+SOUTH,0,You walk into a wall.
+WEST,12,You walk out of Research Hall.
+EAST,0,You walk into a door.
+15,inside,School of Art,You're inside the Schol of Art. It's a nice building but it's full of art majors.
+NORTH,16,You walk towards Innovation Hall.
+SOUTH,0,You walk into a painting.
+WEST,0,You walk into a sculpture.
+EAST,12,You walk towards Research Hall.
+16,inside,Innovation Hall,You're inside Innovation. You see students waiting for their classes
+NORTH,17,You walk out of Innovation Hall.
+SOUTH,15,You walk towards the School of Art.
+WEST,18,You walk towards the Patriot Center.
+EAST,0,You walk into a wall
+17,outside,Outside of Innovation Hall,You're choking on smoke outside of Innovation hall.
+NORTH,20,You walk towards College Hall.
+SOUTH,16,You walk into Innovation Hall.
+WEST,18,You walk towards the Patriot Center.
+EAST,19,You walk towards South Plaza.
+18,inside,The Patriot Center,You're in the Patriot Center. Is there an event here sometime soon?
+NORTH,0,You get tired of walking.
+SOUTH,0,You get tired of walking
+WEST,0,You get tired of walking.
+EAST,17,Outside of Innovation Hall.
+19,outside,South Plaza,You're in the South plaza. Maybe there will be an event here some time.
+NORTH,21,You walk into the lower floor of the Johnson Center.
+SOUTH,15,You walk towards the School of Art.
+WEST,17,You walk towards Innovation Hall.
+EAST,3,You walk towards Exploratory.
+20,inside,College Hall,You're in college hall. Can a name get any more generic?
+NORTH,0,You get bored and turn back.
+SOUTH,17,You wak towards Innovation Hall.
+WEST,0,You get bored and turn back.
+EAST,46,You walk into the Music Theater Building.
+21,inside,Lower floor of Johnson Center,You're on the lower level of the Johnson center. You see some people in the radio studio.
+NORTH,24,You walk up the stairs to the main level of the Johnson Center.
+SOUTH,19,You walk out into South Plaza.
+WEST,22,You walk into Indaroma and Red Hot & Blue
+EAST,23,You walk into Starbucks.
+22,inside,Indaroma and Red Hot & Blue,You're feeling hungery looking at the food.
+NORTH,21,You walk out.
+SOUTH,0,You consider Red Hot & Blue.
+WEST,0,You consider Indaroma.
+EAST,21,You walk out.
+23,inside,Starbucks,You're in Starbucks. Want coffee?
+NORTH,21,You walk out.
+SOUTH,0,You consider Starbucks
+WEST,21,You walk out.
+EAST,0,You consider Starbucks
+24,inside,Johnson Center - Information Desk,You're at the Johnson Center information desk. Feeling lost?
+NORTH,25,You walk towards the northern side of the Johnson Center.
+SOUTH,21,You walk down the stairs to the lower level of the Johnson Center.
+WEST,45,You walk towards the Music Theater Building.
+EAST,3,You walk towards Exploratory Hall.
+Patty,Brent
+25,inside,Johnson center - Tables,You're at the tables in the Johnson Center. They're all occupied.
+NORTH,26,You walk towards the northern side of the Johnson Center.
+SOUTH,24,You walk towards the Information Desk.
+WEST,27,You walk towards food.
+EAST,28,You walk towards an alcove of tables.
+26,inside,Johnson Center - North,You're on the north end of the Johnson Center.
+NORTH,29,You walk into the Book Store.
+SOUTH,25,You walk towards the Johnson Center tables.
+WEST,2,You walk out to the Mason Statue.
+EAST,30,You walk out to North Plaza.
+27,inside,Restaurants,You're feeling hungry looking at the food.
+NORTH,26,You walk towards the northern side of the Johnson Center.
+SOUTH,24,You walk towards the Johnson Center Information Desk.
+WEST,0,You consider getting food but the lines are too long.
+EAST,25,You walk towards the Johnson Center tables.
+28,inside,Johnson Center - Alcove,You're in an alcove with tables in the Johnson Center. Maybe you'll find a seat here.
+NORTH,0,You walk into a wall.
+SOUTH,0,You walk into a microwave.
+WEST,25,You walk towards the Johnson Center tables
+EAST,0,You walk into a wall.
+29,inside,Johnson Center - Book Store,You're in the book store in the Johnson Center. Maybe you need a textbook.
+NORTH,0,You walk into a wall.
+SOUTH,26,You walk out of the Book Store.
+WEST,0,You walk into a pile of clothes
+EAST,0,You walk into a cash register.
+30,outside,North Plaza,You're in the North Plaza.
+NORTH,31,You walk towards the Robinson underpass.
+SOUTH,3,You walk towards Exploratory hall.
+WEST,1,You walk around the fountains as you head towards the clock
+EAST,2,You walk towards the statue.
+Preacher
+31,outside,Robinson Underpass,You're between/under the Robinson buildings. and near an entrance to SUB I.
+NORTH,34,You walk towards SUB I.
+SOUTH,30,You walk towards North Plaza.
+WEST,32,You walk into Robinson A.
+EAST,33,You walk into Robinson B.
+32,inside,Robinson A,You're in Robinson A. You see students waiting for class.
+NORTH,0,You walk into a wall.
+SOUTH,0,You walk into a wall.
+WEST,0,You walk into a wall.
+EAST,31,You walk out of Robinson A.
+33,inside,Robinson B,You're in Robinson B. You see students waiting for class.
+NORTH,0,You walk into a wall.
+SOUTH,0,You walk into a wall.
+WEST,31,You walk out of Robinson B.
+EAST,0,You walk into a wall.
+34,inside,SUB I - inside entrance to lower level,You're in the entrance of the lower level of SUB I. You see a disappointing sports bar.
+NORTH,36,You walk towards Gas Station Sushi
+SOUTH,31,You walk out of SUB I.
+WEST,35,You walk into a sports bar.
+EAST,0,You walk into a wall.
+35,inside,SUB I - sports bar whatsitsname,You're in some sports bar. What's the name of this place again?
+NORTH,0,You walk into a wall.
+SOUTH,0,You trip over some tables.
+WEST,0,You walk into the bar.
+EAST,34,You leave the sports bar.
+36,inside,SUB I -Gas Station Sushi,You're at the gas station sushi place. Feeling hungry?
+NORTH,37,You walk towards Chick Fil A.
+SOUTH,34,You walk towards the entrance of SUB I.
+WEST,0,You consider Gas Station Sushi.
+EAST,0,You walk into a wall.
+37,inside,SUB I - Chick Fil A,You're at Chick Fil A. Feeling hungry?
+NORTH,38,You walk towards the main staircase of SUB I.
+SOUTH,36,You walk towards Gas Station Sushi.
+WEST,0,You consider Chick Fil A.
+EAST,0,You consider Gas Station Sandwiches.
+Chris
+38,inside,SUB I - Main Staircase,You're at the bottom of the main staircase in SUB I.
+NORTH,2,You walk out towards the Mason Statue.
+SOUTH,39,You walk up the main Staircase.
+WEST,0,You consider the Financial Aid Office
+EAST,37,You walk towards Chick Fil A.
+39,inside,SUB I - Center,You're in the main section of SUB I and see some students sitting in chairs and heading to various offices.
+NORTH,40,You walk out of SUB I towards the MIX.
+SOUTH,38,You walk towards the main staircase.
+WEST,0,You consider robbing some offices.
+EAST,0,You consider robbin some offices.
+40,outside,Library and Mix intersection,You're at the intersection of the MIX Fenwick and SUB I.
+NORTH,41,You walk into the MIX.
+SOUTH,39,You walk towards SUB I.
+WEST,47,You walk towards Northern Neck Starbucks.
+EAST,42,You walk into the lobby of Fenwick.
+41,inside,The MIX - Front Counter,You're in the MIX. Feeling innovative?
+NORTH,0,You walk into the front counter.
+SOUTH,40,You walk out of the MIX.
+WEST,44,You walk towards the work area of the MIX
+EAST,0,You consider an empty hallway
+42,inside,Fenwick - Lobby,You're in the lobby of Fenwick. You see students studying.
+NORTH,43,You walk into the library.
+EAST,0,You walk into a window.
+WEST,40,You walk out of the lobby towards the MIX.
+SOUTH,1,You walk out of the lobby towards the Clock Tower.
+43,inside,Fenwick - library,You're in the library. Maybe you can find a book you need here.
+NORTH,0,You consider a pile of books.
+SOUTH,42,You walk into the lobby of Fenwick.
+WEST,0,You consider a pile of books.
+EAST,0,You consider a pile of books.
+44,inside,The MIX - Work Area,You're in the work area of the MIX. You see students working on various projects.
+NORTH,0,You trip over some students.
+SOUTH,0,You trip over some students.
+WEST,0,You trip over some students.
+EAST,41,You walk to the front counter of The MIX.
+45,inside,Music Theater Building,You're inside the Music Theater Building. You see students waiting for class.
+NORTH,46,You walk towards the Center for the Arts.
+SOUTH,53,You walk outside to the Mason Pond.
+WEST,20,You walk towards College Hall.
+EAST,24,You walk towards the Johnson Center.
+46,inside,Center for the Arts,You're in the Center for the Arts. It smells like a pet store for some reason.
+NORTH,2,You walk out to the Mason Statue.
+SOUTH,45,You walk towards the Music Theater Building.
+WEST,0,You walk into a door.
+EAST,0,You walk into a wall.
+47,inside,Northern Neck Starbucks,You're at the Northern Neck Starbucks. The wait time is lower here than the other Starbucks.
+NORTH,48,You walk towards Merten Hall.
+SOUTH,4,You walk towards SouthSide and Skyline.
+WEST,49,You walk towards old campus.
+EAST,100000,You walk towards the dorms.
+48,inside,Merten Hall,You're in Merten Hall. You see some students playing Smash.
+NORTH,0,You walk into a hall.
+SOUTH,47,You walk towards Northern Neck Starbucks
+WEST,0,You consider Panda
+EAST,0,You consider Einstein's
+49,outside,Old Campus,You're in Old Campus. You see old buildings that feel out of place.
+NORTH,0,You get lost and return to where you started
+SOUTH,0,You get lost and return to where you started
+WEST,0,You get lost and return to where you started
+EAST,47,You walk towards Northern Neck Starbucks
+Erik
+100000,inside,Elevator,You can now go to your private room, type move north.
 NORTH,100001,You are headed to your room through the north exit
 SOUTH,4,You try to head back to the Hallway
-WEST,0,You tried heading west, there is nothing there.
-EAST,0,You tried heading, east there is nothing there.
-5,inside,Engineering Building,You are inside the Nguyen Engineering Building
-NORTH,3,You walk north towards Exploratory Hall
-SOUTH,0,You start going south, but decide to stay on campus instead
-WEST,0,You look to the west, and decide not to
-EAST,0,You go to Einstein's Bagels, and grab a bagel.
+WEST,47,You walk towards Northern Neck Starbucks
+EAST,0,You tried heading east, there is nothing there.
+50,inside,Engineering Building,You are in a classroom in the Engineering Building
+NORTH,0,You admire the whiteboard
+SOUTH,0,You trip over a desk
+WEST,13,You walk out of the classroom
+EAST,0,You walk into a wall
 Steve,Sarah
-6,inside,JC,You are inside the Johnson Center
-NORTH,4,You walk out to the dorms
-SOUTH,0,You start to go towards Innovation, but the way is closed due to construction
-WEST,0,You trip and fall
-EAST,3,You walk out to Exploratory Hall
-Brent,Patty
-7,inside,SUB-1,Student Union Building 1
-NORTH,0,Nothing there! Try again!
-SOUTH,1,You walk back to the clock tower
-EAST,-8,WOW SECRET!
-WEST,0,You go to chick-fil-a, but it is closed
-Chris
-8,inside,SECRET ROOM,You found a secret room!
-NORTH,0,You admire the secret room
-SOUTH,0,You sit on the nice sofa in the secret room
-EAST,0,You search for another secret room, but this world is not meta enough for a secret room inside a secret room
-WEST,7,You leave the secret room
-9,inside,MRP-8,Factory entrance
-NORTH,0,fill
-SOUTH,0,fill
-EAST,0,fill
-WEST,2,fill
+51,outside,Ox Road,You are walking along the long flat Ox Road
+NORTH,53,You head back towards campus, and end up at the Mason Pond
+SOUTH,54,You see a large building up ahead and decide to check it out
+EAST,0,You decide not to try to cross the busy road
+WEST,-52,Are those train tracks? You see a train coming towards you, and manage to jump on
+52,inside,Train,You are in a small box car on a train heading west
+NORTH,0,Nowhere to go that way.
+SOUTH,-55,You jump out of the car.
+EAST,0,You try to get to a different car, but can't.
+WEST,0,You try to get to a different car, but can't.
+54,inside,MRP-8,You are in the lobby for MRP-8
+NORTH,51,You leave the building
+SOUTH,0,You talk to the person at the desk, who shoes you away
+WEST,0,You admire the wall
+EAST,0,You trip
 Stacy
-10,inside,MRP-8,Factory Overhang
-NORTH,0,fill
-SOUTH,9,fill
-WEST,0,fill
-EAST,-11,fill
-11,inside,MRP-8,Office
-NORTH,0,fill
-SOUTH,0,fill
-WEST,10,fill
-EAST,0,fill
+53,outside,Mason Pond,You are standing next to the Mason Pond
+NORTH,45,You go into the Theater Building
+SOUTH,51,You walk out onto Ox Road
+WEST,0,You admire the pond
+EAST,0,You try to catch a duck, to no avail
+55,outside,Nowhere,You are nowhere. I wonder how you got here?
+NORTH,0,You walk to Nowhere
+SOUTH,0,You walk to Nowhere
+EAST,-56,You jump on a passing train
+WEST,0,You walk to Nowhere
+56,inside,Train,You are in a small box car on a train heading east
+NORTH,0,Nothing to the north!
+SOUTH,-51,You jump out of the train
+EAST,0,You sit down and take a nap
+WEST,0,You try to walk to a different car, but trip and fall
+57,outside,MRP-8,Factory Overhang
+NORTH,0,You look out over the factory floor
+SOUTH,54,You take the elevator down to the lobby
+EAST,0,You look out to the east, but don't see anything
+WEST,-58,You see an open window, and jump in!
+58,inside,MRP-8,You are in an empty office
+NORTH,59,You walk out into the hallway
+SOUTH,0,You look inside the desk, but find nothing of value
+EAST,57,You jump out the window onto the factory overhang
+WEST,0,You try to hack into a computer, but its battery is dead
+59,inside,MRP-8,You are in a hallway in MRP-8
+NORTH,0,You walk into a wall
+SOUTH,58,You walk into an office
+EAST,0,You grab a snack from the vending machine
+WEST,0,Trip over a potted plant
 Security
-12,inside,Exploratory Hall,You are standing under the skeleton of a large animal
-NORTH,0,fill
-SOUTH,0,fill
-EAST,0,fill
-WEST,3,fill
-Erik
