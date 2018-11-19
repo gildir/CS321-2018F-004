@@ -59,10 +59,10 @@ public class PlayerAccountManager {
 		try {
 			playerIds.add(lower);
 			/*String[] recoveryArray = new String[recovery.size()];
-			int count = 0;
-			for(String i : recovery)
-				recoveryArray[count++] = i;
-			count = 0;*/
+			  int count = 0;
+			  for(String i : recovery)
+			  recoveryArray[count++] = i;
+			  count = 0;*/
 			Player p = new Player(username, recovery);
 			userDir.mkdir();
 			writePlayerDataFile(p);
@@ -138,7 +138,7 @@ public class PlayerAccountManager {
 	public boolean accountExists(String username) {
 		return playerIds.contains(username);
 	}
-	
+
 	/**
 	 * returns the player object based off of their name
 	 * @param name Username of player to be returned
@@ -163,7 +163,7 @@ public class PlayerAccountManager {
 		}
 		return new AccountResponse(player);
 	}
-	
+
 	/**
 	 * Resets the password of the give player
 	 * @param p Player who's password is getting changed
@@ -184,6 +184,31 @@ public class PlayerAccountManager {
 			return Responses.INTERNAL_SERVER_ERROR;
 		}
 		return Responses.SUCCESS;
-		
+
+	}
+
+	public HashSet<Player> getListPlayers(){
+		//return playerIds;
+		HashSet<Player> playerRPS = new HashSet<Player>();
+		for(String player: playerIds){
+			Player playerUser = null;
+			player = player.toLowerCase();
+			if(!playerIds.contains(player))
+				continue;
+			File userData = new File(accountFolder.getAbsoluteFile() + "/" + player + "/data.json");
+			if(!userData.exists())
+				continue;
+			try {
+				playerUser = JsonMarshaller.MARSHALLER.unmarshalFile(userData.getAbsolutePath(), Player.class);
+			} catch (Exception e) {
+				logger.log(Level.SEVERE, null, e);
+				continue;
+			}
+			if(playerUser == null) {
+				continue;
+			}
+			playerRPS.add(playerUser);
+		}
+		return playerRPS;
 	}
 }

@@ -604,9 +604,23 @@ public class GameClient {
                 case "TEACH":
                     System.out.println(remoteGameInterface.teach(this.playerName));
                     break;
-        case "TOGGLERPSCHAT":
-            System.out.println(remoteGameInterface.toggleRPSChat(this.playerName));
-            break;
+		case "TOGGLERPSCHAT":
+		    System.out.println(remoteGameInterface.toggleRPSChat(this.playerName));
+		    break;
+		case "LISTPLAYERS":
+		    System.out.println(remoteGameInterface.listAllPlayers());
+		    break;
+		case "RANK TOP5":
+		    System.out.println(remoteGameInterface.rankings(this.playerName,"top5"));
+		    break;
+		case "RANK":
+		    if(tokens.isEmpty()){
+			System.err.println("You need to provide a username");
+		    }
+		    else{
+			System.out.println(remoteGameInterface.rankings(this.playerName, tokens.remove(0)));
+		    }
+		    break;
                 case "FRIENDS":
                     String sub;
                     if (tokens.isEmpty() || !((sub = tokens.remove(0).toUpperCase()).equals("ADD") || sub.equals("REMOVE")
