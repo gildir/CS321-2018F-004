@@ -23,7 +23,8 @@ import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 import java.util.logging.StreamHandler;
 import java.util.logging.FileHandler;
-
+import java.io.FileInputStream;
+import java.util.Arrays;
 /**
  *
  * @author Kevin
@@ -1230,6 +1231,8 @@ public class GameCore implements GameCoreInterface {
                 challengee.getReplyWriter().println(player.getName() + " chose ROCK: You win.");
                 winner = player.getName() + " challenged " + challengee.getName() + " to a Rock Paper Scissors Battle: " + challengee.getName() + " won this round.";
                 challengee.setWins(challengee.getWins()+1);
+		challengee.setRPSwins(challengee.getRPSwins()+1);
+		player.setRPSloss(player.getRPSloss()+1);
                 this.broadcast(map.findRoom(player.getCurrentRoom()), winner);
 		        rpsLog(player.getName(), challengee.getName(), "wins", player.getOption(), challengee.getOption());
       		  		
@@ -1239,7 +1242,9 @@ public class GameCore implements GameCoreInterface {
                 player.getReplyWriter().println(challengee.getName() + " chose ROCK: It is a tie.");
                 challengee.getReplyWriter().println(player.getName() + " chose ROCK: It is a tie.");
                 winner = player.getName() + " challenged " + challengee.getName() + " to a Rock Paper Scissors Battle: It is a tie this round.";
-                this.broadcast(map.findRoom(player.getCurrentRoom()), winner);
+                challengee.setRPSties(challengee.getRPSties()+1);
+		player.setRPSties(player.getRPSties()+1);
+		this.broadcast(map.findRoom(player.getCurrentRoom()), winner);
 		rpsLog(player.getName(), challengee.getName(), "ties", player.getOption(), challengee.getOption());
               	
 	      }
@@ -1249,6 +1254,8 @@ public class GameCore implements GameCoreInterface {
                 challengee.getReplyWriter().println(player.getName() + " chose ROCK: You lose.");
                 winner = player.getName() + " challenged " + challengee.getName() + " to a Rock Paper Scissors Battle: " + player.getName() + " won this round.";
                 player.setWins(player.getWins()+1);
+		player.setRPSwins(player.getRPSwins()+1);
+		challengee.setRPSloss(challengee.getRPSloss()+1);
                 this.broadcast(map.findRoom(player.getCurrentRoom()), winner);
 		rpsLog(challengee.getName(), player.getName(), "wins", challengee.getOption(), player.getOption());
               	
@@ -1298,6 +1305,8 @@ public class GameCore implements GameCoreInterface {
                 challengee.getReplyWriter().println(player.getName() + " chose PAPER: You win.");
                 winner = player.getName() + " challenged " + challengee.getName() + " to a Rock Paper Scissors Battle: " + challengee.getName() + " won this round.";
                 challengee.setWins(challengee.getWins()+1);
+		challengee.setRPSwins(challengee.getRPSwins()+1);
+		player.setRPSloss(player.getRPSloss()+1);
                 this.broadcast(map.findRoom(player.getCurrentRoom()), winner);
 		rpsLog(challengee.getName(), player.getName(), "wins", challengee.getOption(), player.getOption());
               	
@@ -1307,7 +1316,9 @@ public class GameCore implements GameCoreInterface {
                 player.getReplyWriter().println(challengee.getName() + " chose PAPER: It is a tie.");
                 challengee.getReplyWriter().println(player.getName() + " chose PAPER: It is a tie.");
                 winner = player.getName() + " challenged " + challengee.getName() + " to a Rock Paper Scissors Battle: It is a tie this round.";
-                this.broadcast(map.findRoom(player.getCurrentRoom()), winner);
+                challengee.setRPSties(challengee.getRPSties()+1);
+		player.setRPSties(player.getRPSties()+1);
+		this.broadcast(map.findRoom(player.getCurrentRoom()), winner);
 		rpsLog(player.getName(), challengee.getName(), "ties", player.getOption(), challengee.getOption());
               
 	      }
@@ -1317,6 +1328,8 @@ public class GameCore implements GameCoreInterface {
                 challengee.getReplyWriter().println(player.getName() + " chose PAPER: You lose.");
                 winner = player.getName() + " challenged " + challengee.getName() + " to a Rock Paper Scissors Battle: " + player.getName() + " won this round.";
                 player.setWins(player.getWins()+1);
+		player.setRPSwins(player.getRPSwins()+1);
+		challengee.setRPSloss(challengee.getRPSloss()+1);
                 this.broadcast(map.findRoom(player.getCurrentRoom()), winner);
 		rpsLog(player.getName(), challengee.getName(), "wins", player.getOption(), challengee.getOption());
               	
@@ -1367,6 +1380,8 @@ public class GameCore implements GameCoreInterface {
                 challengee.getReplyWriter().println(player.getName() + " chose SCISSORS: You win.");
                 winner = player.getName() + " challenged " + challengee.getName() + " to a Rock Paper Scissors Battle: " + challengee.getName() + " won this round.";
                 challengee.setWins(challengee.getWins()+1);
+		challengee.setRPSwins(challengee.getRPSwins()+1);
+		player.setRPSloss(player.getRPSloss()+1);
                 this.broadcast(map.findRoom(player.getCurrentRoom()), winner);
 		rpsLog(challengee.getName(), player.getName(), "wins", challengee.getOption(), player.getOption());
               	
@@ -1377,6 +1392,8 @@ public class GameCore implements GameCoreInterface {
                 challengee.getReplyWriter().println(player.getName() + " chose SCISSORS: It is a tie.");
                 winner = player.getName() + " challenged " + challengee.getName() + " to a Rock Paper Scissors Battle: It is a tie this round.";
                 this.broadcast(map.findRoom(player.getCurrentRoom()), winner);
+		challengee.setRPSties(challengee.getRPSties()+1);
+		player.setRPSties(player.getRPSties()+1);
 		rpsLog(challengee.getName(), player.getName(), "ties", challengee.getOption(), player.getOption());
            
 	      }
@@ -1386,6 +1403,8 @@ public class GameCore implements GameCoreInterface {
                 challengee.getReplyWriter().println(player.getName() + " chose SCISSORS: You lose.");
                 winner = player.getName() + " challenged " + challengee.getName() + " to a Rock Paper Scissors Battle: " + player.getName() + " won this round.";
                 player.setWins(player.getWins()+1);
+		player.setRPSwins(player.getRPSwins()+1);
+		challengee.setRPSloss(challengee.getRPSloss()+1);
                 this.broadcast(map.findRoom(player.getCurrentRoom()), winner);
 		rpsLog(player.getName(), challengee.getName(), "wins", player.getOption(), challengee.getOption());
               	
@@ -1897,12 +1916,99 @@ public class GameCore implements GameCoreInterface {
 	@Override
 	public String listAllPlayers(){
 		String allNames = "";
-		HashSet<String> allPlayerIds = accountManager.getListPlayers();
-		for(String player : allPlayerIds){
-			allNames += player + ", ";
+		HashSet<Player> allPlayerIds = accountManager.getListPlayers();
+		for(Player player : allPlayerIds){
+			allNames += player.getName() + ", ";
 		}
 		allNames = allNames.substring(0, allNames.length()-2);
 		return allNames;
+	}
+
+	@Override
+	public String rankings(String ranks, String userOption){
+		HashSet<Player> allPlayerIds = accountManager.getListPlayers();
+		ArrayList<Player> rankingScores = new ArrayList<Player>();
+		ArrayList<String> allPlayerNames = new ArrayList<String>();
+		//System.out.println(allPlayerIds);
+		for(Player playerID: allPlayerIds){
+
+			//Player playerRPS = this.playerList.findPlayer(playerID);
+			//rankingScores.add(playerID.getName());
+			//System.out.println(playerID.getName());
+			//System.out.println(playerID.getRPSwins());
+			//System.out.println(playerID.getRPSloss());
+			//System.out.println(playerID.getRPSties());
+			int totalGames = playerID.getRPSwins()+playerID.getRPSloss()+playerID.getRPSties();
+			System.out.println(totalGames);
+			double rankingScore = ((playerID.getRPSwins()+(.5 * playerID.getRPSties()))/(1 + playerID.getRPSloss()))*totalGames;
+			playerID.setPlayerRankingScore(rankingScore);
+			rankingScores.add(playerID);
+			allPlayerNames.add(playerID.getName());
+			//String rankingScoreString = Double.toString(rankingScore);
+			//rankingScores.add(Integer.toString(totalGames));
+			
+			
+			//System.out.println(playerRPS.getRPSwins());
+		}
+
+		for(int i = 0; i < rankingScores.size(); i++){
+			for(int j = rankingScores.size()-1; j > i; j--){
+				if(rankingScores.get(i).getPlayerRankingScore() < rankingScores.get(j).getPlayerRankingScore()){
+					Player tmp = rankingScores.get(i);
+					rankingScores.set(i, rankingScores.get(j));
+					rankingScores.set(j, tmp);
+				}
+			}
+		}
+		
+		//Giving players their titles
+		for(int i = 0; i < rankingScores.size(); i++){
+			if(i == 0){
+				rankingScores.get(i).setRankingTitle("The Grand Poobah");
+			}
+			else if(i == 1){
+				rankingScores.get(i).setRankingTitle("GrandMaster");
+			}
+			else if(i == 2){
+				rankingScores.get(i).setRankingTitle("Master");
+			}
+			else if(i == 3){
+				rankingScores.get(i).setRankingTitle("Darth");
+			}
+			else if(i == 4){
+				rankingScores.get(i).setRankingTitle("Elite");
+			}
+			else{
+				rankingScores.get(i).setRankingTitle("Casual");
+			}
+		}
+		
+		if(userOption.equals("top5")){
+			//then return top 5 rankings with their titles
+			//getRankingTitle()
+			String top5 = "THE TOP 5 RPS BATTLERS:\n";
+			for(int i = 0; i < 5; i++){
+				top5 += Integer.toString(i+1) + ". " + rankingScores.get(i).getRankingTitle() + " " + rankingScores.get(i).getName() + "\n";
+			}
+			return top5;
+		}
+		else if(allPlayerNames.contains(userOption)){
+			//then reutnr specific user ranking score with his/her title
+			String userTitleRank = "";
+			for(Player player: rankingScores){
+				if(player.getName().equals(userOption)){
+					userTitleRank = player.getRankingTitle() + " " + player.getName();
+					break;
+				}
+			}
+			return userTitleRank;
+		}
+		else{
+			return "This user doesn't exist or incorrect input";
+		}
+		
+			
+		
 	}
 
 

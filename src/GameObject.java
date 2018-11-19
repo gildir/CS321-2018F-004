@@ -668,4 +668,13 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
     public String listAllPlayers() throws RemoteException{
 	return core.listAllPlayers();
     }
+
+    /**
+     * @param String representing the top 10 or a specific player
+     * @return String saying the respective entry rankings
+     * @throws RemoteException
+     */
+    public String rankings(String ranks, String userOption) throws RemoteException{
+	    return core.rankings(ranks, userOption);
+    }
 }
