@@ -72,7 +72,7 @@ public class Shop
 	}
 	
 	/**
-	 * @author Team 4: Alaqeel
+	 * @author Team 4: Alaqeel, Mistry
 	 * @return The shop name
 	 */
 	public String getTitle() {
@@ -96,23 +96,21 @@ public class Shop
         result += this.getObjects();
         
         // players names
-//        String players = this.getPlayers();
-//        if (players.length() > 1) result += "You are here by yourself.\n";
-//        else {
-//        	result += "You are here along with:\n";
-//        	result += players;
-//        }
-//        result += players;
+        String players = this.getPlayers();
+        if (players.length() > 1) result += "\nYou are here by yourself.\n";
+        else {
+        	result += "\nYou are here along with:\n";
+        	result += players;
+        }
         
         result += "\n";
-        result += "Players in the area: " + this.getPlayers() + "\n";
 
         result += "How can we help you?\n";
         return result;
     }
 	
 	/**
-	 * @author Team 4: Alaqeel
+	 * @author Team 4: Alaqeel, Mistry
 	 * 
 	 * returns a list of the players, separated by comma and using the Oxford comma.
 	 * 
@@ -124,22 +122,21 @@ public class Shop
 		
 		int i = 0;
 		for (Player p : this.playerlist) {
-			result += String.format("%s, ", p.toString());
+			if(i == 0)
+			{
+				result += p.getName();
+			}
+			else
+			{
+				result += ", " + p.getName();
+			}
 			i++;
 		}
-		
-		// removes the comma at the end of the line
-		if (i > 0) result = result.substring(0, result.length()-2);
-		
-		// fixes the oxford comma
-		if (i > 1) {
-			String temp = result.substring(0, result.lastIndexOf(", "));
-			temp += " and ";
-			temp += result.substring(result.lastIndexOf(", ")+2);
-			return temp + "\n";
+		if(i == 1)
+		{
+			return "";
 		}
-		return result + "\n";
-		
+		return result + "!\n";
 	}
 	
 	
