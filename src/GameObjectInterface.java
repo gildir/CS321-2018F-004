@@ -567,7 +567,7 @@ public interface GameObjectInterface extends Remote {
     * @return Message showing success
     * @throws RemoteException
     */
-    public String accept(String challenger, String challengee) throws RemoteException;
+    public String accept(String challenger, String challengee, String rounds) throws RemoteException;
 
     /**
      * Prompts a messaging that they are rejectin a challenge from someone to R-P-S
@@ -619,4 +619,12 @@ public interface GameObjectInterface extends Remote {
      * @throws RemoteException
      */
     public void setPlayerChatPrefix(String playerName, String newPrefix) throws RemoteException;
+
+     /**
+      * Toggles the RPS resolutions of other players in the same room
+      * @param Player is the name of the Player who wants to toggle the RPS chat
+      * @return Message showing success
+      * @throws RemoteException
+      */
+     public String toggleRPSChat(String player) throws RemoteException;
 }

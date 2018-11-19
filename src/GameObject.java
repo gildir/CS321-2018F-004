@@ -837,8 +837,17 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
      * @return Message showing success
      * @throws RemoteException
      */
-    public String accept(String challenger, String challengee) throws RemoteException{
-      return core.accept(challenger, challengee);
+    public String accept(String challenger, String challengee, String rounds) throws RemoteException{
+      return core.accept(challenger, challengee, rounds);
+    }
+
+    /**
+     * @param player is the name of the player that wants to turn off RPS resolutions
+     * @return Message showing success
+     * @throws RemoteException
+     */
+    public String toggleRPSChat(String player) throws RemoteException{
+	return core.toggleRPSChat(player);
     }
   
     /**
