@@ -591,6 +591,15 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
     }
 
     /**
+     * Returns a Shop's "In Demand" inventory as a formatted string
+     * @param id The shop ID
+     * @return A formatted string representing the Shop's "In Demand" inventory
+     */
+    public String getShopDemInv(int id) throws RemoteException{
+        return core.getShopDemInv(id);
+    }
+
+    /**
      * 108 In game ASCII map
      * Returns an ascii representation of nearby rooms
      * @param name Name of the player

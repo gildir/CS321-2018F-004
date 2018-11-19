@@ -166,7 +166,7 @@ public class Shop
         result += "\n";
         
         // catalog
-        result += this.getObjects();
+        result += this.getObjects(0);
         
         // players names
         String players = this.getPlayers();

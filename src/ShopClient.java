@@ -145,4 +145,8 @@ public class ShopClient {
 	public String getInv() throws RemoteException{
 		return remote.getShopInv(this.id);
 	}
+
+    public String getDemInv() throws RemoteException{
+        return remote.getShopDemInv(this.id);
+    }
 }
