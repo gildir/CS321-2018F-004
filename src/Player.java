@@ -42,6 +42,7 @@ public class Player {
     public boolean toggleChat = false;
     private String challengerOption = "";
     private boolean hasOption = false;
+    private ArrayList<NPC> dialogueList = new ArrayList<NPC>();
     private int rounds = 0;
     private int wins = 0;
     private boolean hasTitle = false; //used for title and use item feature 
