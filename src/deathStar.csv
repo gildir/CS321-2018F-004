@@ -46,7 +46,7 @@ SOUTH,15,You walk down an interesting looking prison hallway
 WEST,24,You take an elevator up to a laser turret tower
 10,inside,Death Star - Troop Quarters,You are in the main hub of the troops quarters
 NORTH,28,You take an elevator up
-EAST,100000,You walk into the elevator
+EAST,27,You go through a large doorway, into a room filled with bunk beds
 SOUTH,11,You walk out into a hallway
 WEST,8,You walk out into a hallway
 11,inside,Death Star,You are in a hallway, and can see the mess hall off to the north
@@ -129,10 +129,10 @@ NORTH,0,You look at the destination panel, and it appears a course has been prel
 EAST,-30,You press a button, and suddenly your pod is launched out into space!
 SOUTH,0,You sit in your chair for a while and ponder the meaning of life
 WEST,25,You exit your escape pod
-100000,inside,Death Star - Elevator,You are in the elevator to go to your room
-NORTH,100001,You go to your room
-EAST,0,You stand around waiting for a second, until you remember that you never pressed a button
-SOUTH,0,You ride the elevator up and down, for a bit
+27,inside,Death Star - Troop Bunks,The large array of bunks in this room allows you to figure out this is where the Storm Troopers sleep
+NORTH,0,You try to get into the lockers, but you can't find one with the combination 1-2-3-4
+EAST,0,You lie down in a bed and take a nap, until an officer rudely shakes you away and tells you to get in uniform
+SOUTH,0,You trip and fall
 WEST,10,You go exit the troop bunks
 28,inside,Death Star - Imperial Hangar,You are in the Empire's leaders' personal hangar
 NORTH,0,A large group of Storm Troopers are standing at attention outside a shuttle. You decide to avoid this.
@@ -227,7 +227,7 @@ WEST,0,You look through a door and see a large Rancor, and decide its probably b
 46,inside,Tatooine - Jabba's Palace,You are standing in the large entrance hall to Jabba the Hutt's Palace
 NORTH,47,You walk down to the throne room
 EAST,49,You go outside
-SOUTH,50,You head down to the kitchens
+SOUTH,-50,You head down to the kitchens, when a guard grabs you and throws you in a sand barge. You wake up next in the middle of the desert, next to the sarlac pit
 WEST,0,You talk to a guard, who grunts and says "No lollygaggin'!"
 47,inside,Tatooine - Jabba's Palace,You are standing in the middle of a large throne room.
 NORTH,0,You go up to the throne, but a small critter screaches at you, so you stay where you are

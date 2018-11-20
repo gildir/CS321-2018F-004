@@ -21,6 +21,9 @@ object are on the ground and what direction you are facing.
     <help command = "SAY">
         <description>  SAY message   - Says 'message' to any other players in the same area.</description>
     </help>
+    <help command = "TALK">
+        <description>  TALK [npc name] - Initiates dialogue with named NPC.</description>
+    </help>
     <help command = "MOVE">
         <description>  MOVE direction- Tries to walk forward once toward &lt;direction&gt; times.</description>
     </help>
@@ -81,8 +84,20 @@ object are on the ground and what direction you are facing.
         <help command = "OFFER">
         <description>  O or OFFER player object - Offer player an item</description>
     </help>
+        <help command = "OFFER_REPLY">
+        <description>  O_REPLY or OFFER_REPLY 'accept'/'reject' - Accept or reject an offer that has been made</description>
+    </help>
         <help command = "DROP">
         <description>  DROP object   - Tries to drop an object from your pockets in the same area</description>
+    </help>
+	<help command = "USE">
+	<description> USE object - Uses an object from your pockets and gives you a title.</description>
+    </help>
+    	<help command = "TITLE">
+	<description> TITLE - Shows you the title obtained from an object.</description>
+    </help>
+	<help command = "EXAMINE">
+	<description>  EXAMINE object - Tries to examine a object in your inventory</description>
     </help>
         <help command = "POKE_GHOUL">
         <description>  POKE_GHOUL    - Pokes the ghoul in the current room.</description>
@@ -98,6 +113,21 @@ object are on the ground and what direction you are facing.
     </help>
     <help command = "REPLY">
         <description>  REPLY message            - Reply 'message' to last whisper.</description>
+    </help>
+    <help command = "MAKECHAT">
+        <description>  MAKECHAT name            - Creates a chatroom called 'name'.</description>
+    </help>
+    <help command = "INVCHAT">
+        <description>  INVCHAT player chat      - Invites 'player' to join the chatroom called 'chat'.</description>
+    </help>
+    <help command = "JOINCHAT">
+        <description>  JOINCHAT chat            - Joins the chatroom called 'chat' if invited.</description>
+    </help>
+    <help command = "LEAVECHAT">
+        <description>  LEAVECHAT chat           - Leaves the chatroom called 'chat' if a member.</description>
+    </help>
+    <help command = "[chatroom name]">
+        <description>  [chatroom name] message  - Sends 'message' to chatroom called [chatroom name].</description>
     </help>
     <help command = "IGNORE">
         <description>  IGNORE player            - Ignore messages from 'player'.</description>
@@ -123,6 +153,9 @@ object are on the ground and what direction you are facing.
     <help command = "FRIENDS">
         <description>  FRIENDS                   - Displays friend subcommand list.</description>
     </help>
+    <help command = "ACCOUNT">
+        <description>  ACCOUNT                   - Enters account edit wizard</description>
+    </help>
     <help command = "DELETE">
         <description>  DELETE                   - Deletes your character permanently.</description>
     </help>
@@ -140,5 +173,11 @@ object are on the ground and what direction you are facing.
     </help>
     <help command = "TEACH">
         <description>  TEACH                   - Teaches you the basics of how to play R-P-S.</description>
+    </help>
+    <help command = "CHEST">
+        <description>  CHEST                   - Invokes the Chest interaction subSystem Menu in the DormRoom</description>
+    </help>
+     <help command = "TOGGLERPSCHAT">
+	<description> TOGGLERPSCHAT		-Toggles the win resolutions of R-P-S battles in your area.</description>
     </help>
 </helps>
