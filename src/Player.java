@@ -49,8 +49,8 @@ public class Player {
     private String playerItemTitle = "";
     private double rewardAmount; //task 229, keeps track of how much money players will be rewarded every reward interval while logged in
     private long rewardProgress; //task 229, keeps track of how much time must elapse before a reward.
-    
-    
+    private long totalPay; //used to calculate missed allowance payments for task 228
+
 	public Player(@JsonProperty("name") String name) {
         this.currentRoom = 1;
         this.currentDirection = Direction.NORTH;
@@ -60,6 +60,7 @@ public class Player {
         this.money = 0;
         this.rewardAmount = 0.1; //Task 229, This is the default starting amount (also set when player leaves in GameCore)
         this.rewardProgress = 0; //Task 229, value resets to 0 on leave (in GameCore leaveGame)
+        this.totalPay = 0; //for task 228        
     }
 
     public int getDormId() {return this.dormId;}
@@ -611,6 +612,14 @@ public class Player {
     	this.rewardProgress = l;
     }
     
+    public long getTotalPay() {
+    	return this.totalPay;
+    }
+    
+    public void setTotalPay(long l) {
+    	this.totalPay = l;
+    }
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // INSERT CODE FOR GETTERS AND SETTERS ABOVE ///////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -708,7 +717,6 @@ public class Player {
 		toggleChat = false;
 		return "You have turned on RPS resolutions in your area";
 	}
-
 
     }
 
