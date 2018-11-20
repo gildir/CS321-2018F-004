@@ -507,6 +507,7 @@ public interface GameObjectInterface extends Remote, IAccount.Client {
      */
     public String journal(String name) throws RemoteException;
 
+    /** 
      * Returns a Shop's "In Demand" inventory as a formatted string
      * @param id The shop ID
      * @return A formatted string representing the Shop's "In Deman" inventory
