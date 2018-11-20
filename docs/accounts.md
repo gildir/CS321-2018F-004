@@ -3,8 +3,8 @@
 
 ## As a User
 
-The user only needs to know two things. When the server starts create an account by entering 'C' at the prompt. From here you can create a username and password. This will create your persistent account. You can then log into the server any subsequent times using that information. All of your account elements such as player position and inventory should be saved.
-The second is the DELETE command. Use this command when signed in to completely wipe away your profile forever.
+The user only needs to know three things. When the server starts create an account by entering 'C' at the prompt. From here you can create a username and password. This will create your persistent account. You can then log into the server any subsequent times using that information. All of your account elements such as player position and inventory should be saved.
+The second is the DELETE command. Use this command when signed in to completely wipe away your profile forever. The third is the ACCOUNT command. This will take you into an account edit wizard that currently allows you to change your password and add/remove security questions.
 
 ## As a Developer
 
@@ -16,12 +16,15 @@ Player accounts are stored in files on a per-account basis. This is done so that
 |-- players
 |   |-- ac1
 |   |   |-- data.json
-|   |   |-- pass.txt
+|   |   |-- account.json
 |   |
 |   |-- ac2
 |       |-- data.json
-|       |-- pass.txt	   
+|       |-- account.json   
 ```
+data.json contains all player  data; money, inventory, position, etc.
+account.json contains all account data; password, reset questions, etc.
+
 ###### Adding new fields to Player
 
 The marshaller simply needs getters and setters for any new variables. Example:
@@ -38,15 +41,30 @@ public void setVar(TYPE var) {
 ```
 ###### Primary file of interest: PlayerAccountManager.java
 
-	public synchronized AccountResponse createNewAccount(String username, String password)
+	public synchronized DataResponse<Player> createNewAccount(String username, String password)
 	private void writePlayerDataFile(Player p) throws Exception
-	public void forceUpdateData(Player p)
+	private void writeAccountDataFile(PlayerAccount a) throws Exception
+	public void forceUpdatePlayerFile(Player p)
+	public void forceUpdateAccountFile(PlayerAcount a)
 	public boolean deleteAccount(String username)
-	public AccountResponse getAccount(String username, String password)
+	public DataResponse<Player> getPlayer(String username, String password)
+	public DataResponse<PlayerAccount> getAccount(String username)
 	public boolean accountExists(String username)
 	
 These functions handle the management of all player account activities. Creating, Getting, Updating, and Deleting
 
+###### Secondary file of interest: PlayerAccount.java
+Public methods only:
+
+	public DataResponse<Long> getAccountAge(String name)
+	public Responses verifyPassword(String name, String pass)
+	public Responses addRecoveryQuestion(String name, String question, String answer)
+	public Responses verifyAnswers(String name, ArrayList<String> answers)
+	public Responses changePassword(String name, String password)
+	public DataResponse<ArrayList<String>> getQuestions(String name)
+	public Responses removeQuestion(String name, int num)
+	
+Notice how all sensitive data has no public accessors. All passwords remain hidden.
 ###### Using IDEs
 
 The json marshalling is handled by [Jackson](https://github.com/FasterXML) libraries. These files live in the `lib` folder. While classpath arguments have been added to the build and run command files, for an IDE to function correctly it will need to add these libraries.
