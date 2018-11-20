@@ -47,6 +47,7 @@ public class Player {
     private int wins = 0;
     private boolean hasTitle = false; //used for title and use item feature 
     private String playerItemTitle = "";
+    private long totalPay; //used to calculate missed allowance payments for task 228
 
 	public Player(@JsonProperty("name") String name) {
         this.currentRoom = 1;
@@ -55,6 +56,7 @@ public class Player {
         this.currentInventory = new LinkedList<>();
         this.chestImage = new LinkedList<>();
         this.money = 0;
+        this.totalPay = 0; //for task 228        
     }
 
     public int getDormId() {return this.dormId;}
@@ -389,7 +391,7 @@ public class Player {
             dialogueList.add(npc);
         }
     }
-
+  
     public LinkedList<Item> getCurrentInventory() {
         return currentInventory;
     }
@@ -588,6 +590,14 @@ public class Player {
         hasChallenge = challenged;
     }
     
+    public long getTotalPay() {
+    	return this.totalPay;
+    }
+    
+    public void setTotalPay(long l) {
+    	this.totalPay = l;
+    }
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // INSERT CODE FOR GETTERS AND SETTERS ABOVE ///////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -685,7 +695,6 @@ public class Player {
 		toggleChat = false;
 		return "You have turned on RPS resolutions in your area";
 	}
-
 
     }
 
