@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dialogues>
+        <dialogue id = "-1">
+                <intro>
+                "Hey now that you're here, we should do a quick daily standup!
+		Its really important to function as a team."
+
+		You make a poor excuse, and quickly walk away.
+                </intro>
+        </dialogue>
+        <dialogue id = "5">
+                <intro></intro>
+                <cont>
+                You talk to Patty, who informs you that the project is going
+		south because the different teams have no communication, and
+		your own team never does the daily standups. You decide that
+		daily standups are unnecessary, but should probably get some
+		communiction going with other teams. Sarah is unlikely to
+		cooperate, but if you can get Chris to work with you, the
+		next merge should be a lot easier. Maybe you could contact
+		him over Piazza?
+                </cont>
+                <done></done>
+                <condition>null</condition>
+                <status>null</status>
+	</dialogue>
+	<dialogue id = "8">
+		<intro></intro>
+		<cont></cont>
+		<done>
+		You find Patty and summarize your meeting with Erik. You
+		leave out the part where you gave a rambling madman 200
+		dollars to give you nonsensical advice.
+
+		"A Kanban Board?" Patty asks. "I've heard of them, but never
+		seen one! Of course, now that you mention it, that would 
+		solve all our problems! Can you get me one? I promise it will
+		be worth your time."
+
+		Now you have to find a Kanban Board. I guess you should ask if
+		MRP-8 has a spare one...
+		</done>
+		<condition>SUCCESS</condition>
+		<status>null</status>
+	</dialogue>
+	<dialogue id = "11">
+                <intro></intro>
+                <cont></cont>
+		<done>
+		You hand over the Kanban Board to Patty, who excitedly thanks
+		you, saying this will finally get the group back on track.
+
+		Congratulations, You've Won! Now you may be asking, what about
+		Sarah? Or Steve?
+		You can play all of those quest lines and more, all you have
+		to do is purchase the $40 dlc expansion pack!
+		</done>
+                <condition>SWAP</condition>
+                <status>1,Kanban Board,Trophy,1,3000,A small shiny trophy,Victorious,1</status>
+        </dialogue>
+</dialogues>

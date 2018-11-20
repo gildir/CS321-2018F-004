@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dialogues>
+        <dialogue id = "-1">
+                <intro>
+		"I used to be an CS Major like you, then I took an arrow 
+		in the knee."
+                </intro>
+        </dialogue>
+        <dialogue id = "10">
+		<intro>
+		You find a security guard in an office of MRP-8. You get ready
+		for a fight, but he doesn't seem to be angry.
+
+		"Let me guess, you're looking for a Kanban Board. 3 times this
+		week people have come through looking for a Kanban Board! I
+		tell the company, hey, we could make bank selling these things,
+		but nope. Anyways, I'm sick of working in this place. It's too
+		efficient, too organised. I'll get you that Kanban Board if you
+		can get me a job. Deal?"
+
+		It sounds like a great deal to you, but where are you going to
+		find a job? It's not the sort of thing people just drop on the
+		ground...
+                </intro>
+                <cont>
+                "Have you got me a job yet? You come back when you've got a
+		job for me, and I'll give you that Kanban Board
+                </cont>
+                <done>
+                You give the guard a job, and he thanks you and gives you a
+		Kanban Board! You should let Erik know that you found one. Be 
+		careful, because you only have 1 Kanban Board!
+                </done>
+                <condition>SWAP</condition>
+                <status>1,Job,Kanban Board,10,0,A priceless Kanban Board,Efficient,1</status>
+        </dialogue>
+</dialogues>

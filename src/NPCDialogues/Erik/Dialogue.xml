@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dialogues>
+        <dialogue id = "-1">
+                <intro>
+                "Sensei Rother demands the use of the improvement kata to
+		balance your constraints and diffuse work through a bill of
+		resources, and harness the collective powers of the first and
+		second ways in order to procreate synergies and reduce wait
+		times!"
+                </intro>
+        </dialogue>
+        <dialogue id = "7">
+		<intro>
+		You see a homeless looking man standing by the street. You ask
+		if he is the great manager known as Erik.
+
+		"Ah so you've heard of me! Well, I used to give my advice for
+		free, but now its going to cost you. Give me 200 dollars and
+		I'll consider helping you."
+
+		If you want your group to improve, you have no choice but to
+		give him what he wants.
+		</intro>
+		<cont>
+		"Do you have your money yet? No? Well then have fun figuring
+		out the sacred scriptures of senseis Allspaw and Goldratt,
+		or their holy and venerable three ways!"
+                </cont>
+		<done>
+		You hand over the money. He thanks you, and says he wants to
+		take you to a temple known as MRP-8. Talk to him when you're
+		ready to go.
+		</done>
+                <condition>PAY</condition>
+                <status>200</status>
+	</dialogue>
+	<dialogue id = "8">
+                <intro>
+                Erik drives you to MRP-8, which is much less exciting than the
+		temple of divine productivity you were promised. He walks you
+		past the security guard, and takes you up above the factory
+		floor.
+
+		"What do you see?"
+
+		You give him some wishy washy answer about a bunch of boxes and
+		machines.
+
+		"NONSENSE! This is the pinnacle of group evolution! All three
+		ways elegantly combined together in an orgasmic display of
+		effeciency! The enlightened individuals who run this plant
+		understand perfectly the 4 types of work: Planned work, 
+	        Internal Improvements, Changes, and Coffee Runs. Normally, I
+		would let you figure that out, but that would've taken you a
+		month."
+
+		"By using the three ways, the plant managers managed to bring
+		together a bunch of unintelligent machines, and can get them
+		to work together better than you can get your group of software
+		engineers to! How? Simple! Kanban Boards! Always Kanban Boards!
+		Sensei Allspaw's teachings about takt time allowed the plant to
+		automate manual task, decreasing wait time and leveraging
+		synergies. Proactively! That's the key to success in group
+		projects!"
+
+		You look at him strangely. "Proactively leverage our
+		synergies?" You ask. Erik smacks you on the head in reply.
+
+		"Haven't you heard anything I've said? Kanban Boards! That's
+		secret! Leverage those synergies also, and never forget to
+		HTML your blockchain into bitcoins, but the secret is Kanban
+		Boards!"
+
+		You quickly write that down, and when you look up, Erik is
+		gone. I guess you have to find your own way home.
+                </intro>
+                <cont>
+                "Oh you've made it back? Did you think about what I told you?
+		It was probably just wasted upon you, you're too thick to
+		understand the enlightening principles of the saviors, even
+		after I spelled it out for you."
+                </cont>
+                <done></done>
+		<condition>TP1</condition>
+                <status>10</status>
+	</dialogue>
+	<dialogue id = "10">
+		<intro>
+		You approach Erik and ask that he give you another lesson on
+		the scriptures of DevOps. He agrees to do it for free this
+		time, as you're a returning customer. You tune out his
+		monologue of gibberish this time, and wait until he disappears
+		to start looking for a Kanban Board.
+		</intro>
+		<cont>
+		Once again, you ask Erik to take you to MRP-8. He is more
+		enthusiastic this time, and seems to believe you are starting
+		to get the hang of his teachings.
+		</cont>
+		<done></done>
+		<condition>TP2</condition>
+		<status>10</status>
+	</dialogue>
+	<dialogue id = "11">
+                <intro>
+		You tell Erik that you finally have a Kanban Board. He
+		congradulates you, mumbles something about getting you to
+		write a book, and tells you to give it to Patty so you don't
+		break it.
+                </intro>
+                <cont>
+                You should give the Kanban Board to Patty like Erik told you.
+                </cont>
+                <done></done>
+                <condition>null</condition>
+                <status>null</status>
+        </dialogue>
+
+</dialogues>

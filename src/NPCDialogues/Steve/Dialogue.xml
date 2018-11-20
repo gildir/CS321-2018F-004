@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dialogues>
+	<dialogue id = "-1">
+		<intro>
+		Steve says "Sarah tells me you've been dragging your feet
+		on project Ghoul! Didn't I tell you I want that to be your
+		group's number one priority!"
+		</intro>
+	</dialogue>
+        <dialogue id = "1">
+		<intro>
+		You walk into class, and Steve, the professor, calls you over.			
+		"How's it going? Good? Great! Just to let you know, You're
+		your new group leader. Don't think it means anything, all it
+		means is you're the new group leader. By the way, are you
+		ready for your demo today?"
+
+		You still have a few minutes before you have to demo, you
+		should get a laptop and use it in this room!
+		</intro>
+		<cont>
+		"Are you ready for your demo?" Steve asks.
+
+		You better find a laptop and use it in this room!
+		</cont>
+		<condition>TITLE</condition>
+		<status>(maybe) Tech Savvy</status>
+		<done>
+		Due to the fact that you had no idea what you were 
+		supposed to be demoing, your demo did not go too well.
+		However, your stories miraculously got approved. Now all you
+		have to do is turn it in. How hard could that be?
+		</done>
+	</dialogue>
+	<dialogue id = "2">
+                <intro>
+		Steve addresses the whole class now.
+		"Ok everyone, do your sprint retrospective and turn in your
+		notecards."
+	
+		Notecards? Forget the retrospective, you had better quickly
+		find 5 notecards!
+                </intro>
+                <cont>
+                You don't have your 5 notecards yet, so you probably shouldn't 
+		talk to Steve yet.
+                </cont>
+                <done>
+                You got your notecards turned in just before the bell. Now
+		for the pull request! You should go talk to your computer in
+		your dorm room.
+		</done>
+		<condition>INVENTORY</condition>
+                <status>x5 Notecard</status>
+	</dialogue>
+	<dialogue id = "4">
+                <intro></intro>
+                <cont></cont>
+                <done>
+                "This is unacceptable." Steve says as you walk over.
+		"Sarah tells me that your group hasn't been able to meet
+		any of the deadlines on the critical path for Project Ghoul.
+		What's more, I don't even see any of your features for this
+		sprint in the dev branch! What has your group been doing?
+		You need to get your priorities straight, and stop holding
+		back other groups with your sloppy work!"
+
+		You try to explain how Sarah deleted all your changes for the
+		last sprint, but he doesn't seem to believe you. You should
+		probably tell the rest of your team what's going on, so they
+		can get all the necessary work done.
+                </done>
+                <condition>SUCCESS</condition>
+                <status>null</status>
+        </dialogue>
+</dialogues>
