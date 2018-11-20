@@ -5,9 +5,6 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
-/**
- * My personal json marshaller short-hands
- */
 public class JsonMarshaller {
 	public static final JsonMarshaller MARSHALLER = new JsonMarshaller();
 	private ObjectMapper jsonMapper;

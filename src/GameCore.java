@@ -7,6 +7,9 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -37,7 +40,6 @@ public class GameCore implements GameCoreInterface {
     private Ghoul ghoul;
     private PrintWriter pw;
     private Bank bank;
-    private ArrayList<Chatroom> chatrooms = new ArrayList<Chatroom>();
     private final Logger rpsLogger = Logger.getLogger("battles");
     private FileHandler rpsHandler;
     private boolean pickRPSToggle = false;
@@ -201,6 +203,24 @@ public class GameCore implements GameCoreInterface {
                 awakeDayGhoul.setDaemon(true);
                 objectThread.start();
                 awakeDayGhoul.start();
+            }
+	
+	/**
+	 * Used to create a hash encrypted in SHA256 for use in encrypting passwords
+	 * 
+	 * @param toHash
+	 * @return SHA256 encrypted hash value, or "ERROR" If encryption method fails.
+	 */
+	private String hash(String toHash) {
+		try {
+			byte[] encodedhash = MessageDigest.getInstance("SHA-256").digest(toHash.getBytes(StandardCharsets.UTF_8));
+			StringBuilder sb = new StringBuilder();
+			for (byte b : encodedhash)
+				sb.append(String.format("%02X", b));
+			return sb.toString();
+		} catch (NoSuchAlgorithmException e) {
+		}
+		return "ERROR";
 	}
 
 	public void ghoulWander(Ghoul g, Room room) {
@@ -597,7 +617,7 @@ public class GameCore implements GameCoreInterface {
      * Picks up multiple items of the name type
      * @param name name of the the player
      * @param target name of the item
-     * @param amount amount of items to pickup
+     * @param amount amount of pickup
      * @return String indicating how many items was picked up
      */
     public String pickup(String name, String target, int amount) {
@@ -981,14 +1001,15 @@ public class GameCore implements GameCoreInterface {
     @Override
 	public Player joinGame(String name, String password) {
 		synchronized (loginLock) {
+			password = hash(password);
 			// Check to see if the player of that name is already in game.
 			Player player = this.playerList.findPlayer(name);
 			if (player != null)
 				return null;
-			DataResponse<Player> resp = accountManager.getPlayer(name, password);
+			PlayerAccountManager.AccountResponse resp = accountManager.getAccount(name, password);
 			if (!resp.success())
 				return null;
-			player = resp.data;
+			player = resp.player;
 			this.playerList.addPlayer(player);
 
             //112a DormRoom creation
@@ -1023,7 +1044,7 @@ public class GameCore implements GameCoreInterface {
 
 	public synchronized Responses createAccountAndJoinGame(String name, String password) {
 		synchronized (createAccountLock) {
-			DataResponse<Player> resp = accountManager.createNewAccount(name, password);
+			PlayerAccountManager.AccountResponse resp = accountManager.createNewAccount(name, hash(password));
 			if (!resp.success())
 				return resp.error;
 			if (joinGame(name, password) != null)
@@ -1527,13 +1548,13 @@ public class GameCore implements GameCoreInterface {
       if(playerChallengee == null || playerChallenger == null){
         return "This player does not exist in the game.";
       }
-      if(playerChallenger.getInBattle()){
+      if(playerChallenger.getInBattle() == true){
         return "You are already in a R-P-S battle.";
       }
       if(playerChallengee.getInBattle()){
         return "This player is already in a R-P-S battle";
       }
-      if(playerChallengee.getInBattle()){
+      if(playerChallengee.getInBattle() == true){
         return playerChallengee.getName() + " is already in a R-P-S battle.";
       }
       if(playerChallenger != playerChallengee && playerChallenger.getCurrentRoom() == playerChallengee.getCurrentRoom()) {
@@ -1892,7 +1913,7 @@ public class GameCore implements GameCoreInterface {
 			this.broadcast(player, "You see " + player.getName() + " heading off to class.");
 			this.playerList.removePlayer(name);
             connectionLog(false, player.getName());
-            this.accountManager.forceUpdatePlayerFile(player);
+            this.accountManager.forceUpdateData(player);
 			return player;
 		}
 		return null;
@@ -1926,169 +1947,6 @@ public class GameCore implements GameCoreInterface {
     public String quickReply(String srcName, String message) {
         String target = this.playerList.findPlayer(srcName).getLastPlayer();
         return whisper(srcName, target, message);
-    }
-    
-    /**
-     * Create a new chatroom
-     * @param playerName Name of the player creating the chatroom
-     * @param chatName Name of the chatroom
-     * @return Message showing success
-     * @throws RemoteException
-     */
-    public String makeChat(String playerName, String chatName) {
-    	Player creator = this.playerList.findPlayer(playerName);
-    	for (Chatroom chat:chatrooms) {
-    		if (chat.getName().equals(chatName.toUpperCase())) {
-    			return "This chatroom already exists.";
-    		}
-    	}
-    	Chatroom newChat = new Chatroom(creator, chatName.toUpperCase());
-    	chatrooms.add(newChat);
-    	return "Chatroom " + chatName.toUpperCase() + " created.";
-    }
-    
-    /**
-     * Invite a player to your current chatroom.
-     * @param srcPlayer Name of player sending the invite
-     * @param dstPlayer Name of player receiving the invite
-     * @return Message showing success
-     * @throws RemoteException
-     */
-    public String invChat(String srcPlayer, String dstPlayer, String chatName) {
-    	Player sender = this.playerList.findPlayer(srcPlayer);
-    	Player invitee = this.playerList.findPlayer(dstPlayer);
-        if (invitee == null) {
-            return "Player " + dstPlayer + " not found.";
-        }
-        if (srcPlayer.equals(dstPlayer)) {
-        	return "You can't invite yourself to a chat.";
-        }
-        for (Chatroom chat: chatrooms) {
-        	if (chat.getName().equals(chatName.toUpperCase())) {
-        		if (!chat.getMembers().contains(sender)) {
-        			return "You are not in the chatroom [" + chatName.toUpperCase() + "]";
-        		}
-            	if (chat.getMembers().contains(invitee)) {
-            		return dstPlayer + " is already in the chatroom [" + chatName.toUpperCase() + "]";
-            	}
-            	if (chat.getInvited().contains(invitee)) {
-            		return dstPlayer + " is already invited to the chatroom [" + chatName.toUpperCase() + "]";
-            	}
-        		String message = "Hey! Feel free to join the chatroom [" + chatName.toUpperCase() + "]";
-        		whisper(srcPlayer, dstPlayer, message);
-        		chat.addInvited(invitee);
-        		return "You invited " + dstPlayer + " to join [" + chatName.toUpperCase() + "]";
-        	}
-        }
-    	return "You are trying to invite " + dstPlayer + " to a non-existent chatroom [" + chatName.toUpperCase() + "]";
-    }
-    
-    /**
-     * Join a player's chatroom
-     * @param srcPlayer Name of player joining
-     * @param dstPlayer Name of player in the target chatroom
-     * @return Message showing success
-     * @throws RemoteException
-     */
-    public String joinChat(String srcPlayer, String chatName) {
-    	Player joining = this.playerList.findPlayer(srcPlayer);
-    	Chatroom chatToJoin = null;
-    	for (Chatroom chat:chatrooms) {
-    		if (chat.getName().equals(chatName.toUpperCase())) {
-    			chatToJoin = chat;
-    		}
-    	}
-    	if (chatToJoin == null) {
-    		return "Chatroom [" + chatName.toUpperCase() + "] does not exist.";
-    	}
-    	if (chatToJoin.getMembers().contains(joining)) {
-    		return "You are already in chatroom [" + chatName.toUpperCase() + "]";
-    	}
-    	if (!chatToJoin.getInvited().contains(joining)) {
-    		return "You were not invited to join chatroom [" + chatName.toUpperCase() + "]";
-    	}
-    	chatToJoin.addMember(joining);
-    	chatToJoin.removeInvited(joining);
-        return "You joined chatroom [" + chatName.toUpperCase() + "]";
-    }
-    
-    /**
-     * Leave a chatroom
-     * @param srcPlayer Name of player leaving
-     * @param chatName Name of chatroom to leave
-     * @return Message showing success
-     * @throws RemoteException
-     */
-    public String leaveChat(String srcPlayer, String chatName) {
-    	Player leaving = this.playerList.findPlayer(srcPlayer);
-    	Chatroom chatToLeave = null;
-    	for (Chatroom chat:chatrooms) {
-    		if (chat.getName().equals(chatName.toUpperCase())) {
-    			chatToLeave = chat;
-    		}
-    	}
-    	if (chatToLeave == null) {
-    		return "Chatroom [" + chatName.toUpperCase() + "] does not exist.";
-    	}
-    	if (!chatToLeave.getMembers().contains(leaving)) {
-    		return "You are not in chatroom [" + chatName.toUpperCase() + "]";
-    	}
-    	chatToLeave.removeMember(leaving);
-    	if (chatToLeave.getMembers().size() == 0) {
-    		chatrooms.remove(chatToLeave);
-    		chatToLeave = null;
-    	}
-        return "You left chatroom [" + chatName.toUpperCase() + "]";
-    }
-    
-    /**
-     * Check if chatroom exists
-     * @return boolean showing success
-     * @throws RemoteException
-     */
-    public boolean checkChat(String command) {
-    	for (Chatroom chat:chatrooms) {
-    		if (chat.getName().equals(command)) {
-    			return true;
-    		}
-    	}
-    	return false;
-    }
-    
-    /**
-     * Message a chatroom
-     * @param srcPlayer Name of player sending the message
-     * @param message The message to be sent
-     * @param chatName The name of the chat to send the message to
-     * @return Message showing success
-     * @throws RemoteException
-     */
-    public String messageChat(String srcPlayer, String message, String chatName) {
-		Player player = this.playerList.findPlayer(srcPlayer);
-		Chatroom chatToMessage = null;
-    	for (Chatroom chat:chatrooms) {
-            if (chat.getName().equals(chatName.toUpperCase())) {
-            	chatToMessage = chat;
-               	if (!chat.getMembers().contains(player)) {
-               		return "You are not in the chatroom [" + chatName.toUpperCase() + "]";
-               	}
-    		}
-    	}
-    	if (chatToMessage == null) {
-    		return "You are trying to message a non-existent chatroom [" + chatName.toUpperCase() + "]";
-    	}
-		if (player != null) {
-		    for (Player otherPlayer : chatToMessage.getMembers()) {
-		        if (otherPlayer != player) {
-		            otherPlayer.messagePlayer(player, "messages chatroom [" + chatName.toUpperCase() + "]", message);
-		        }
-		    }
-            chatLog(player, 0, message, "Chatroom " + chatName);
-            return player.getMessage() + "message, " + message + " to chatroom [" + chatName.toUpperCase() + "]";
-
-		} else {
-			return null;
-		}
     }
 
    /**
@@ -2486,152 +2344,88 @@ public class GameCore implements GameCoreInterface {
     }
 	
 	/**
-	 * Remove question by position in list. Returns the status of the removal.<br>
-	 * <br>
-	 * Possible Responses:<br>
-	 * NOT_FOUND<br>
-	 * INTERNAL_SERVER_ERROR<br>
-	 * FAILURE<br>
-	 * SUCCESS<br>
-	 * 
-	 * @param name
-	 * @param num - which question
-	 * @return removedStatus
+	 * Gets recovery question
+	 * @param name User of recovery question 
+	 * @param num Marks which question will be grabbed
+	 * @return String of recovery question, null if user doesn't exist
 	 */
-	@Override
-	public Responses removeQuestion(String name, int num) {
-		DataResponse<PlayerAccount> account = accountManager.getAccount(name);
-		if (!account.success())
-			return account.error;
-		accountManager.markAccount(name);
-		return account.data.removeQuestion(name, num);
+	public String getQuestion(String name, int num) {
+        Player player = this.playerList.findPlayer(name);
+        if (player==null) {
+        	PlayerAccountManager.AccountResponse resp = this.accountManager.getPlayer(name);
+        	if(!resp.success())
+        		return null;
+        	player=resp.player;
+        }
+        if (player != null) {
+			return player.getQuestion(num);
+		} else {
+			return null;
+		}
+	}
+	
+	public void addQuestion(String name, String question, String answer) {
+		//PlayerAccountManager.AccountResponse resp = this.accountManager.getPlayer(name);
+	
+		//if(!resp.success())
+			//return;
+		Player player = this.playerList.findPlayer(name);
+		if(player != null) {
+			player.addQuestion(question, hash(answer));
+		}
+		
+	}
+	
+	/**
+	 * Gets recovery answer
+	 * @param name User of recovery answer
+	 * @param num Marks which answer will be grabbed
+	 * @return String of recovery question, null if user doesn't exist
+	 */
+	public Boolean getAnswer(String name, int num, String answer) {
+        Player player = this.playerList.findPlayer(name);
+        if (player==null) {
+        	PlayerAccountManager.AccountResponse resp = this.accountManager.getPlayer(name);
+        	if(!resp.success())
+        		return null;
+        	player=resp.player;
+        }
+		if(player != null) {
+			return player.getAnswer(num).equals(hash(answer));
+		} else {
+			return null;
+		}
 	}
 
-	/**
-	 * Returns either the questions or a status error<br>
-	 * <br>
-	 * Possible Errors:<br>
-	 * NOT_FOUND<br>
-	 * INTERNAL_SERVER_ERROR<br>
-	 * 
-	 * @param name
-	 * @return questionsStatus
-	 */
-	@Override
-	public DataResponse<ArrayList<String>> getQuestions(String name) {
-		DataResponse<PlayerAccount> account = accountManager.getAccount(name);
-		if (!account.success())
-			return new DataResponse<>(account.error);
-		accountManager.markAccount(name);
-		return account.data.getQuestions(name);
-	}
-
-	/**
-	 * Returns whether the answers were correct or an error occurred.<br>
-	 * <br>
-	 * Possible Responses:<br>
-	 * NOT_FOUND<br>
-	 * INTERNAL_SERVER_ERROR<br>
-	 * FAILURE<br>
-	 * SUCCESS<br>
-	 * 
-	 * @param name
-	 * @param answers
-	 * @return verifiedStatus
-	 */
-	@Override
-	public Responses verifyAnswers(String name, ArrayList<String> answers) {
-		DataResponse<PlayerAccount> account = accountManager.getAccount(name);
-		if (!account.success())
-			return account.error;
-		accountManager.markAccount(name);
-		return account.data.verifyAnswers(name, answers);
-	}
-
-	/**
-	 * Returns the status of adding a recovery question.<br>
-	 * <br>
-	 * Possible Responses:<br>
-	 * NOT_FOUND<br>
-	 * INTERAL_SERVER_ERROR<br>
-	 * FAILURE      - bad question length<br>
-	 * BAD_PASSWORD - need answer<br>
-	 * SUCCESS<br>
-	 * 
-	 * @param name
-	 * @param question
-	 * @param answer
-	 * @return addStatus
-	 */
-	@Override
-	public Responses addRecoveryQuestion(String name, String question, String answer) {
-		DataResponse<PlayerAccount> account = accountManager.getAccount(name);
-		if (!account.success())
-			return account.error;
-		accountManager.markAccount(name);
-		return account.data.addRecoveryQuestion(name, question, answer);
-	}
-
-	/**
-	 * Returns either account age or error.<br>
-	 * <br>
-	 * Possible Errors:<br>
-	 * NOT_FOUND<br>
-	 * INTERAL_SERVER_ERROR<br>
-	 * 
-	 * @param name
-	 * @return ageStatus
-	 */
-	@Override
-	public DataResponse<Long> getAccountAge(String name) {
-		DataResponse<PlayerAccount> account = accountManager.getAccount(name);
-		if (!account.success())
-			return new DataResponse<Long>(account.error);
-		accountManager.markAccount(name);
-		return account.data.getAccountAge(name);
-	}
-
-	/**
-	 * Returns the status of testing a password against current.<br>
-	 * <br>
-	 * Possible Responses:<br>
-	 * NOT_FOUND<br>
-	 * INTERNAL_SERVER_ERROR<br>
-	 * FAILURE<br>
-	 * SUCCESS<br>
-	 * 
-	 * @param name
-	 * @param password
-	 * @return verifyStatus
-	 */
-	@Override
 	public Responses verifyPassword(String name, String password) {
-		DataResponse<PlayerAccount> account = accountManager.getAccount(name);
-		if (!account.success())
-			return account.error;
-		accountManager.markAccount(name);
-		return account.data.verifyPassword(name, password);
+		password = hash(password);
+		PlayerAccountManager.AccountResponse resp = this.accountManager.getAccount(name, password);
+		if (resp.success())
+			return Responses.SUCCESS;
+		return resp.error;
 	}
 
 	/**
-	 * Returns the status of changing a password.<br>
-	 * <br>
-	 * Possible Responses:<br>
-	 * NOT_FOUND<br>
-	 * INTERNAL_SERVER_ERROR<br>
-	 * SUCCESS<br>
+	 * Resets passwords.
 	 * 
-	 * @param name
-	 * @param newPassword
-	 * @return changeStatus
+	 * @param name Name of player getting password reset
+	 * @param password New password to be saved
 	 */
-	@Override
-	public Responses changePassword(String name, String password) {
-		DataResponse<PlayerAccount> account = accountManager.getAccount(name);
-		if (!account.success())
-			return account.error;
-		accountManager.markAccount(name);
-		return account.data.changePassword(name, password);
+	public Responses resetPassword(String name, String password) {
+		password = hash(password);
+		PlayerAccountManager.AccountResponse resp = this.accountManager.getPlayer(name);
+		if(!resp.success()) {
+			return resp.error;
+		}
+		return accountManager.resetPassword(resp.player, password);
+		
+	}
+	
+	public void removeQuestion(String name, int num) {
+		Player player = this.playerList.findPlayer(name);
+		if(player != null) {
+			player.removeQuestion(num);
+		}
 	}
 
 	/**

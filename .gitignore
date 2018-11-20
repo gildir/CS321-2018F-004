@@ -23,11 +23,3 @@ hs_err_pid*
 
 # Player files
 /src/players/
-
-# Requested Files
-/src/FilteredWordsList*
-/src/ChatPrefixFile*
-/src/ghoulLog.txt
-/src/chatlog.txt
-/src/friends.json
-/src/logs/

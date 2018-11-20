@@ -19,9 +19,6 @@ import java.io.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- * Represents an NPC 
- */
 public class NPC {
     private final String name;
     private int room;

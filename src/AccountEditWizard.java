@@ -3,11 +3,6 @@ import java.io.PrintStream;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
-/**
- * An instance of the blocking wizard that contains the data needed for account
- * editing. This could have been made as an object but its easy to see the
- * modules additions inline in this class
- */
 public class AccountEditWizard extends Wizard.BlockingWizard {
 
 	private ArrayList<Class<?>> moduleClasses = new ArrayList<>();

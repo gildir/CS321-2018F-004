@@ -5,11 +5,6 @@ import java.util.HashSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- * Dedicated class for handling the friend system. Keeps a list of personal
- * friends and list of people that have me as a friend. This is done for
- * efficiency when purging a player from the system
- */
 public class FriendsManager {
 	private HashMap<String, HashSet<String>> myAdded; // Everyone I have added
 	private HashMap<String, HashSet<String>> addedMe; // Everyone thats added me
@@ -50,13 +45,7 @@ public class FriendsManager {
 	}
 
 	/**
-	 * Add a friend to your friends list<br>
-	 * <br>
-	 * Possible Responses:<br>
-	 * SILLY<br>
-	 * EXISTS<br>
-	 * SUCCESS<br>
-	 * <br>
+	 * Add a friend to your friends list
 	 * 
 	 * @param player
 	 * @param friend
@@ -75,13 +64,7 @@ public class FriendsManager {
 	}
 
 	/**
-	 * Removes a player from your friends list<br>
-	 * <br>
-	 * Possible Responses:<br>
-	 * SILLY<br>
-	 * NOT_FOUND<br>
-	 * SUCCESS<br>
-	 * <br>
+	 * Removes a player from your friends list
 	 * 
 	 * @param player
 	 * @param friend
@@ -137,7 +120,7 @@ public class FriendsManager {
 
 	private boolean remove(HashMap<String, HashSet<String>> removeFrom, String a, String b) {
 		HashSet<String> list = removeFrom.get(a);
-		boolean res = list != null && list.remove(b);
+		boolean res =  list != null && list.remove(b);
 		if (res)
 			writeFile();
 		return res;
@@ -160,7 +143,7 @@ public class FriendsManager {
 	public HashMap<String, HashSet<String>> getAddedMe() {
 		return addedMe;
 	}
-
+	
 	private void writeFile() {
 		new Thread(new Runnable() {
 			@Override
