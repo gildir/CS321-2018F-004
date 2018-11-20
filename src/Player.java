@@ -51,6 +51,13 @@ public class Player {
     private long rewardProgress; //task 229, keeps track of how much time must elapse before a reward.
     private long totalPay; //used to calculate missed allowance payments for task 228
 
+    //Tracks which quest the player is on
+    private int questProgress;
+    //Used to count victories in RPS quest
+    private int rpsVictoryCount;
+    //Used to count pokes in poke quests
+    private int pokeCount;
+
 	public Player(@JsonProperty("name") String name) {
         this.currentRoom = 1;
         this.currentDirection = Direction.NORTH;
@@ -58,9 +65,14 @@ public class Player {
         this.currentInventory = new LinkedList<>();
         this.chestImage = new LinkedList<>();
         this.money = 0;
+
+	this.questProgress = 0;
+	this.rpsVictoryCount = 0;
+
         this.rewardAmount = 0.1; //Task 229, This is the default starting amount (also set when player leaves in GameCore)
         this.rewardProgress = 0; //Task 229, value resets to 0 on leave (in GameCore leaveGame)
         this.totalPay = 0; //for task 228        
+
     }
 
     public int getDormId() {return this.dormId;}
@@ -592,6 +604,44 @@ public class Player {
 
     public void setHasChallenge(boolean challenged){
         hasChallenge = challenged;
+    }
+
+
+    public void setRpsVictoryCount(int count){
+	rpsVictoryCount = count;
+    }
+
+    public void addRpsVictory(){
+	rpsVictoryCount ++;
+    }
+
+    public int getRpsVictoryCount(){
+	return rpsVictoryCount;
+    }
+
+    public void setPokeCount(int num){
+        pokeCount = num;
+    }
+
+    public void addPoke(){
+	pokeCount ++;
+    }
+
+    public int getPokeCount(){
+	return pokeCount;
+    }
+
+
+    public int getProgress(){
+        return questProgress;
+    }
+
+    public void setProgress(int progress){
+        this.questProgress = progress;
+    }
+
+    public void advanceQuest(){
+	questProgress ++;
     }
     
     @JsonIgnore
