@@ -884,4 +884,9 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
     public void checkVenmoMail(String playerName) throws RemoteException {
         Venmo.checkMail(playerName);
     }
+
+    @Override
+    public boolean isPlayerOnline(String name) throws RemoteException {
+        return core.isPlayerOnline(name);
+    }
 }
