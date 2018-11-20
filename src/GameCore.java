@@ -2645,17 +2645,4 @@ public class GameCore implements GameCoreInterface {
 		return message;
 		
 	}
-
-	/**
-	 * Toggles the RPS resolution of other players in same room
-	 * @param name of Player that wants to toggle
-	 */
-	@Override
-	public String toggleRPSChat(String player){
-		Player playerToggle = this.playerList.findPlayer(player);
-		String message = playerToggle.toggleResolution();
-		return message;
-		
-	}
-
 }
