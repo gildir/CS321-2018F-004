@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dialogues>
+        <dialogue id = "-1">
+                <intro>
+                "Hello, if you don't have any official business, I'll have to
+		ask you to leave."
+                </intro>
+        </dialogue>
+        <dialogue id = "9">
+		<intro>
+                "Hello, if you don't have any official business, I'll have to
+                ask you to leave."
+
+                You tell her that you are searching for a Kanban Board.
+
+                "What! I don't know who told you that we have those here, but
+                you're sadly mistaken. And if we did, I wouldn't give it to
+                you. Get out of here before I call security!"
+
+                Not the best reception, but from what Erik said, you know they
+                have one. Try asking again
+		</intro>
+                <cont></cont>
+		<done>
+		You insist that she has a Kanban Board, and tell her that Erik
+		told you about it.
+
+		"Of course! I should've known. I'll have a word with Erik, but
+		just because you know about it doesn't mean you can have it."
+
+		Closer, but it appears she won't budge on this. You'll have to
+		find another way in and take it yourself.
+		</done>
+                <condition>SUCCESS</condition>
+                <status>null</status>
+        </dialogue>
+</dialogues>

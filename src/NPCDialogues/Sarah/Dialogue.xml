@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dialogues>
+        <dialogue id = "-1">
+		<intro>
+		"Perfection is the enemy of good! We simply do not have the
+		luxury of time to polish this to whatever gold standard you're
+		proposing. We need to merge Ghoul!"
+                </intro>
+        </dialogue>
+        <dialogue id = "4">
+		<intro>
+		You walk up to Sarah, who is busy tapping away on her IPhone.
+		You start to ask why she deleted your code, when she
+		interrupts you and says,
+
+		"My team is still waiting for your team to implement Ghoul so
+		we can do our features, but for some reason your team keeps
+		on dragging your feet. Maybe you're not prioritizing
+		correctly? Or maybe you're just not used to supporting a
+		project this important?"
+
+		Before you can reply, Steve calls you over to discuss your
+		project timeline.
+                </intro>
+		<cont>
+		No more time to talk, Steve wants to talk about the project
+		timeline.
+                </cont>
+		<done></done>
+                <condition>null</condition>
+                <status>null</status>
+        </dialogue>
+</dialogues>

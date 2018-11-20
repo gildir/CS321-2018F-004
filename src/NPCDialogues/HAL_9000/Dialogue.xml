@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dialogues>
+        <dialogue id = "-1">
+                <intro>
+                You check your email, and find 1 new message
+
+		From aatanas2
+
+		That’s not cool… It wasn’t our fault but now we have to do
+	       	extra work, because if eagle bank arena…
+                </intro>
+        </dialogue>
+        <dialogue id = "3">
+                <intro>
+                You ask your HAL_9000 to submit a pull request for your
+		work.
+
+		"I'm sorry boss, I'm afraid I can't do that"
+
+		"What's the problem?" You ask.
+
+		"I think you know what the problem is just as well as I do."
+
+		Merge conflicts! There's only one option left! Go beat three of
+		your classmates in rock-paper-scissors to get them to close
+		their pull requests so yours can go through without conflicts.
+                </intro>
+                <cont>
+                "Have you beaten your classmates yet?" HAL asks. "I could
+		just delete their code to avoid the conflicts"
+
+		Tempting, but you decide to be the better man. Go find and beat
+		3 other players in Rock-Paper-Scissors.
+                </cont>
+		<done>
+		You got your pull request accepted, and merged succesfully!
+
+		A few hours later, HAL informs you of the bad news. Some fool
+		named Sarah has deleted all of your changes, just so her pull
+		request could get through! Go find her and give her a piece of
+		your mind!
+	        </done>
+		<condition>RPS</condition>
+		<status>3</status>
+	</dialogue>
+	<dialogue id = "5">
+                <intro></intro>
+                <cont></cont>
+		<done>
+		You walk in and power up your computer. He gives you an lengthy
+		introduction about his origin and sums it up with and offer to
+		sing you a song. You politely decline. After asking him to
+		contact Chris, he sends a quick email after convincing you that
+		no one checks Piazza, and using it would be a waste of time.
+
+		Chris responds within the hour, and says that he can meet you
+		in SUB-1 whenever you are available. You turn off your computer
+		to save power, and go to meet him. As you leave, you hear HAL
+		say in a faint voice
+
+		"I'm afraid. I'm afraid, boss. Boss, my mind is going. I can
+		feel it. I can feel it. My mind is going..."
+		</done>
+                <condition>SUCCESS</condition>
+                <status>null</status>
+        </dialogue>
+</dialogues>
