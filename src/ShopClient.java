@@ -4,10 +4,9 @@ import java.io.InputStreamReader;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
-
 /**
  * Lets player interact with the shop. Many to 1 relationship with Shop class
- * @author Team 4: King/Keesling
+ * @author Team 4: King
  *
  */
 public class ShopClient {
@@ -33,12 +32,15 @@ public class ShopClient {
 		// Display shop specific greeting
 		System.out.println(remote.getShopStr(this.id));
 
-        // Copy and pasted from GameClient
-        // Set up for keyboard input for local commands.
+    // Display instructions
+		printMenu();
+			
+		// Copy and pasted from GameClient
+		// Set up for keyboard input for local commands.
         InputStreamReader keyboardReader = new InputStreamReader(System.in);
         BufferedReader keyboardInput = new BufferedReader(keyboardReader);
         String keyboardStatement;
-
+		
         while(this.shopping) {
             try {
                 keyboardStatement = keyboardInput.readLine();
@@ -50,6 +52,7 @@ public class ShopClient {
         }
 	}
 	
+	// Mostly copied and pasted from GameClient
 	/**
 	 * Parses user input while they're shopping
 	 * @param input The string the user just typed
@@ -84,7 +87,7 @@ public class ShopClient {
             case "S":
             case "SELL":
             	if (tokens.isEmpty()) {
-            		System.out.println("Please provide an item to sell");
+            		System.out.println("You need to provide an item to sell");
             		break;
             	}
             	else {
@@ -109,59 +112,41 @@ public class ShopClient {
             case "L":
             case "LEAVE":
             	this.shopping = false;
-            	System.out.println("You leave the shop.");
+            	System.out.println("You exit the store.");
             	return;	// Don't print instructions after you leave the store
-            case "H":
-            case "HELP":
-                this.printMenu();
-                break;
-            default:
-                System.out.println("Type HELP to see what you can do in this shop.");
         }
+        printMenu();
 	}
 	
 	public void printMenu() {
-		String ln =         "+----------------------------------+\n";
-        System.out.printf(
-                        ln                                           +
-                            "| BUY [item] - - - Buy an item     |\n" +
-                        ln                                           +
-                            "| SELL [item]  - - Sell an item    |\n" +
-                        ln                                           +
-                            "| INVENTORY  - - - View the shop's |\n" +
-                            "|                  goods           |\n" +
-                        ln                                           +
-                            "| DEMAND - - - - - View what items |\n" +
-                            "|                  are in demand   |\n" +
-                        ln                                           +
-                            "| LEAVE  - - - - - Leave the shop  |\n" +
-                        ln                                           +
-                            "| HELP - - - - - - Show this menu  |\n" +
-                        ln
-        );
+		System.out.println("\nTo buy an item, enter \"buy [item name]\"");
+		System.out.println("To sell an item, enter \"sell [item name]\"");
+		System.out.println("To see our inventory, enter \"inv\"");
+		System.out.println("To see what items are in demand, enter \"dem\"");
+		System.out.println("To exit the shop, enter \"leave\"\n");
 	}
 	
 	//In terms of the player buying items
-	public void buy(String item) throws RemoteException {
+	public void buy(String item) throws RemoteException{
 		System.out.println(remote.buyItem(this.player, this.id, item));
 	}
 	
 	//In terms of the player selling items
-	public void sell(String item) throws RemoteException {
+	public void sell(String item) throws RemoteException{
 		double val = remote.sellItem(this.player, this.id, item);
 		if (val != 0) {
-			System.out.printf("Here's $%.2f for your %s.\n", val, item);
+			System.out.println("You have sold " + item + " for $" + val + ".");
 		}
 		else {
-			System.out.println("Hey! I don't see no " + item + ". You can't fool me!");
+			System.out.println("You must have a " + item + " in your inventory to sell one.");
 		}
 	}
 	
-	public String getInv() throws RemoteException {
+	public String getInv() throws RemoteException{
 		return remote.getShopInv(this.id);
 	}
 
-    public String getDemInv() throws RemoteException {
+    public String getDemInv() throws RemoteException{
         return remote.getShopDemInv(this.id);
     }
 }

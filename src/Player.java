@@ -389,7 +389,7 @@ public class Player {
             dialogueList.add(npc);
         }
     }
-
+  
     public LinkedList<Item> getCurrentInventory() {
         return currentInventory;
     }
