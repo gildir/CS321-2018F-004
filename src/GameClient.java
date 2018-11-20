@@ -1133,6 +1133,11 @@ public class GameClient {
         }
     }
 
+    /**
+     * Adds a custom command to the custom command file. 
+     * Gets command value from the user on the command line.
+     * @param customCommandName The name of the custom command to add.
+     */
     private void addCustomCommand(String customCommandName)
     {
         InputStreamReader keyboardReader = new InputStreamReader(System.in);
@@ -1210,6 +1215,12 @@ public class GameClient {
         }
     }
 
+    /**
+     * Executes custom command listed in custom command file
+     * @param commandName Name of custom command previously bound and stored in custom command file.
+     * @param parameters ArrayList of parameters for the custom command
+     * @return true if custom command was executed succesfully, false otherwise
+     */
     private boolean executeCustomCommand(String commandName, ArrayList<String> parameters) {
         try {
             File customCommandFile = new File("./CommandShortcut.xml");
@@ -1251,6 +1262,10 @@ public class GameClient {
         return false;
     }
 
+    /**
+     * Removes custom command. The name of the command to remove
+     * is is read from the command line.
+     */
     private void removeCustomCommand() {
         try {
             File customCommandFile = new File("./CommandShortcut.xml");
@@ -1302,6 +1317,10 @@ public class GameClient {
         }
     }
 
+    /**
+     * Lists custom commands from custom command file
+     * @return true if custom commands were listed succesfully, false otherwise
+     */
     private boolean showCustomCommands()
     {
         try {
