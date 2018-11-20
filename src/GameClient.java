@@ -37,7 +37,6 @@ import org.w3c.dom.Attr;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
-import java.io.*;
 
 
 /**
@@ -93,16 +92,13 @@ public class GameClient {
             String strName = "rmi://"+host+"/GameService";
             remoteGameInterface = (GameObjectInterface) Naming.lookup(strName);
 
-            // Start by remotely executing the joinGame method.  
-            //   Lets the player choose a name and checks it with the server.  If the name is
-            //    already taken or the user doesn't like their input, they can choose again.
+            // User may either log in or create an account
+            // Account names are trimmed and unique ignoring case
+			int loginFailCount=0;
             while(nameSat == false) {
 				try {
 					System.out.println("Logging in or creating account?");
 					String mode;
-					String reset;
-					ArrayList<String> recovery = new ArrayList<String>();//questions and answers, order q1,a1,q2,a2,q3,a3
-					int count;
 					do {
 						System.out.print("(L/C)> ");
 						mode = keyboardInput.readLine().toUpperCase().trim();
@@ -116,11 +112,17 @@ public class GameClient {
 						nameSat = remoteGameInterface.joinGame(this.playerName, pass);
 						if (!nameSat) {
 							System.out.println("Username and password combination invalid");
-							resetPassword();
+							if(++loginFailCount==3) {
+								String temp;
+								if((temp = resetPassword(keyboardInput)) != null)
+									nameSat = remoteGameInterface.joinGame(this.playerName, temp);
+							}
 						}
 						break;
 					case "C":
-						Responses resp = remoteGameInterface.createAccountAndJoinGame(playerName, pass); //removed recovery
+						loginFailCount=0;
+						Responses resp = remoteGameInterface.createAccountAndJoinGame(playerName, pass);
+						System.out.println(resp);
 						switch (resp) {
 						case BAD_USERNAME_FORMAT:
 							System.out
@@ -972,137 +974,82 @@ public class GameClient {
     }
     /**
      * Prompts the user through a dialogue tree to give them the option to reset their password
+	 * @return password
+     * @throws IOException 
      */
-    public void resetPassword() {
-    	InputStreamReader keyboardReader = new InputStreamReader(System.in);
-        BufferedReader keyboardInput = new BufferedReader(keyboardReader);
-    	String reset;
-    	String name;
-    	String question;
-    	String answer;
-    	String input;
-    	String password;
-    	Responses response;
-    	int count;
-    	boolean correct;
-    	Boolean buff;
-    	//booleans for dialogue loops
-    	boolean go;
-    	boolean test;
-    	boolean test2;
-    	try {
-	    	go = true;
-	    	//asks if player wants to reset password
-	    	while(go) {
-	    		System.out.println();
-	    		System.out.println("Reset password?");
-	    		System.out.print("(Y/N)> ");
-	    		reset = keyboardInput.readLine().toUpperCase().trim();
-	    		switch (reset) {
-	    		case "Y":
-	    			go = false;
-	    			//asks for account name for password resets
-	    			System.out.println();
-	    			System.out.println("Please enter your account name");
-	    			System.out.print(">");
-	    			name = keyboardInput.readLine().trim();
-	    			question = remoteGameInterface.getQuestion(name, 0);
-	    			//answer = remoteGameInterface.getAnswer(name, 0);
-	    			if (question != null) {
-	    				test = true;
-	    				while (test) {
-	    					//asks recovery question
-	    					correct = true;
-	    					count = 0;
-	    					do {
-	    						System.out.println();
-			    				System.out.println(question);
-			    				System.out.print("Answer:");
-			    				input = new String(System.console().readPassword()).toLowerCase().trim();
-			    				buff = remoteGameInterface.getAnswer(name, count, input);
-			    				question = remoteGameInterface.getQuestion(name, ++count);
-			    				if(buff == null) {
-			    					question = null;
-			    				} else {
-			    					correct = buff;
-			    				}
-	    					} while(question != null && correct);
-		    				//gets new password if recovery question answered
-		    				if(correct) {
-		    					test = false;
-		    					System.out.println();
-		    					System.out.println("Please input new password");
-		    					System.out.print(">");
-		    					password = new String(System.console().readPassword()); //task 221 hides password
-		    					response = remoteGameInterface.resetPassword(name, password);
-		    					switch(response) {
-								case SUCCESS:
-									System.out.println("Password Succesfully changed");
-									break;
-								case UNKNOWN_FAILURE:
-									System.out.println("The server experienced an unkown failure");
-									break;
-								case INTERNAL_SERVER_ERROR:
-									System.out.println("The experienced a data error");
-									break;
-								default:
-									System.out.println("Unkown server behavior");
-									break;
-		    					}
-		    				} else {
-		    					test2 = true;
-		    					//asks user if they want to try again after failing the recovery question
-		    					while (test2) {
-		    						System.out.println();
-		    						System.out.println("Your answers did not match, try again?");
-		    						System.out.print("(Y/N) >");
-			    					input = keyboardInput.readLine().toUpperCase().trim();
-			    					switch (input) {
-			    					case "N":
-			    						test = false;
-			    					case "Y":
-			    						test2 = false;
-			    						break;
-			    					default:
-			    						System.out.println("Invalid input");
-			    					}
-		    					}
-		    				}
-	    				}
-	    			} else {
-		    			test2 = true;
-		    				//Username inputed by user wasn't found, asks if they want to continue recovery process
-		    				//Alternatively, user may not have set up questions yet
-			    			while(test2) {
-			    				System.out.println();
-			    				System.out.println("Your username was not found or your account has no recovery questions, try again?");
-			    				System.out.print("(Y/N) >");
-			    				input = keyboardInput.readLine().toUpperCase().trim();
-			    				switch(input) {
-			    				case "N":
-			    					go = false;
-			    				case "Y":
-			    					go = true;
-			    					test2 = false;
-			    					break;
-			    				default:
-			    					System.out.println("Invalid input");
-			    				}
-			    			}
-	    			}
-	    			break;
-	    		case "N":
-	    			go = false;
-	    			//Recovery process is ended
-	    			break;
-	    		default:
-	    			System.out.println("Invalid input");
-	    		}
-	    	}
-    	}catch (IOException ex) {
-    		Logger.getLogger(GameClient.class.getName()).log(Level.SEVERE, null, ex);
+    public String resetPassword(BufferedReader stdin)  {
+    	System.out.println("Reset password?");
+    	String temp;
+    	for(;;) {
+    		System.out.print("(Y/N)> ");
+    		try {
+    		temp = stdin.readLine().toUpperCase().trim();
+    		}catch(Exception e) {
+    			System.out.println("Sorry, there was an error reading user input");
+    			return null;
+    		}
+    		switch(temp) {
+    		case"Y":
+    			break;
+    		case "N":
+    			return null;
+    		default:
+    			continue;
+    		}
+    		break;
     	}
+    	DataResponse<ArrayList<String>> questions;
+    	try {
+    		questions = remoteGameInterface.getQuestions(this.playerName);
+			if(!questions.success()) {
+				switch(questions.error) {
+				case NOT_FOUND:
+					System.out.println("This username was not found");
+					break;
+				case INTERNAL_SERVER_ERROR:
+					System.out.println("Sorry, it appears the server is experiencing difficulties");
+					break;
+				default:
+				}
+				return null;
+			}
+    	} catch(RemoteException e) {
+    		System.out.println("There was a problem contacting the server to get the reset quetsions");
+    		return null;
+    	}
+    	if (questions.data.size()==0) {
+    		System.out.println("You have no reset questions");
+    		return null;
+    	}
+    	ArrayList<String> answers = new ArrayList<String>(questions.data.size());
+    	for(String question : questions.data) {
+    		System.out.println(question);
+    		System.out.print("> ");
+			answers.add(new String(System.console().readPassword()));
+		}
+    	System.out.print("New password: ");
+    	String password = new String(System.console().readPassword());
+     	try {
+			Responses resp = remoteGameInterface.changePassword(this.playerName, password);
+			switch(resp) {
+			case NOT_FOUND:
+				System.out.println("Somehow your account couldnt be found");
+				break;
+			case INTERNAL_SERVER_ERROR:
+				System.out.println("The server experienced an error changing your password");
+				break;
+			case SUCCESS:
+				System.out.println("Password changed!");
+				return password;
+			default:
+				System.out.println("Unexpected server behavior");
+			}
+    	} catch (RemoteException e) {
+			System.out.println("There was an error contacting the server");
+			return null;
+		}
     	System.out.println();
+    	return null;
     }
     
     public static void main(String[] args) {
