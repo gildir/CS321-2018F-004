@@ -134,14 +134,23 @@ public class GameCore implements GameCoreInterface {
                         Thread.sleep(rand.nextInt(60000));
                         object = objects.get(rand.nextInt(objects.size()));
                         room = map.randomRoom();
-                        room.addObject(object);
-                        room.addObject(object);
-                        room.addObject(object);
-                        room.addObject(object);
-                        room.addObject(object);
 
-						GameCore.this.broadcast(room, "You see a student rush past and drop a " + object + " on the ground.");
-						
+                        try {
+							room.addObject(object);
+							GameCore.this.broadcast(room, "You see a student rush past and drop a " + object + " on the ground.");
+						}
+						catch (IndexOutOfBoundsException e){
+							GameCore.this.broadcast(room, "You see a student rush past.");
+						}
+
+                      // were these added for testing/demoing?
+                      //  room.addObject(object);
+                      //  room.addObject(object);
+                      //  room.addObject(object);
+                      //  room.addObject(object);
+                      //  room.addObject(object);
+
+
                     } catch (InterruptedException ex) {
                         Logger.getLogger(GameObject.class.getName()).log(Level.SEVERE, null, ex);
                     }
