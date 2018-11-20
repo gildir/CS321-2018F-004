@@ -169,7 +169,6 @@ public class GameCore implements GameCoreInterface {
                  hbThread.setDaemon(true);
                  hbThread.setName("heartbeatChecker");
                  
-                 
                  //task 228, daily allowance checker thread
                  Thread allowanceThread = new Thread(new Runnable() {
                      @Override
@@ -205,7 +204,6 @@ public class GameCore implements GameCoreInterface {
                  
                  allowanceThread.setDaemon(true);
                  allowanceThread.setName("allowance");
-                 allowanceThread.start();
         
                 // new thread awake and control the action of Ghoul.
                 // team5 added in 10/13/2018
@@ -244,10 +242,12 @@ public class GameCore implements GameCoreInterface {
                 allThreads.add(hbThread);
                 allThreads.add(objectThread);
                 allThreads.add(awakeDayGhoul);
+                allThreads.add(allowanceThread);
                 
                 hbThread.start();
                 objectThread.start();
                 awakeDayGhoul.start();
+                allowanceThread.start();
             }
     
     protected void shutdown() {
