@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <dialogue>
-    <npc name = "Slartibartfast">
+    <npc name = "questNPC">
         <dialogue_type type = "greeting">
-            <dialogue_prompt>Hello Slartibartfast</dialogue_prompt>
+            <dialogue_prompt>Hello quest NPC</dialogue_prompt>
             <dialogue_id id = "1">
 Hello adventurer
             </dialogue_id>
@@ -12,7 +12,7 @@ Hello adventurer
         <dialogue_type type = "nameQuestion">
             <dialogue_prompt>What is your name</dialogue_prompt>
             <dialogue_id id = "1">
-My name is Slartibartfast
+My name is questNPC
             </dialogue_id>
         </dialogue_type>
 
