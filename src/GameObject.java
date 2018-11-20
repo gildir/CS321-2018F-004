@@ -30,6 +30,10 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
 		core = new GameCore(playerAccountsLocation, worldFile);
 
     }
+	
+	protected void shutdown() {
+		core.shutdown();
+	}
 
     /**
      * Links an asynchronous event message connection to a player.

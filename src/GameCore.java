@@ -51,6 +51,7 @@ public class GameCore implements GameCoreInterface {
 	private Logger playerLogger = Logger.getLogger("connections");
 	private FriendsManager friendsManager;
 	private final Object friendsLock = new Object();
+	private ArrayList<Thread> allThreads = new ArrayList<>();
     
     private int dormCountId = 100002;//used for dormroom initialization   
     /**
@@ -105,9 +106,8 @@ public class GameCore implements GameCoreInterface {
                     double inWeight = 0;
                     double inValue = 0;
                     String inName = "";
-                    String inFlavor = "";
-                    String inDisc = "";
-
+			String inFlavor = "";
+			String inDisc = "";
                     Scanner scanner = new Scanner(new File("./items.csv"));
                     scanner.nextLine();
                     scanner.useDelimiter(",|\\r\\n|\\n|\\r");
@@ -116,8 +116,8 @@ public class GameCore implements GameCoreInterface {
                     {
                         inName = scanner.next();
                         inWeight = Double.parseDouble(scanner.next().replace(",", ""));
-                        inValue = Double.parseDouble(scanner.next().replace(",", ""));
-                        inDisc = scanner.next();
+			inValue = Double.parseDouble(scanner.next().replace(",", ""));
+			inDisc = scanner.next();
                         inFlavor = scanner.next().replace("\\r\\n|\\r|\\n", "");
                         Item newItem = new Item(inName, inWeight, inValue, inDisc, inFlavor);
                         objects.add(newItem);
@@ -136,17 +136,31 @@ public class GameCore implements GameCoreInterface {
                         Thread.sleep(rand.nextInt(60000));
                         object = objects.get(rand.nextInt(objects.size()));
                         room = map.randomRoom();
-                        room.addObject(object);
-                        room.addObject(object);
-                        room.addObject(object);
-                        room.addObject(object);
-                        room.addObject(object);
 
-						GameCore.this.broadcast(room, "You see a student rush past and drop a " + object + " on the ground.");
-						
+                        try {
+							room.addObject(object);
+							GameCore.this.broadcast(room, "You see a student rush past and drop a " + object + " on the ground.");
+						}
+						catch (IndexOutOfBoundsException e){
+							GameCore.this.broadcast(room, "You see a student rush past.");
+						}
+
+                      // were these added for testing/demoing?
+                      //  room.addObject(object);
+                      //  room.addObject(object);
+                      //  room.addObject(object);
+                      //  room.addObject(object);
+                      //  room.addObject(object);
+
+
                     } catch (InterruptedException ex) {
-                        Logger.getLogger(GameObject.class.getName()).log(Level.SEVERE, null, ex);}
-                }}});
+                        Logger.getLogger(GameObject.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
+        });
+        objectThread.setDaemon(true);
+        objectThread.setName("objectThread");
 
                 Thread hbThread = new Thread(new Runnable() {
                     @Override
@@ -165,8 +179,82 @@ public class GameCore implements GameCoreInterface {
                     });
                  hbThread.setDaemon(true);
                  hbThread.setName("heartbeatChecker");
-                 hbThread.start();
+                 
+                 //task 228, daily allowance checker thread
+                 Thread allowanceThread = new Thread(new Runnable() {
+                     @Override
+                     public void run() {
+                             while(true) {
+                                 try {
+                                	 Thread.sleep(600000); //checks to update all player allowance every 10 minutes
+                                     //Thread.sleep(5000); //checks every 5 seconds (for testing/demo uncomment this and comment line above)
+                                     
+                                     long daysPlayed = 0; //will be used to calculate each players allowance
+                                     //calculate each players given allowance
+                                     for (Player player : playerList) {
+                                    	 DataResponse<PlayerAccount> resp = GameCore.this.accountManager.getAccount(player.getName());
+                                    	 if(!resp.success()) {
+                                    		 System.err.println("Error getting account for allowence: "+player.getName());
+                                    		 continue;
+                                    	 }
+                                    	 daysPlayed = ((System.currentTimeMillis() - resp.data.getAccountAge("").data)/86400000); //helps calculate how many days worth of allowance to give
+                                    	 //daysPlayed = ((System.currentTimeMillis() - player.getAccountAge())/30000); //testing/demo alternative to the line above (day shortened to 30 seconds)
+                                    	 if(daysPlayed!=player.getTotalPay()) //determines if player needs payment
+                                    	 {
+                                    		 player.getReplyWriter().println("Collecting your owed allowance of $" + String.format("%.2f", ((daysPlayed-player.getTotalPay())*10.0))); //prints how much player is getting
+                                    		 player.changeMoney((daysPlayed-player.getTotalPay())*10.0); //calculates allowance owed to player
+                                    		 player.setTotalPay(daysPlayed); //update TotalPay
+                                    	 }
+                                    	}
+                                     
+                                 } catch (InterruptedException ex) {
+                                 }
+                             }
+                         }
+                     });
+                 
+                 allowanceThread.setDaemon(true);
+                 allowanceThread.setName("allowance");
         
+               //Thread that rewards money to all players every 10 minutes (600,000 ms)
+                 //Team 3, task 229
+                 Thread rewardThread = new Thread(new Runnable() {
+                     @Override
+                     public void run() {
+                    	 
+                    	 final long rewardTime = 600000; //time that must elapse before rewarding players
+                    	 //final long rewardTime = 10000; //10 seconds for testing and demo (comment the above line)
+                    	 final long checkInterval = 2000; // Every 2 seconds, thread checks all players for if they meet requirements for payment at rewardTime. Increase this value for better performance
+                    	 final double rewardIncrement = .01; //How much reward amount increments each time they are given
+                             while(true) {
+                                 try {
+                                     Thread.sleep(checkInterval); //how often thread checks
+                                     //check if server needs to add money to each player's account
+                                     for (Player player : playerList) {
+                                    	 if (player.getRewardProgress() >= rewardTime) {
+                                    		 player.changeMoney(player.getRewardAmount());
+                                    		 
+                                    		 //Let the player know their wallet has increased (mainly for demo and testing purposes.)
+                                    		 player.getReplyWriter().println("Your wallet grew by $" + String.format("%.2f", player.getRewardAmount()) + "!"); //message to player
+                                    		 
+                                    		 player.setRewardAmount(player.getRewardAmount() + rewardIncrement); //amount player is rewarded increments by rewardIncrement
+                                    		 player.setRewardProgress(0); //reward given, reset progress.
+                                    	 	}
+                                    	 
+                                    	 player.setRewardProgress(player.getRewardProgress() + checkInterval); //increase rewardProgress
+                                    	}
+                                     
+                                 } catch (InterruptedException ex) {
+                                 }
+                             }
+                         }
+                     });
+                 
+                 rewardThread.setDaemon(true);
+                 rewardThread.setName("reward");
+                 rewardThread.start();
+                 
+                 
                 // new thread awake and control the action of Ghoul.
                 // team5 added in 10/13/2018
                 Thread awakeDayGhoul = new Thread(new Runnable() {
@@ -198,30 +286,28 @@ public class GameCore implements GameCoreInterface {
                         }
                     }
                 });
-
-                objectThread.setDaemon(true);
                 awakeDayGhoul.setDaemon(true);
+                awakeDayGhoul.setName("awakeDayGhoul");
+
+                allThreads.add(hbThread);
+                allThreads.add(objectThread);
+                allThreads.add(awakeDayGhoul);
+                allThreads.add(allowanceThread);
+                
+                hbThread.start();
                 objectThread.start();
                 awakeDayGhoul.start();
+                allowanceThread.start();
             }
-	
-	/**
-	 * Used to create a hash encrypted in SHA256 for use in encrypting passwords
-	 * 
-	 * @param toHash
-	 * @return SHA256 encrypted hash value, or "ERROR" If encryption method fails.
-	 */
-	private String hash(String toHash) {
-		try {
-			byte[] encodedhash = MessageDigest.getInstance("SHA-256").digest(toHash.getBytes(StandardCharsets.UTF_8));
-			StringBuilder sb = new StringBuilder();
-			for (byte b : encodedhash)
-				sb.append(String.format("%02X", b));
-			return sb.toString();
-		} catch (NoSuchAlgorithmException e) {
-		}
-		return "ERROR";
-	}
+    
+    protected void shutdown() {
+    	for(Player p : playerList)
+    		p.getReplyWriter().println("!SHUTDOWN");
+    	for(Thread t : allThreads)
+    		t.interrupt();
+    	friendsManager.shutdown();
+    	accountManager.shutdown();
+    }
 
 	public void ghoulWander(Ghoul g, Room room) {
 		Random rand = new Random();
@@ -337,7 +423,8 @@ public class GameCore implements GameCoreInterface {
      * @param name Name of the player
      * @return void
      */
-    public void shopLeft(String name) {
+    public void shopLeft(String name)
+    {
         Player player = this.playerList.findPlayer(name);
         Room room = map.findRoom(player.getCurrentRoom());
         shoplist.get(room.getId()).removePlayer(player);
@@ -354,7 +441,7 @@ public class GameCore implements GameCoreInterface {
 
     /**
      * Allows player to sell an item to a shop, and increases their money
-     * @author Team 4: King/Keesling
+     * @author Team 4: King
      * @param name Name of the player
      * @param shopId The ID of the shop the player is selling an item to
      * @param item The item the player is selling (eventually will be an Item obj)
@@ -369,7 +456,7 @@ public class GameCore implements GameCoreInterface {
         if (removed != null) {
             //check to see if the item is in demand
 
-            for (Item x : s.getDemand()) {
+            for (Item x : s.getDemand()){
                 if (x.getName().compareToIgnoreCase(removed.getName()) == 0){
                     //remove and replace the in demand item
                     s.removeDemand(x);
@@ -472,7 +559,8 @@ public class GameCore implements GameCoreInterface {
      * @param shopId The ID of the shop the player is selling an item to
      * @param item The item the player is buying (eventually will be an Item obj)
      */
-    public String buyItem(String name, int shopId, String itemName) {
+    public String buyItem(String name, int shopId, String itemName)
+    {
     	double val = 0;
     	Player player = this.playerList.findPlayer(name);
     	Shop s = shoplist.get(shopId);
@@ -483,7 +571,7 @@ public class GameCore implements GameCoreInterface {
     		if (ii.name.compareToIgnoreCase(itemName) == 0) 
     			item = ii;
 
-    	if (item == null)  return "Sorry, " + itemName + " isn't in stock.";    	
+    	if (item == null)  return "Item not in stock!!!";    	
     	
     	if(s.getInven().contains(item))
     	{
@@ -492,7 +580,7 @@ public class GameCore implements GameCoreInterface {
     			s.ping(player, item);
     		}
     		else {
-    			return "Not enough money bub, don't try to low ball us.";
+    			return "Not enough money!!!";
     		}
     	}
     	
@@ -501,7 +589,7 @@ public class GameCore implements GameCoreInterface {
     
     	val = item.getPrice() * 1.2;
     	player.changeMoney(-val);
-    	return String.format("Thank you, that will be $%.2f.", val);
+    	return "Thank you, that will be $" + val + ".";
     }
 
     /**
@@ -1911,6 +1999,8 @@ public class GameCore implements GameCoreInterface {
 		if (player != null) {
             player.chestImage = ((DormRoom)droom).getChest();    
 			this.broadcast(player, "You see " + player.getName() + " heading off to class.");
+			player.setRewardAmount(0.1);//task 229, clear reward increment as specified by task
+			player.setRewardProgress(0);//task 229, resets time until reward as specified by task 
 			this.playerList.removePlayer(name);
             connectionLog(false, player.getName());
             this.accountManager.forceUpdateData(player);

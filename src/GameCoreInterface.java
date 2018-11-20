@@ -410,11 +410,7 @@ public interface GameCoreInterface {
 	 * @return Message showing online friends
 	 */
 	public String viewFriends(String name, boolean onlineOnly);
-	
-	public void addQuestion(String name, String question, String answer);
-	
-	public void removeQuestion(String name, int num);
-	
+
 	/**
 	 * Returns a message saying the player has toggled the RPS resolutions in area
 	 * @param Player name
