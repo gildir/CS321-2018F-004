@@ -103,8 +103,9 @@ public class GameCore implements GameCoreInterface {
                     double inWeight = 0;
                     double inValue = 0;
                     String inName = "";
-			String inFlavor = "";
-			String inDisc = "";
+                    String inFlavor = "";
+                    String inDisc = "";
+
                     Scanner scanner = new Scanner(new File("./items.csv"));
                     scanner.nextLine();
                     scanner.useDelimiter(",|\\r\\n|\\n|\\r");
@@ -113,8 +114,8 @@ public class GameCore implements GameCoreInterface {
                     {
                         inName = scanner.next();
                         inWeight = Double.parseDouble(scanner.next().replace(",", ""));
-			inValue = Double.parseDouble(scanner.next().replace(",", ""));
-			inDisc = scanner.next();
+                        inValue = Double.parseDouble(scanner.next().replace(",", ""));
+                        inDisc = scanner.next();
                         inFlavor = scanner.next().replace("\\r\\n|\\r|\\n", "");
                         Item newItem = new Item(inName, inWeight, inValue, inDisc, inFlavor);
                         objects.add(newItem);
@@ -316,8 +317,7 @@ public class GameCore implements GameCoreInterface {
      * @param name Name of the player
      * @return void
      */
-    public void shopLeft(String name)
-    {
+    public void shopLeft(String name) {
         Player player = this.playerList.findPlayer(name);
         Room room = map.findRoom(player.getCurrentRoom());
         shoplist.get(room.getId()).removePlayer(player);
@@ -334,7 +334,7 @@ public class GameCore implements GameCoreInterface {
 
     /**
      * Allows player to sell an item to a shop, and increases their money
-     * @author Team 4: King
+     * @author Team 4: King/Keesling
      * @param name Name of the player
      * @param shopId The ID of the shop the player is selling an item to
      * @param item The item the player is selling (eventually will be an Item obj)
@@ -349,7 +349,7 @@ public class GameCore implements GameCoreInterface {
         if (removed != null) {
             //check to see if the item is in demand
 
-            for (Item x : s.getDemand()){
+            for (Item x : s.getDemand()) {
                 if (x.getName().compareToIgnoreCase(removed.getName()) == 0){
                     //remove and replace the in demand item
                     s.removeDemand(x);
@@ -452,8 +452,7 @@ public class GameCore implements GameCoreInterface {
      * @param shopId The ID of the shop the player is selling an item to
      * @param item The item the player is buying (eventually will be an Item obj)
      */
-    public String buyItem(String name, int shopId, String itemName)
-    {
+    public String buyItem(String name, int shopId, String itemName) {
     	double val = 0;
     	Player player = this.playerList.findPlayer(name);
     	Shop s = shoplist.get(shopId);
@@ -464,7 +463,7 @@ public class GameCore implements GameCoreInterface {
     		if (ii.name.compareToIgnoreCase(itemName) == 0) 
     			item = ii;
 
-    	if (item == null)  return "Item not in stock!!!";    	
+    	if (item == null)  return "Sorry, " + itemName + " isn't in stock.";    	
     	
     	if(s.getInven().contains(item))
     	{
@@ -473,7 +472,7 @@ public class GameCore implements GameCoreInterface {
     			s.ping(player, item);
     		}
     		else {
-    			return "Not enough money!!!";
+    			return "Not enough money bub, don't try to low ball us.";
     		}
     	}
     	
@@ -482,7 +481,7 @@ public class GameCore implements GameCoreInterface {
     
     	val = item.getPrice() * 1.2;
     	player.changeMoney(-val);
-    	return "Thank you, that will be $" + val + ".";
+    	return String.format("Thank you, that will be $%.2f.", val);
     }
 
     /**
@@ -2633,6 +2632,18 @@ public class GameCore implements GameCoreInterface {
 			return account.error;
 		accountManager.markAccount(name);
 		return account.data.changePassword(name, password);
+	}
+
+	/**
+	 * Toggles the RPS resolution of other players in same room
+	 * @param name of Player that wants to toggle
+	 */
+	@Override
+	public String toggleRPSChat(String player){
+		Player playerToggle = this.playerList.findPlayer(player);
+		String message = playerToggle.toggleResolution();
+		return message;
+		
 	}
 
 	/**
