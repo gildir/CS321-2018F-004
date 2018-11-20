@@ -47,6 +47,9 @@ public class Player {
     private int wins = 0;
     private boolean hasTitle = false; //used for title and use item feature 
     private String playerItemTitle = "";
+    private double rewardAmount; //task 229, keeps track of how much money players will be rewarded every reward interval while logged in
+    private long rewardProgress; //task 229, keeps track of how much time must elapse before a reward.
+    private long totalPay; //used to calculate missed allowance payments for task 228
 
     //Tracks which quest the player is on
     private int questProgress;
@@ -62,8 +65,14 @@ public class Player {
         this.currentInventory = new LinkedList<>();
         this.chestImage = new LinkedList<>();
         this.money = 0;
+
 	this.questProgress = 0;
 	this.rpsVictoryCount = 0;
+
+        this.rewardAmount = 0.1; //Task 229, This is the default starting amount (also set when player leaves in GameCore)
+        this.rewardProgress = 0; //Task 229, value resets to 0 on leave (in GameCore leaveGame)
+        this.totalPay = 0; //for task 228        
+
     }
 
     public int getDormId() {return this.dormId;}
@@ -635,6 +644,32 @@ public class Player {
 	questProgress ++;
     }
     
+    @JsonIgnore
+    public double getRewardAmount() {
+    	return this.rewardAmount;
+    }
+    
+    public void setRewardAmount(double d) {
+    	this.rewardAmount = d;
+    }
+    
+    @JsonIgnore
+    public long getRewardProgress() {
+    	return this.rewardProgress;
+    }
+    
+    public void setRewardProgress(long l) {
+    	this.rewardProgress = l;
+    }
+    
+    public long getTotalPay() {
+    	return this.totalPay;
+    }
+    
+    public void setTotalPay(long l) {
+    	this.totalPay = l;
+    }
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // INSERT CODE FOR GETTERS AND SETTERS ABOVE ///////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -732,7 +767,6 @@ public class Player {
 		toggleChat = false;
 		return "You have turned on RPS resolutions in your area";
 	}
-
 
     }
 
