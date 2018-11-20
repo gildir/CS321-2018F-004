@@ -40,6 +40,7 @@ public class GameCore implements GameCoreInterface {
     private Ghoul ghoul;
     private PrintWriter pw;
     private Bank bank;
+    private ArrayList<Chatroom> chatrooms = new ArrayList<Chatroom>();
     private final Logger rpsLogger = Logger.getLogger("battles");
     private FileHandler rpsHandler;
     private boolean pickRPSToggle = false;
@@ -326,11 +327,24 @@ public class GameCore implements GameCoreInterface {
     	
     	// Add player to shop in room if applicable
     	if (map.isShoppable(room)) {
+            shoplist.get(room.getId()).addPlayer(player);
     		return room.getId();
     	}
     	return -1;
     }
 
+    /**
+     * updates the playlist in the Shop
+     * @param name Name of the player
+     * @return void
+     */
+    public void shopLeft(String name)
+    {
+        Player player = this.playerList.findPlayer(name);
+        Room room = map.findRoom(player.getCurrentRoom());
+        shoplist.get(room.getId()).removePlayer(player);
+    }
+    
     /**
      * Returns Shop.tostring
      * @param id The shop's id in the hashmap
@@ -349,18 +363,33 @@ public class GameCore implements GameCoreInterface {
      */
     public double sellItem(String name, int shopId, String item) {
     	Player player = this.playerList.findPlayer(name);
-    	Shop s = shoplist.get(shopId);
-    	double value = 0;
-    	
-    	Item removed = player.removeObjectFromInventory(item);
-    	if (removed != null) {
-    		s.add(removed);
-    		value = removed.price;
-        	player.changeMoney(value);
-    	}
-    	
-    	//int value = removed.getValue();
-    	return value;
+        Shop s = shoplist.get(shopId);
+        double value = 0;
+        
+        Item removed = player.removeObjectFromInventory(item);
+
+        if (removed != null) {
+            //check to see if the item is in demand
+
+            for (Item x : s.getDemand()){
+                if (x.getName().compareToIgnoreCase(removed.getName()) == 0){
+                    //remove and replace the in demand item
+                    s.removeDemand(x);
+                    s.addDemandRand();
+
+                    value = removed.getPrice()*2; //player gets double item's price
+                    player.changeMoney(value);
+                    s.add(removed); //add sold item to shop's inv
+                    return value;
+                }
+            }
+            value = removed.getPrice();
+            
+            s.add(removed); //add sold item to shop's inv
+            
+            player.changeMoney(value);            
+        }
+        return value;
     }
     
 	public String bribeGhoul(String playerName, String item){
@@ -566,7 +595,17 @@ public class GameCore implements GameCoreInterface {
      */
     public String getShopInv(int id) {
 		Shop s = this.shoplist.get(new Integer(id));
-		return s.getObjects();
+		return s.getObjects(0);
+    }
+
+    /**
+     * Returns a Shop's "In Demand" inventory as a formatted string
+     * @param id The shop ID
+     * @return A formatted string representing the Shop's "In Demand" inventory
+     */
+    public String getShopDemInv(int id) {
+        Shop s = this.shoplist.get(new Integer(id));
+        return s.getObjects(1);
     }
 
     /**
@@ -1906,6 +1945,169 @@ public class GameCore implements GameCoreInterface {
     public String quickReply(String srcName, String message) {
         String target = this.playerList.findPlayer(srcName).getLastPlayer();
         return whisper(srcName, target, message);
+    }
+    
+    /**
+     * Create a new chatroom
+     * @param playerName Name of the player creating the chatroom
+     * @param chatName Name of the chatroom
+     * @return Message showing success
+     * @throws RemoteException
+     */
+    public String makeChat(String playerName, String chatName) {
+    	Player creator = this.playerList.findPlayer(playerName);
+    	for (Chatroom chat:chatrooms) {
+    		if (chat.getName().equals(chatName.toUpperCase())) {
+    			return "This chatroom already exists.";
+    		}
+    	}
+    	Chatroom newChat = new Chatroom(creator, chatName.toUpperCase());
+    	chatrooms.add(newChat);
+    	return "Chatroom " + chatName.toUpperCase() + " created.";
+    }
+    
+    /**
+     * Invite a player to your current chatroom.
+     * @param srcPlayer Name of player sending the invite
+     * @param dstPlayer Name of player receiving the invite
+     * @return Message showing success
+     * @throws RemoteException
+     */
+    public String invChat(String srcPlayer, String dstPlayer, String chatName) {
+    	Player sender = this.playerList.findPlayer(srcPlayer);
+    	Player invitee = this.playerList.findPlayer(dstPlayer);
+        if (invitee == null) {
+            return "Player " + dstPlayer + " not found.";
+        }
+        if (srcPlayer.equals(dstPlayer)) {
+        	return "You can't invite yourself to a chat.";
+        }
+        for (Chatroom chat: chatrooms) {
+        	if (chat.getName().equals(chatName.toUpperCase())) {
+        		if (!chat.getMembers().contains(sender)) {
+        			return "You are not in the chatroom [" + chatName.toUpperCase() + "]";
+        		}
+            	if (chat.getMembers().contains(invitee)) {
+            		return dstPlayer + " is already in the chatroom [" + chatName.toUpperCase() + "]";
+            	}
+            	if (chat.getInvited().contains(invitee)) {
+            		return dstPlayer + " is already invited to the chatroom [" + chatName.toUpperCase() + "]";
+            	}
+        		String message = "Hey! Feel free to join the chatroom [" + chatName.toUpperCase() + "]";
+        		whisper(srcPlayer, dstPlayer, message);
+        		chat.addInvited(invitee);
+        		return "You invited " + dstPlayer + " to join [" + chatName.toUpperCase() + "]";
+        	}
+        }
+    	return "You are trying to invite " + dstPlayer + " to a non-existent chatroom [" + chatName.toUpperCase() + "]";
+    }
+    
+    /**
+     * Join a player's chatroom
+     * @param srcPlayer Name of player joining
+     * @param dstPlayer Name of player in the target chatroom
+     * @return Message showing success
+     * @throws RemoteException
+     */
+    public String joinChat(String srcPlayer, String chatName) {
+    	Player joining = this.playerList.findPlayer(srcPlayer);
+    	Chatroom chatToJoin = null;
+    	for (Chatroom chat:chatrooms) {
+    		if (chat.getName().equals(chatName.toUpperCase())) {
+    			chatToJoin = chat;
+    		}
+    	}
+    	if (chatToJoin == null) {
+    		return "Chatroom [" + chatName.toUpperCase() + "] does not exist.";
+    	}
+    	if (chatToJoin.getMembers().contains(joining)) {
+    		return "You are already in chatroom [" + chatName.toUpperCase() + "]";
+    	}
+    	if (!chatToJoin.getInvited().contains(joining)) {
+    		return "You were not invited to join chatroom [" + chatName.toUpperCase() + "]";
+    	}
+    	chatToJoin.addMember(joining);
+    	chatToJoin.removeInvited(joining);
+        return "You joined chatroom [" + chatName.toUpperCase() + "]";
+    }
+    
+    /**
+     * Leave a chatroom
+     * @param srcPlayer Name of player leaving
+     * @param chatName Name of chatroom to leave
+     * @return Message showing success
+     * @throws RemoteException
+     */
+    public String leaveChat(String srcPlayer, String chatName) {
+    	Player leaving = this.playerList.findPlayer(srcPlayer);
+    	Chatroom chatToLeave = null;
+    	for (Chatroom chat:chatrooms) {
+    		if (chat.getName().equals(chatName.toUpperCase())) {
+    			chatToLeave = chat;
+    		}
+    	}
+    	if (chatToLeave == null) {
+    		return "Chatroom [" + chatName.toUpperCase() + "] does not exist.";
+    	}
+    	if (!chatToLeave.getMembers().contains(leaving)) {
+    		return "You are not in chatroom [" + chatName.toUpperCase() + "]";
+    	}
+    	chatToLeave.removeMember(leaving);
+    	if (chatToLeave.getMembers().size() == 0) {
+    		chatrooms.remove(chatToLeave);
+    		chatToLeave = null;
+    	}
+        return "You left chatroom [" + chatName.toUpperCase() + "]";
+    }
+    
+    /**
+     * Check if chatroom exists
+     * @return boolean showing success
+     * @throws RemoteException
+     */
+    public boolean checkChat(String command) {
+    	for (Chatroom chat:chatrooms) {
+    		if (chat.getName().equals(command)) {
+    			return true;
+    		}
+    	}
+    	return false;
+    }
+    
+    /**
+     * Message a chatroom
+     * @param srcPlayer Name of player sending the message
+     * @param message The message to be sent
+     * @param chatName The name of the chat to send the message to
+     * @return Message showing success
+     * @throws RemoteException
+     */
+    public String messageChat(String srcPlayer, String message, String chatName) {
+		Player player = this.playerList.findPlayer(srcPlayer);
+		Chatroom chatToMessage = null;
+    	for (Chatroom chat:chatrooms) {
+            if (chat.getName().equals(chatName.toUpperCase())) {
+            	chatToMessage = chat;
+               	if (!chat.getMembers().contains(player)) {
+               		return "You are not in the chatroom [" + chatName.toUpperCase() + "]";
+               	}
+    		}
+    	}
+    	if (chatToMessage == null) {
+    		return "You are trying to message a non-existent chatroom [" + chatName.toUpperCase() + "]";
+    	}
+		if (player != null) {
+		    for (Player otherPlayer : chatToMessage.getMembers()) {
+		        if (otherPlayer != player) {
+		            otherPlayer.messagePlayer(player, "messages chatroom [" + chatName.toUpperCase() + "]", message);
+		        }
+		    }
+            chatLog(player, 0, message, "Chatroom " + chatName);
+            return player.getMessage() + "message, " + message + " to chatroom [" + chatName.toUpperCase() + "]";
+
+		} else {
+			return null;
+		}
     }
 
    /**

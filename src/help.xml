@@ -118,6 +118,21 @@ object are on the ground and what direction you are facing.
     <help command = "REPLY">
         <description>  REPLY message            - Reply 'message' to last whisper.</description>
     </help>
+    <help command = "MAKECHAT">
+        <description>  MAKECHAT name            - Creates a chatroom called 'name'.</description>
+    </help>
+    <help command = "INVCHAT">
+        <description>  INVCHAT player chat      - Invites 'player' to join the chatroom called 'chat'.</description>
+    </help>
+    <help command = "JOINCHAT">
+        <description>  JOINCHAT chat            - Joins the chatroom called 'chat' if invited.</description>
+    </help>
+    <help command = "LEAVECHAT">
+        <description>  LEAVECHAT chat           - Leaves the chatroom called 'chat' if a member.</description>
+    </help>
+    <help command = "[chatroom name]">
+        <description>  [chatroom name] message  - Sends 'message' to chatroom called [chatroom name].</description>
+    </help>
     <help command = "IGNORE">
         <description>  IGNORE player            - Ignore messages from 'player'.</description>
     </help>

@@ -465,6 +465,49 @@ public class GameClient {
                         System.out.println(remoteGameInterface.quickReply(this.playerName, message));
                     }
                     break;
+                case "MAKECHAT":
+                    if (tokens.isEmpty()) {
+                        System.err.println("You need to provide chatroom name.");
+                    }
+                    else if (tokens.size() > 1) {
+                        System.err.println("The chat name has to be one word.");
+                    }
+                    else {
+                    	String chatName = tokens.remove(0).toLowerCase();
+                        System.out.println(remoteGameInterface.makeChat(this.playerName, chatName));
+                    }
+                    break;
+                case "INVCHAT":
+                    if (tokens.isEmpty()) {
+                        System.err.println("You need to provide a player to invite.");
+                    }
+                    else if (tokens.size() < 2) {
+                        System.err.println("You need to provide a chatroom to invite the player to.");
+                    }
+                    else {
+                    	String playerName = tokens.remove(0).toLowerCase();
+                    	String chatName = tokens.remove(0);
+                        System.out.println(remoteGameInterface.invChat(this.playerName, playerName, chatName));
+                    }
+                    break;
+                case "JOINCHAT":
+                    if (tokens.isEmpty()) {
+                        System.err.println("You need to provide a chatroom name.");
+                    }
+                    else {
+                    	String chatName = tokens.remove(0).toLowerCase();
+                        System.out.println(remoteGameInterface.joinChat(this.playerName, chatName));
+                    }
+                    break;
+                case "LEAVECHAT":
+                    if (tokens.isEmpty()) {
+                        System.err.println("You need to provide a chatroom name.");
+                    }
+                    else {
+                    	String chatName = tokens.remove(0).toLowerCase();
+                        System.out.println(remoteGameInterface.leaveChat(this.playerName, chatName));
+                    }
+                    break;
                 case "IGNORE":
                     if(tokens.isEmpty()) {
                         System.err.println("You need to provide a player to ignore");
@@ -618,6 +661,7 @@ public class GameClient {
                 	if (shopId != -1) {
                 		System.out.println("You enter the shop");
                 		new ShopClient(this.playerName, shopId, remoteGameInterface);
+                        remoteGameInterface.shopLeft(this.playerName);
                 	}
                 	else {
                 		System.out.println("There is no shop here");
@@ -914,8 +958,17 @@ public class GameClient {
                     }
                     break;
                 default:
+                	if (remoteGameInterface.checkChat(command)) {
+                        if (tokens.isEmpty()) {
+                            System.err.println("You need to provide a message.");
+                        }
+                        else {
+                            message = parseMessage(tokens);
+                            System.out.println(remoteGameInterface.messageChat(this.playerName, message, command));
+                        }
+                	}
                     //If command does not match with any, see if it is custom command
-                    if (!executeCustomCommand(command, tokens)) {
+                	else if (!executeCustomCommand(command, tokens)) {
                         System.out.println("Invalid Command, Enter \"help\" to get help");
                     }
                     break;
@@ -1421,9 +1474,6 @@ public class GameClient {
             while (line != null) {
                 String word = line.toLowerCase();
                 words.add(word);
-                words.add("\"" + word + "\"");
-                words.add("\"" + word);
-                words.add(word + "\"");
                 line = br.readLine();
             }
 
