@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<dialogue>
+    <npc name = "questNPC">
+        <dialogue_type type = "greeting">
+            <dialogue_prompt>Hello quest NPC</dialogue_prompt>
+            <dialogue_id id = "1">
+Hello adventurer
+            </dialogue_id>
+        </dialogue_type>
+
+        <dialogue_type type = "nameQuestion">
+            <dialogue_prompt>What is your name</dialogue_prompt>
+            <dialogue_id id = "1">
+My name is questNPC
+            </dialogue_id>
+        </dialogue_type>
+
+        <dialogue_type type = "pickup">
+            <dialogue_prompt>Pickup</dialogue_prompt>
+            <dialogue_id id = "1">
+Seems like your inventory is almost empty? Why don't you try picking some
+items on the ground?
+            </dialogue_id>
+
+            <dialogue_id id = "2">
+I see that your inventory is almost full. Be aware that you can only carry
+10 items at once.
+            </dialogue_id>
+        </dialogue_type>
+
+        <dialogue_type type = "tutorial">
+            <dialogue_prompt>Tutorial</dialogue_prompt>
+            <dialogue_id id = "1">
+Hey, you there, stranger. Seems like you are lost. Need some help?
+
+Oh, you are a newcomer. Well, if you are newcomer and willing to be part of here,
+you'd better learn this place quick and earn yourself a place to call home.
+But since I am here, let's see what I can do for you. Ah, I know. Why don't you
+try going to --insert place name here-- and come back here? I'm sure that you'll 
+get an idea what kind of place this is while you are doing that.
+
+Still need something? Oh, right. I haven't taught you how to open map and to move.
+You can open map by typing --insert map command here-- and move by typing
+"move" with direction you wish to move. So, if you wish to move to west, type
+"move w". If you are still unsure of something...well, good luck.
+            </dialogue_id>
+
+            <dialogue_id id = "2">
+I see that you came back from --insert place name here--. Well done. That should
+make you feel confident about this place at least by a little bit. Now what else.
+
+By the way, is that all you got in your inventory? Guess I'll need to show you
+about getting items for our next lesson.
+            </dialogue_id>
+
+            <dialogue_id id = "3">
+Do you see that there? That's a shop, a place where you can purchase items using
+money you got. Pretty handy place, so you'd better remember that. To enter shop,
+you'll have to type "shop" then press enter. Why don't you try purchasing an
+item you like from a shop right now?
+            </dialogue_id>
+
+            <dialogue_id id = "4">
+Looks like you got a nice item with you? Nice choice there and well done on
+your first purchase. Remember that although shop has a lot of items, you'll
+need a money to buy things. 
+
+Talk to me again when you are ready for your next lesson.
+            </dialogue_id>
+
+            <dialogue_id id = "5">
+Remember how to buy an item from the shop? Nice way of getting an item, but
+that's not the only way to get an item. Throughout your journey in this world,
+you'll be able to see a lot of items on a ground. Some people think they are
+garbages, but who knows how they can be used? Try using "pickup" command with
+the name of the object on the floor. If you wish to pick up a newspaper, type
+"pickup newspaper".
+            </dialogue_id>
+
+            <dialogue_id id = "6">
+Nicely done on picking garbages. Oh, ignore my word choice there. Anyhow
+that is how you collect an item other than using a shop. You may have alreay
+saw people just dropping their stuffs, and you are right, once you pick them
+up, they are yours. Good luck on your scavanger hunt.
+
+I'll get your next lesson ready when you come back.
+            </dialogue_id>
+
+            <dialogue_id id = "7">
+Anyone needs a friend, right? You may have already saw other people talking
+to each other. I guess once you learn how to talk to other people, you'll be
+able to earn your place in this world very quickly. Why don't you try talking
+to anyone using "say" command?
+            </dialogue_id>
+
+            <dialogue_id id = "8">
+I saw that you making relationship with other people. I'm starting to feel
+your confidence in this world. Well done.
+
+But remember that there isn't only people in this world. I guess we can talk
+about this during our next lesson.
+            </dialogue_id>
+
+            <dialogue_id id = "9">
+Hey, you are back. Remember our conversation about being different than people?
+Those are called ghouls. These cursed ghouls are everywhere! They don't 
+particularly do bad things but they are so annoying. I know, why don't you annoy
+them for this lesson? Do it for the good of society...and my peaceful break.
+You can annoy ghould by using "poke_ghoul" command.
+            </dialogue_id>
+
+            <dialogue_id id = "10">
+Our hero returns! Well done on annoying those ghouls. I finally had a time
+without their joke in a...long time, I guess. 
+
+Anyway, talk to me again whenever you are ready for the next lesson.
+            </dialogue_id>
+
+            <dialogue_id id = "11">
+Now you've learned almost everything about this world other than battle.
+It's called battle but do not fear, it's just a rock-paper-scisors. But
+before that, I'd like you to meet someone about battle. She's the professor
+of rock-paper-scisors. Would you visit her at -insert place name here- 
+for me?
+            </dialogue_id>
+
+            <dialogue_id id = "12">
+I heard that you had a good conversation with the professor. Thank you.
+I'm pretty sure she taught you a lot of things about battle, right?
+Let's try that in a real situation. Talk to me when you are ready for
+it.
+            </dialogue_id>
+
+            <dialogue_id id = "13">
+Winning a battle is an essential way to prove yourself to be worthy
+in this world. Luckily for you, there are a lot of people you can
+challenge a battle. Go there and show them what you got.
+
+Oh, before that, make sure that you have enough rock,paper and scisors.
+You don't know what will happen in real life.
+            </dialogue_id>
+
+            <dialogue_id id = "14">
+Brilliant! Everyone is talking about that battle between you and
+who knows his name. Now you have learned everything you need to
+know about this place. I don't usually say this, but congratulation.
+
+Officially, I welcome you to this place. Now get out there and 
+have some fun.
+            </dialogue_id>
+        </dialogue_type>
+    </npc>
+</dialogue>

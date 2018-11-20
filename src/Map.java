@@ -1,12 +1,14 @@
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.Scanner;
+import java.util.HashMap;
 
 /**
  * @author Kevin
@@ -49,10 +51,17 @@ public class Map{
                                 //                System.out.println("Adding Room " + id + " with Title " + title + ": " + description);
 
 
-                                if(id == 1){	//If the room number is 1 then the quest NPC will be here 
-                                        LinkedList<String> quests = new LinkedList<>(Arrays.asList("quest1", "quest2", "quest3"));	//Lists the quests avalible at the NPC
-                                        newRoom = new Room(id, room_type, title, description, new LinkedList<>(Arrays.asList(
-                                                            new NPC("Slartibartfast", 1, quests))));	//Renamed the NPC 114 by cwells21
+
+                                if(id == 1){ //If the room number is 1 then the quest NPC will be here 
+                                        LinkedList<String> quests = new LinkedList<>(Arrays.asList("quest1", "quest2", "quest3"));//Lists the quests avalible at the NPC
+                                        String questNPCName = "Slartibartfast";//Renamed the NPC 114 by cwells21
+                                        ArrayList<DialogueOption> dialogue = new ArrayList<DialogueOption>();
+
+                                        HashMap<String, NPC> npcs = new HashMap<>();
+                                        npcs.put(questNPCName, new NPC(questNPCName, 1, quests, dialogue));
+
+                                        newRoom = new Room(id, room_type, title, description, npcs);
+
                                 }
                                 else {
                                         newRoom = new Room(id, room_type, title, description);	//This room is not 1 and the quest NPC is not here
@@ -74,11 +83,13 @@ public class Map{
 
                                 map.add(newRoom);
                         }
+
                         mapIn.close();	//close the map file
                 } catch (IOException | IllegalArgumentException ex) {
                         Logger.getLogger(Map.class.getName()).log(Level.SEVERE, null, ex);
                         System.out.println("[SHUTDOWN] Invalid File " + worldFile);	//Handles the case that the file is not formatted as a map.
 	                      System.exit(-1);	//Report back to the OS of the improper exit of the game.
+
                 }
         }
 
@@ -132,7 +143,9 @@ public class Map{
 	Room current;
 
 	setExits(row,col,nodeArr,baseId);
+
 	//Blank display template for the display
+
 	result += "   ______________________________________________\n";
 	result += "   |ASCII Map - Displaying rooms near you!      |\n";
 	result += "   | X = You  $ = Shop   # = Inside | = Outside |\n";
@@ -155,13 +168,17 @@ public class Map{
         result += "   |                                            |\n";
         result += "   |                                            |\n";
         result += "   |____________________________________________|\n";
+
 	//Map function works for grid layout and some custom layouts.
 	//Will not work on the mazes, then if you had a map it would not be much of a maze
+
 	for(row = 0; row < 3; row ++)
 	{
            for(col = 0; col < 5; col ++)
 	   {
+
               if(nodeArr[row][col] != null){	//Walk through a grid of room starting from upper left to lower right dawing a room if one is connected
+
                  current = this.findRoom(nodeArr[row][col].id);
 		 //System.out.println("Printing Room [" + row +"][" + col + "]");
 	         result = result.substring(0,309 + (250*row) +(8*col)) + "___" +result.substring(312 + (250*row) + (8*col),result.length());
@@ -232,7 +249,9 @@ public class Map{
 	  Room room = this.findRoom(roomId);
 	  nodeArr[row][col] = new Node(room);
 	  Scanner exits = new Scanner(room.getExits()).useDelimiter(" ");
+
           while(exits.hasNext())	//While a next room exists procss north, south, east west...
+
           {
              switch(exits.next())
              {
@@ -265,7 +284,9 @@ public class Map{
 
        public Node()
        {
+
           n = false;	//initialize the room to be a blank slate for the information to be added later
+
 	  s = false;
 	  e = false;
 	  w = false;
@@ -277,7 +298,9 @@ public class Map{
 
        public Node(Room room)
        {
-	  n = false;	//
+
+	  n = false;
+
 	  s = false;
 	  e = false;
 	  w = false;

@@ -47,6 +47,15 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
     }    
 
 	/**
+	 * implements the chst operations 
+	 * @param playerName Player name
+	 * @return String message from chest operations
+	 * @throws RemoteException
+	 */
+	public String chest(String playerName, String option, String item) throws RemoteException {
+		return core.chest(playerName,option,item);
+	}
+	/**
 	 * Used to create a hash encrypted in SHA256 for use in encrypting passwords
 	 * 
 	 * @param toHash
@@ -101,10 +110,7 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
 	public boolean joinGame(String name, String password) throws RemoteException {
 		// Request join to the core and return the results back to the remotely calling
 		// method.
-		password = hash(password);
-		if (!password.equals("ERROR"))
-			return (core.joinGame(name, password) != null);
-		return false; // Password is invalid due to failure of hash function
+		return (core.joinGame(name, password) != null);
 	}
 
 	/**
@@ -115,17 +121,13 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
 	 * 
 	 * @param name
 	 * @param password
-	 * @param recovery List of recovery questions and answers, ordered q1,a1,q2,a2,q3,a3
 	 * @return an enumeration representing the creation status, or null if password
 	 *         failed to be encrypted in hash function.
 	 * @throws RemoteException
 	 */
 	@Override
-	public Responses createAccountAndJoinGame(String name, String password, ArrayList<String> recovery) throws RemoteException {
-		password = hash(password);
-		if (password.equals("ERROR"))
-			return Responses.UNKNOWN_FAILURE;
-		return core.createAccountAndJoinGame(name, password, recovery);
+	public Responses createAccountAndJoinGame(String name, String password) throws RemoteException {
+		return core.createAccountAndJoinGame(name, password);
 	}
 
     /**
@@ -207,6 +209,77 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
     public String quickReply(String srcName, String message) throws RemoteException {
         return core.quickReply(srcName, message);
     }
+    
+    /**
+     * Create a new chatroom
+     * @param playerName Name of the player creating the chatroom
+     * @param chatName Name of the chatroom
+     * @return Message showing success
+     * @throws RemoteException
+     */
+    @Override
+    public String makeChat(String playerName, String chatName) throws RemoteException {
+        return core.makeChat(playerName, chatName);
+    }
+    
+    /**
+     * Invite a player to your current chatroom.
+     * @param srcPlayer Name of player sending the invite
+     * @param dstPlayer Name of player receiving the invite
+     * @return Message showing success
+     * @throws RemoteException
+     */
+    @Override
+    public String invChat(String srcPlayer, String dstPlayer, String chatName) throws RemoteException {
+        return core.invChat(srcPlayer, dstPlayer, chatName);
+    }
+    
+    /**
+     * Join a chatroom
+     * @param srcPlayer Name of player joining
+     * @param chatName Name of chatroom to join
+     * @return Message showing success
+     * @throws RemoteException
+     */
+    @Override
+    public String joinChat(String srcPlayer, String chatName) throws RemoteException {
+        return core.joinChat(srcPlayer, chatName);
+    }
+    
+    /**
+     * Leave a chatroom
+     * @param srcPlayer Name of player leaving
+     * @param chatName Name of chatroom to leave
+     * @return Message showing success
+     * @throws RemoteException
+     */
+    @Override
+    public String leaveChat(String srcPlayer, String chatName) throws RemoteException {
+        return core.leaveChat(srcPlayer, chatName);
+    }
+    
+    /**
+     * Check if chatroom exists
+     * @return boolean showing success
+     * @throws RemoteException
+     */
+    @Override
+    public boolean checkChat(String command) throws RemoteException {
+        return core.checkChat(command);
+    }
+    
+    /**
+     * Message a chatroom
+     * @param srcPlayer Name of player sending the message
+     * @param message The message to be sent
+     * @param chatName The name of the chat to send the message to
+     * @return Message showing success
+     * @throws RemoteException
+     */
+    @Override
+    public String messageChat(String srcPlayer, String message, String chatName) throws RemoteException {
+    	return core.messageChat(srcPlayer, message, chatName);
+    }
 
     /**
      * Player ignores further messages from another Player
@@ -256,6 +329,28 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
    public String joke(String filename) throws RemoteException{
      return core.joke(filename);
    }
+
+	/**
+	 * Initiates dialogue with NPC
+	 * @param playerName Player name
+	 * @param npcName NPC name
+	 * @return Dialogue options for player
+     * @throws RemoteException
+	 */
+    public String talkNpc(String name, String npcName) throws RemoteException {
+        return core.talkNpc(name, npcName);
+    }
+
+	/**
+	 * Selects dialogue option with NPC and gets response
+	 * @param playerName Player name
+	 * @param npcName NPC name
+	 * @param dialogueChoice Choice of dialogue option
+	 * @return Dialogue options for player
+	 */
+    public String selectNPCDialogueOption(String name, String npcName, int dialogueChoice) throws RemoteException {
+        return core.selectNPCDialogueOption(name, npcName, dialogueChoice);
+    }
 
     //Feature 411. Shout
     /**
@@ -318,6 +413,12 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
         return core.pickup(name, target);
     }
 
+    @Override
+    public String pickup(String name, String object, int amount) throws RemoteException{
+        return core.pickup(name, object, amount);
+    }
+
+
     public String pickupAll(String name)throws RemoteException{
         return core.pickupAll(name);
     }
@@ -334,6 +435,42 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
         return core.drop(name, target);
     }
 
+    /**
+     * Attempts to use an item< target >. Will return a message on any success or failure.
+     * @param name Name of the player to move
+     * @param target The case-insensitive name of the object to use.
+     * @return Message showing success.
+     * @throws RemoteException
+     */
+    @Override
+    public String useItem(String name, String target) throws RemoteException {
+        return core.useItem(name, target);
+    }
+
+    /**
+     * Gets the title of the player. Will return a message on any success or failure.
+     * @param name Name of the player
+     * @return title of player, if applicable.
+     * @throws RemoteException
+     */
+    @Override
+    public String getPlayerTitle(String name) throws RemoteException {
+        return core.getPlayerTitle(name);
+    }
+
+    /**
+     *  Strips title from a player.
+     *  @param name name of the player
+     *  @throws RemoteException
+     */
+    public boolean removePlayerTitle(String name) {
+	return core.removePlayerTitle(name);
+    }
+
+	public String examine(String name, String target) throws RemoteException 
+	{
+		return core.examine(name, target);
+	}
     /**
      * Attempts to erase the whiteboard in the room. Will return a message on any success or failure.
      * @param name Name of the player to erase the whiteboard
@@ -374,6 +511,27 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
     }
     
     /**
+     * @author Group: King
+     * @param name Name of the player trying to shop
+     * @return Returns the id of the room the player has just entered a bank in 
+     * @throws RemoteException
+     */
+    public int bank(String name) throws RemoteException {
+    	return core.bank(name);
+    }
+    
+    /**
+     * Gives the central bank object commands (implimented like this for maximum encapsulation)
+     * @param cmd_id The id of the command to be used (mapped in the BankClient class)
+     * @param name The name of the user interacting with the Bank
+     * @param cmd Any extra arguments that may need to be sent to the command
+     * @return A string based on the success or failure of the command
+     */
+    public String bankCmdRunner(String cmd, String name, String args) {
+    	return core.bankCmdRunner(cmd, name, args);
+    }
+    
+    /**
      * @author Group 4: King
      * Lets player shop if in a shoppable location
      * @param name Name of the player trying to shop
@@ -383,7 +541,6 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
     public int shop(String name) throws RemoteException{
     	return core.shop(name);
     }
-   
     
     /**
      * @author Group 4: King
@@ -414,8 +571,18 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
      * @param message String name of item being offered
      */
     @Override
-    public String offer (String srcName, String dstName, String message) throws RemoteException{
-	    return core.offer(srcName, dstName, message);
+    public String offer (String srcName, String message1, String junk, String message2) throws RemoteException{
+	    return core.offer(srcName, message1, junk, message2);
+    }
+
+    /**
+     * Returns a string message about success of offer and status of inventory
+     * @param dstName Name of player accepting or rejecting the offer
+     * @param reply whther the offer has been accepted or rejected
+     * @return Message showing status of offer reply
+     */
+    public String offerReply(String dstName, boolean reply) throws RemoteException{
+        return core.offerReply(dstName, reply);
     }
         
     /**
@@ -532,6 +699,16 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
     public String buyItem(String name, int shopId, String item) throws RemoteException{
     	return core.buyItem(name, shopId, item);
     }
+
+    /**
+     * updates the playlist in the Shop
+     * @param name Name of the player
+     * @return void
+     */
+    public void shopLeft(String name) throws RemoteException
+    {
+        core.shopLeft(name);
+    }
     
     /**
      * Returns a Shop's inventory as a formatted string
@@ -541,7 +718,25 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
     public String getShopInv(int id) throws RemoteException{
     	return core.getShopInv(id);
     }
-	
+
+    /**
+     * Returns a Shop's "In Demand" inventory as a formatted string
+     * @param id The shop ID
+     * @return A formatted string representing the Shop's "In Demand" inventory
+     */
+    public String getShopDemInv(int id) throws RemoteException{
+        return core.getShopDemInv(id);
+    }
+
+    /**
+     * 108 In game ASCII map
+     * Returns an ascii representation of nearby rooms
+     * @param name Name of the player
+     * @return String representation of the map
+     */
+    public String showMap(String name) throws RemoteException{
+       return core.showMap(name);
+    }	
 	/**
 	 * Delete a player's account.
 	 * 
@@ -585,50 +780,15 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
 	/**
 	 * returns a message showing all online friends
 	 * 
-	 * @param Player name
+	 * @param Player name name of player requesting list of friends
+         * @param onlineOnly true if you only want a list of online friends, else false.
 	 * @return Message showing online friends
 	 * @throws RemoteException 
 	 */
 	@Override
-    public String viewOnlineFriends(String name) throws RemoteException {
-        return core.viewOnlineFriends(name);
-    }  
-	
-	/**
-	 * Gets user's recovery question
-	 *
-	 *@param name Name of user
-	 *@param num Marks which question will be grabbed
-	 */
-	public String getQuestion(String name, int num) throws RemoteException {
-		return core.getQuestion(name, num);
-	}
-	
-	/**
-	 * Gets a user's recovery answer
-	 * 
-	 * @param name Name of user
-	 * @param num Marks which answer will be grabbed
-	 * @throws RemoteException
-	 */
-	public String getAnswer(String name, int num) throws RemoteException {
-		return core.getAnswer(name, num);
-	}
-	
-	/**
-	 * Resets Users password
-	 * 
-	 * @param name Name of user
-	 * @param pass New password
-	 * @throws RemoteException
-	 */
-	public Responses resetPassword(String name, String pass) throws RemoteException {
-		pass = hash(pass);
-		if(pass.endsWith("ERROR")) {
-			return Responses.UNKNOWN_FAILURE;
-		}
-		return core.resetPassword(name, pass);
-	}
+    public String viewFriends(String name, boolean onlineOnly) throws RemoteException {
+        return core.viewFriends(name, onlineOnly);
+    }
     
     @Override
     public void heartbeatCheck(String name) throws RemoteException{
@@ -652,7 +812,72 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
      * @return Message showing success
      * @throws RemoteException
      */
-    public String accept(String challenger, String challengee) throws RemoteException{
-      return core.accept(challenger, challengee);
+    public String accept(String challenger, String challengee, String rounds) throws RemoteException{
+      return core.accept(challenger, challengee, rounds);
+    }
+
+	@Override
+	public Responses removeQuestion(String name, int num) throws RemoteException {
+		return core.removeQuestion(name, num);
+	}
+
+	@Override
+	public DataResponse<ArrayList<String>> getQuestions(String name) throws RemoteException {
+		return core.getQuestions(name);
+	}
+
+	@Override
+	public Responses verifyAnswers(String name, ArrayList<String> answers) throws RemoteException {
+		return core.verifyAnswers(name, answers);
+	}
+
+	@Override
+	public Responses addRecoveryQuestion(String name, String question, String answer) throws RemoteException {
+		return core.addRecoveryQuestion(name, question, answer);
+	}
+
+	@Override
+	public DataResponse<Long> getAccountAge(String name)  throws RemoteException{
+		return core.getAccountAge(name);
+	}
+
+	@Override
+	public Responses verifyPassword(String name, String password) throws RemoteException {
+		return core.verifyPassword(name, password);
+	}
+
+	@Override
+	public Responses changePassword(String name, String password)  throws RemoteException{
+		return core.changePassword(name, password);
+	}
+
+    /**
+     * @param player is the name of the player that wants to turn off RPS resolutions
+     * @return Message showing success
+     * @throws RemoteException
+     */
+    public String toggleRPSChat(String player) throws RemoteException{
+	return core.toggleRPSChat(player);
+    }
+  
+    /**
+     * Sets a player's chat prompt string
+     * @param playerName - player you're setting the chat prefix for
+     * @param newPrefix - the player's new prefix.
+     * @throws RemoteException
+     */
+    public void setPlayerChatPrefix(String playerName, String newPrefix) throws RemoteException {
+        Player player = core.findPlayer(playerName);
+        player.setPrefix(newPrefix);
+    }
+    
+    /**
+     * Checks the Venmo mailbox. If mailbox is not empty, prints the content.
+     * 
+     * @param playerName Name of the player
+     * @throws RemoteException
+     */
+    public void checkVenmoMail(String playerName) throws RemoteException {
+        Venmo.checkMail(playerName);
     }
 }

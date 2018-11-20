@@ -3,6 +3,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -18,6 +19,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 @JsonIgnoreProperties({ "replyWriter", "outputWriter" })
 public class Player {
+    private int dormId;//used to determine private dormroom Id
+    public LinkedList<Item> chestImage;
     public LinkedList<Item> currentInventory;
     private String name;
     private int currentRoom;
@@ -27,45 +30,51 @@ public class Player {
     private double money;
     private DataInputStream inputWriter = null;
     private boolean inTrade = false;
+    private Item tradeItem = null;
     private boolean tradeRequested = false;
+    private boolean tradeReceived = false;
     private String tradePartner = "";
     private String lastPlayer = "";
     private boolean hasChallenge = false;
     private boolean inBattle = false;
     private String challenger = " ";
     private String option = "";
+    public boolean toggleChat = false;
     private String challengerOption = "";
     private boolean hasOption = false;
-    @JsonProperty("recovery")
-    private ArrayList<String> recovery;
-    
-    
-	public Player(@JsonProperty("name") String name, @JsonProperty("recovery") ArrayList<String> recovery) {
+    private ArrayList<NPC> dialogueList = new ArrayList<NPC>();
+    private int rounds = 0;
+    private int wins = 0;
+    private boolean hasTitle = false; //used for title and use item feature 
+    private String playerItemTitle = "";
+
+	public Player(@JsonProperty("name") String name) {
         this.currentRoom = 1;
         this.currentDirection = Direction.NORTH;
         this.name = name;
-        this.recovery = recovery;
         this.currentInventory = new LinkedList<>();
+        this.chestImage = new LinkedList<>();
         this.money = 0;
     }
 
+    public int getDormId() {return this.dormId;}
+    public void setDormId(int i) {this.dormId = i;} 
+
     private HashSet<Player> ignoredPlayers = new HashSet<Player>();
-    // missed Messages - not yet in uses
-    private HashSet<Message> missedMessages = new HashSet<Message>();
 
     //Feature 409 WordFilter
 
-    /**
+/*    *//**
      * Prints a chat statemnet from another player.
      * @param playerName - name of player making the statement
      * @param action - whether the player is saying or whispering the statement
      * @param message - the statement the other player is making
-     */
+     *//*
     public void say(String playerName, String action, String message) {
         String filteredMessage = filterMessage(message);
-        String statement = playerName + " " + action + " " + "\"" + filteredMessage + "\"" + ".";
+        String statement = playerName + " " + action + " " + filteredMessage + ".";
         getReplyWriter().println(statement);
-    }
+    }*/
 
     //Collection of words to be filtered from game chat
     private HashSet<String> filteredWords = new HashSet<String>();
@@ -75,6 +84,8 @@ public class Player {
      * @param newFilteredWords - collection of words to be filtered from this player's chat
      */
     public void setFilteredWords(HashSet<String> newFilteredWords) {
+        filteredWords = new HashSet<String>();
+
         for(String word : newFilteredWords) {
             filteredWords.add(word.toLowerCase());
         }
@@ -109,44 +120,59 @@ public class Player {
      * @param message - message being filtered.
      * @return - new filtered message.
      */
-
     public String filterMessage(String message) {
+
+        if(filteredWords.size() == 0) { return message; }
+
         String newMessage = "";
         String bleep = "[BLEEEEP]";
+        String messageL = message.toLowerCase();
 
-        for(String word : message.split("\\s+")) {
+        for(int i = 0; i < message.length(); i ++) {
+            char current = message.charAt(i);
+            char currentL = messageL.charAt(i);
             boolean match = false;
+            int wordLen = 0;
 
-            if(filteredWords.contains(word.toLowerCase())) {
-                newMessage += bleep + " ";
+            for(String word : filteredWords) {
+                String wordL = word.toLowerCase();
+
+                if(i + word.length() <= message.length() && currentL == wordL.charAt(0)) {
+                    String fragmentL = messageL.substring(i, i + word.length());
+
+                    if(wordL.equals(fragmentL)) {
+                        match = true;
+                        wordLen = word.length();
+                        break;
+                    }
+                }
+            }
+
+            if(match) {
+                newMessage += bleep;
+                i += wordLen - 1;
             } else {
-                newMessage += word + " ";
+                newMessage += current;
             }
         }
-
-        newMessage = newMessage.substring(0, (newMessage.length()-1));
 
         return newMessage;
     }
 
+    /*
+
     public void printMessage(Player speaker, String message, String action) {
         String newMessage = filterMessage(message);
-        this.getReplyWriter().println(speaker.getName() + " " + action + " \"" + newMessage + "\"");
+        this.getReplyWriter().println(speaker.getName() + " " + action + " " + newMessage);
     }
-
+*/
     /**
      * Adds a player's reference to set ignoredPlayers.
      * @param playerToIgnore
      * @return - whether player reference was successfully added to set ignorePlayer.
      */
     public boolean ignorePlayer(Player playerToIgnore) {
-        // if(!ignoredPlayers.contains(playerToIgnore)){
-        //     System.out.println(playerToIgnore.name + " has been ignored.");
         return ignoredPlayers.add(playerToIgnore);
-        // } else {
-        //     System.out.println(playerToIgnore.name + " is already being ignored.");
-        //     return false;
-        // }
     }
 
     //Feature 408. Unignore Player.
@@ -199,41 +225,43 @@ public class Player {
     }
 
     /**
-     *
-     * @param sentMessage - the Message being sent to this player.
-     * @return - whether or not the sent message was successfully added to the set of received messages.
+     * Format a message to be sent to this player.
+     * @param source Player speaking this message
+     * @param messageType Verbage of how this message is communicated
+     *                    Examples: "says", "whispers", "shouts", "offers to trade", "mimes to the party", "performs an expressionist dance illustrating"
+     * @param message The message to be communicated
+     * @return True if successful
+     *          False if ignoring
      */
+    public boolean messagePlayer(Player source, String messageType, String message ) {
+        // check source for ignore
+        for (Player p : this.ignoredPlayers)
+            if (p.equals(source))
+                return false;
 
-    public boolean receiveMessage(Message sentMessage) {
-        boolean received = false;
+        // filter message
+        String newMessage = filterMessage(message);
 
-        //put ignore detection here
-
-        /*if(recievedMessages.add(sentMessage)) {
-
-            sentMessage.SetReceived();
-            received = true;
-        }*/
-
-        // if recipient is offline, detect here
-
-        return received;
+        // send prefix, timestamp, source, type, ", ", and message
+        this.getReplyWriter().println(
+            this.prefix +
+            String.format("[%tD %<tT]", GameServer.getDate()) + " " +
+            source.getName() + " " +
+            messageType + ", " +
+            newMessage);
+        return true;
     }
 
     /**
-     *
-     * @param textOfMessage - The actual input message from the user.
-     * @param intendedRecipient - A reference to the user the message is being sent to.
-     * @return - Whether the recipient successfully received the sent message.
+     * Return a standard opening for chat messages sent by this player
+     * @return [Time Stamp][Prefix] You
      */
-    public boolean sendMessage(String textOfMessage, Player intendedRecipient) {
-
-        Message newMessage = new Message(textOfMessage, this, intendedRecipient);
-        return intendedRecipient.receiveMessage(newMessage);
-
+    public String getMessage() {
+        return
+            this.prefix +
+            String.format("[%tD %<tT]", GameServer.getDate()) +
+            " You ";
     }
-
-    /**Reeds changes end here**/
 
     public void turnLeft() {
         switch(this.currentDirection.toString()) {
@@ -268,6 +296,11 @@ public class Player {
                 break;                
         }
     }
+    
+    
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // INSERT CODE FOR GETTERS AND SETTERS BELOW ///////////////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public String getLastPlayer() {
         return lastPlayer;
@@ -276,7 +309,7 @@ public class Player {
     public void setLastPlayer(String lastPlayer) {
         this.lastPlayer = lastPlayer;
     }
-
+    
     public void setInBattle(boolean battle){
 	inBattle = battle;
     }
@@ -289,28 +322,74 @@ public class Player {
     public String getName() {
         return name;
     }
-    
-    @JsonProperty("recovery")
-    public void setRecovery(ArrayList<String> recovery) {
-    	this.recovery = recovery;
-    }
 
     public void setName(String name) {
         this.name = name;
     }
-	
-	public String getQuestion(int num) {
-		if(this.recovery.size() >= num * 2)
-			return this.recovery.get(num * 2);
-		return null;
-	}
-	
-	public String getAnswer(int num) {
-		if(this.recovery.size() >= (num * 2) + 1)
-			return this.recovery.get((num * 2) + 1);
-		return null;
-	}
 
+    //Update dialogue status of this player with other npcs
+    public void updateDialogueList(String npcName, String dialogueTag, int updateAmount)
+    {
+        for (int i = 0; i < dialogueList.size(); i++) {
+            if (dialogueList.get(i).getName().equals(npcName))
+            {
+                dialogueList.get(i).changeDialogueList(dialogueTag, updateAmount);
+            }
+        }
+    }
+
+    //Get dialogue status of this player with other npcs
+    public ArrayList<NPC> getDialogueList()
+    {
+        return dialogueList;
+    }
+
+    //Overload method for getDialogueIdFromList
+    public int getDialogueIdFromList(String npcName, String dialogueTag)
+    {
+        return getDialogueIdFromList(npcName, dialogueTag, "");
+    }
+
+    //Takes the dialgoue id of specific dialogue from npc. 
+    //If no dialogue id exists, add this npc to the dialogueLIst
+    public int getDialogueIdFromList(String npcName, String dialogueTag, String prompt)
+    {
+        int result = -1;
+        for (int i = 0; i < dialogueList.size(); i++) {
+            if (dialogueList.get(i).getName().equals(npcName))
+            {
+                result = dialogueList.get(i).getDialogueId(dialogueTag);
+            }
+        }
+
+        if (result == -1)
+        {
+            addDialogueList(npcName, dialogueTag, prompt);
+            result = 1;
+        }
+
+        return result;
+    }
+
+    //Helper method used to add npc to the dialogueList
+    private void addDialogueList(String npcName, String dialogueTag, String prompt)
+    {
+        boolean found = false;
+        for (int i = 0; i < dialogueList.size(); i++) {
+            if (dialogueList.get(i).getName().equals(npcName))
+            {
+                found = true;
+                //dialogueList.get(i).addToDialogueList(dialogueTag, prompt);
+            }
+        }
+
+        if (found == false)
+        {
+            NPC npc = new NPC(npcName, -1, new LinkedList<String>(), new ArrayList<DialogueOption>());
+            dialogueList.add(npc);
+        }
+    }
+  
     public LinkedList<Item> getCurrentInventory() {
         return currentInventory;
     }
@@ -365,6 +444,33 @@ public class Player {
 	}
     }
 
+    //setter for hasTitle
+    public void setHasTitle(boolean val) {
+	hasTitle = val;
+    }
+
+    //getter for hasTitle
+    public boolean checkIfHasTitle() {
+	return hasTitle;
+    }
+
+    //sets new title of player
+    public void setTitle(String newTitle) {
+	playerItemTitle = newTitle;
+    }
+
+    //gets title of player
+    public String getTitle() {
+	return playerItemTitle;
+    }
+
+    public boolean hasReceivedTrade(){
+        return tradeReceived;
+    }
+
+    public void setReceivedTrade(boolean val){
+        tradeReceived = val;
+    }
     public boolean hasTradeRequest(){
         return tradeRequested;
     }
@@ -385,6 +491,13 @@ public class Player {
     }
     public void setTradePartner(String s){
         tradePartner = s;
+    }
+
+    public void setTradeItem(Item it){
+        tradeItem = it;
+    }
+    public Item getTradeItem(){
+        return tradeItem;
     }
 
     public void setReplyWriter(PrintWriter writer) {
@@ -436,6 +549,20 @@ public class Player {
     public void setChallengerOption(String challengerOption){
         this.challengerOption = challengerOption;
     }
+    public void setRounds(int round){
+        this.rounds = round;
+    }
+
+    public int getRounds(){
+        return this.rounds;
+    }
+
+    public void setWins(int wins){
+        this.wins = wins;
+    }
+    public int getWins(){
+        return this.wins;
+    }
     
     public double getMoney() {
         return this.money;
@@ -460,6 +587,10 @@ public class Player {
     public void setHasChallenge(boolean challenged){
         hasChallenge = challenged;
     }
+    
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// INSERT CODE FOR GETTERS AND SETTERS ABOVE ///////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     
     /**
      * Allows the caller to add/take money in user's wallet.
@@ -515,16 +646,48 @@ public class Player {
 
     private static class ItemPriceComparator implements Comparator<Item> {
 	@Override
-	public int compare(Item ItemA, Item ItemB) {
-		if(ItemA.getPrice() > ItemB.getPrice()) {
-			return 1;
-		}
-		else if(ItemA.getPrice() < ItemB.getPrice()) {
-			return -1;
-		}
-		else {
-			return 0;
-		}
-	}
+        public int compare(Item ItemA, Item ItemB) {
+            if(ItemA.getPrice() > ItemB.getPrice()) {
+                return 1;
+            }
+            else if(ItemA.getPrice() < ItemB.getPrice()) {
+                return -1;
+            }
+            else {
+                return 0;
+            }
+        }
     }
+
+    //Feature 413 Prefix
+    // string to be used as a chat prefix, default value is ">>>".
+    private String prefix = ">>>";
+
+    /**
+     * Sets the chat prefix from default.
+     * @param newPrefix - New prefix to replace old.
+     */
+    public void setPrefix(String newPrefix) {
+        prefix = newPrefix;
+    }
+
+
+    //End 413 Prefix
+    /*
+     * This toggles the R-P-S resolutions of other players in the same room
+     */
+    public String toggleResolution(){
+	if (toggleChat == false){
+		toggleChat = true;
+		return "You have turned off RPS resolutions in your area";
+	}
+	else{
+		toggleChat = false;
+		return "You have turned on RPS resolutions in your area";
+	}
+
+
+    }
+
+
 }
