@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dialogues>
+        <dialogue id = "-1">
+                <intro>
+                "Hey, how's it going? Just to let you know, my team started
+		using tabs instead of spaces, so we went back and updated the
+		rest of the code. I hope this doesn't give you any merge
+		conflicts."
+                </intro>
+	</dialogue>
+        <dialogue id = "6">
+		<intro>
+		You find Chris sitting by the Chick-fil-a. You walk up to him
+		and begin to discuss you problem. He agrees that Sarah is a
+		problem, but had no difficulties with his pull request. He
+		agrees to have better communication, but you need to do some
+		research for him in return. He wants you to poke the ghoul 10
+		times and observe its reaction.
+		</intro>
+                <cont>
+		You have not poked the ghoul 10 times yet. You should probably
+		do that before you talk to Chris.
+                </cont>
+		<done>
+		You tell Chris what you have learned about the Ghoul. He thanks
+		you, and agrees to have better communication in the future.
+
+		Additionally, he tells you of this man named Erik, who
+		supposedly knows the secret to getting your group to funciton
+		perfectly. You should find him and figure it out.
+		</done>
+                <condition>POKE</condition>
+                <status>10</status>
+        </dialogue>
+</dialogues>

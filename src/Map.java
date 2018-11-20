@@ -26,7 +26,7 @@ public class Map{
                         int numRooms, numExits;
 
                         String title, description, room_type;
-                        String message;
+                        String message, npcName;
                         int id, link;
 
                         Direction exitId;
@@ -37,9 +37,10 @@ public class Map{
                         numRooms = Integer.parseInt(mapIn.nextLine());
                         numExits = 4;
 
+			mapIn.useDelimiter(",|\\n|\\r\\n");
+
                         for(int i = 0; i < numRooms; i++) {
 
-                                mapIn.useDelimiter(",|\\n|\\r\\n"); 
                                 id = Integer.parseInt(mapIn.next());
                                 room_type = mapIn.next();
                                 title = mapIn.next();
@@ -79,7 +80,14 @@ public class Map{
                                         newRoom.addExit(exitId, link, message);
                                 }                
 
-                                map.add(newRoom);
+                                mapIn.useDelimiter(",|\\n|\\r\\n");	
+                                //Check if the next value is an integer, if not, then get the name of an npc to add from the next value and add it to the last room
+                                while(!mapIn.hasNextInt() && mapIn.hasNext())
+                                {
+                                        npcName = mapIn.next();
+                                        newRoom.addNPC(npcName, id);
+                                }
+				map.add(newRoom);
                         }
                         mapIn.close();
                 } catch (IOException | IllegalArgumentException ex) {
