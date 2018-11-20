@@ -26,7 +26,7 @@ public class Map{
                         int numRooms, numExits;
 
                         String title, description, room_type;	//Strings store the title of the room, a brief description of the room, and the type of room ( inside/outside)
-                        String message;	
+                        String message, npcName;	
                         int id, link;	
 
                         Direction exitId;
@@ -37,9 +37,10 @@ public class Map{
                         numRooms = Integer.parseInt(mapIn.nextLine());	//Reads the fle parsing the csv file to create the rooms.
                         numExits = 4;	//Sets the number of exits at 4
 
-                        for(int i = 0; i < numRooms; i++) {
+                        mapIn.useDelimiter(",|\\n|\\r\\n");
 
-                                mapIn.useDelimiter(",|\\n|\\r\\n"); 
+			for(int i = 0; i < numRooms; i++) {
+
                                 id = Integer.parseInt(mapIn.next());	//Walks through the file parsing lines to create the map.
                                 room_type = mapIn.next();
                                 title = mapIn.next();
@@ -80,8 +81,14 @@ public class Map{
                                         //                    System.out.println("... Adding Exit " + exitId + " to " + link + ": " + message);
                                         newRoom.addExit(exitId, link, message);
                                 }                
-
-                                map.add(newRoom);
+			        mapIn.useDelimiter(",|\\n|\\r\\n");	
+                                //Check if the next value is an integer, if not, then get the name of an npc to add from the next value and add it to the last room
+                                while(!mapIn.hasNextInt() && mapIn.hasNext())
+                                {
+                                        npcName = mapIn.next();
+                                        newRoom.addNPC(npcName, id);
+                                }
+				map.add(newRoom);
                         }
 
                         mapIn.close();	//close the map file

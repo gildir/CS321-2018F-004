@@ -484,6 +484,7 @@ public interface GameObjectInterface extends Remote, IAccount.Client {
      */
     public String showMap(String name) throws RemoteException;
 
+    
     /**
      * Talk to an NPC in the player's room
      * @param player Name of the player

@@ -20,7 +20,7 @@ public class Room {
     private static final int MAX_WHITEBOARD_LEN = 120;
     private StringBuilder whiteboard;
     //list of NPCs in a room, list in case additional NPCs are added to the game
-    private final HashMap<String, NPC> npcs;
+    private HashMap<String, NPC> npcs;
     //add tem state check for ghoul
     public boolean hasGhoul = false;
 
@@ -134,6 +134,16 @@ public class Room {
 		}
 		return ret;
         }
+    }
+
+    /*
+     * Adds an NPC to the current room, uses team 6 implementation
+     *
+     * @param name String name for the npc, also refers to file to get NPC dialogue
+     * @param id The id of the NPC's room
+     */
+    public void addNPC(String name, int id) {
+        npcs.put(name, new NPC(name, id));
     }
 
     public HashMap<String, NPC> getNPCs() {

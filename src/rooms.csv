@@ -1,9 +1,10 @@
-5
+6
 1,outside,Clock in the Main Quad,You are standing in front of the George Mason University Clock. A plaque on the clock says it was a gift from the Class of 1999
 NORTH,0,You try to walk north towards the library, but the sidewalk is closed due to construction.
 SOUTH,3,You walk around the grassy median and head south, past the Johnson Center.
 EAST,2,You walk around the fountains as you head towards the statue.
-WEST,4,You try to walk west towards the dorms, and the large student rally is gone!, Home here I come!.
+WEST,4,You try to walk west towards the dorms, and the large student rally is gone! Home here I come!.
+questNPC
 2,outside,Mason Statue,There is a large statue of George Mason resting at the end of the sidewalk. The Mason statue is currently wearing a green Patriots basketball t-shirt.
 NORTH,0,You start to walk north towards the parking deck, but you really don't want to, so you stop yourself.
 SOUTH,0,You try to enter the Johnson Center, but the entrances are closed due to construction.
@@ -11,7 +12,7 @@ WEST,1,You walk around the fountains as you head towards the clock.
 EAST,0,You look to the west and see a very long staircase just past the traffic circle. You decide against going that direction.
 3,outside,Exploratory Hall,You are standing out front of the new Exploratory Hall.
 NORTH,1,You head up the sidewalk, towards the clock.
-SOUTH,0,You try to head south, but too many students are smoking near Enterprise hall, so you stay where you are.
+SOUTH,5,You try to head south, but too many students are smoking near Enterprise hall, so you stay where you are.
 WEST,0,You try to head towards the Johnson Center, but the entrance is closed for construction.
 EAST,0,You look towards Exploratory Hall, but decide to just admire the view from where you are.
 4,inside,Dorm Building,Dorm Building main hallway leading to the elevator.
@@ -24,3 +25,9 @@ NORTH,100001,You are headed to your room through the north exit
 SOUTH,4,You try to head back to the Hallway
 WEST,0,You tried heading west, there is nothing there.
 EAST,0,You tried heading, east there is nothing there.
+5,inside,Engineering Building,You are inside the Nguyen Engineering Building
+NORTH,3,filler
+SOUTH,0,filler
+WEST,0,filler
+EAST,0,filler
+Steve,Sarah

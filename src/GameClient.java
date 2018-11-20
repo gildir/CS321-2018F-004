@@ -387,28 +387,39 @@ public class GameClient {
                     else {
                         boolean done = false;
                         String npcName = tokens.remove(0);
-                        String output = remoteGameInterface.talkNpc(this.playerName, npcName);
-                        if (output == null) {
-                            System.out.println("Named NPC not in room");
-                        }
-                        else {
-                            System.out.println("Dialogue Options: enter the number of the option to select it, or done to exit.");
-                            System.out.print(output);
-                            Scanner scan = new Scanner(System.in);
-                            while (!done) {
-                                String line = scan.nextLine();
-                                if (line.equalsIgnoreCase("done")) {
-                                    done = true;
-                                }
-                                else {
-                                    int dialogueChoice = Integer.parseInt(line)-1;
-                                    System.out.println(remoteGameInterface.selectNPCDialogueOption(this.playerName, npcName, dialogueChoice));
-                                    System.out.println("Dialogue Options: enter the number of the option to select it, or done to exit.");
-                                }
+                    			//Integrated team 6 talk command with tutorial quest talk command, due to a late merge on the tutorial quest command
+			//Checks if the NPC is implemented for team 6 Main Story compatability, if true, calls team 6 talk command
+			//Both NPCs can exist and be talked to with the same command
+			if(remoteGameInterface.checkNPCValidity(this.playerName, npcName.toUpperCase())){
+			    System.out.println(remoteGameInterface.talk(this.playerName, npcName.toUpperCase()));
+                        }else{
+                            String output = remoteGameInterface.talkNpc(this.playerName, npcName);
+                            if (output == null) {
+                                System.out.println("Named NPC not in room");
+                            }
+                            else {
+                                System.out.println("Dialogue Options: enter the number of the option to select it, or done to exit.");
+                                System.out.print(output);
+                                Scanner scan = new Scanner(System.in);
+                                while (!done) {
+                                    String line = scan.nextLine();
+                                    if (line.equalsIgnoreCase("done")) {
+                                        done = true;
+                                    }
+                                    else {
+                                        int dialogueChoice = Integer.parseInt(line)-1;
+                                        System.out.println(remoteGameInterface.selectNPCDialogueOption(this.playerName, npcName, dialogueChoice));
+                                        System.out.println("Dialogue Options: enter the number of the option to select it, or done to exit.");
+                                    }            
+		    
+				}
                             }
                     }
                     }
                     break;
+		case "JOURNAL":
+		    System.out.println(remoteGameInterface.journal(this.playerName));
+		    break;
                 case "MOVE":
                     if(tokens.isEmpty()) {
                         System.err.println("You need to provide a direction to move.");

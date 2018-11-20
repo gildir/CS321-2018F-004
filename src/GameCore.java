@@ -449,6 +449,7 @@ public class GameCore implements GameCoreInterface {
 			try {
 				GhoulLog myLog = new GhoulLog();
 				myLog.glLog("GameCore","pokeGhoul", "Player" + " " + playerName + " has just poked the Ghoul");
+				player.addPoke();
 			} catch (Exception e){
 				e.printStackTrace();
 			}
@@ -1017,6 +1018,7 @@ public class GameCore implements GameCoreInterface {
             dorm.addExit(Direction.valueOf("EAST"),-100000,"You go back to the elevator");
             dorm.addExit(Direction.valueOf("SOUTH"),100000,"You go back to the elevator");
             dorm.addExit(Direction.valueOf("WEST"),-100000,"You go back to the elevator");
+	    dorm.addNPC("HAL_9000",dormCountId);
             dorm.setChest(player.chestImage);//point to the chest
             this.map.addRoom(dorm);
             if(player.getCurrentRoom() > 100000){player.setCurrentRoom(dormCountId);}
@@ -1725,11 +1727,13 @@ public class GameCore implements GameCoreInterface {
                     String winner2 = player.getName() + " challenged " + challengee.getName() + " to a Rock Paper Scissors Battle: " + player.getName() + " won the tournament with a final score of " + p1Win + " - " + p2Win + ".";
                     this.broadcast(map.findRoom(player.getCurrentRoom()), winner2);
 		    pickRPSToggle = false;
+		    player.addRpsVictory();//Win counter for Main Questline
                 }
                 else if(p2Win > p1Win){
                     String winner2 = player.getName() + " challenged " + challengee.getName() + " to a Rock Paper Scissors Battle: " + player.getName() + " won the tournament with a final score of " + p1Win + " - " + p2Win + ".";
                     this.broadcast(map.findRoom(player.getCurrentRoom()), winner2);
 		    pickRPSToggle = false;
+		    challengee.addRpsVictory();//Win counter for Main Questline
                 }
                 else{
                     String noWinner = player.getName() + " challenged " + challengee.getName() + " to a Rock Paper Scissors Battle: They tied in the tournament with a final score of " + p1Win + " - " + p2Win + ".";
@@ -2348,6 +2352,73 @@ public class GameCore implements GameCoreInterface {
        int roomId = this.playerList.findPlayer(name).getCurrentRoom();
        return map.asciiMap(roomId);
     }
+
+
+    /**
+     * Talk to an NPC in the player's room
+     * @param player Name of the player
+     * @param npc Name of the npc
+     * @return String response from the npc if found
+     */
+    public String talk(String playerName, String npcName){
+       Player player = this.playerList.findPlayer(playerName);
+       boolean found = false;
+       NPC npc = null;
+       for(NPC temp : map.findRoom(player.getCurrentRoom()).getNPCs().values()){
+           if(temp.getName().toUpperCase().equals(npcName.toUpperCase())){
+              found = true;
+	      npc = temp;
+              break;
+	   }
+       }
+       if(!found){
+           return "NPC " + npcName + " is not located in your current room";
+       }
+       else{
+	   return npc.talk(player);
+       }
+    }
+    /**
+     * Checks the implementation of the given npc
+     * @param npc Name of the npc
+     * @return True if uses team 6 implementation
+     */
+    public boolean checkNPCValidity(String playerName, String npcName){
+       Player player = this.playerList.findPlayer(playerName);
+       boolean found = false;
+       NPC npc = null;
+       for(NPC temp : map.findRoom(player.getCurrentRoom()).getNPCs().values()){
+           if(temp.getName().toUpperCase().equals(npcName)){
+              found = true;
+              npc = temp;
+              break;
+           }
+       }
+       if(found)
+	  return npc.checkValidDialogue();
+       return false;
+    }
+    /**
+     * Returns an the player's current quest
+     * @param name Name of the player
+     * @return String representation of current quest progress
+     */
+    public String journal(String name){
+	try{
+           int progress = this.playerList.findPlayer(name).getProgress();
+	   File questDesc = new File("./NPCDialogues/questDescriptions");
+	   Scanner sc = new Scanner(questDesc);
+	   String ret = "Current Quest Description:\n";
+	   String temp = "";
+	   for(int i = 0; i <= progress; i ++)
+	      temp = sc.nextLine();
+	   return ret + temp;
+	}catch(FileNotFoundException ex){
+	   System.out.println("[RUNTIME] No Quest Description File ./NPCDialogues/questDescriptions");
+	   return null;
+	}
+    }
+
 
 	/**
 	 * Logs player connections
