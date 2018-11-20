@@ -5,7 +5,7 @@ import java.util.ArrayList;
  *
  * @author Kevin
  */
-public interface GameCoreInterface {
+public interface GameCoreInterface extends IAccount.Server {
 	
 	/**
 	 * Makes the ghoul walk to an adjacent room
@@ -392,32 +392,6 @@ public interface GameCoreInterface {
      * @param name Name of client's player that is checking in.
      */
     public void heartbeatCheck(String name);
-	
-	/**
-	 * Gets recovery question
-	 * @param name User of recovery question 
-	 * @param num Marks which question will be grabbed
-	 * @return String of recovery question, null if user doesn't exist
-	 */
-	public String getQuestion(String name, int num);
-	
-	/**
-	 * Gets recovery answer
-	 * @param name User of recovery answer
-	 * @param num Marks which answer will be grabbed
-	 * @return String of recovery question, null if user doesn't exist
-	 */
-	public Boolean getAnswer(String name, int num, String answer);
-	
-	public Responses verifyPassword(String name, String password);
-
-	/**
-	 * Resets passwords.
-	 * 
-	 * @param name Name of player getting password reset
-	 * @param password New password to be saved
-	 */
-	public Responses resetPassword(String name, String pass);
 
      /**
       * Challenge someone to R-P-S
@@ -487,11 +461,7 @@ public interface GameCoreInterface {
 	 * @return Message showing online friends
 	 */
 	public String viewFriends(String name, boolean onlineOnly);
-	
-	public void addQuestion(String name, String question, String answer);
-	
-	public void removeQuestion(String name, int num);
-	
+		
 	/**
 	 * Returns a message saying the player has toggled the RPS resolutions in area
 	 * @param Player name

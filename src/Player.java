@@ -45,11 +45,9 @@ public class Player {
     private ArrayList<NPC> dialogueList = new ArrayList<NPC>();
     private int rounds = 0;
     private int wins = 0;
-    @JsonProperty("recovery")
-    private ArrayList<String> recovery; //stored question, answer, question,...
     private boolean hasTitle = false; //used for title and use item feature 
     private String playerItemTitle = "";
-    private final long accountAge;
+
 
     //Tracks which quest the player is on
     private int questProgress;
@@ -57,12 +55,12 @@ public class Player {
     private int rpsVictoryCount;
     //Used to count pokes in poke quests
     private int pokeCount;
+  
+	public Player(@JsonProperty("name") String name) {
 
-    public Player(@JsonProperty("name") String name, @JsonProperty("accountAge") long accountAge) {
         this.currentRoom = 1;
         this.currentDirection = Direction.NORTH;
         this.name = name;
-        this.accountAge = accountAge;
         this.currentInventory = new LinkedList<>();
         this.chestImage = new LinkedList<>();
         this.money = 0;
@@ -310,6 +308,11 @@ public class Player {
                 break;                
         }
     }
+    
+    
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // INSERT CODE FOR GETTERS AND SETTERS BELOW ///////////////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public String getLastPlayer() {
         return lastPlayer;
@@ -331,56 +334,10 @@ public class Player {
     public String getName() {
         return name;
     }
-    
-    @JsonProperty("recovery")
-    public void setRecovery(ArrayList<String> recovery) {
-    	this.recovery = recovery;
-    }
-
-    @JsonProperty("recovery")
-    public ArrayList<String> getRecovery() {
-    	return this.recovery;
-    }
 
     public void setName(String name) {
         this.name = name;
     }
-	
-	public String getQuestion(int num) {
-		String q = null;
-		try {
-			q = this.recovery.get(num * 2);
-		} catch (IndexOutOfBoundsException e) {
-			return null;
-		}
-		return q;
-	}
-	
-	public void addQuestion(String question, String answer) {
-		this.recovery.add(question);
-		this.recovery.add(answer);
-		this.setRecovery(this.recovery);
-	}
-	
-	public void removeQuestion(int num) {
-		this.recovery.remove(num * 2);
-		this.money = num * 2;
-		this.recovery.remove(num * 2); //second one removes the answer
-	}
-	
-	public String getAnswer(int num) {
-		String q = null;
-		try {
-			q = this.recovery.get((num * 2) + 1);
-		} catch (IndexOutOfBoundsException e) {
-			return null;
-		}
-		return q;
-	}
-	
-	public long getAccountAge() {
-		return accountAge;
-	}
 
     //Update dialogue status of this player with other npcs
     public void updateDialogueList(String npcName, String dialogueTag, int updateAmount)
@@ -444,7 +401,7 @@ public class Player {
             dialogueList.add(npc);
         }
     }
-
+  
     public LinkedList<Item> getCurrentInventory() {
         return currentInventory;
     }
@@ -666,6 +623,10 @@ public class Player {
     public int getPokeCount(){
 	return pokeCount;
     }
+    
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// INSERT CODE FOR GETTERS AND SETTERS ABOVE ///////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     
     /**
      * Allows the caller to add/take money in user's wallet.

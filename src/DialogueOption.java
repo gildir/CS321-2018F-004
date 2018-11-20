@@ -16,6 +16,9 @@ import java.io.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * This class represents a dialogue option between a player and an NPC
+ */
 public class DialogueOption {
 
     private final String prompt;
@@ -24,10 +27,6 @@ public class DialogueOption {
     private boolean useTag = false;
     private int currentDialogueId = 1;
 
-    /**
-     * This class represents a dialogue option between a player and an NPC
-     *
-     */
     public DialogueOption(String prompt, String response) {
         this.prompt = prompt;
         this.response = response;

@@ -20,6 +20,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.Scanner;
 
+/**
+ * Represents an NPC 
+ */
 public class NPC {
     private final String name;
     private int room;

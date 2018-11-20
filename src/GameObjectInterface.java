@@ -9,7 +9,7 @@ import java.util.HashSet;
  *
  * @author Kevin
  */
-public interface GameObjectInterface extends Remote {
+public interface GameObjectInterface extends Remote, IAccount.Client {
 	
 	/**
 	 * Pokes the ghoul in the current room
@@ -551,35 +551,6 @@ public interface GameObjectInterface extends Remote {
 	 */
 	public String viewFriends(String name, boolean onlineOnly) throws RemoteException;
 	
-	/**
-	 * Resets passwords.
-	 * 
-	 * @param name Name of player getting password reset
-	 * @param password New password to be saved
-	 * @throws RemoteException
-	 */
-	public Responses resetPassword(String name, String password) throws RemoteException;
-	
-	/**
-	 * Gets recovery question
-	 * @param name User of recovery question 
-	 * @param num Marks which question will be grabbed
-	 * @return String of recovery question, null if user doesn't exist
-	 * @throws RemoteException
-	 */
-	public String getQuestion(String name, int num) throws RemoteException;
-	
-	/**
-	 * Gets recovery answer
-	 * @param name User of recovery answer
-	 * @param num Marks which answer will be grabbed
-	 * @return String of recovery question, null if user doesn't exist
-	 * @throws RemoteException
-	 */
-	public Boolean getAnswer(String name, int num, String answer) throws RemoteException;
-
-    public Responses verifyPassword(String name, String pass) throws RemoteException;
-    
     /**
      * Player check in to ensure the client has not crashed. A client needs to 
      * call this method at least every hour or else it will be logged off.
@@ -631,23 +602,6 @@ public interface GameObjectInterface extends Remote {
       * @throws Remote Exception
       */
      public String teach(String player) throws RemoteException;
-     
-   /**
-    * Adds a recovery question
-    * @param name Name of user
-    * @param question Question being added
-    * @param answer The answer
-    * @throws RemoteException
-    */
- 	public void addQuestion(String name, String question, String answer) throws RemoteException;
- 	
- 	/**
- 	 * Removes a recovery question
- 	 * @param name Name of user
- 	 * @param num Number of question to be removed
- 	 * @throws RemoteException
- 	 */
- 	public void removeQuestion(String name, int num) throws RemoteException;
 
 	/*
      * Sets a player's chat prompt string
@@ -656,6 +610,14 @@ public interface GameObjectInterface extends Remote {
      * @throws RemoteException
      */
     public void setPlayerChatPrefix(String playerName, String newPrefix) throws RemoteException;
+    
+    /**
+     * Checks the Venmo mailbox. If mailbox is not empty, prints the content.
+     * 
+     * @param playerName Name of the player
+     * @throws RemoteException
+     */
+    public void checkVenmoMail(String playerName) throws RemoteException;
 
      /**
       * Toggles the RPS resolutions of other players in the same room
