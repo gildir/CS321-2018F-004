@@ -30,6 +30,10 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
 		core = new GameCore(playerAccountsLocation, worldFile);
 
     }
+	
+	protected void shutdown() {
+		core.shutdown();
+	}
 
     /**
      * Links an asynchronous event message connection to a player.
@@ -737,38 +741,6 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
     public String showMap(String name) throws RemoteException{
        return core.showMap(name);
     }	
-
-    /**
-     * Talk to an NPC in the player's room
-     * @param player Name of the player
-     * @param npc Name of the npc
-     * @return String response from the npc if found
-     */
-    public String talk(String player, String npc) throws RemoteException{
-       return core.talk(player,npc);
-    }
-
-    /**
-     * Checks the implementation of the given npc
-     * @param player Name of the player
-     * @param npc Name of the npc
-     * @return True if uses team 6 implementation
-     */
-    public boolean checkNPCValidity(String player, String npc) throws RemoteException{
-       return core.checkNPCValidity(player, npc);
-    }
-
-    /**
-     * Returns an the player's current quest
-     * @param name Name of the player
-     * @return String representation of current quest progress
-     */
-    public String journal(String name) throws RemoteException{
-       return core.journal(name);
-    }
-
-
-
 	/**
 	 * Delete a player's account.
 	 * 

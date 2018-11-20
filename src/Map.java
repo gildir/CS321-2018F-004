@@ -17,31 +17,30 @@ import java.util.HashMap;
 public class Map{   
         private LinkedList<Room> map;
 
-        public Map(String worldFile) {
+        public Map(String worldFile) {		//Name of the map passed on the command line as an argument.
                 map = new LinkedList<>();
                 try {
-                        File mapFile = new File(worldFile);
+                        File mapFile = new File(worldFile);	//Opens the file containing the map csv
                         Scanner mapIn = new Scanner(mapFile).useDelimiter(",|\\n|\\r\\n");
 
                         int numRooms, numExits;
 
-                        String title, description, room_type;
-                        String message, npcName;
-                        int id, link;
+                        String title, description, room_type;	//Strings store the title of the room, a brief description of the room, and the type of room ( inside/outside)
+                        String message;	
+                        int id, link;	
 
                         Direction exitId;
 
                         Room newRoom;
                         Exit newExit;
 
-                        numRooms = Integer.parseInt(mapIn.nextLine());
-                        numExits = 4;
-
-			mapIn.useDelimiter(",|\\n|\\r\\n");
+                        numRooms = Integer.parseInt(mapIn.nextLine());	//Reads the fle parsing the csv file to create the rooms.
+                        numExits = 4;	//Sets the number of exits at 4
 
                         for(int i = 0; i < numRooms; i++) {
 
-                                id = Integer.parseInt(mapIn.next());
+                                mapIn.useDelimiter(",|\\n|\\r\\n"); 
+                                id = Integer.parseInt(mapIn.next());	//Walks through the file parsing lines to create the map.
                                 room_type = mapIn.next();
                                 title = mapIn.next();
                                 mapIn.useDelimiter("\\S|\\s");
@@ -52,23 +51,25 @@ public class Map{
                                 //                System.out.println("Adding Room " + id + " with Title " + title + ": " + description);
 
 
-                                if(id == 1){
-                                        LinkedList<String> quests = new LinkedList<>(Arrays.asList("quest1", "quest2", "quest3"));
-                                        String questNPCName = "questNPC";
+
+                                if(id == 1){ //If the room number is 1 then the quest NPC will be here 
+                                        LinkedList<String> quests = new LinkedList<>(Arrays.asList("quest1", "quest2", "quest3"));//Lists the quests avalible at the NPC
+                                        String questNPCName = "Slartibartfast";//Renamed the NPC 114 by cwells21
                                         ArrayList<DialogueOption> dialogue = new ArrayList<DialogueOption>();
 
                                         HashMap<String, NPC> npcs = new HashMap<>();
                                         npcs.put(questNPCName, new NPC(questNPCName, 1, quests, dialogue));
 
                                         newRoom = new Room(id, room_type, title, description, npcs);
+
                                 }
                                 else {
-                                        newRoom = new Room(id, room_type, title, description);
+                                        newRoom = new Room(id, room_type, title, description);	//This room is not 1 and the quest NPC is not here
                                 }
 
                                 for(int j = 0; j < numExits; j++) {
 
-                                        mapIn.useDelimiter(",|\\n|\\r\\n");
+                                        mapIn.useDelimiter(",|\\n|\\r\\n");	//using a comma delimited file to represent the data of the room.
                                         exitId = Direction.valueOf(mapIn.next());
                                         link = Integer.parseInt(mapIn.next());
                                         mapIn.useDelimiter("\\S|\\s");
@@ -80,20 +81,15 @@ public class Map{
                                         newRoom.addExit(exitId, link, message);
                                 }                
 
-                                mapIn.useDelimiter(",|\\n|\\r\\n");	
-                                //Check if the next value is an integer, if not, then get the name of an npc to add from the next value and add it to the last room
-                                while(!mapIn.hasNextInt() && mapIn.hasNext())
-                                {
-                                        npcName = mapIn.next();
-                                        newRoom.addNPC(npcName, id);
-                                }
-				map.add(newRoom);
+                                map.add(newRoom);
                         }
-                        mapIn.close();
+
+                        mapIn.close();	//close the map file
                 } catch (IOException | IllegalArgumentException ex) {
                         Logger.getLogger(Map.class.getName()).log(Level.SEVERE, null, ex);
-                        System.out.println("[SHUTDOWN] Invalid File " + worldFile);
-	                      System.exit(-1);
+                        System.out.println("[SHUTDOWN] Invalid File " + worldFile);	//Handles the case that the file is not formatted as a map.
+	                      System.exit(-1);	//Report back to the OS of the improper exit of the game.
+
                 }
         }
 
@@ -148,6 +144,8 @@ public class Map{
 
 	setExits(row,col,nodeArr,baseId);
 
+	//Blank display template for the display
+
 	result += "   ______________________________________________\n";
 	result += "   |ASCII Map - Displaying rooms near you!      |\n";
 	result += "   | X = You  $ = Shop   # = Inside | = Outside |\n";
@@ -170,12 +168,17 @@ public class Map{
         result += "   |                                            |\n";
         result += "   |                                            |\n";
         result += "   |____________________________________________|\n";
-	
+
+	//Map function works for grid layout and some custom layouts.
+	//Will not work on the mazes, then if you had a map it would not be much of a maze
+
 	for(row = 0; row < 3; row ++)
 	{
            for(col = 0; col < 5; col ++)
 	   {
-              if(nodeArr[row][col] != null){
+
+              if(nodeArr[row][col] != null){	//Walk through a grid of room starting from upper left to lower right dawing a room if one is connected
+
                  current = this.findRoom(nodeArr[row][col].id);
 		 //System.out.println("Printing Room [" + row +"][" + col + "]");
 	         result = result.substring(0,309 + (250*row) +(8*col)) + "___" +result.substring(312 + (250*row) + (8*col),result.length());
@@ -246,7 +249,9 @@ public class Map{
 	  Room room = this.findRoom(roomId);
 	  nodeArr[row][col] = new Node(room);
 	  Scanner exits = new Scanner(room.getExits()).useDelimiter(" ");
-          while(exits.hasNext())
+
+          while(exits.hasNext())	//While a next room exists procss north, south, east west...
+
           {
              switch(exits.next())
              {
@@ -279,7 +284,9 @@ public class Map{
 
        public Node()
        {
-          n = false;
+
+          n = false;	//initialize the room to be a blank slate for the information to be added later
+
 	  s = false;
 	  e = false;
 	  w = false;
@@ -291,7 +298,9 @@ public class Map{
 
        public Node(Room room)
        {
+
 	  n = false;
+
 	  s = false;
 	  e = false;
 	  w = false;
