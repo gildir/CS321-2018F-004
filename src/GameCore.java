@@ -1086,21 +1086,16 @@ public class GameCore implements GameCoreInterface {
      */
     @Override
 	public Player joinGame(String name, String password) {
-                // Check to see if the player of that name is already in game.
-                if (isPlayerOnline(name))
-                        return null;
-                        
 		synchronized (loginLock) {
-                    //Fetch player file
-                    DataResponse<Player> resp = accountManager.getPlayer(name, password);
-                    
-                    //return null if no player was found
-                    if (!resp.success())
-                            return null;
-                    
-                    //else mark player online, alert everyone, and return player
-                    Player player = resp.data;
-                    this.playerList.addPlayer(player);
+			// Check to see if the player of that name is already in game.
+			Player player = this.playerList.findPlayer(name);
+			if (player != null)
+				return null;
+			DataResponse<Player> resp = accountManager.getPlayer(name, password);
+			if (!resp.success())
+				return null;
+			player = resp.data;
+			this.playerList.addPlayer(player);
 
             //112a DormRoom creation
             player.setDormId(dormCountId);
@@ -1113,9 +1108,9 @@ public class GameCore implements GameCoreInterface {
             if(player.getCurrentRoom() > 100000){player.setCurrentRoom(dormCountId);}
             dormCountId++;
 
-                    this.broadcast(player, player.getName() + " has arrived.");
-                    connectionLog(true, player.getName());
-                    return player;
+			this.broadcast(player, player.getName() + " has arrived.");
+			connectionLog(true, player.getName());
+			return player;
 		}
 	}
 
@@ -2758,10 +2753,5 @@ public class GameCore implements GameCoreInterface {
 		return message;
 		
 	}
-
-    @Override
-    public boolean isPlayerOnline(String name) {
-        return this.playerList.findPlayer(name) != null;
-    }
 
 }
