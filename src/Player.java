@@ -45,21 +45,16 @@ public class Player {
     private ArrayList<NPC> dialogueList = new ArrayList<NPC>();
     private int rounds = 0;
     private int wins = 0;
-    @JsonProperty("recovery")
-    private ArrayList<String> recovery; //stored question, answer, question,...
     private boolean hasTitle = false; //used for title and use item feature 
     private String playerItemTitle = "";
-    private final long accountAge;
 
-    public Player(@JsonProperty("name") String name, @JsonProperty("accountAge") long accountAge) {
+	public Player(@JsonProperty("name") String name) {
         this.currentRoom = 1;
         this.currentDirection = Direction.NORTH;
         this.name = name;
-        this.accountAge = accountAge;
         this.currentInventory = new LinkedList<>();
         this.chestImage = new LinkedList<>();
         this.money = 0;
-        this.recovery = new ArrayList<String>();
     }
 
     public int getDormId() {return this.dormId;}
@@ -89,6 +84,8 @@ public class Player {
      * @param newFilteredWords - collection of words to be filtered from this player's chat
      */
     public void setFilteredWords(HashSet<String> newFilteredWords) {
+        filteredWords = new HashSet<String>();
+
         for(String word : newFilteredWords) {
             filteredWords.add(word.toLowerCase());
         }
@@ -124,23 +121,45 @@ public class Player {
      * @return - new filtered message.
      */
     public String filterMessage(String message) {
+
+        if(filteredWords.size() == 0) { return message; }
+
         String newMessage = "";
         String bleep = "[BLEEEEP]";
+        String messageL = message.toLowerCase();
 
-        for(String word : message.split("\\s+")) {
+        for(int i = 0; i < message.length(); i ++) {
+            char current = message.charAt(i);
+            char currentL = messageL.charAt(i);
             boolean match = false;
+            int wordLen = 0;
 
-            if(filteredWords.contains(word.toLowerCase())) {
-                newMessage += bleep + " ";
+            for(String word : filteredWords) {
+                String wordL = word.toLowerCase();
+
+                if(i + word.length() <= message.length() && currentL == wordL.charAt(0)) {
+                    String fragmentL = messageL.substring(i, i + word.length());
+
+                    if(wordL.equals(fragmentL)) {
+                        match = true;
+                        wordLen = word.length();
+                        break;
+                    }
+                }
+            }
+
+            if(match) {
+                newMessage += bleep;
+                i += wordLen - 1;
             } else {
-                newMessage += word + " ";
+                newMessage += current;
             }
         }
 
-        newMessage = newMessage.substring(0, (newMessage.length()-1));
-
         return newMessage;
-    }/*
+    }
+
+    /*
 
     public void printMessage(Player speaker, String message, String action) {
         String newMessage = filterMessage(message);
@@ -277,6 +296,11 @@ public class Player {
                 break;                
         }
     }
+    
+    
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // INSERT CODE FOR GETTERS AND SETTERS BELOW ///////////////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public String getLastPlayer() {
         return lastPlayer;
@@ -285,7 +309,7 @@ public class Player {
     public void setLastPlayer(String lastPlayer) {
         this.lastPlayer = lastPlayer;
     }
-
+    
     public void setInBattle(boolean battle){
 	inBattle = battle;
     }
@@ -298,56 +322,10 @@ public class Player {
     public String getName() {
         return name;
     }
-    
-    @JsonProperty("recovery")
-    public void setRecovery(ArrayList<String> recovery) {
-    	this.recovery = recovery;
-    }
-
-    @JsonProperty("recovery")
-    public ArrayList<String> getRecovery() {
-    	return this.recovery;
-    }
 
     public void setName(String name) {
         this.name = name;
     }
-	
-	public String getQuestion(int num) {
-		String q = null;
-		try {
-			q = this.recovery.get(num * 2);
-		} catch (IndexOutOfBoundsException e) {
-			return null;
-		}
-		return q;
-	}
-	
-	public void addQuestion(String question, String answer) {
-		this.recovery.add(question);
-		this.recovery.add(answer);
-		this.setRecovery(this.recovery);
-	}
-	
-	public void removeQuestion(int num) {
-		this.recovery.remove(num * 2);
-		this.money = num * 2;
-		this.recovery.remove(num * 2); //second one removes the answer
-	}
-	
-	public String getAnswer(int num) {
-		String q = null;
-		try {
-			q = this.recovery.get((num * 2) + 1);
-		} catch (IndexOutOfBoundsException e) {
-			return null;
-		}
-		return q;
-	}
-	
-	public long getAccountAge() {
-		return accountAge;
-	}
 
     //Update dialogue status of this player with other npcs
     public void updateDialogueList(String npcName, String dialogueTag, int updateAmount)
@@ -609,6 +587,10 @@ public class Player {
     public void setHasChallenge(boolean challenged){
         hasChallenge = challenged;
     }
+    
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// INSERT CODE FOR GETTERS AND SETTERS ABOVE ///////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     
     /**
      * Allows the caller to add/take money in user's wallet.
