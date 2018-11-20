@@ -89,6 +89,8 @@ public class Player {
      * @param newFilteredWords - collection of words to be filtered from this player's chat
      */
     public void setFilteredWords(HashSet<String> newFilteredWords) {
+        filteredWords = new HashSet<String>();
+
         for(String word : newFilteredWords) {
             filteredWords.add(word.toLowerCase());
         }
@@ -124,23 +126,45 @@ public class Player {
      * @return - new filtered message.
      */
     public String filterMessage(String message) {
+
+        if(filteredWords.size() == 0) { return message; }
+
         String newMessage = "";
         String bleep = "[BLEEEEP]";
+        String messageL = message.toLowerCase();
 
-        for(String word : message.split("\\s+")) {
+        for(int i = 0; i < message.length(); i ++) {
+            char current = message.charAt(i);
+            char currentL = messageL.charAt(i);
             boolean match = false;
+            int wordLen = 0;
 
-            if(filteredWords.contains(word.toLowerCase())) {
-                newMessage += bleep + " ";
+            for(String word : filteredWords) {
+                String wordL = word.toLowerCase();
+
+                if(i + word.length() <= message.length() && currentL == wordL.charAt(0)) {
+                    String fragmentL = messageL.substring(i, i + word.length());
+
+                    if(wordL.equals(fragmentL)) {
+                        match = true;
+                        wordLen = word.length();
+                        break;
+                    }
+                }
+            }
+
+            if(match) {
+                newMessage += bleep;
+                i += wordLen - 1;
             } else {
-                newMessage += word + " ";
+                newMessage += current;
             }
         }
 
-        newMessage = newMessage.substring(0, (newMessage.length()-1));
-
         return newMessage;
-    }/*
+    }
+
+    /*
 
     public void printMessage(Player speaker, String message, String action) {
         String newMessage = filterMessage(message);
@@ -285,7 +309,7 @@ public class Player {
     public void setLastPlayer(String lastPlayer) {
         this.lastPlayer = lastPlayer;
     }
-
+    
     public void setInBattle(boolean battle){
 	inBattle = battle;
     }
