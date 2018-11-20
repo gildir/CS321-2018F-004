@@ -628,6 +628,16 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
     public String buyItem(String name, int shopId, String item) throws RemoteException{
     	return core.buyItem(name, shopId, item);
     }
+
+    /**
+     * updates the playlist in the Shop
+     * @param name Name of the player
+     * @return void
+     */
+    public void shopLeft(String name) throws RemoteException
+    {
+        core.shopLeft(name);
+    }
     
     /**
      * Returns a Shop's inventory as a formatted string
@@ -636,6 +646,15 @@ public class GameObject extends UnicastRemoteObject implements GameObjectInterfa
      */
     public String getShopInv(int id) throws RemoteException{
     	return core.getShopInv(id);
+    }
+
+    /**
+     * Returns a Shop's "In Demand" inventory as a formatted string
+     * @param id The shop ID
+     * @return A formatted string representing the Shop's "In Demand" inventory
+     */
+    public String getShopDemInv(int id) throws RemoteException{
+        return core.getShopDemInv(id);
     }
 
     /**

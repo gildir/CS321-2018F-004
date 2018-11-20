@@ -608,6 +608,7 @@ public class GameClient {
                 	if (shopId != -1) {
                 		System.out.println("You enter the shop");
                 		new ShopClient(this.playerName, shopId, remoteGameInterface);
+                        remoteGameInterface.shopLeft(this.playerName);
                 	}
                 	else {
                 		System.out.println("There is no shop here");
