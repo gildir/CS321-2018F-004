@@ -2,17 +2,35 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Queue;
 
+/****************************************************************************
+ * @author Shane
+ * 
+ * CS 321
+ * George Mason University
+ * 
+ * 10/10/2018
+ * 
+ * File Name: RoomConnectivityVerifier
+*@version 1.0 Early Beta
+*@since 2018/11/7
+* Description: This class verifies that all rooms are connnected and tere
+are no rooms that serve as a black hole.  This is important in the cases
+of the maze and the manual generated maps.  
+* 
+***************************************************************************/
+ 
+
 public class RoomConnectivityVerifier {
-    public static HashSet<Integer> verifyConnectivity(String worldFile){
-        Map map = new Map(worldFile);
-        Room startingRoom = map.findRoom(1);
-        Queue<Room> queue = new LinkedList<>();
-        queue.add(startingRoom);
-        HashSet<Room> visited = new HashSet<>();
-        while (!queue.isEmpty()){
-            Room currentRoom = queue.poll();
-            for(Direction direction: Direction.values()){
-                int connectedRoomID = currentRoom.getLink(direction);
+    public static HashSet<Integer> verifyConnectivity(String worldFile){	//Takes a string that is the name of the file to be checked
+        Map map = new Map(worldFile);	//Opens the map file
+        Room startingRoom = map.findRoom(1);	//starts with room 1
+        Queue<Room> queue = new LinkedList<>();	//holds a queue of rooms visited
+        queue.add(startingRoom);	
+        HashSet<Room> visited = new HashSet<>();	//create a hash table of the rooms visited
+        while (!queue.isEmpty()){	//while there are rooms in the queue
+            Room currentRoom = queue.poll();	//move to the current room
+            for(Direction direction: Direction.values()){	//iterate through the rooms in a breadth first traversal of the rooms
+                int connectedRoomID = currentRoom.getLink(direction);	//as rooms are vsited check them off the list
                 if(connectedRoomID == 0 || connectedRoomID > 100000){
                     continue;
                 }
@@ -25,7 +43,7 @@ public class RoomConnectivityVerifier {
         }
         HashSet<Integer> visitedIDs = new HashSet<>();
         for(Room room: visited){
-            visitedIDs.add(room.getId());
+            visitedIDs.add(room.getId());	//traverse though the visited rooms
         }
         return visitedIDs;
 //        HashSet<Room> allRooms = new HashSet<>();
@@ -79,7 +97,7 @@ public class RoomConnectivityVerifier {
         if(roomIDs.equals(allRoomIds)){
             System.out.println("the rooms are all connected");
         }
-        else{
+        else{	//in the case that not all of the rooms are checked off the list report the rooms in the list not visited.
             System.out.println("there are unconnected rooms");
 	    System.out.println("Expected " + allRoomIds.size() + " rooms");
 	    System.out.println("Found " + roomIDs.size() + " rooms");
