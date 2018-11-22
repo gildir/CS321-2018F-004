@@ -7,9 +7,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -137,17 +134,31 @@ public class GameCore implements GameCoreInterface {
                         Thread.sleep(rand.nextInt(60000));
                         object = objects.get(rand.nextInt(objects.size()));
                         room = map.randomRoom();
-                        room.addObject(object);
-                        room.addObject(object);
-                        room.addObject(object);
-                        room.addObject(object);
-                        room.addObject(object);
 
-						GameCore.this.broadcast(room, "You see a student rush past and drop a " + object + " on the ground.");
-						
+                        try {
+							room.addObject(object);
+							GameCore.this.broadcast(room, "You see a student rush past and drop a " + object + " on the ground.");
+						}
+						catch (IndexOutOfBoundsException e){
+							GameCore.this.broadcast(room, "You see a student rush past.");
+						}
+
+                      // were these added for testing/demoing?
+                      //  room.addObject(object);
+                      //  room.addObject(object);
+                      //  room.addObject(object);
+                      //  room.addObject(object);
+                      //  room.addObject(object);
+
+
                     } catch (InterruptedException ex) {
-                        Logger.getLogger(GameObject.class.getName()).log(Level.SEVERE, null, ex);}
-                }}});
+                        Logger.getLogger(GameObject.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
+        });
+        objectThread.setDaemon(true);
+        objectThread.setName("objectThread");
 
                 Thread hbThread = new Thread(new Runnable() {
                     @Override
@@ -166,7 +177,6 @@ public class GameCore implements GameCoreInterface {
                     });
                  hbThread.setDaemon(true);
                  hbThread.setName("heartbeatChecker");
-                 hbThread.start();
                  
                  //task 228, daily allowance checker thread
                  Thread allowanceThread = new Thread(new Runnable() {
@@ -1468,12 +1478,6 @@ public class GameCore implements GameCoreInterface {
         if(player != null) {
 	    Item usedItem = player.removeObjectFromInventory(itemName);
 	    if(usedItem != null) {
-		//checks if the item is a rathskeller bottle, special action if so
-		if(usedItem.getName().equals("Rathskeller_Bottle")) {
-			player.drinkRathskeller();
-			this.broadcast(player, player.getName() + " used " + usedItem.getName());
-			return "You have used the item, and it's time to get funky.";
-		}
 		player.setTitle(usedItem.getFlavor());
 		player.setHasTitle(true);
                 this.broadcast(player, player.getName() + " used " + usedItem.getName());
@@ -1487,64 +1491,6 @@ public class GameCore implements GameCoreInterface {
         else {
             return null;
         }
-    }
-
-    //helper method for parsing messages when a player uses a rathskeller bottle
-    /**
-     * Used for the Rathskeller Bottle Feature; should never be accessed outside this class
-     * Takes the player message, makes it all lower case, and randomly uppercases words
-     * Also replaces all punctuation with '!' or '?'
-     * @param message the message typed by the player
-     * @return the translated string
-     */
-    private String translateRathskeller(String message) {
-	String newMessage = message;
-	newMessage  = newMessage.toLowerCase();
-	int length = newMessage.length() - 1;
-	Random rand = new Random(System.nanoTime());
-	String[] parsedMessage;
-	String delim = " ";
-	parsedMessage = newMessage.split(delim);
-	int numUpper = rand.nextInt(parsedMessage.length);
-
-	for(int x = 0; x < parsedMessage.length; x++) {
-		char[] tempStr = parsedMessage[x].toCharArray();
-		for(int y = 0; y < tempStr.length; y++) {
-			char temp = tempStr[y];
-			if(temp == ',' || temp == '.' || temp == '!' || temp == '?' || temp == ':' || temp == ';')
-			{
-				int flag = rand.nextInt() % 2;
-				if(flag == 1)
-				{
-					tempStr[y] = '!';
-				}
-				else
-				{
-					tempStr[y] = '?';
-				}
-			}			
-		}
-		parsedMessage[x] = new String(tempStr);
-	}
-	
-	for(int x = 0; x < numUpper; x++)
-	{
-		int index = rand.nextInt(parsedMessage.length - 1);
-		String temp = (parsedMessage[index]).toUpperCase();
-		parsedMessage[index] = temp;
-	}
-	
-	newMessage = "";
-	for(int x = 0; x < parsedMessage.length; x++) {
-		if(x == parsedMessage.length - 1) {
-			newMessage = newMessage + parsedMessage[x];
-		}
-		else {
-			newMessage = newMessage + parsedMessage[x] + " ";
-		}
-	}
-
-	return newMessage;
     }
 
     /** 
@@ -2074,17 +2020,13 @@ public class GameCore implements GameCoreInterface {
     public String whisper(String srcName, String dstName, String message){
         Player srcPlayer = this.playerList.findPlayer(srcName);
         Player dstPlayer = this.playerList.findPlayer(dstName);
-	String tempMessage = message;
-	if(srcPlayer.getRathskellerStatus()) {
-		tempMessage = translateRathskeller(message);
-	}
         if (dstPlayer == null)
             return "Player " + dstName + " not found.";
-        if (!dstPlayer.messagePlayer(srcPlayer, "whispers", tempMessage))
+        if (!dstPlayer.messagePlayer(srcPlayer, "whispers", message))
             return "Player " + dstPlayer.getName() + " is ignoring you.";
         dstPlayer.setLastPlayer(srcName);
-        chatLog(srcPlayer, 1, tempMessage, dstPlayer.getName());
-        return srcPlayer.getMessage() + "whisper to " + dstPlayer.getName() + ", " + tempMessage;
+        chatLog(srcPlayer, 1, message, dstPlayer.getName());
+        return srcPlayer.getMessage() + "whisper to " + dstPlayer.getName() + ", " + message;
     }
 
     /**
@@ -2425,16 +2367,12 @@ public class GameCore implements GameCoreInterface {
     public String shout(String name, String message) {
         Player player = this.playerList.findPlayer(name);
         if(player != null){
-	    String tempMessage = message;
-	    if(player.getRathskellerStatus()) {
-		tempMessage = translateRathskeller(message);
-	    }
             for(Player otherPlayer : this.playerList) {
                 if(otherPlayer != player)
-                    otherPlayer.messagePlayer(player, "shouts", tempMessage);
+                    otherPlayer.messagePlayer(player, "shouts", message);
             }
-                    chatLog(player, 2, tempMessage,"Everyone");
-            return player.getMessage() + "shout, " + tempMessage;
+                    chatLog(player, 2, message,"Everyone");
+            return player.getMessage() + "shout, " + message;
         } else {
             return null;
         }
