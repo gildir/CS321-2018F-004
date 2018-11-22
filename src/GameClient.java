@@ -128,7 +128,6 @@ public class GameClient {
 					case "C":
 						loginFailCount=0;
 						Responses resp = remoteGameInterface.createAccountAndJoinGame(playerName, pass);
-						System.out.println(resp);
 						switch (resp) {
 						case BAD_USERNAME_FORMAT:
 							System.out
