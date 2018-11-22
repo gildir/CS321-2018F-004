@@ -50,7 +50,6 @@ public class Player {
     private double rewardAmount; //task 229, keeps track of how much money players will be rewarded every reward interval while logged in
     private long rewardProgress; //task 229, keeps track of how much time must elapse before a reward.
     private long totalPay; //used to calculate missed allowance payments for task 228
-    private boolean rathskellerStatus = false;
 
     //Tracks which quest the player is on
     private int questProgress;
@@ -460,38 +459,6 @@ public class Player {
 			break;
 		default:
 			System.out.println("Please enter in valid input or use the correct format (n/w/p) -> (i/d)");
-	}
-    }
-
-    /**
-     *  Initiates the action of drinking a rathskeller bottle
-     *  Makes the rathskeller status true for one minute after which it will be false
-     */
-    public void drinkRathskeller() {
-	rathskellerStatus = true;
-	Thread rTimer = new Thread(new RathskellerTimer());
-	rTimer.start();
-    }
-
-    /**
-     * Gets the status of a player and tells if they drank from a rathskeller bottle
-     * @return true if the player has drunken, false otherwise
-     */
-    public boolean getRathskellerStatus() {
-	return rathskellerStatus;
-    }
-
-    //runnable class for timing the rathskeller feature
-    private class RathskellerTimer implements Runnable {
-	@Override
-	public void run() {
-		try {
-			Thread.sleep(60000);
-			rathskellerStatus = false;
-		}
-		catch(InterruptedException e) {
-			rathskellerStatus = false;
-		}
 	}
     }
 

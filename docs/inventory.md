@@ -98,14 +98,7 @@ In order to examine a item and see its discription, the item must be in your inv
 ### Developer
 The examine feature obtains the string from the user input and retreves the calling players inventory.  The inventory linked list is then searched sequentially for an item with a matching string name to the inputed name by the user. This search ignores case.  If the search is completed and no match is found, a string is returned prompting the user.  If the string is found, the discription string from the item object is extracted and returned. Code for the examine function can be found [here](./src/GameCore.java).
 
-## Rathskeller Bottle - Feature F07 - shull4 and Jae-Moon Hwang
-### User
-There exists an item named Rathskeller Bottle. When used, every player message will be lower cased and then randomly upper cased. Additionally, all punctuation will be changed to ! or ? randomly. This effect will last for a minute.
-
-### Developer
-When the Rathskeller Bottle is used, a flag is triggered on the player for a minute. This is done with a thread that sleeps for 60 seconds then makes the flag false. Say, Whisper, Reply, and Joke are all affected. There is a helper method in GameCore.java that translates the player's message.
-
-## Refuse Items - Feature 508 - Saru Kalva
+## Refuse Items - Feature F07 - Saru Kalva
 ### User
 To refuse items, the user must choose the option to reply_offer or r_offer and follow this with either the keyword 'reject'. This can only be done if the player has been made an offer made by another player, and offers are only allowed once a trade has been setup, meaning one of the players involved in the trade have requested and accepted one another. Only one trade is allowed at a time. A refused offer will result in no change to the player's inventory. The current, unchanged inventory will be displayed to the user so they are aware. If the player accepts the offer that has been shown to them, their inventory will lose the item that was requested by the other player and will gain the item that they have been offered. Their new inventory will then be displayed to the user.
 
