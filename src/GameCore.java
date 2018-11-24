@@ -639,6 +639,10 @@ public class GameCore implements GameCoreInterface {
      */
     @Override
 	public Player joinGame(String name, String password) {
+                // Check to see if the player of that name is already in game.
+                if (isPlayerOnline(name))
+                        return null;
+                        
 		synchronized (loginLock) {
 			// Check to see if the player of that name is already in game.
 			Player player = this.playerList.findPlayer(name);
@@ -782,6 +786,8 @@ public class GameCore implements GameCoreInterface {
 	public String say(String name, String message) {
 		Player player = this.playerList.findPlayer(name);
 		if (player != null) {
+      /*
+//<<<<<<< PeerReview
 //			this.broadcast(player, player.getName() + " says, \"" + message + "\"");
             this.sayToAll(message, player);
             String newMessage = player.filterMessage(message);
@@ -791,6 +797,17 @@ public class GameCore implements GameCoreInterface {
                 System.out.println("Failed to log chat");
             }
             return "You say, \"" + newMessage + "\"";
+======= */
+		    String tempMessage = message;
+		    if(player.getRathskellerStatus()) {
+			tempMessage = translateRathskeller(message);
+		    }
+		    for (Player otherPlayer : this.playerList)
+		        if (otherPlayer != player && otherPlayer.getCurrentRoom() == player.getCurrentRoom())
+		            otherPlayer.messagePlayer(player, "says", tempMessage);
+            	chatLog(player, 0, tempMessage, "Room " + player.getCurrentRoom());
+            	return player.getMessage() + "say, " + tempMessage;
+//>>>>>>> dev
 
 		} else {
 			return null;
@@ -951,6 +968,127 @@ public class GameCore implements GameCoreInterface {
     }       
 
     /**
+
+     * Attempts to use an item in the player's inventory. Will return a message on any success or failure.
+     * @param name Name of the player to move
+     * @param itemName name of item to use
+     * @return Message showing success. 
+     */    
+    public String useItem(String name, String itemName) {
+        Player player = this.playerList.findPlayer(name);
+        if(player != null) {
+	    Item usedItem = player.removeObjectFromInventory(itemName);
+	    if(usedItem != null) {
+		//checks if the item is a rathskeller bottle, special action if so
+		if(usedItem.getName().equals("Rathskeller_Bottle")) {
+			player.drinkRathskeller();
+			this.broadcast(player, player.getName() + " used " + usedItem.getName());
+			return "You have used the item, and it's time to get funky.";
+		}
+		player.setTitle(usedItem.getFlavor());
+		player.setHasTitle(true);
+                this.broadcast(player, player.getName() + " used " + usedItem.getName());
+                return "You have used the item, and it magically disappears into the void.";
+            }
+            else {
+                this.broadcast(player, player.getName() + " tried to use " + itemName + ", but couldn't find it.");
+                return "You tried to use an item that you don't have.";
+            }
+        }
+        else {
+            return null;
+        }
+    }
+
+    //helper method for parsing messages when a player uses a rathskeller bottle
+    /**
+     * Used for the Rathskeller Bottle Feature; should never be accessed outside this class
+     * Takes the player message, makes it all lower case, and randomly uppercases words
+     * Also replaces all punctuation with '!' or '?'
+     * @param message the message typed by the player
+     * @return the translated string
+     */
+    private String translateRathskeller(String message) {
+	String newMessage = message;
+	newMessage  = newMessage.toLowerCase();
+	int length = newMessage.length() - 1;
+	Random rand = new Random(System.nanoTime());
+	String[] parsedMessage;
+	String delim = " ";
+	parsedMessage = newMessage.split(delim);
+	int numUpper = rand.nextInt(parsedMessage.length);
+
+	for(int x = 0; x < parsedMessage.length; x++) {
+		char[] tempStr = parsedMessage[x].toCharArray();
+		for(int y = 0; y < tempStr.length; y++) {
+			char temp = tempStr[y];
+			if(temp == ',' || temp == '.' || temp == '!' || temp == '?' || temp == ':' || temp == ';')
+			{
+				int flag = rand.nextInt() % 2;
+				if(flag == 1)
+				{
+					tempStr[y] = '!';
+				}
+				else
+				{
+					tempStr[y] = '?';
+				}
+			}			
+		}
+		parsedMessage[x] = new String(tempStr);
+	}
+	
+	for(int x = 0; x < numUpper; x++)
+	{
+		int index = rand.nextInt(parsedMessage.length - 1);
+		String temp = (parsedMessage[index]).toUpperCase();
+		parsedMessage[index] = temp;
+	}
+	
+	newMessage = "";
+	for(int x = 0; x < parsedMessage.length; x++) {
+		if(x == parsedMessage.length - 1) {
+			newMessage = newMessage + parsedMessage[x];
+		}
+		else {
+			newMessage = newMessage + parsedMessage[x] + " ";
+		}
+	}
+
+	return newMessage;
+    }
+
+    /** 
+     * Gets the title of a player
+     * @param name name of the player
+     * @return the title given by the item used if applicable
+     */
+    public String getPlayerTitle(String name) {
+	Player player = this.playerList.findPlayer(name);
+	if(player != null) {
+		return player.getTitle();
+	}
+	else {
+		return null;
+	}
+    }
+
+    /**
+     * Removes the title from a player
+     * @param name name of player
+     */
+    public boolean removePlayerTitle(String name) {
+	Player player = this.playerList.findPlayer(name);
+	if(player != null) {
+		player.setTitle("");
+		player.setHasTitle(false);
+		return true;
+	}
+	return false;
+    }
+
+    /**
+
      * Attempts to erase the whiteboard in the room. Will return a message on any success or failure.
      * @param name Name of the player to erase the whiteboard
      * @return Message showing success. 
@@ -1278,25 +1416,19 @@ public class GameCore implements GameCoreInterface {
     public String whisper(String srcName, String dstName, String message){
         Player srcPlayer = this.playerList.findPlayer(srcName);
         Player dstPlayer = this.playerList.findPlayer(dstName);
-        String returnMessage;
+
+	String tempMessage = message;
+	if(srcPlayer.getRathskellerStatus()) {
+		tempMessage = translateRathskeller(message);
+	}
         if (dstPlayer == null)
-            returnMessage = "Player " + dstName + " not found.";
-        else if (srcPlayer == null)
-            returnMessage = "Message failed, check connection to server.";
-        else if (dstPlayer.isIgnoring(srcPlayer))
-            returnMessage = "Player " + dstPlayer.getName() + " is ignoring you.";
-        else {
-            dstPlayer.setLastPlayer(srcName);
-            String newMessage = dstPlayer.filterMessage(message);
-            dstPlayer.getReplyWriter().println(srcPlayer.getName() + " whispers you, " + newMessage);
-            returnMessage = "You whisper to " + dstPlayer.getName() + ", " + message;
-        }
-        try {
-                chatLog(srcPlayer, 1, message, dstPlayer.getName());
-            } catch (IOException e) {
-                System.out.println("Failed to log chat");
-            }
-        return returnMessage;
+            return "Player " + dstName + " not found.";
+        if (!dstPlayer.messagePlayer(srcPlayer, "whispers", tempMessage))
+            return "Player " + dstPlayer.getName() + " is ignoring you.";
+        dstPlayer.setLastPlayer(srcName);
+        chatLog(srcPlayer, 1, tempMessage, dstPlayer.getName());
+        return srcPlayer.getMessage() + "whisper to " + dstPlayer.getName() + ", " + tempMessage;
+
     }
 
     /**
@@ -1425,18 +1557,18 @@ public class GameCore implements GameCoreInterface {
     public String shout(String name, String message) {
         Player player = this.playerList.findPlayer(name);
         if(player != null){
+	    String tempMessage = message;
+	    if(player.getRathskellerStatus()) {
+		tempMessage = translateRathskeller(message);
+	    }
             for(Player otherPlayer : this.playerList) {
-                if(otherPlayer != player && !otherPlayer.isIgnoring(player)) {
-                    String newMessage = otherPlayer.filterMessage(message);
-                    otherPlayer.getReplyWriter().println(player.getName() + " shouts, \"" + newMessage + "\"");
-                }
+
+                if(otherPlayer != player)
+                    otherPlayer.messagePlayer(player, "shouts", tempMessage);
             }
-            try {
-                    chatLog(player, 2, "\""+message+"\"", "Everyone");
-                } catch (IOException e) {
-                    System.out.println("Failed to log chat");
-                }
-            return "You shout, \"" + message + "\"";
+                    chatLog(player, 2, tempMessage,"Everyone");
+            return player.getMessage() + "shout, " + tempMessage;
+
         } else {
             return null;
         }
@@ -1701,5 +1833,10 @@ public class GameCore implements GameCoreInterface {
 		return accountManager.resetPassword(resp.player, password);
 		
 	}
+
+    @Override
+    public boolean isPlayerOnline(String name) {
+        return this.playerList.findPlayer(name) != null;
+    }
 
 }

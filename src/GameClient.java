@@ -37,6 +37,7 @@ import org.w3c.dom.Attr;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
+import java.io.*;
 
 
 /**
@@ -109,6 +110,12 @@ public class GameClient {
 					String pass = new String(System.console().readPassword()); //task 221 hides password
 					switch (mode) {
 					case "L":
+                        //First check if any user by that name is currently logged on
+                        if(remoteGameInterface.isPlayerOnline(this.playerName)){
+                            System.out.println("This account is alreay logged in.\n");
+                            break;
+                        }
+                                                    
 						nameSat = remoteGameInterface.joinGame(this.playerName, pass);
 						if (!nameSat) {
 							System.out.println("Username and password combination invalid");
@@ -122,7 +129,6 @@ public class GameClient {
 					case "C":
 						loginFailCount=0;
 						Responses resp = remoteGameInterface.createAccountAndJoinGame(playerName, pass);
-						System.out.println(resp);
 						switch (resp) {
 						case BAD_USERNAME_FORMAT:
 							System.out
@@ -989,6 +995,7 @@ public class GameClient {
             Logger.getLogger(GameClient.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
     /**
      * Prompts the user through a dialogue tree to give them the option to reset their password
 	 * @return password
@@ -1014,6 +1021,15 @@ public class GameClient {
     			continue;
     		}
     		break;
+    	}
+    	try {
+	    	if(remoteGameInterface.isPlayerOnline(this.playerName)) {
+	    		System.out.println("This account is currently logged in");
+	    		return null;
+	    	}
+    	} catch(RemoteException e) {
+    		System.out.println("Remote exception checking to see if this account is already logged in. Will not reset password.");
+    		return null;
     	}
     	DataResponse<ArrayList<String>> questions;
     	try {
