@@ -8,6 +8,36 @@ import java.util.ArrayList;
 public interface GameCoreInterface extends IAccount.Server {
 	
 	/**
+	 * Lists all spirits the player has captured.
+	 * @param playerName Player name
+	 * @return String list of spirits the player has captured
+	 * @throws RemoteException
+	 */
+	public String spiritListAll(String playerName);
+	
+	/**
+	 * Lists all spirits the player has not captured.
+	 * @param playerName Player name
+	 * @return String list of spirits the player has not captured
+	 * @throws RemoteException
+	 */
+	public String spiritListMissing(String playerName);
+	
+	/**
+	 * Captures the spirit in the current room
+	 * @param playerName Player name
+	 * @return String message of spirit capture success or failure
+	 */
+	public String capture(String playerName);
+	
+	/**
+	 * The player plays RPS against ghoul to avoid being dragged
+	 * @param playerName the player playing RPS
+	 * @param option the RPS choice of the player
+	 */
+	public String ghoulRPS(String playerName, String option);
+	
+	/**
 	 * Makes the ghoul walk to an adjacent room
 	 * @param g Ghoul that is being moved
 	 * @param room Room the ghoul is currently in
@@ -31,7 +61,11 @@ public interface GameCoreInterface extends IAccount.Server {
 	public String bribeGhoul(String playerName,String item);
 
 	
-	//public String giveToGhoul(String object, String playerName);
+	/**
+	* Broadcasts a message to all room. 
+	* @param message Message to broadcast.
+	*/
+	public void broadcast(String message);
 
     
     /**

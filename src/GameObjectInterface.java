@@ -12,6 +12,38 @@ import java.util.HashSet;
 public interface GameObjectInterface extends Remote, IAccount.Client {
 	
 	/**
+	 * Lists all spirits the player has captured.
+	 * @param playerName Player name
+	 * @return String list of spirits the player has captured
+	 * @throws RemoteException
+	 */
+	public String spiritListAll(String playerName) throws RemoteException;
+	
+	/**
+	 * Lists all spirits the player has not captured.
+	 * @param playerName Player name
+	 * @return String list of spirits the player has not captured
+	 * @throws RemoteException
+	 */
+	public String spiritListMissing(String playerName) throws RemoteException;
+	
+	/**
+	 * Captures the spirit in the current room
+	 * @param playerName Player name
+	 * @return String message of spirit capture success or failure
+	 * @throws RemoteException
+	 */
+	public String capture(String playerName) throws RemoteException;
+	
+	/**
+	 * The player plays RPS against ghoul to avoid being dragged
+	 * @param playerName the player playing RPS
+	 * @param option the RPS choice of the player
+	 * @throws RemoteException
+	 */
+	public String ghoulRPS(String playerName, String option) throws RemoteException;
+	
+	/**
 	 * Pokes the ghoul in the current room
 	 * @param playerName Player name
 	 * @return String message of ghoul

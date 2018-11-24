@@ -50,6 +50,8 @@ public class Player {
     private double rewardAmount; //task 229, keeps track of how much money players will be rewarded every reward interval while logged in
     private long rewardProgress; //task 229, keeps track of how much time must elapse before a reward.
     private long totalPay; //used to calculate missed allowance payments for task 228
+	private boolean fightingGhoul = false;
+	private Ghoul challengedGhoul;
 
     //Tracks which quest the player is on
     private int questProgress;
@@ -74,6 +76,19 @@ public class Player {
         this.totalPay = 0; //for task 228        
 
     }
+	
+	public Ghoul getChallengedGhoul() {
+		return challengedGhoul;
+	}
+ 	public void setChallengedGhoul(Ghoul challengedGhoul) {
+		this.challengedGhoul = challengedGhoul;
+	}
+ 	public boolean isFightingGhoul() {
+		return fightingGhoul;
+	}
+ 	public void setFightingGhoul(boolean fightingGhoul) {
+		this.fightingGhoul = fightingGhoul;
+	}
 
     public int getDormId() {return this.dormId;}
     public void setDormId(int i) {this.dormId = i;} 

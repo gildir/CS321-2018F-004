@@ -331,7 +331,7 @@ public class Map{
 	     }
 	  }
 	  inside = room.getRoomType().equals("inside");
-	  ghoul = room.hasGhoul;
+	  ghoul = room.hasGhoul();
 	  shop = isShoppable(room);
 	  id = room.getId();
        }

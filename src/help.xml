@@ -108,6 +108,18 @@ object are on the ground and what direction you are facing.
         <help command = "POKE_GHOUL">
         <description>  POKE_GHOUL    - Pokes the ghoul in the current room.</description>
     </help>
+	<help command = "CAPTURE">
+        <description>  CAPTURE    - Captures the spirit in the current room.</description>
+    </help>
+	<help command = "SPIRIT_LIST_ALL">
+        <description>  SPIRIT_LIST_ALL    - Lists all spirits you have captured.</description>
+    </help>
+	<help command = "SPIRIT_LIST_MISSING">
+        <description>  SPIRIT_LIST_MISSING    - Lists all spirits you have not captured.</description>
+    </help>
+	<help command = "CAPTURE">
+        <description>  CAPTURE    - Captures the spirit in the current room.</description>
+    </help>
     <help command = "REDO">
         <description>  REDO          - Repeats the last command you entered.</description>
     </help>
