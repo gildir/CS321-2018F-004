@@ -186,4 +186,10 @@ object are on the ground and what direction you are facing.
     <help command = "LISTPLAYERS">
 	<description> LISTPLAYERS		-Lists all the current players in the world.</description>
     </help>
+    <help command = "RANK TOP5">
+	<description> RANK TOP5 	       -Lists the top 5 players in R-P-S battle.</description>
+    </help>
+    <help command = "RANK">
+	<description> RANK      		-Shows the rank of the user in R-P-S battle.</description>
+    </help>
 </helps>
