@@ -365,10 +365,27 @@ public class GameCore implements GameCoreInterface {
 						Room room = map.randomRoom();
 						String spirit = null;
 						
-						//ArrayList<String> spirits = new ArrayList<String>();
-						//Add all spirit types here: ex: happy, sad, scary, etc.
+						//Add all spirit types here
 						spirits.add("happy");
 						spirits.add("sad");
+						spirits.add("scary");
+						spirits.add("spooky");
+						spirits.add("sleepy");
+						spirits.add("angry");
+						spirits.add("annoying");
+						spirits.add("calm");
+						spirits.add("cheerful");
+						spirits.add("silly");
+						spirits.add("energetic");
+						spirits.add("excited");
+						spirits.add("bored");
+						spirits.add("mysterious");
+						spirits.add("curious");
+						spirits.add("dizzy");
+						spirits.add("hungry");
+						spirits.add("lazy");
+						spirits.add("relaxed");
+						spirits.add("lonely");
 						
 						while(true) {
 							try {
