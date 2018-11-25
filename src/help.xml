@@ -180,7 +180,10 @@ object are on the ground and what direction you are facing.
     <help command = "CHEST">
         <description>  CHEST                   - Invokes the Chest interaction subSystem Menu in the DormRoom</description>
     </help>
-     <help command = "TOGGLERPSCHAT">
+    <help command = "TOGGLERPSCHAT">
 	<description> TOGGLERPSCHAT		-Toggles the win resolutions of R-P-S battles in your area.</description>
+    </help>
+    <help command = "LISTPLAYERS">
+	<description> LISTPLAYERS		-Lists all the current players in the world.</description>
     </help>
 </helps>

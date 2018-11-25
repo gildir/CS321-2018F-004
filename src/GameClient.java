@@ -455,7 +455,7 @@ public class GameClient {
                     break;
                 case "ONLINE":
                     System.out.println(remoteGameInterface.showPlayers());
-					break;
+                    break;
                 case "W":
                 case "WHISPER":
                     if (tokens.isEmpty()) {
@@ -553,7 +553,6 @@ public class GameClient {
                     }
                     parseInput(lastCommand);
                     break;
-
 		case "USE":
 		    if(tokens.isEmpty()) {
 			System.err.println("You need to provide an item to use.");
@@ -669,7 +668,7 @@ public class GameClient {
                     System.out.println(remoteGameInterface.inventory(this.playerName));
                     break; 
                 case "VENMO": // Team 4: Alaqeel
-                	System.out.println(remoteGameInterface.venmo(this.playerName, tokens));
+                    System.out.println(remoteGameInterface.venmo(this.playerName, tokens));
                     break;   
                 case "SHOP":
                 	int shopId = remoteGameInterface.shop(this.playerName); 
@@ -692,8 +691,8 @@ public class GameClient {
                 		System.out.println("There is no bank here");
                 	}
                 case "WALLET":
-                	System.out.println(remoteGameInterface.wallet(this.playerName));
-                	break;               
+                    System.out.println(remoteGameInterface.wallet(this.playerName));
+                    break;               
         case "R_TRADE":
                     if(tokens.isEmpty()) {
                             System.err.println("You need to provide the name of the player that you want to trade with");
@@ -710,7 +709,7 @@ public class GameClient {
                     else{
                         System.out.println(remoteGameInterface.playerResponse(this.playerName, tokens.remove(0)));
                     }
-		    break;
+            break;
                 case "POKE_GHOUL":
                     System.out.println(remoteGameInterface.pokeGhoul(this.playerName));
                     break;
@@ -719,9 +718,9 @@ public class GameClient {
                         System.err.println("You need to provide an item to give Ghoul.");
                     }else{
                         System.out.println(remoteGameInterface.bribeGhoul(this.playerName, tokens.remove(0)));
-		    }
-		break;
-		case "DROP":
+            }
+        break;
+        case "DROP":
                     if(tokens.isEmpty()) {
                         System.err.println("You need to provide an object to drop.");
                     }
@@ -833,10 +832,19 @@ public class GameClient {
 		    break;
                 case "CHALLENGE":
                     if(tokens.isEmpty()){
-                      System.err.println("You need to provide a name.");
+                      System.err.println("You need to provide a name and number of rounds.");
                     }
                     else{
-                      System.out.println(remoteGameInterface.challenge(this.playerName, tokens.remove(0)));
+                        if(tokens.size() < 2){
+                          System.err.println("You need to provide the number of rounds.");
+                        }
+                        else{
+
+                            String option1 = tokens.remove(0);
+                            String option2 = tokens.remove(0);
+                            //System.out.println(option1 + " \t\t" + option2);
+                            System.out.println(remoteGameInterface.challenge(this.playerName, option1, option2));//tokens.remove(0), tokens.remove(0)));
+                        }
                     }
                     break;
                 case "ACCEPT":
@@ -889,6 +897,20 @@ public class GameClient {
 		    break;
 		case "TOGGLERPSCHAT":
 		    System.out.println(remoteGameInterface.toggleRPSChat(this.playerName));
+		    break;
+		case "LISTPLAYERS":
+		    System.out.println(remoteGameInterface.listAllPlayers());
+		    break;
+		case "RANK TOP5":
+		    System.out.println(remoteGameInterface.rankings(this.playerName,"top5"));
+		    break;
+		case "RANK":
+		    if(tokens.isEmpty()){
+			System.err.println("You need to provide a username");
+		    }
+		    else{
+			System.out.println(remoteGameInterface.rankings(this.playerName, tokens.remove(0)));
+		    }
 		    break;
                 case "FRIENDS":
                     String sub;
@@ -1086,11 +1108,11 @@ public class GameClient {
     }
     
     public static void main(String[] args) {
-		if(args.length < 1) {
-			System.out.println("[SHUTDOWN] .. This program requires one argument. Run as java -Djava.security.policy=game.policy GameClient hostname");
-			System.exit(-1);
-		}
-		
+        if(args.length < 1) {
+            System.out.println("[SHUTDOWN] .. This program requires one argument. Run as java -Djava.security.policy=game.policy GameClient hostname");
+            System.exit(-1);
+        }
+        
         System.out.println("[STARTUP] Game Client Now Starting...");
         new GameClient(args[0]);
     }
@@ -1395,12 +1417,12 @@ public class GameClient {
      *  - Spawns multiple threads, one for each remote connection.
      */
     public class ReplyRemote implements Runnable {
-		private String host;
-		
-		public ReplyRemote(String host) {
-			this.host = host;
-		}
-		
+        private String host;
+        
+        public ReplyRemote(String host) {
+            this.host = host;
+        }
+        
         @Override
         public void run() {
             // This thread is interruptable, which will allow it to clean up before
