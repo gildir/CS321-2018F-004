@@ -7,9 +7,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -40,6 +37,7 @@ public class GameCore implements GameCoreInterface {
     private Ghoul ghoul;
     private PrintWriter pw;
     private Bank bank;
+    private ArrayList<Chatroom> chatrooms = new ArrayList<Chatroom>();
     private final Logger rpsLogger = Logger.getLogger("battles");
     private FileHandler rpsHandler;
     private boolean pickRPSToggle = false;
@@ -51,6 +49,7 @@ public class GameCore implements GameCoreInterface {
 	private Logger playerLogger = Logger.getLogger("connections");
 	private FriendsManager friendsManager;
 	private final Object friendsLock = new Object();
+	private ArrayList<Thread> allThreads = new ArrayList<>();
     
     private int dormCountId = 100002;//used for dormroom initialization   
     /**
@@ -88,6 +87,9 @@ public class GameCore implements GameCoreInterface {
         accountManager = new PlayerAccountManager(playerAccountsLocation);
         
 		friendsManager = FriendsManager.Create(new File("friends.json"));
+		
+		// sets up Venmo with the correct playerList and account manager
+		Venmo.setup(playerList);
         		
         Thread objectThread = new Thread(new Runnable() {
             @Override
@@ -132,17 +134,31 @@ public class GameCore implements GameCoreInterface {
                         Thread.sleep(rand.nextInt(60000));
                         object = objects.get(rand.nextInt(objects.size()));
                         room = map.randomRoom();
-                        room.addObject(object);
-                        room.addObject(object);
-                        room.addObject(object);
-                        room.addObject(object);
-                        room.addObject(object);
 
-						GameCore.this.broadcast(room, "You see a student rush past and drop a " + object + " on the ground.");
-						
+                        try {
+							room.addObject(object);
+							GameCore.this.broadcast(room, "You see a student rush past and drop a " + object + " on the ground.");
+						}
+						catch (IndexOutOfBoundsException e){
+							GameCore.this.broadcast(room, "You see a student rush past.");
+						}
+
+                      // were these added for testing/demoing?
+                      //  room.addObject(object);
+                      //  room.addObject(object);
+                      //  room.addObject(object);
+                      //  room.addObject(object);
+                      //  room.addObject(object);
+
+
                     } catch (InterruptedException ex) {
-                        Logger.getLogger(GameObject.class.getName()).log(Level.SEVERE, null, ex);}
-                }}});
+                        Logger.getLogger(GameObject.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
+        });
+        objectThread.setDaemon(true);
+        objectThread.setName("objectThread");
 
                 Thread hbThread = new Thread(new Runnable() {
                     @Override
@@ -161,8 +177,82 @@ public class GameCore implements GameCoreInterface {
                     });
                  hbThread.setDaemon(true);
                  hbThread.setName("heartbeatChecker");
-                 hbThread.start();
+                 
+                 //task 228, daily allowance checker thread
+                 Thread allowanceThread = new Thread(new Runnable() {
+                     @Override
+                     public void run() {
+                             while(true) {
+                                 try {
+                                	 Thread.sleep(600000); //checks to update all player allowance every 10 minutes
+                                     //Thread.sleep(5000); //checks every 5 seconds (for testing/demo uncomment this and comment line above)
+                                     
+                                     long daysPlayed = 0; //will be used to calculate each players allowance
+                                     //calculate each players given allowance
+                                     for (Player player : playerList) {
+                                    	 DataResponse<PlayerAccount> resp = GameCore.this.accountManager.getAccount(player.getName());
+                                    	 if(!resp.success()) {
+                                    		 System.err.println("Error getting account for allowence: "+player.getName());
+                                    		 continue;
+                                    	 }
+                                    	 daysPlayed = ((System.currentTimeMillis() - resp.data.getAccountAge("").data)/86400000); //helps calculate how many days worth of allowance to give
+                                    	 //daysPlayed = ((System.currentTimeMillis() - player.getAccountAge())/30000); //testing/demo alternative to the line above (day shortened to 30 seconds)
+                                    	 if(daysPlayed!=player.getTotalPay()) //determines if player needs payment
+                                    	 {
+                                    		 player.getReplyWriter().println("Collecting your owed allowance of $" + String.format("%.2f", ((daysPlayed-player.getTotalPay())*10.0))); //prints how much player is getting
+                                    		 player.changeMoney((daysPlayed-player.getTotalPay())*10.0); //calculates allowance owed to player
+                                    		 player.setTotalPay(daysPlayed); //update TotalPay
+                                    	 }
+                                    	}
+                                     
+                                 } catch (InterruptedException ex) {
+                                 }
+                             }
+                         }
+                     });
+                 
+                 allowanceThread.setDaemon(true);
+                 allowanceThread.setName("allowance");
         
+               //Thread that rewards money to all players every 10 minutes (600,000 ms)
+                 //Team 3, task 229
+                 Thread rewardThread = new Thread(new Runnable() {
+                     @Override
+                     public void run() {
+                    	 
+                    	 final long rewardTime = 600000; //time that must elapse before rewarding players
+                    	 //final long rewardTime = 10000; //10 seconds for testing and demo (comment the above line)
+                    	 final long checkInterval = 2000; // Every 2 seconds, thread checks all players for if they meet requirements for payment at rewardTime. Increase this value for better performance
+                    	 final double rewardIncrement = .01; //How much reward amount increments each time they are given
+                             while(true) {
+                                 try {
+                                     Thread.sleep(checkInterval); //how often thread checks
+                                     //check if server needs to add money to each player's account
+                                     for (Player player : playerList) {
+                                    	 if (player.getRewardProgress() >= rewardTime) {
+                                    		 player.changeMoney(player.getRewardAmount());
+                                    		 
+                                    		 //Let the player know their wallet has increased (mainly for demo and testing purposes.)
+                                    		 player.getReplyWriter().println("Your wallet grew by $" + String.format("%.2f", player.getRewardAmount()) + "!"); //message to player
+                                    		 
+                                    		 player.setRewardAmount(player.getRewardAmount() + rewardIncrement); //amount player is rewarded increments by rewardIncrement
+                                    		 player.setRewardProgress(0); //reward given, reset progress.
+                                    	 	}
+                                    	 
+                                    	 player.setRewardProgress(player.getRewardProgress() + checkInterval); //increase rewardProgress
+                                    	}
+                                     
+                                 } catch (InterruptedException ex) {
+                                 }
+                             }
+                         }
+                     });
+                 
+                 rewardThread.setDaemon(true);
+                 rewardThread.setName("reward");
+                 rewardThread.start();
+                 
+                 
                 // new thread awake and control the action of Ghoul.
                 // team5 added in 10/13/2018
                 Thread awakeDayGhoul = new Thread(new Runnable() {
@@ -194,30 +284,28 @@ public class GameCore implements GameCoreInterface {
                         }
                     }
                 });
-
-                objectThread.setDaemon(true);
                 awakeDayGhoul.setDaemon(true);
+                awakeDayGhoul.setName("awakeDayGhoul");
+
+                allThreads.add(hbThread);
+                allThreads.add(objectThread);
+                allThreads.add(awakeDayGhoul);
+                allThreads.add(allowanceThread);
+                
+                hbThread.start();
                 objectThread.start();
                 awakeDayGhoul.start();
+                allowanceThread.start();
             }
-	
-	/**
-	 * Used to create a hash encrypted in SHA256 for use in encrypting passwords
-	 * 
-	 * @param toHash
-	 * @return SHA256 encrypted hash value, or "ERROR" If encryption method fails.
-	 */
-	private String hash(String toHash) {
-		try {
-			byte[] encodedhash = MessageDigest.getInstance("SHA-256").digest(toHash.getBytes(StandardCharsets.UTF_8));
-			StringBuilder sb = new StringBuilder();
-			for (byte b : encodedhash)
-				sb.append(String.format("%02X", b));
-			return sb.toString();
-		} catch (NoSuchAlgorithmException e) {
-		}
-		return "ERROR";
-	}
+    
+    protected void shutdown() {
+    	for(Player p : playerList)
+    		p.getReplyWriter().println("!SHUTDOWN");
+    	for(Thread t : allThreads)
+    		t.interrupt();
+    	friendsManager.shutdown();
+    	accountManager.shutdown();
+    }
 
 	public void ghoulWander(Ghoul g, Room room) {
 		Random rand = new Random();
@@ -322,11 +410,24 @@ public class GameCore implements GameCoreInterface {
     	
     	// Add player to shop in room if applicable
     	if (map.isShoppable(room)) {
+            shoplist.get(room.getId()).addPlayer(player);
     		return room.getId();
     	}
     	return -1;
     }
 
+    /**
+     * updates the playlist in the Shop
+     * @param name Name of the player
+     * @return void
+     */
+    public void shopLeft(String name)
+    {
+        Player player = this.playerList.findPlayer(name);
+        Room room = map.findRoom(player.getCurrentRoom());
+        shoplist.get(room.getId()).removePlayer(player);
+    }
+    
     /**
      * Returns Shop.tostring
      * @param id The shop's id in the hashmap
@@ -345,18 +446,33 @@ public class GameCore implements GameCoreInterface {
      */
     public double sellItem(String name, int shopId, String item) {
     	Player player = this.playerList.findPlayer(name);
-    	Shop s = shoplist.get(shopId);
-    	double value = 0;
-    	
-    	Item removed = player.removeObjectFromInventory(item);
-    	if (removed != null) {
-    		s.add(removed);
-    		value = removed.price;
-        	player.changeMoney(value);
-    	}
-    	
-    	//int value = removed.getValue();
-    	return value;
+        Shop s = shoplist.get(shopId);
+        double value = 0;
+        
+        Item removed = player.removeObjectFromInventory(item);
+
+        if (removed != null) {
+            //check to see if the item is in demand
+
+            for (Item x : s.getDemand()){
+                if (x.getName().compareToIgnoreCase(removed.getName()) == 0){
+                    //remove and replace the in demand item
+                    s.removeDemand(x);
+                    s.addDemandRand();
+
+                    value = removed.getPrice()*2; //player gets double item's price
+                    player.changeMoney(value);
+                    s.add(removed); //add sold item to shop's inv
+                    return value;
+                }
+            }
+            value = removed.getPrice();
+            
+            s.add(removed); //add sold item to shop's inv
+            
+            player.changeMoney(value);            
+        }
+        return value;
     }
     
 	public String bribeGhoul(String playerName, String item){
@@ -419,6 +535,7 @@ public class GameCore implements GameCoreInterface {
 			try {
 				GhoulLog myLog = new GhoulLog();
 				myLog.glLog("GameCore","pokeGhoul", "Player" + " " + playerName + " has just poked the Ghoul");
+				player.addPoke();
 			} catch (Exception e){
 				e.printStackTrace();
 			}
@@ -459,6 +576,7 @@ public class GameCore implements GameCoreInterface {
     	{
     		if (player.getMoney() > item.getPrice() * 1.2) {
     			s.remove(item);
+    			s.ping(player, item);
     		}
     		else {
     			return "Not enough money!!!";
@@ -485,17 +603,23 @@ public class GameCore implements GameCoreInterface {
 		
 		// Gets the object of the caller player
 		Player player1 = this.playerList.findPlayer(name);
-		Player player2;
+		String player2s;
 		double amount;
 		// Executes the relevant commands
 		switch(tokens.remove(0).toUpperCase()) {
 			case "SEND": // sending a transaction
 				if (tokens.isEmpty()) return "Specify recipient and amount. Type \"venmo help\" to learn more.";
+				player2s = tokens.remove(0);
+				// checks if player is sending to themselves
+                if (name.equals(player2s)) return "You can't Venmo yourself";
 				// gets the object of the receiving player
-				player2 = this.playerList.findPlayer(tokens.remove(0));
-				// checks that the name is correct
-				if (player2 == null) return "Incorrect player name. Type \"venmo help\" to learn more."; 
-				// checks if user entered a transaction amount
+				Player player2 = this.playerList.findPlayer(player2s);
+				// checks that the name is correct and that the player is online
+                if (player2 == null) {
+                    if (accountManager.accountExists(player2s)) return "The player is offline. You can mail them the money instead.\nType \"venmo help\" to learn more."; 
+                    else return "Incorrect player name. Type \"venmo help\" to learn more."; 
+                }
+                // checks if user entered a transaction amount
 				if (tokens.isEmpty()) return "Specify transaction amount. Type \"venmo help\" to learn more.";
 				
 				// checks if the player entered a valid number
@@ -505,12 +629,14 @@ public class GameCore implements GameCoreInterface {
 					return "Please enter a valid number. Type \"venmo help\" to learn more.";
 				}
 				return Venmo.send(player1, player2, amount);
-			case "OFFER": // offering a transaction
+			case "MAIL": // offering a transaction
                 if (tokens.isEmpty()) return "Specify recipient and amount. Type \"venmo help\" to learn more.";
                 // gets the object of the receiving player
-                player2 = this.playerList.findPlayer(tokens.remove(0));
+                player2s = tokens.remove(0);
+                // checks if player is sending to themselves:
+                if (name.equals(player2s)) return "You can't Venmo yourself";
                 // checks that the name is correct
-                if (player2 == null) return "Incorrect player name. Type \"venmo help\" to learn more."; 
+                if (!accountManager.accountExists(player2s)) return "Incorrect player name. Type \"venmo help\" to learn more."; 
                 // checks if user entered a transaction amount
                 if (tokens.isEmpty()) return "Specify transaction amount. Type \"venmo help\" to learn more.";
                 
@@ -520,14 +646,14 @@ public class GameCore implements GameCoreInterface {
                 } catch (NumberFormatException e) {
                     return "Please enter a valid number. Type \"venmo help\" to learn more.";
                 }
-                return Venmo.offer(player1, player2, amount);
+                return Venmo.mail(player1, player2s, amount);
 			case "ACCEPT": // accepting a transaction
                 if (tokens.isEmpty()) return "Enter the transaction ID. Type \"venmo help\" to learn more.";
                 return Venmo.accept(player1, tokens.remove(0));
 			case "REJECT": // rejecting a transaction
                 if (tokens.isEmpty()) return "Enter the transaction ID. Type \"venmo help\" to learn more.";
                 return Venmo.reject(player1, tokens.remove(0));
-			case "LIST": // listing pending transactions
+			case "MAILBOX": // listing pending transactions
 			    return Venmo.list(player1);
 			case "HELP": // prints the help menu
 				return "This is how you can use Venmo:\n" + Venmo.instructions();
@@ -561,14 +687,24 @@ public class GameCore implements GameCoreInterface {
      */
     public String getShopInv(int id) {
 		Shop s = this.shoplist.get(new Integer(id));
-		return s.getObjects();
+		return s.getObjects(0);
+    }
+
+    /**
+     * Returns a Shop's "In Demand" inventory as a formatted string
+     * @param id The shop ID
+     * @return A formatted string representing the Shop's "In Demand" inventory
+     */
+    public String getShopDemInv(int id) {
+        Shop s = this.shoplist.get(new Integer(id));
+        return s.getObjects(1);
     }
 
     /**
      * Picks up multiple items of the name type
      * @param name name of the the player
      * @param target name of the item
-     * @param amount amount of pickup
+     * @param amount amount of items to pickup
      * @return String indicating how many items was picked up
      */
     public String pickup(String name, String target, int amount) {
@@ -951,16 +1087,19 @@ public class GameCore implements GameCoreInterface {
      */
     @Override
 	public Player joinGame(String name, String password) {
+                // Check to see if the player of that name is already in game.
+                if (isPlayerOnline(name))
+                        return null;
+                        
 		synchronized (loginLock) {
-			password = hash(password);
 			// Check to see if the player of that name is already in game.
 			Player player = this.playerList.findPlayer(name);
 			if (player != null)
 				return null;
-			PlayerAccountManager.AccountResponse resp = accountManager.getAccount(name, password);
+			DataResponse<Player> resp = accountManager.getPlayer(name, password);
 			if (!resp.success())
 				return null;
-			player = resp.player;
+			player = resp.data;
 			this.playerList.addPlayer(player);
 
             //112a DormRoom creation
@@ -969,6 +1108,7 @@ public class GameCore implements GameCoreInterface {
             dorm.addExit(Direction.valueOf("EAST"),-100000,"You go back to the elevator");
             dorm.addExit(Direction.valueOf("SOUTH"),100000,"You go back to the elevator");
             dorm.addExit(Direction.valueOf("WEST"),-100000,"You go back to the elevator");
+	    dorm.addNPC("HAL_9000",dormCountId);
             dorm.setChest(player.chestImage);//point to the chest
             this.map.addRoom(dorm);
             if(player.getCurrentRoom() > 100000){player.setCurrentRoom(dormCountId);}
@@ -995,7 +1135,7 @@ public class GameCore implements GameCoreInterface {
 
 	public synchronized Responses createAccountAndJoinGame(String name, String password) {
 		synchronized (createAccountLock) {
-			PlayerAccountManager.AccountResponse resp = accountManager.createNewAccount(name, hash(password));
+			DataResponse<Player> resp = accountManager.createNewAccount(name, password);
 			if (!resp.success())
 				return resp.error;
 			if (joinGame(name, password) != null)
@@ -1097,11 +1237,15 @@ public class GameCore implements GameCoreInterface {
 	public String say(String name, String message) {
 		Player player = this.playerList.findPlayer(name);
 		if (player != null) {
+		    String tempMessage = message;
+		    if(player.getRathskellerStatus()) {
+			tempMessage = translateRathskeller(message);
+		    }
 		    for (Player otherPlayer : this.playerList)
 		        if (otherPlayer != player && otherPlayer.getCurrentRoom() == player.getCurrentRoom())
-		            otherPlayer.messagePlayer(player, "says", message);
-            chatLog(player, 0, message, "Room " + player.getCurrentRoom());
-            return player.getMessage() + "say, " + message;
+		            otherPlayer.messagePlayer(player, "says", tempMessage);
+            	chatLog(player, 0, tempMessage, "Room " + player.getCurrentRoom());
+            	return player.getMessage() + "say, " + tempMessage;
 
 		} else {
 			return null;
@@ -1342,6 +1486,12 @@ public class GameCore implements GameCoreInterface {
         if(player != null) {
 	    Item usedItem = player.removeObjectFromInventory(itemName);
 	    if(usedItem != null) {
+		//checks if the item is a rathskeller bottle, special action if so
+		if(usedItem.getName().equals("Rathskeller_Bottle")) {
+			player.drinkRathskeller();
+			this.broadcast(player, player.getName() + " used " + usedItem.getName());
+			return "You have used the item, and it's time to get funky.";
+		}
 		player.setTitle(usedItem.getFlavor());
 		player.setHasTitle(true);
                 this.broadcast(player, player.getName() + " used " + usedItem.getName());
@@ -1355,6 +1505,64 @@ public class GameCore implements GameCoreInterface {
         else {
             return null;
         }
+    }
+
+    //helper method for parsing messages when a player uses a rathskeller bottle
+    /**
+     * Used for the Rathskeller Bottle Feature; should never be accessed outside this class
+     * Takes the player message, makes it all lower case, and randomly uppercases words
+     * Also replaces all punctuation with '!' or '?'
+     * @param message the message typed by the player
+     * @return the translated string
+     */
+    private String translateRathskeller(String message) {
+	String newMessage = message;
+	newMessage  = newMessage.toLowerCase();
+	int length = newMessage.length() - 1;
+	Random rand = new Random(System.nanoTime());
+	String[] parsedMessage;
+	String delim = " ";
+	parsedMessage = newMessage.split(delim);
+	int numUpper = rand.nextInt(parsedMessage.length);
+
+	for(int x = 0; x < parsedMessage.length; x++) {
+		char[] tempStr = parsedMessage[x].toCharArray();
+		for(int y = 0; y < tempStr.length; y++) {
+			char temp = tempStr[y];
+			if(temp == ',' || temp == '.' || temp == '!' || temp == '?' || temp == ':' || temp == ';')
+			{
+				int flag = rand.nextInt() % 2;
+				if(flag == 1)
+				{
+					tempStr[y] = '!';
+				}
+				else
+				{
+					tempStr[y] = '?';
+				}
+			}			
+		}
+		parsedMessage[x] = new String(tempStr);
+	}
+	
+	for(int x = 0; x < numUpper; x++)
+	{
+		int index = rand.nextInt(parsedMessage.length - 1);
+		String temp = (parsedMessage[index]).toUpperCase();
+		parsedMessage[index] = temp;
+	}
+	
+	newMessage = "";
+	for(int x = 0; x < parsedMessage.length; x++) {
+		if(x == parsedMessage.length - 1) {
+			newMessage = newMessage + parsedMessage[x];
+		}
+		else {
+			newMessage = newMessage + parsedMessage[x] + " ";
+		}
+	}
+
+	return newMessage;
     }
 
     /** 
@@ -1499,13 +1707,13 @@ public class GameCore implements GameCoreInterface {
       if(playerChallengee == null || playerChallenger == null){
         return "This player does not exist in the game.";
       }
-      if(playerChallenger.getInBattle() == true){
+      if(playerChallenger.getInBattle()){
         return "You are already in a R-P-S battle.";
       }
       if(playerChallengee.getInBattle()){
         return "This player is already in a R-P-S battle";
       }
-      if(playerChallengee.getInBattle() == true){
+      if(playerChallengee.getInBattle()){
         return playerChallengee.getName() + " is already in a R-P-S battle.";
       }
       if(playerChallenger != playerChallengee && playerChallenger.getCurrentRoom() == playerChallengee.getCurrentRoom()) {
@@ -1677,11 +1885,13 @@ public class GameCore implements GameCoreInterface {
                     String winner2 = player.getName() + " challenged " + challengee.getName() + " to a Rock Paper Scissors Battle: " + player.getName() + " won the tournament with a final score of " + p1Win + " - " + p2Win + ".";
                     this.broadcast(map.findRoom(player.getCurrentRoom()), winner2);
 		    pickRPSToggle = false;
+		    player.addRpsVictory();//Win counter for Main Questline
                 }
                 else if(p2Win > p1Win){
                     String winner2 = player.getName() + " challenged " + challengee.getName() + " to a Rock Paper Scissors Battle: " + player.getName() + " won the tournament with a final score of " + p1Win + " - " + p2Win + ".";
                     this.broadcast(map.findRoom(player.getCurrentRoom()), winner2);
 		    pickRPSToggle = false;
+		    challengee.addRpsVictory();//Win counter for Main Questline
                 }
                 else{
                     String noWinner = player.getName() + " challenged " + challengee.getName() + " to a Rock Paper Scissors Battle: They tied in the tournament with a final score of " + p1Win + " - " + p2Win + ".";
@@ -1862,9 +2072,11 @@ public class GameCore implements GameCoreInterface {
 		if (player != null) {
             player.chestImage = ((DormRoom)droom).getChest();    
 			this.broadcast(player, "You see " + player.getName() + " heading off to class.");
+			player.setRewardAmount(0.1);//task 229, clear reward increment as specified by task
+			player.setRewardProgress(0);//task 229, resets time until reward as specified by task 
 			this.playerList.removePlayer(name);
             connectionLog(false, player.getName());
-            this.accountManager.forceUpdateData(player);
+            this.accountManager.forceUpdatePlayerFile(player);
 			return player;
 		}
 		return null;
@@ -1880,13 +2092,17 @@ public class GameCore implements GameCoreInterface {
     public String whisper(String srcName, String dstName, String message){
         Player srcPlayer = this.playerList.findPlayer(srcName);
         Player dstPlayer = this.playerList.findPlayer(dstName);
+	String tempMessage = message;
+	if(srcPlayer.getRathskellerStatus()) {
+		tempMessage = translateRathskeller(message);
+	}
         if (dstPlayer == null)
             return "Player " + dstName + " not found.";
-        if (!dstPlayer.messagePlayer(srcPlayer, "whispers", message))
+        if (!dstPlayer.messagePlayer(srcPlayer, "whispers", tempMessage))
             return "Player " + dstPlayer.getName() + " is ignoring you.";
         dstPlayer.setLastPlayer(srcName);
-        chatLog(srcPlayer, 1, message, dstPlayer.getName());
-        return srcPlayer.getMessage() + "whisper to " + dstPlayer.getName() + ", " + message;
+        chatLog(srcPlayer, 1, tempMessage, dstPlayer.getName());
+        return srcPlayer.getMessage() + "whisper to " + dstPlayer.getName() + ", " + tempMessage;
     }
 
     /**
@@ -1898,6 +2114,169 @@ public class GameCore implements GameCoreInterface {
     public String quickReply(String srcName, String message) {
         String target = this.playerList.findPlayer(srcName).getLastPlayer();
         return whisper(srcName, target, message);
+    }
+    
+    /**
+     * Create a new chatroom
+     * @param playerName Name of the player creating the chatroom
+     * @param chatName Name of the chatroom
+     * @return Message showing success
+     * @throws RemoteException
+     */
+    public String makeChat(String playerName, String chatName) {
+    	Player creator = this.playerList.findPlayer(playerName);
+    	for (Chatroom chat:chatrooms) {
+    		if (chat.getName().equals(chatName.toUpperCase())) {
+    			return "This chatroom already exists.";
+    		}
+    	}
+    	Chatroom newChat = new Chatroom(creator, chatName.toUpperCase());
+    	chatrooms.add(newChat);
+    	return "Chatroom " + chatName.toUpperCase() + " created.";
+    }
+    
+    /**
+     * Invite a player to your current chatroom.
+     * @param srcPlayer Name of player sending the invite
+     * @param dstPlayer Name of player receiving the invite
+     * @return Message showing success
+     * @throws RemoteException
+     */
+    public String invChat(String srcPlayer, String dstPlayer, String chatName) {
+    	Player sender = this.playerList.findPlayer(srcPlayer);
+    	Player invitee = this.playerList.findPlayer(dstPlayer);
+        if (invitee == null) {
+            return "Player " + dstPlayer + " not found.";
+        }
+        if (srcPlayer.equals(dstPlayer)) {
+        	return "You can't invite yourself to a chat.";
+        }
+        for (Chatroom chat: chatrooms) {
+        	if (chat.getName().equals(chatName.toUpperCase())) {
+        		if (!chat.getMembers().contains(sender)) {
+        			return "You are not in the chatroom [" + chatName.toUpperCase() + "]";
+        		}
+            	if (chat.getMembers().contains(invitee)) {
+            		return dstPlayer + " is already in the chatroom [" + chatName.toUpperCase() + "]";
+            	}
+            	if (chat.getInvited().contains(invitee)) {
+            		return dstPlayer + " is already invited to the chatroom [" + chatName.toUpperCase() + "]";
+            	}
+        		String message = "Hey! Feel free to join the chatroom [" + chatName.toUpperCase() + "]";
+        		whisper(srcPlayer, dstPlayer, message);
+        		chat.addInvited(invitee);
+        		return "You invited " + dstPlayer + " to join [" + chatName.toUpperCase() + "]";
+        	}
+        }
+    	return "You are trying to invite " + dstPlayer + " to a non-existent chatroom [" + chatName.toUpperCase() + "]";
+    }
+    
+    /**
+     * Join a player's chatroom
+     * @param srcPlayer Name of player joining
+     * @param dstPlayer Name of player in the target chatroom
+     * @return Message showing success
+     * @throws RemoteException
+     */
+    public String joinChat(String srcPlayer, String chatName) {
+    	Player joining = this.playerList.findPlayer(srcPlayer);
+    	Chatroom chatToJoin = null;
+    	for (Chatroom chat:chatrooms) {
+    		if (chat.getName().equals(chatName.toUpperCase())) {
+    			chatToJoin = chat;
+    		}
+    	}
+    	if (chatToJoin == null) {
+    		return "Chatroom [" + chatName.toUpperCase() + "] does not exist.";
+    	}
+    	if (chatToJoin.getMembers().contains(joining)) {
+    		return "You are already in chatroom [" + chatName.toUpperCase() + "]";
+    	}
+    	if (!chatToJoin.getInvited().contains(joining)) {
+    		return "You were not invited to join chatroom [" + chatName.toUpperCase() + "]";
+    	}
+    	chatToJoin.addMember(joining);
+    	chatToJoin.removeInvited(joining);
+        return "You joined chatroom [" + chatName.toUpperCase() + "]";
+    }
+    
+    /**
+     * Leave a chatroom
+     * @param srcPlayer Name of player leaving
+     * @param chatName Name of chatroom to leave
+     * @return Message showing success
+     * @throws RemoteException
+     */
+    public String leaveChat(String srcPlayer, String chatName) {
+    	Player leaving = this.playerList.findPlayer(srcPlayer);
+    	Chatroom chatToLeave = null;
+    	for (Chatroom chat:chatrooms) {
+    		if (chat.getName().equals(chatName.toUpperCase())) {
+    			chatToLeave = chat;
+    		}
+    	}
+    	if (chatToLeave == null) {
+    		return "Chatroom [" + chatName.toUpperCase() + "] does not exist.";
+    	}
+    	if (!chatToLeave.getMembers().contains(leaving)) {
+    		return "You are not in chatroom [" + chatName.toUpperCase() + "]";
+    	}
+    	chatToLeave.removeMember(leaving);
+    	if (chatToLeave.getMembers().size() == 0) {
+    		chatrooms.remove(chatToLeave);
+    		chatToLeave = null;
+    	}
+        return "You left chatroom [" + chatName.toUpperCase() + "]";
+    }
+    
+    /**
+     * Check if chatroom exists
+     * @return boolean showing success
+     * @throws RemoteException
+     */
+    public boolean checkChat(String command) {
+    	for (Chatroom chat:chatrooms) {
+    		if (chat.getName().equals(command)) {
+    			return true;
+    		}
+    	}
+    	return false;
+    }
+    
+    /**
+     * Message a chatroom
+     * @param srcPlayer Name of player sending the message
+     * @param message The message to be sent
+     * @param chatName The name of the chat to send the message to
+     * @return Message showing success
+     * @throws RemoteException
+     */
+    public String messageChat(String srcPlayer, String message, String chatName) {
+		Player player = this.playerList.findPlayer(srcPlayer);
+		Chatroom chatToMessage = null;
+    	for (Chatroom chat:chatrooms) {
+            if (chat.getName().equals(chatName.toUpperCase())) {
+            	chatToMessage = chat;
+               	if (!chat.getMembers().contains(player)) {
+               		return "You are not in the chatroom [" + chatName.toUpperCase() + "]";
+               	}
+    		}
+    	}
+    	if (chatToMessage == null) {
+    		return "You are trying to message a non-existent chatroom [" + chatName.toUpperCase() + "]";
+    	}
+		if (player != null) {
+		    for (Player otherPlayer : chatToMessage.getMembers()) {
+		        if (otherPlayer != player) {
+		            otherPlayer.messagePlayer(player, "messages chatroom [" + chatName.toUpperCase() + "]", message);
+		        }
+		    }
+            chatLog(player, 0, message, "Chatroom " + chatName);
+            return player.getMessage() + "message, " + message + " to chatroom [" + chatName.toUpperCase() + "]";
+
+		} else {
+			return null;
+		}
     }
 
    /**
@@ -2064,12 +2443,16 @@ public class GameCore implements GameCoreInterface {
     public String shout(String name, String message) {
         Player player = this.playerList.findPlayer(name);
         if(player != null){
+	    String tempMessage = message;
+	    if(player.getRathskellerStatus()) {
+		tempMessage = translateRathskeller(message);
+	    }
             for(Player otherPlayer : this.playerList) {
                 if(otherPlayer != player)
-                    otherPlayer.messagePlayer(player, "shouts", message);
+                    otherPlayer.messagePlayer(player, "shouts", tempMessage);
             }
-                    chatLog(player, 2, message,"Everyone");
-            return player.getMessage() + "shout, " + message;
+                    chatLog(player, 2, tempMessage,"Everyone");
+            return player.getMessage() + "shout, " + tempMessage;
         } else {
             return null;
         }
@@ -2137,6 +2520,73 @@ public class GameCore implements GameCoreInterface {
        int roomId = this.playerList.findPlayer(name).getCurrentRoom();
        return map.asciiMap(roomId);
     }
+
+
+    /**
+     * Talk to an NPC in the player's room
+     * @param player Name of the player
+     * @param npc Name of the npc
+     * @return String response from the npc if found
+     */
+    public String talk(String playerName, String npcName){
+       Player player = this.playerList.findPlayer(playerName);
+       boolean found = false;
+       NPC npc = null;
+       for(NPC temp : map.findRoom(player.getCurrentRoom()).getNPCs().values()){
+           if(temp.getName().toUpperCase().equals(npcName.toUpperCase())){
+              found = true;
+	      npc = temp;
+              break;
+	   }
+       }
+       if(!found){
+           return "NPC " + npcName + " is not located in your current room";
+       }
+       else{
+	   return npc.talk(player);
+       }
+    }
+    /**
+     * Checks the implementation of the given npc
+     * @param npc Name of the npc
+     * @return True if uses team 6 implementation
+     */
+    public boolean checkNPCValidity(String playerName, String npcName){
+       Player player = this.playerList.findPlayer(playerName);
+       boolean found = false;
+       NPC npc = null;
+       for(NPC temp : map.findRoom(player.getCurrentRoom()).getNPCs().values()){
+           if(temp.getName().toUpperCase().equals(npcName)){
+              found = true;
+              npc = temp;
+              break;
+           }
+       }
+       if(found)
+	  return npc.checkValidDialogue();
+       return false;
+    }
+    /**
+     * Returns an the player's current quest
+     * @param name Name of the player
+     * @return String representation of current quest progress
+     */
+    public String journal(String name){
+	try{
+           int progress = this.playerList.findPlayer(name).getProgress();
+	   File questDesc = new File("./NPCDialogues/questDescriptions");
+	   Scanner sc = new Scanner(questDesc);
+	   String ret = "Current Quest Description:\n";
+	   String temp = "";
+	   for(int i = 0; i <= progress; i ++)
+	      temp = sc.nextLine();
+	   return ret + temp;
+	}catch(FileNotFoundException ex){
+	   System.out.println("[RUNTIME] No Quest Description File ./NPCDialogues/questDescriptions");
+	   return null;
+	}
+    }
+
 
 	/**
 	 * Logs player connections
@@ -2295,88 +2745,152 @@ public class GameCore implements GameCoreInterface {
     }
 	
 	/**
-	 * Gets recovery question
-	 * @param name User of recovery question 
-	 * @param num Marks which question will be grabbed
-	 * @return String of recovery question, null if user doesn't exist
-	 */
-	public String getQuestion(String name, int num) {
-        Player player = this.playerList.findPlayer(name);
-        if (player==null) {
-        	PlayerAccountManager.AccountResponse resp = this.accountManager.getPlayer(name);
-        	if(!resp.success())
-        		return null;
-        	player=resp.player;
-        }
-        if (player != null) {
-			return player.getQuestion(num);
-		} else {
-			return null;
-		}
-	}
-	
-	public void addQuestion(String name, String question, String answer) {
-		//PlayerAccountManager.AccountResponse resp = this.accountManager.getPlayer(name);
-	
-		//if(!resp.success())
-			//return;
-		Player player = this.playerList.findPlayer(name);
-		if(player != null) {
-			player.addQuestion(question, hash(answer));
-		}
-		
-	}
-	
-	/**
-	 * Gets recovery answer
-	 * @param name User of recovery answer
-	 * @param num Marks which answer will be grabbed
-	 * @return String of recovery question, null if user doesn't exist
-	 */
-	public Boolean getAnswer(String name, int num, String answer) {
-        Player player = this.playerList.findPlayer(name);
-        if (player==null) {
-        	PlayerAccountManager.AccountResponse resp = this.accountManager.getPlayer(name);
-        	if(!resp.success())
-        		return null;
-        	player=resp.player;
-        }
-		if(player != null) {
-			return player.getAnswer(num).equals(hash(answer));
-		} else {
-			return null;
-		}
-	}
-
-	public Responses verifyPassword(String name, String password) {
-		password = hash(password);
-		PlayerAccountManager.AccountResponse resp = this.accountManager.getAccount(name, password);
-		if (resp.success())
-			return Responses.SUCCESS;
-		return resp.error;
-	}
-
-	/**
-	 * Resets passwords.
+	 * Remove question by position in list. Returns the status of the removal.<br>
+	 * <br>
+	 * Possible Responses:<br>
+	 * NOT_FOUND<br>
+	 * INTERNAL_SERVER_ERROR<br>
+	 * FAILURE<br>
+	 * SUCCESS<br>
 	 * 
-	 * @param name Name of player getting password reset
-	 * @param password New password to be saved
+	 * @param name
+	 * @param num - which question
+	 * @return removedStatus
 	 */
-	public Responses resetPassword(String name, String password) {
-		password = hash(password);
-		PlayerAccountManager.AccountResponse resp = this.accountManager.getPlayer(name);
-		if(!resp.success()) {
-			return resp.error;
-		}
-		return accountManager.resetPassword(resp.player, password);
-		
+	@Override
+	public Responses removeQuestion(String name, int num) {
+		DataResponse<PlayerAccount> account = accountManager.getAccount(name);
+		if (!account.success())
+			return account.error;
+		accountManager.markAccount(name);
+		return account.data.removeQuestion(name, num);
 	}
-	
-	public void removeQuestion(String name, int num) {
-		Player player = this.playerList.findPlayer(name);
-		if(player != null) {
-			player.removeQuestion(num);
-		}
+
+	/**
+	 * Returns either the questions or a status error<br>
+	 * <br>
+	 * Possible Errors:<br>
+	 * NOT_FOUND<br>
+	 * INTERNAL_SERVER_ERROR<br>
+	 * 
+	 * @param name
+	 * @return questionsStatus
+	 */
+	@Override
+	public DataResponse<ArrayList<String>> getQuestions(String name) {
+		DataResponse<PlayerAccount> account = accountManager.getAccount(name);
+		if (!account.success())
+			return new DataResponse<>(account.error);
+		accountManager.markAccount(name);
+		return account.data.getQuestions(name);
+	}
+
+	/**
+	 * Returns whether the answers were correct or an error occurred.<br>
+	 * <br>
+	 * Possible Responses:<br>
+	 * NOT_FOUND<br>
+	 * INTERNAL_SERVER_ERROR<br>
+	 * FAILURE<br>
+	 * SUCCESS<br>
+	 * 
+	 * @param name
+	 * @param answers
+	 * @return verifiedStatus
+	 */
+	@Override
+	public Responses verifyAnswers(String name, ArrayList<String> answers) {
+		DataResponse<PlayerAccount> account = accountManager.getAccount(name);
+		if (!account.success())
+			return account.error;
+		accountManager.markAccount(name);
+		return account.data.verifyAnswers(name, answers);
+	}
+
+	/**
+	 * Returns the status of adding a recovery question.<br>
+	 * <br>
+	 * Possible Responses:<br>
+	 * NOT_FOUND<br>
+	 * INTERAL_SERVER_ERROR<br>
+	 * FAILURE      - bad question length<br>
+	 * BAD_PASSWORD - need answer<br>
+	 * SUCCESS<br>
+	 * 
+	 * @param name
+	 * @param question
+	 * @param answer
+	 * @return addStatus
+	 */
+	@Override
+	public Responses addRecoveryQuestion(String name, String question, String answer) {
+		DataResponse<PlayerAccount> account = accountManager.getAccount(name);
+		if (!account.success())
+			return account.error;
+		accountManager.markAccount(name);
+		return account.data.addRecoveryQuestion(name, question, answer);
+	}
+
+	/**
+	 * Returns either account age or error.<br>
+	 * <br>
+	 * Possible Errors:<br>
+	 * NOT_FOUND<br>
+	 * INTERAL_SERVER_ERROR<br>
+	 * 
+	 * @param name
+	 * @return ageStatus
+	 */
+	@Override
+	public DataResponse<Long> getAccountAge(String name) {
+		DataResponse<PlayerAccount> account = accountManager.getAccount(name);
+		if (!account.success())
+			return new DataResponse<Long>(account.error);
+		accountManager.markAccount(name);
+		return account.data.getAccountAge(name);
+	}
+
+	/**
+	 * Returns the status of testing a password against current.<br>
+	 * <br>
+	 * Possible Responses:<br>
+	 * NOT_FOUND<br>
+	 * INTERNAL_SERVER_ERROR<br>
+	 * FAILURE<br>
+	 * SUCCESS<br>
+	 * 
+	 * @param name
+	 * @param password
+	 * @return verifyStatus
+	 */
+	@Override
+	public Responses verifyPassword(String name, String password) {
+		DataResponse<PlayerAccount> account = accountManager.getAccount(name);
+		if (!account.success())
+			return account.error;
+		accountManager.markAccount(name);
+		return account.data.verifyPassword(name, password);
+	}
+
+	/**
+	 * Returns the status of changing a password.<br>
+	 * <br>
+	 * Possible Responses:<br>
+	 * NOT_FOUND<br>
+	 * INTERNAL_SERVER_ERROR<br>
+	 * SUCCESS<br>
+	 * 
+	 * @param name
+	 * @param newPassword
+	 * @return changeStatus
+	 */
+	@Override
+	public Responses changePassword(String name, String password) {
+		DataResponse<PlayerAccount> account = accountManager.getAccount(name);
+		if (!account.success())
+			return account.error;
+		accountManager.markAccount(name);
+		return account.data.changePassword(name, password);
 	}
 
 	/**
@@ -2390,5 +2904,10 @@ public class GameCore implements GameCoreInterface {
 		return message;
 		
 	}
+
+    @Override
+    public boolean isPlayerOnline(String name) {
+        return this.playerList.findPlayer(name) != null;
+    }
 
 }

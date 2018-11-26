@@ -154,8 +154,23 @@ object are on the ground and what direction you are facing.
         <help command = "ACCOUNT">
             <description>  ACCOUNT       - Enters account edit wizard</description>
         </help>
+        <help command = "MAKECHAT">
+        <description>  MAKECHAT      -  MAKECHAT [name] Creates a chatroom called 'name'.</description>
+        </help>
+        <help command = "JOINCHAT">
+        <description>  JOINCHAT      - JOINCHAT [chat] Joins the chatroom called 'chat' if invited.</description>
+        </help>
+        <help command = "LEAVECHAT">
+        <description>  LEAVECHAT     - LEAVECHAT [chat] Leaves the chatroom called 'chat' if a member.</description>
+        </help>
+        <help command = "INVCHAT">
+        <description>  INVCHAT       - INVCHAT [player][chat] Invites 'player' to join the chatroom called 'chat'.</description>
+        </help>
          <help command = "TOGGLERPSCHAT">
-	    <description> TOGGLERPSCHAT		-Toggles the win resolutions of R-P-S battles in your area.</description>
+	    <description>  TOGGLERPSCHAT - Toggles the win resolutions of R-P-S battles in your area.</description>
+        </help>
+        <help command = "[chatroom name]">
+        <description>  [chatroom name]- [chatroom name] message Sends 'message' to chatroom called [chatroom name].</description>
         </help>
     </help_category>
     <help_category category = "BATTLE">

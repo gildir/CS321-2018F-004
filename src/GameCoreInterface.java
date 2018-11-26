@@ -5,7 +5,7 @@ import java.util.ArrayList;
  *
  * @author Kevin
  */
-public interface GameCoreInterface {
+public interface GameCoreInterface extends IAccount.Server {
 	
 	/**
 	 * Makes the ghoul walk to an adjacent room
@@ -129,6 +129,14 @@ public interface GameCoreInterface {
      * @return Message showing success
      */
     public String ignorePlayer(String srcName, String dstName);
+    
+    /**
+     * Checks if the player is online or not.
+     * @param name Player Name. 
+     * @return true if the player is logged into the game. Else it returns false.
+     * @throws RemoteException 
+     */
+    public boolean isPlayerOnline(String name);
 
     /**
      * Player unIgnores further messages from another Player
@@ -154,6 +162,59 @@ public interface GameCoreInterface {
      */
     public String quickReply(String srcName, String message);
     // End 404.
+    
+    /**
+     * Create a new chatroom
+     * @param playerName Name of the player creating the chatroom
+     * @param chatName Name of the chatroom
+     * @return Message showing success
+     * @throws RemoteException
+     */
+    public String makeChat(String playerName, String chatName);
+    
+    /**
+     * Invite a player to your current chatroom.
+     * @param srcPlayer Name of player sending the invite
+     * @param dstPlayer Name of player receiving the invite
+     * @return Message showing success
+     * @throws RemoteException
+     */
+    public String invChat(String srcPlayer, String dstPlayer, String chatName);
+    
+    /**
+     * Join a player's chatroom
+     * @param srcPlayer Name of player joining
+     * @param dstPlayer Name of player in the target chatroom
+     * @return Message showing success
+     * @throws RemoteException
+     */
+    public String joinChat(String srcPlayer, String chatName);
+    
+    /**
+     * Leave a chatroom
+     * @param srcPlayer Name of player leaving
+     * @param chatName Name of chatroom to leave
+     * @return Message showing success
+     * @throws RemoteException
+     */
+    public String leaveChat(String srcPlayer, String chatName);
+    
+    /**
+     * Check if chatroom exists
+     * @return boolean showing success
+     * @throws RemoteException
+     */
+    public boolean checkChat(String command);
+    
+    /**
+     * Message a chatroom
+     * @param srcPlayer Name of player sending the message
+     * @param message The message to be sent
+     * @param chatName The name of the chat to send the message to
+     * @return Message showing success
+     * @throws RemoteException
+     */
+    public String messageChat(String srcPlayer, String message, String chatName);
 
     // Feature 410: Joke
     /**
@@ -238,6 +299,20 @@ public interface GameCoreInterface {
     public String getShopInv(int id);
 
     /**
+     * Returns a Shop's "In Demand" inventory as a formatted string
+     * @param id The shop ID
+     * @return A formatted string representing the Shop's "In Demand" inventory
+     */
+    public String getShopDemInv(int id);
+
+    /**
+     * updates the playlist in the Shop
+     * @param name Name of the player
+     * @return void
+     */
+    public void shopLeft(String name);
+
+    /**
      * Returns a string representation of the offer statement.
      * @param srcName Name of player making offer
      * @param dstName Name of player receiving offer
@@ -301,32 +376,6 @@ public interface GameCoreInterface {
      * @param name Name of client's player that is checking in.
      */
     public void heartbeatCheck(String name);
-	
-	/**
-	 * Gets recovery question
-	 * @param name User of recovery question 
-	 * @param num Marks which question will be grabbed
-	 * @return String of recovery question, null if user doesn't exist
-	 */
-	public String getQuestion(String name, int num);
-	
-	/**
-	 * Gets recovery answer
-	 * @param name User of recovery answer
-	 * @param num Marks which answer will be grabbed
-	 * @return String of recovery question, null if user doesn't exist
-	 */
-	public Boolean getAnswer(String name, int num, String answer);
-	
-	public Responses verifyPassword(String name, String password);
-
-	/**
-	 * Resets passwords.
-	 * 
-	 * @param name Name of player getting password reset
-	 * @param password New password to be saved
-	 */
-	public Responses resetPassword(String name, String pass);
 
      /**
       * Challenge someone to R-P-S
@@ -396,11 +445,7 @@ public interface GameCoreInterface {
 	 * @return Message showing online friends
 	 */
 	public String viewFriends(String name, boolean onlineOnly);
-	
-	public void addQuestion(String name, String question, String answer);
-	
-	public void removeQuestion(String name, int num);
-	
+		
 	/**
 	 * Returns a message saying the player has toggled the RPS resolutions in area
 	 * @param Player name
