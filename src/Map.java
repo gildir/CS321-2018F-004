@@ -18,27 +18,27 @@ public class Map{
         public Map(String worldFile) {
                 map = new LinkedList<>();
                 try {
-                        File mapFile = new File(worldFile);
-                        Scanner mapIn = new Scanner(mapFile).useDelimiter(",|\\n|\\r\\n");
+                        File mapFile = new File(worldFile);	//Set the mapfile to be the file defined by worldFile
+                        Scanner mapIn = new Scanner(mapFile).useDelimiter(",|\\n|\\r\\n");	//Set the tokens for parsing the map file
 
-                        int numRooms, numExits;
+                        int numRooms, numExits;	//Stores the number of rooms and the number of exits
 
-                        String title, description, room_type;
+                        String title, description, room_type;	//Strings that will hold the data for the descriptions of the rooms
                         String message;
                         int id, link;
 
                         Direction exitId;
 
-                        Room newRoom;
+                        Room newRoom;	//
                         Exit newExit;
 
-                        numRooms = Integer.parseInt(mapIn.nextLine());
-                        numExits = 4;
+                        numRooms = Integer.parseInt(mapIn.nextLine());	//Read the number of rooms form the first line of the file
+                        numExits = 4;	//set the number of potential exits as 4
 
                         for(int i = 0; i < numRooms; i++) {
 
-                                mapIn.useDelimiter(",|\\n|\\r\\n"); 
-                                id = Integer.parseInt(mapIn.next());
+                                mapIn.useDelimiter(",|\\n|\\r\\n"); 	//While the number of rooms created is less than the number of rooms defined in the file 
+                                id = Integer.parseInt(mapIn.next());	//read the 5 lines in the file that define a room.
                                 room_type = mapIn.next();
                                 title = mapIn.next();
                                 mapIn.useDelimiter("\\S|\\s");
@@ -50,9 +50,9 @@ public class Map{
 
 
                                 if(id == 1){
-                                        LinkedList<String> quests = new LinkedList<>(Arrays.asList("quest1", "quest2", "quest3"));
+                                        LinkedList<String> quests = new LinkedList<>(Arrays.asList("quest1", "quest2", "quest3"));	//Define the quests for the NPC
                                         newRoom = new Room(id, room_type, title, description, new LinkedList<>(Arrays.asList(
-                                                            new NPC("questNPC", 1, quests))));
+                                                            new NPC("Slartibartfast", 1, quests))));	//Rename the NPC as per sprint 5
                                 }
                                 else {
                                         newRoom = new Room(id, room_type, title, description);
@@ -60,7 +60,7 @@ public class Map{
 
                                 for(int j = 0; j < numExits; j++) {
 
-                                        mapIn.useDelimiter(",|\\n|\\r\\n");
+                                        mapIn.useDelimiter(",|\\n|\\r\\n");	//For each direction check and add exits as neccisary
                                         exitId = Direction.valueOf(mapIn.next());
                                         link = Integer.parseInt(mapIn.next());
                                         mapIn.useDelimiter("\\S|\\s");

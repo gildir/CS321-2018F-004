@@ -51,10 +51,10 @@ public class GameCore implements GameCoreInterface {
 	 * @throws Exception
 	 * 
 	 */
-    public GameCore(String playerAccountsLocation, String worldFile) throws Exception {
+    public GameCore(String playerAccountsLocation, String worldFile) throws Exception {	//allow for a map to be passed on the command line
 
         // Generate the game map.
-        map = new Map(worldFile);
+        map = new Map(worldFile);	
         this.dailyLogger = new DailyLogger();
         dailyLogger.write("SERVER STARTED");
         playerList = new PlayerList(); 
@@ -112,7 +112,7 @@ public class GameCore implements GameCoreInterface {
                 }
                 while(true) {
                     try {
-                        Thread.sleep(rand.nextInt(60000));
+                        Thread.sleep(rand.nextInt(90000));	//Updated per Sprint 1
                         object = objects.get(rand.nextInt(objects.size()));
                         room = map.randomRoom();
                         room.addObject(object);
