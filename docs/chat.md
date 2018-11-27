@@ -125,6 +125,39 @@ Example of ignored me:
 > The Ignored Me feature is checked in GameCore.whisper. When it is found that a player is ignoring the whisperer, the whisper operation ends and returns an appropriate message to the whisperer.
 
 
+## Timestamps - Brandon
+### User:
+> The timestamp feature is an addition to chat messages sent in the game. When a message is sent in the game, the time that the message was sent is listed to the left of the message in a 24-hour clock format (that is, from 00:00 to 23:59), according to the time of the server. This is a great way to keep track of when exactly messages were sent in the event that users may need to refer to them later. In addition, the Chat Log feature has been updated to show timestamps with the messages in the log as well.
+
+![](../images/timestamp.png)
+
+### Dev:
+> The implementation of timestamps is done in the Player.java file. In the messagePlayer and getMessage methods in the Player.java file, a call to GameServer.java's getDate() method is used in order to receive the server time within the message, and is formatted to where the timestamp is placed before the actual message. This format can be altered by those who wish to implement different message formats or different forms of timestamps.
+
+
+## Prefix - Reed, Carl
+### User:
+> The prefix feature is an addition to mesages that distinguishes chat messages from other types of messages within the game. The default prefix is ">>>" and can be changed within the user's "chat config" file. The prefix will appear for messages said within player chat, such as say, shout, whisper, and quick reply messages, but will not appear for other messages, such as events that happen within the game world.
+
+![](../images/prefix.png)
+
+### Dev:
+> The implementation of the prefix is done in the Player.java file, while the file to read in the prefix is done in the GameClient.java file. Within the GameClient.java file, the method readPrefixFromFile is called, in which the chat config file is read in to the player's configuration. By default, it is ">>>" and set in the setPrefix method in the Player.java file, called within the GameObject.java file in the setPlayerChatPrefix(String, String) method. In the messagePlayer and getMessage methods, the prefix is set by adding this.prefix in the message statment, and the prefix is added to the user's chat output. This format can be altered by those who wish to implement different message formats or different forms of prefixes. 
+
+
+## Group Chat - Brandon
+### User:
+> This feature allows the user to create a group chatroom in which they are able to share messages privately among that chatroom's members. The command is executed by typing "MAKECHAT," followed by a space, followed by the name of the chatroom, restricting the name to be one word. Users can invite other players to the created chatroom by inputting "INVCHAT," the name of the desired player to join, and the name of the chatroom created, all separated by spaces. If invited to a chatroom, the user can type in "JOINCHAT," followed by a space, followed by the name of the chatroom they were invited to. Finally, the user can leave a specified group chatroom by typing in "LEAVECHAT," followed by a space, followed by the name of the chatroom they wish to leave.
+
+![](../images/groupchat1.png)
+![](../images/groupchat2.png)
+
+### Dev:
+> This feature utilizes a new class: Chatroom.java, in which ArrayList<Strings> are used to manage members of the chatroom and those invited to the chatroom, with getter and setter methods for names and methods, along with methods for adding and removing members and those who were invited to the chatroom. GameCore.java uses the makechat(String playerName, String chatName), invChat(String srcPlayer, String dstPlayer, String chatName), joinChat(String srcPlayer, String chatName), and leaveChat(String srcPlayer, String chatName) methods for cases handled in GameClient.java for creating chats, inviting players to chats, joining chats, and leaving chats, respectively. Cases in these methods ensure that duplicate chats are not allowed, you must be invited in a chat to join, you must be a member of a chat to invite someone, and if the last person in a chatroom leaves, the instance of that chatroom is discarded and the name becomes available again. These exceptions are all handled within GameCore.java.
+  
 
 ## Note to Devs
 > When adding a new feature, start at GameClient -> GameObjectInterface -> GameObject -> GameCoreInterface -> GameCore.
+>Two methods have been implemented to create a standard system to send out messages among players in the game: boolean messagePlayer(Player source, String messageType, String message), and String getMessage(). These methods are now called in the say, shout, whisper, and quickReply methods within the GameCore.java file.
+
+> Several requested files have been added to the .gitignore file for this sprint. These files are all within the /src/ directory, and are as follows: FilteredWordsList, ChatPrefixFile, ghoulLog.txt, chatlog.txt, friends.json, and the src/logs/ directory.

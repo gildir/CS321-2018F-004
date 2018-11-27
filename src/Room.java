@@ -1,4 +1,5 @@
 import java.util.LinkedList;
+import java.util.HashMap;
 import java.lang.StringBuilder;
 import java.lang.IllegalArgumentException; 
 
@@ -14,10 +15,12 @@ public class Room {
     private final LinkedList<Item> objects;
     private final LinkedList<Exit> exits;
 
+
+
     private static final int MAX_WHITEBOARD_LEN = 120;
     private StringBuilder whiteboard;
     //list of NPCs in a room, list in case additional NPCs are added to the game
-    private final LinkedList<NPC> npcs;
+    private HashMap<String, NPC> npcs;
     //add tem state check for ghoul
     public boolean hasGhoul = false;
 
@@ -31,18 +34,18 @@ public class Room {
         this.title = title;
         this.description = description;
         this.room_type = room_type;
-        this.npcs = new LinkedList<>();
+        this.npcs = new HashMap<>();
     }
 
-    public Room(int id, String room_type, String title, String description, LinkedList<NPC> npcs) {
+    public Room(int id, String room_type, String title, String description, HashMap<String, NPC> npcs) {
         this.objects = new LinkedList<>();
         this.exits = new LinkedList<>();
         this.whiteboard = new StringBuilder(MAX_WHITEBOARD_LEN);
         this.id = id;
         this.title = title;
+	    this.room_type = room_type;
         this.description = description;
         this.npcs = npcs;
-        this.room_type = room_type;
     }
     
     public String toString(PlayerList playerList, Player player) {
@@ -51,12 +54,11 @@ public class Room {
         result += ".-------------------------+----------------------\n";
         result += this.getDescription() + "\n";
         result += "...................\n";
-        result += "NPCs in the area: " + this.getNPCs() + "\n";
+        result += "NPCs in the area: " + this.getNPCs().keySet() + "\n";
         result += "Objects in the area: " + this.getObjects() + "\n";
         result += "Players in the area: " + this.getPlayers(playerList) + "\n";
         result += "You see paths in these directions: " + this.getExits() + "\n";
         result += "...................\n";
-        result += "You are facing: " + player.getCurrentDirection() + "\n";
         return result;
     }
     
@@ -134,13 +136,18 @@ public class Room {
         }
     }
 
-    public String getNPCs() {
-        if(this.npcs.isEmpty()) {
-            return "None.";
-        }
-        else {
-            return this.npcs.toString();
-        }
+    /*
+     * Adds an NPC to the current room, uses team 6 implementation
+     *
+     * @param name String name for the npc, also refers to file to get NPC dialogue
+     * @param id The id of the NPC's room
+     */
+    public void addNPC(String name, int id) {
+        npcs.put(name, new NPC(name, id));
+    }
+
+    public HashMap<String, NPC> getNPCs() {
+        return this.npcs;
     }
     
     public void addObject(Item obj) {
