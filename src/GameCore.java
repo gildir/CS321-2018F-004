@@ -24,7 +24,8 @@ import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 import java.util.logging.StreamHandler;
 import java.util.logging.FileHandler;
-
+import java.io.FileInputStream;
+import java.util.Arrays;
 /**
  *
  * @author Kevin
@@ -1700,44 +1701,77 @@ public class GameCore implements GameCoreInterface {
         }
     }
 
+    /**
+     * Challenge another player to rps
+     * @param playerChallenger Name of the player who is initiating the challenge
+     * @param playerChallenged Name of the player who is being challenged
+     * @return String of feedback from player's attempt to challenge
+     */ 
     @Override
-    public String challenge(String challenger, String challengee){
-      Player playerChallenger = this.playerList.findPlayer(challenger);
-      Player playerChallengee = this.playerList.findPlayer(challengee);
-      if(playerChallengee == null || playerChallenger == null){
-        return "This player does not exist in the game.";
+    public String challenge(String playerChallenger, String playerChallenged, String sRounds){
+      Player player = this.playerList.findPlayer(playerChallenger);
+      Player opponent = this.playerList.findPlayer(playerChallenged);
+      int rounds = 0;
+      if(opponent == null || player == null){
+        return "This player does not exist in the game or is not online.";
       }
-      if(playerChallenger.getInBattle()){
+      if(opponent.getHasChallenge()){
+        opponent.getReplyWriter().println("You have a challenge that has not been responded to yet.");
+        return "This Player already has a challenge that needs to be responded to.";
+      }
+      if(player.getInBattle()){
         return "You are already in a R-P-S battle.";
       }
-      if(playerChallengee.getInBattle()){
-        return "This player is already in a R-P-S battle";
+      if(opponent.getInBattle()){
+        return opponent.getName() + " is already in a R-P-S battle.";
       }
-      if(playerChallengee.getInBattle()){
-        return playerChallengee.getName() + " is already in a R-P-S battle.";
-      }
-      if(playerChallenger != playerChallengee && playerChallenger.getCurrentRoom() == playerChallengee.getCurrentRoom()) {
-        playerChallengee.setChallenger(challenger);
-        playerChallenger.setChallenger(challengee);
-        playerChallengee.setHasChallenge(true);
-        playerChallengee.getReplyWriter().println(playerChallenger.getName() + " challenges you to a R-P-S.");
+      if(player != opponent && player.getCurrentRoom() == opponent.getCurrentRoom()) {
+        switch(sRounds){
+        case "1":
+        case "ONE":
+            rounds = 1;
+            break;
+        case "3":
+        case "THREE":
+            rounds = 3;
+            break;
+        case "5":
+        case "FIVE":
+            rounds = 5;
+        }
+        if(rounds != 1 && rounds != 3 && rounds != 5){
+            return "This is an invalid number of rounds, please choose from 1, 3, or 5 rounds: ";
+        }
 
-        return "You challenged " + playerChallengee.getName() + " to a R-P-S.";
+        opponent.setChallenger(playerChallenger);
+        player.setChallenger(playerChallenged);
+        opponent.setHasChallenge(true);
+        opponent.setRounds(rounds);
+        opponent.getReplyWriter().println(player.getName() + " challenges you to a R-P-S Battle for " + rounds + " rounds. Do you accept?");
+
+        return "You challenged " + opponent.getName() + " to a R-P-S Battle for " + rounds + " rounds.";
       }
-      else if(playerChallenger == playerChallengee)
+      else if(player == opponent)
         return "You can't challenge yourself to R-P-S.";
       else {
         return "This person is not in the same room as you or doesn't exist in the game.";
       }
     }
 
+    /** 
+     * Accept a challenge to rps
+     * @param playerChallenged Name of the player who is being challenged
+     * @param playerChallenged Name of the player who is initiating the challenge
+     * @param sRounds Number of rounds the player wants to accept
+     * @return String of feedback from player's attempt to accept
+     */ 
     @Override
-    public String accept(String challengee, String challenger, String sRounds){
-      Player playerChallenger = this.playerList.findPlayer(challenger);
-      Player playerChallengee = this.playerList.findPlayer(challengee);
+    public String accept(String playerChallenged, String playerChallenger, String sRounds){
+      Player player = this.playerList.findPlayer(playerChallenger);
+      Player opponent = this.playerList.findPlayer(playerChallenged);
       int rounds = 0;
-      if(playerChallengee == null || playerChallenger == null){
-        return "This player does not exist in the game.";
+      if(opponent == null || player == null){
+        return "This player does not exist in the game or is not online.";
       }
       switch(sRounds){
         case "1":
@@ -1756,16 +1790,21 @@ public class GameCore implements GameCoreInterface {
       if(rounds != 1 && rounds != 3 && rounds != 5){
         return "This is an invalid number of rounds, please choose from 1, 3, or 5 rounds: ";
       }
-      if(playerChallengee.getChallenger().equals(playerChallenger.getName()) && playerChallengee.getHasChallenge() == true){
-        if(playerChallenger != playerChallengee && playerChallenger.getCurrentRoom() == playerChallengee.getCurrentRoom()) {
-          playerChallenger.setRounds(rounds);
-          playerChallengee.setRounds(rounds);
-          playerChallenger.getReplyWriter().println(playerChallengee.getName() + " accepts your challenge to a R-P-S for " + rounds + " rounds");
-          playerChallengee.setHasChallenge(false);
-          playerChallengee.setInBattle(true);
-          playerChallenger.setInBattle(true);
-          playerChallengee.getReplyWriter().println("You accept " + playerChallenger.getName() + "\'s challenge to a R-P-S for " + rounds + " rounds");
-          playerChallenger.getReplyWriter().println("Entering Round\nPick rock, paper, or scissors: ");
+      //System.out.println(sRounds + " rounds " + playerChallengee.getRounds());
+      //System.out.println(sRounds.equals(playerChallengee.getRounds()));
+      if(!(opponent.getRounds() == rounds) ){
+        return "You did not accept the challenge for the same amount of rounds, either accept with " + opponent.getRounds() + " rounds or reject the challenge";
+      }
+      if(opponent.getChallenger().equals(player.getName()) && opponent.getHasChallenge()){
+        if(player != opponent && player.getCurrentRoom() == opponent.getCurrentRoom()) {
+          player.setRounds(rounds);
+          opponent.setRounds(rounds);
+          player.getReplyWriter().println(opponent.getName() + " accepts your challenge to a R-P-S for " + rounds + " rounds");
+          opponent.setHasChallenge(false);
+          opponent.setInBattle(true);
+          player.setInBattle(true);
+          opponent.getReplyWriter().println("You accept " + player.getName() + "\'s challenge to a R-P-S for " + rounds + " rounds");
+          player.getReplyWriter().println("Entering Round\nPick rock, paper, or scissors: ");
           return "Entering Round\nPick rock, paper, or scissors: ";
         }
         else
@@ -1773,59 +1812,76 @@ public class GameCore implements GameCoreInterface {
           return "This person is not in the same room as you or doesn't exist in the game.";
         }
       }
-      else if(playerChallenger == playerChallengee){
+      else if(player == opponent){
         return "You can't challenge yourself to R-P-S.";
       }
       else{
-        return "You have not been challenged by " + playerChallenger.getName();
+        return "You have not been challenged by " + player.getName();
       }
     }
 
+    /**  
+     * Reject another player's challenge to rps
+     * @param playerChallenged Name of the player who is being challenged
+     * @param playerChallenger Name of the player who is initiating the challenge
+     * @return String of feedback from player's attempt to reject the challenge
+     */ 
     @Override
-    public String reject(String challengee, String challenger){
-      Player playerChallenger = this.playerList.findPlayer(challenger);
-      Player playerChallengee = this.playerList.findPlayer(challengee);
-      if(playerChallengee == null || playerChallenger == null){
-        return "This player does not exist in the game.";
+    public String reject(String playerChallenged, String playerChallenger){
+      Player player = this.playerList.findPlayer(playerChallenger);
+      Player opponent = this.playerList.findPlayer(playerChallenged);
+      if(opponent == null || player == null){
+        return "This player does not exist in the game or is not online.";
       }
-      if(playerChallengee.getChallenger().equals(playerChallenger.getName()) && playerChallengee.getHasChallenge() == true){
-        if(playerChallenger != playerChallengee && playerChallenger.getCurrentRoom() == playerChallengee.getCurrentRoom()) {
-          playerChallengee.setChallenger(" ");
-          playerChallenger.setChallenger(" ");
-          playerChallengee.setHasChallenge(false);
-          playerChallenger.getReplyWriter().println(playerChallengee.getName() + " rejects your challenge to a R-P-S");
-          return "You reject " + playerChallenger.getName() + "\'s challenge to a R-P-S.";
+      if(opponent.getChallenger().equals(player.getName()) && opponent.getHasChallenge()){
+        if(player != opponent && player.getCurrentRoom() == opponent.getCurrentRoom()) {
+          opponent.setChallenger(" ");
+          player.setChallenger(" ");
+          opponent.setHasChallenge(false);
+          player.getReplyWriter().println(opponent.getName() + " rejects your challenge to a R-P-S");
+          return "You reject " + player.getName() + "\'s challenge to a R-P-S.";
         }
-        else if(playerChallenger == playerChallengee)
-          return "You can't challenge yourself to R-P-S.";
-        else {
-          return "This person is not in the same room as you or doesn't exist in the game.";
-        }
+	else{
+	  return "This person is not in the same room as you or doesn't exist in the game.";
+	}
       }
-      else if(playerChallenger == playerChallengee){
+      else if(player == opponent){
         return "You can't challenge yourself to R-P-S.";
       }
       else{
-        return "You have not been challenged by " + playerChallenger.getName();
+        return "You have not been challenged by " + player.getName();
       }
     }
+
+    //call when want to log completed battle
     private void rpsLog(String winner, String loser, String status, String winnerPick, String loserPick){
 	    rpsLogger.info(winner + " " + status + " against " + loser + "\n" + 
               winner +  " pick " + winnerPick + ", " + loser +  " pick " + loserPick + "\n");
     }
-    private void rpsLogger() throws IOException {
-       rpsHandler = new FileHandler("battles.log", true);
-       SimpleFormatter simpleformat = new SimpleFormatter();
-       rpsHandler.setFormatter(simpleformat);
-       rpsLogger.setLevel(Level.ALL);
-       rpsLogger.setUseParentHandlers(false);
-       rpsLogger.addHandler(rpsHandler);
+    //initializes rpsLogger
+    private void rpsLogger(){
+      try{
+        rpsHandler = new FileHandler("battles.log", true);
+      }
+      catch(IOException e){
+	System.out.println("Error opening battles.log");
+      }
+        SimpleFormatter simpleformat = new SimpleFormatter();
+        rpsHandler.setFormatter(simpleformat);
+        rpsLogger.setLevel(Level.ALL);
+        rpsLogger.setUseParentHandlers(false);
+        rpsLogger.addHandler(rpsHandler);
     }
-
+    /**  
+     * Pick rock, paper or scissors in an rps battle
+     * @param name Name of the player
+     * @param option What the player picked
+     * @return String of feedback from picking
+     */ 
     @Override
     public String pickRPS(String name,  String option){
       Player player = this.playerList.findPlayer(name);
-      Player challengee = this.playerList.findPlayer(player.getChallenger());
+      Player opponent = this.playerList.findPlayer(player.getChallenger());
       pickRPSToggle = true;
 
       if(player.getInBattle() == true && player.getRounds() > 0){
@@ -1833,68 +1889,72 @@ public class GameCore implements GameCoreInterface {
           return "You already pick rock, paper or scissors. You picked " + player.getOption();
         }
         player.setOption(option);
-        challengee.setChallengerOption(option);
+        opponent.setChallengerOption(option);
         String winner = "";
 
-        if(challengee.getOption().equals("ROCK") || challengee.getOption().equals("PAPER") || challengee.getOption().equals("SCISSORS")){
+        if(opponent.getOption().equals("ROCK") || opponent.getOption().equals("PAPER") || opponent.getOption().equals("SCISSORS")){
           player.setRounds(player.getRounds() - 1);
-          challengee.setRounds(challengee.getRounds()-1);
+          opponent.setRounds(opponent.getRounds()-1);
           switch(player.getOption()) {
             case "ROCK":
               player.getReplyWriter().println("You chose ROCK.");
-              if (challengee.getOption().equals("PAPER")) {
-                challengee.getReplyWriter().println("You chose PAPER.");
-                player.getReplyWriter().println(challengee.getName() + " chose PAPER: You lose.");
-                challengee.getReplyWriter().println(player.getName() + " chose ROCK: You win.");
-                winner = player.getName() + " challenged " + challengee.getName() + " to a Rock Paper Scissors Battle: " + challengee.getName() + " won this round.";
-                challengee.setWins(challengee.getWins()+1);
+              if (opponent.getOption().equals("PAPER")) {
+                opponent.getReplyWriter().println("You chose PAPER.");
+                player.getReplyWriter().println(opponent.getName() + " chose PAPER: You lose.");
+                opponent.getReplyWriter().println(player.getName() + " chose ROCK: You win.");
+                winner = player.getName() + " challenged " + opponent.getName() + " to a Rock Paper Scissors Battle: " + opponent.getName() + " won this round.";
+                opponent.setWins(opponent.getWins()+1);
+                opponent.setRPSwins(opponent.getRPSwins()+1);
+                player.setRPSloss(player.getRPSloss()+1);
                 this.broadcast(map.findRoom(player.getCurrentRoom()), winner);
-		rpsLog(player.getName(), challengee.getName(), "wins", player.getOption(), challengee.getOption());
+		rpsLog(player.getName(), opponent.getName(), "wins", player.getOption(), opponent.getOption());
 	      }		      
-              else if (challengee.getOption().equals("ROCK")){
-                challengee.getReplyWriter().println("You chose ROCK.");
-                player.getReplyWriter().println(challengee.getName() + " chose ROCK: It is a tie.");
-                challengee.getReplyWriter().println(player.getName() + " chose ROCK: It is a tie.");
-                winner = player.getName() + " challenged " + challengee.getName() + " to a Rock Paper Scissors Battle: It is a tie this round.";
+              else if (opponent.getOption().equals("ROCK")){
+                opponent.getReplyWriter().println("You chose ROCK.");
+                player.getReplyWriter().println(opponent.getName() + " chose ROCK: It is a tie.");
+                opponent.getReplyWriter().println(player.getName() + " chose ROCK: It is a tie.");
+                winner = player.getName() + " challenged " + opponent.getName() + " to a Rock Paper Scissors Battle: It is a tie this round.";
+                opponent.setRPSties(opponent.getRPSties()+1);
+                player.setRPSties(player.getRPSties()+1);
                 this.broadcast(map.findRoom(player.getCurrentRoom()), winner);
-		rpsLog(player.getName(), challengee.getName(), "ties", player.getOption(), challengee.getOption());
-              	
+		rpsLog(player.getName(), opponent.getName(), "ties", player.getOption(), opponent.getOption());
 	      }
               else {
-                challengee.getReplyWriter().println("You chose SCISSORS.");
-                player.getReplyWriter().println(challengee.getName() + " chose SCISSORS: You win.");
-                challengee.getReplyWriter().println(player.getName() + " chose ROCK: You lose.");
-                winner = player.getName() + " challenged " + challengee.getName() + " to a Rock Paper Scissors Battle: " + player.getName() + " won this round.";
+                opponent.getReplyWriter().println("You chose SCISSORS.");
+                player.getReplyWriter().println(opponent.getName() + " chose SCISSORS: You win.");
+                opponent.getReplyWriter().println(player.getName() + " chose ROCK: You lose.");
+                winner = player.getName() + " challenged " + opponent.getName() + " to a Rock Paper Scissors Battle: " + player.getName() + " won this round.";
                 player.setWins(player.getWins()+1);
+		player.setRPSwins(player.getRPSwins()+1);
+		opponent.setRPSloss(opponent.getRPSloss()+1);
                 this.broadcast(map.findRoom(player.getCurrentRoom()), winner);
-		rpsLog(challengee.getName(), player.getName(), "wins", challengee.getOption(), player.getOption());
-              	
+		rpsLog(opponent.getName(), player.getName(), "wins", opponent.getOption(), player.getOption());
               }
               if(player.getRounds() > 0){
                 player.setOption("");
-                challengee.setOption("");
-                challengee.getReplyWriter().println("You are entering the next round with a score of " + challengee.getWins() + " to " + player.getWins() + "\nPick rock, paper, or scissors: ");
-                player.getReplyWriter().println("You are entering the next round with a score of " + player.getWins() + " to " + challengee.getWins() + "\nPick rock, paper, or scissors: ");
+                opponent.setOption("");
+                opponent.getReplyWriter().println("You are entering the next round with a score of " + opponent.getWins() + " to " + player.getWins() + "\nPick rock, paper, or scissors: ");
+                player.getReplyWriter().println("You are entering the next round with a score of " + player.getWins() + " to " + opponent.getWins() + "\nPick rock, paper, or scissors: ");
                 //player.setRounds(player.getRounds() - 1);
               }
               else{
 
                 int p1Win = player.getWins();
-                int p2Win = challengee.getWins();
+                int p2Win = opponent.getWins();
                 if(p1Win > p2Win){
-                    String winner2 = player.getName() + " challenged " + challengee.getName() + " to a Rock Paper Scissors Battle: " + player.getName() + " won the tournament with a final score of " + p1Win + " - " + p2Win + ".";
+                    String winner2 = player.getName() + " challenged " + opponent.getName() + " to a Rock Paper Scissors Battle: " + player.getName() + " won the tournament with a final score of " + p1Win + " - " + p2Win + ".";
                     this.broadcast(map.findRoom(player.getCurrentRoom()), winner2);
 		    pickRPSToggle = false;
 		    player.addRpsVictory();//Win counter for Main Questline
                 }
                 else if(p2Win > p1Win){
-                    String winner2 = player.getName() + " challenged " + challengee.getName() + " to a Rock Paper Scissors Battle: " + player.getName() + " won the tournament with a final score of " + p1Win + " - " + p2Win + ".";
+                    String winner2 = player.getName() + " challenged " + opponent.getName() + " to a Rock Paper Scissors Battle: " + opponent.getName() + " won the tournament with a final score of " + p1Win + " - " + p2Win + ".";
                     this.broadcast(map.findRoom(player.getCurrentRoom()), winner2);
 		    pickRPSToggle = false;
-		    challengee.addRpsVictory();//Win counter for Main Questline
+		    opponent.addRpsVictory();//Win counter for Main Questline
                 }
                 else{
-                    String noWinner = player.getName() + " challenged " + challengee.getName() + " to a Rock Paper Scissors Battle: They tied in the tournament with a final score of " + p1Win + " - " + p2Win + ".";
+                    String noWinner = player.getName() + " challenged " + opponent.getName() + " to a Rock Paper Scissors Battle: They tied in the tournament with a final score of " + p1Win + " - " + p2Win + ".";
                     this.broadcast(map.findRoom(player.getCurrentRoom()), noWinner);
 		    pickRPSToggle = false;
                 }
@@ -1903,67 +1963,72 @@ public class GameCore implements GameCoreInterface {
                 player.setChallenger(" ");
                 player.setOption("");
                 player.setWins(0);
-                challengee.setChallenger(" ");
-                challengee.setInBattle(false);
-                challengee.setOption("");
-                challengee.setWins(0);
+                opponent.setChallenger(" ");
+                opponent.setInBattle(false);
+                opponent.setOption("");
+                opponent.setWins(0);
               }
               break;
             case "PAPER":
               player.getReplyWriter().println("You chose PAPER.");
-              if (challengee.getOption().equals("SCISSORS")) {
-                challengee.getReplyWriter().println("You chose SCISSORS.");
-                player.getReplyWriter().println(challengee.getName() + " chose SCISSORS: You lose.");
-                challengee.getReplyWriter().println(player.getName() + " chose PAPER: You win.");
-                winner = player.getName() + " challenged " + challengee.getName() + " to a Rock Paper Scissors Battle: " + challengee.getName() + " won this round.";
-                challengee.setWins(challengee.getWins()+1);
+              if (opponent.getOption().equals("SCISSORS")) {
+                opponent.getReplyWriter().println("You chose SCISSORS.");
+                player.getReplyWriter().println(opponent.getName() + " chose SCISSORS: You lose.");
+                opponent.getReplyWriter().println(player.getName() + " chose PAPER: You win.");
+                winner = player.getName() + " challenged " + opponent.getName() + " to a Rock Paper Scissors Battle: " + opponent.getName() + " won this round.";
+                opponent.setWins(opponent.getWins()+1);
+                opponent.setRPSwins(opponent.getRPSwins()+1);
+                player.setRPSloss(player.getRPSloss()+1);
                 this.broadcast(map.findRoom(player.getCurrentRoom()), winner);
-		rpsLog(challengee.getName(), player.getName(), "wins", challengee.getOption(), player.getOption());
+		rpsLog(opponent.getName(), player.getName(), "wins", opponent.getOption(), player.getOption());
               	
 	      }
-              else if (challengee.getOption().equals("PAPER")){
-                challengee.getReplyWriter().println("You chose PAPER.");
-                player.getReplyWriter().println(challengee.getName() + " chose PAPER: It is a tie.");
-                challengee.getReplyWriter().println(player.getName() + " chose PAPER: It is a tie.");
-                winner = player.getName() + " challenged " + challengee.getName() + " to a Rock Paper Scissors Battle: It is a tie this round.";
+              else if (opponent.getOption().equals("PAPER")){
+                opponent.getReplyWriter().println("You chose PAPER.");
+                player.getReplyWriter().println(opponent.getName() + " chose PAPER: It is a tie.");
+                opponent.getReplyWriter().println(player.getName() + " chose PAPER: It is a tie.");
+                winner = player.getName() + " challenged " + opponent.getName() + " to a Rock Paper Scissors Battle: It is a tie this round.";
+                opponent.setRPSties(opponent.getRPSties()+1);
+                player.setRPSties(player.getRPSties()+1);
                 this.broadcast(map.findRoom(player.getCurrentRoom()), winner);
-		rpsLog(player.getName(), challengee.getName(), "ties", player.getOption(), challengee.getOption());
-              
+		rpsLog(player.getName(), opponent.getName(), "ties", player.getOption(), opponent.getOption());
 	      }
               else {
-                challengee.getReplyWriter().println("You chose ROCK.");
-                player.getReplyWriter().println(challengee.getName() + " chose ROCK: You win.");
-                challengee.getReplyWriter().println(player.getName() + " chose PAPER: You lose.");
-                winner = player.getName() + " challenged " + challengee.getName() + " to a Rock Paper Scissors Battle: " + player.getName() + " won this round.";
+                opponent.getReplyWriter().println("You chose ROCK.");
+                player.getReplyWriter().println(opponent.getName() + " chose ROCK: You win.");
+                opponent.getReplyWriter().println(player.getName() + " chose PAPER: You lose.");
+                winner = player.getName() + " challenged " + opponent.getName() + " to a Rock Paper Scissors Battle: " + player.getName() + " won this round.";
                 player.setWins(player.getWins()+1);
+		player.setRPSwins(player.getRPSwins()+1);
+		opponent.setRPSloss(opponent.getRPSloss()+1);
                 this.broadcast(map.findRoom(player.getCurrentRoom()), winner);
-		rpsLog(player.getName(), challengee.getName(), "wins", player.getOption(), challengee.getOption());
+		rpsLog(player.getName(), opponent.getName(), "wins", player.getOption(), opponent.getOption());
               	
               }
               if(player.getRounds() > 0){
 
                 player.setOption("");
-                challengee.setOption("");
-                challengee.getReplyWriter().println("You are entering the next round with a score of " + challengee.getWins() + " to " + player.getWins() + "\nPick rock, paper, or scissors: ");
-                player.getReplyWriter().println("You are entering the next round with a score of " + player.getWins() + " to " + challengee.getWins() + "\nPick rock, paper, or scissors: ");
+                opponent.setOption("");
+                opponent.getReplyWriter().println("You are entering the next round with a score of " + opponent.getWins() + " to " + player.getWins() + "\nPick rock, paper, or scissors: ");
+                player.getReplyWriter().println("You are entering the next round with a score of " + player.getWins() + " to " + opponent.getWins() + "\nPick rock, paper, or scissors: ");
                 //player.setRounds(player.getRounds() - 1);
               }
               else{
 
                 int p1Win = player.getWins();
-                int p2Win = challengee.getWins();
+                int p2Win = opponent.getWins();
                 if(p1Win > p2Win){
-                    String winner2 = player.getName() + " challenged " + challengee.getName() + " to a Rock Paper Scissors Battle: " + player.getName() + " won the tournament with a final score of " + p1Win + " - " + p2Win + ".";
+                    String winner2 = player.getName() + " challenged " + opponent.getName() + " to a Rock Paper Scissors Battle: " + player.getName() + " won the tournament with a final score of " + p1Win + " - " + p2Win + ".";
                     this.broadcast(map.findRoom(player.getCurrentRoom()), winner2);
                     pickRPSToggle = false;
 		}
                 else if(p2Win > p1Win){
-                    String winner2 = player.getName() + " challenged " + challengee.getName() + " to a Rock Paper Scissors Battle: " + player.getName() + " won the tournament with a final score of " + p1Win + " - " + p2Win + ".";
+                    String winner2 = player.getName() + " challenged " + opponent.getName() + " to a Rock Paper Scissors Battle: " + opponent.getName() + " won the tournament with a final score of " + p1Win + " - " + p2Win + ".";
                     this.broadcast(map.findRoom(player.getCurrentRoom()), winner2);
 		    pickRPSToggle = false;
                 }
                 else{
-                    String noWinner = player.getName() + " challenged " + challengee.getName() + " to a Rock Paper Scissors Battle: They tied in the tournament with a final score of " + p1Win + " - " + p2Win + ".";
+                    String noWinner = player.getName() + " challenged " + opponent.getName() + " to a Rock Paper Scissors Battle: They tied in the tournament with a final score of " + p1Win + " - " + p2Win + ".";
                     this.broadcast(map.findRoom(player.getCurrentRoom()), noWinner);
 		    pickRPSToggle = false;
                 }
@@ -1972,67 +2037,71 @@ public class GameCore implements GameCoreInterface {
                 player.setChallenger(" ");
                 player.setOption("");
                 player.setWins(0);
-                challengee.setChallenger(" ");
-                challengee.setInBattle(false);
-                challengee.setOption("");
-                challengee.setWins(0);
+                opponent.setChallenger(" ");
+                opponent.setInBattle(false);
+                opponent.setOption("");
+                opponent.setWins(0);
               }
               break;
             case "SCISSORS":
               player.getReplyWriter().println("You chose SCISSORS.");
-              if (challengee.getOption().equals("ROCK")) {
-                challengee.getReplyWriter().println("You chose ROCK.");
-                player.getReplyWriter().println(challengee.getName() + " chose ROCK: You lose.");
-                challengee.getReplyWriter().println(player.getName() + " chose SCISSORS: You win.");
-                winner = player.getName() + " challenged " + challengee.getName() + " to a Rock Paper Scissors Battle: " + challengee.getName() + " won this round.";
-                challengee.setWins(challengee.getWins()+1);
+              if (opponent.getOption().equals("ROCK")) {
+                opponent.getReplyWriter().println("You chose ROCK.");
+                player.getReplyWriter().println(opponent.getName() + " chose ROCK: You lose.");
+                opponent.getReplyWriter().println(player.getName() + " chose SCISSORS: You win.");
+                winner = player.getName() + " challenged " + opponent.getName() + " to a Rock Paper Scissors Battle: " + opponent.getName() + " won this round.";
+                opponent.setWins(opponent.getWins()+1);
+                opponent.setRPSwins(opponent.getRPSwins()+1);
+                player.setRPSloss(player.getRPSloss()+1);
                 this.broadcast(map.findRoom(player.getCurrentRoom()), winner);
-		rpsLog(challengee.getName(), player.getName(), "wins", challengee.getOption(), player.getOption());
-              	
+		rpsLog(opponent.getName(), player.getName(), "wins", opponent.getOption(), player.getOption());
 	      }
-              else if (challengee.getOption().equals("SCISSORS")){
-                challengee.getReplyWriter().println("You chose SCISSORS.");
-                player.getReplyWriter().println(challengee.getName() + " chose SCISSORS: It is a tie.");
-                challengee.getReplyWriter().println(player.getName() + " chose SCISSORS: It is a tie.");
-                winner = player.getName() + " challenged " + challengee.getName() + " to a Rock Paper Scissors Battle: It is a tie this round.";
+              else if (opponent.getOption().equals("SCISSORS")){
+                opponent.getReplyWriter().println("You chose SCISSORS.");
+                player.getReplyWriter().println(opponent.getName() + " chose SCISSORS: It is a tie.");
+                opponent.getReplyWriter().println(player.getName() + " chose SCISSORS: It is a tie.");
+                winner = player.getName() + " challenged " + opponent.getName() + " to a Rock Paper Scissors Battle: It is a tie this round.";
+		opponent.setRPSties(opponent.getRPSties()+1);
+		player.setRPSties(player.getRPSties()+1);
                 this.broadcast(map.findRoom(player.getCurrentRoom()), winner);
-		rpsLog(challengee.getName(), player.getName(), "ties", challengee.getOption(), player.getOption());
-           
+		rpsLog(opponent.getName(), player.getName(), "ties", opponent.getOption(), player.getOption());
 	      }
               else {
-                challengee.getReplyWriter().println("You chose PAPER.");
-                player.getReplyWriter().println(challengee.getName() + " chose PAPER: You win.");
-                challengee.getReplyWriter().println(player.getName() + " chose SCISSORS: You lose.");
-                winner = player.getName() + " challenged " + challengee.getName() + " to a Rock Paper Scissors Battle: " + player.getName() + " won this round.";
+                opponent.getReplyWriter().println("You chose PAPER.");
+                player.getReplyWriter().println(opponent.getName() + " chose PAPER: You win.");
+                opponent.getReplyWriter().println(player.getName() + " chose SCISSORS: You lose.");
+                winner = player.getName() + " challenged " + opponent.getName() + " to a Rock Paper Scissors Battle: " + player.getName() + " won this round.";
                 player.setWins(player.getWins()+1);
+		player.setRPSwins(player.getRPSwins()+1);
+		opponent.setRPSloss(opponent.getRPSloss()+1);
                 this.broadcast(map.findRoom(player.getCurrentRoom()), winner);
-		rpsLog(player.getName(), challengee.getName(), "wins", player.getOption(), challengee.getOption());
+		rpsLog(player.getName(), opponent.getName(), "wins", player.getOption(), opponent.getOption());
               	
               }
               if(player.getRounds() > 0){
 
                 player.setOption("");
-                challengee.setOption("");
-                challengee.getReplyWriter().println("You are entering the next round with a score of " + challengee.getWins() + " to " + player.getWins() + "\nPick rock, paper, or scissors: ");
-                player.getReplyWriter().println("You are entering the next round with a score of " + player.getWins() + " to " + challengee.getWins() + "\nPick rock, paper, or scissors: ");
+                opponent.setOption("");
+                opponent.getReplyWriter().println("You are entering the next round with a score of " + opponent.getWins() + " to " + player.getWins() + "\nPick rock, paper, or scissors: ");
+                player.getReplyWriter().println("You are entering the next round with a score of " + player.getWins() + " to " + opponent.getWins() + "\nPick rock, paper, or scissors: ");
                 //player.setRounds(player.getRounds() - 1);
               }
               else{
 
                 int p1Win = player.getWins();
-                int p2Win = challengee.getWins();
+                int p2Win = opponent.getWins();
                 if(p1Win > p2Win){
-                    String winner2 = player.getName() + " challenged " + challengee.getName() + " to a Rock Paper Scissors Battle: " + player.getName() + " won the tournament with a final score of " + p1Win + " - " + p2Win + ".";
+                    String winner2 = player.getName() + " challenged " + opponent.getName() + " to a Rock Paper Scissors Battle: " + player.getName() + " won the tournament with a final score of " + p1Win + " - " + p2Win + ".";
                     this.broadcast(map.findRoom(player.getCurrentRoom()), winner2);
 		    pickRPSToggle = false;
                 }
                 else if(p2Win > p1Win){
-                    String winner2 = player.getName() + " challenged " + challengee.getName() + " to a Rock Paper Scissors Battle: " + player.getName() + " won the tournament with a final score of " + p1Win + " - " + p2Win + ".";
+                    String winner2 = player.getName() + " challenged " + opponent.getName() + " to a Rock Paper Scissors Battle: " + opponent.getName() + " won the tournament with a final score of " + p1Win + " - " + p2Win + ".";
                     this.broadcast(map.findRoom(player.getCurrentRoom()), winner2);
 		    pickRPSToggle = false;
                 }
                 else{
-                    String noWinner = player.getName() + " challenged " + challengee.getName() + " to a Rock Paper Scissors Battle: They tied in the tournament with a final score of " + p1Win + " - " + p2Win + ".";
+                    String noWinner = player.getName() + " challenged " + opponent.getName() + " to a Rock Paper Scissors Battle: They tied in the tournament with a final score of " + p1Win + " - " + p2Win + ".";
                     this.broadcast(map.findRoom(player.getCurrentRoom()), noWinner);
 		    pickRPSToggle = false;
                 }
@@ -2041,10 +2110,10 @@ public class GameCore implements GameCoreInterface {
                 player.setChallenger(" ");
                 player.setOption("");
                 player.setWins(0);
-                challengee.setChallenger(" ");
-                challengee.setInBattle(false);
-                challengee.setOption("");
-                challengee.setWins(0);
+                opponent.setChallenger(" ");
+                opponent.setInBattle(false);
+                opponent.setOption("");
+                opponent.setWins(0);
               }
               break;
             default:
@@ -2052,7 +2121,7 @@ public class GameCore implements GameCoreInterface {
           }
         }
         //player.setRounds(player.getRounds() - 1);
-        //challengee.setRounds(challengee.getRounds()-1);
+        //opponent.setRounds(opponent.getRounds()-1);
         return ""; 
       }
       else
@@ -2484,7 +2553,11 @@ public class GameCore implements GameCoreInterface {
         }
     }
 
-    @Override
+    /**  
+     * NPC in the Main Quad that teaches players how to play rps
+     * @param player Name of the player that wants to be taught
+     * @return String of teachings from the NPC or error message if not in Main Quad
+     */  @Override
      public String teach(String player){
          Player players = this.playerList.findPlayer(player);
          String message;
@@ -2909,5 +2982,104 @@ public class GameCore implements GameCoreInterface {
     public boolean isPlayerOnline(String name) {
         return this.playerList.findPlayer(name) != null;
     }
+
+	@Override
+	public String listAllPlayers(){
+		String allNames = "";
+		HashSet<Player> allPlayerIds = accountManager.getListPlayers();
+		for(Player player : allPlayerIds){
+			allNames += player.getName() + ", ";
+		}
+		allNames = allNames.substring(0, allNames.length()-2);
+		return allNames;
+	}
+
+	@Override
+	public String rankings(String ranks, String userOption){
+		HashSet<Player> allPlayerIds = accountManager.getListPlayers();
+		ArrayList<Player> rankingScores = new ArrayList<Player>();
+		ArrayList<String> allPlayerNames = new ArrayList<String>();
+		//System.out.println(allPlayerIds);
+		for(Player playerID: allPlayerIds){
+
+			//Player playerRPS = this.playerList.findPlayer(playerID);
+			//rankingScores.add(playerID.getName());
+			//System.out.println(playerID.getName());
+			//System.out.println(playerID.getRPSwins());
+			//System.out.println(playerID.getRPSloss());
+			//System.out.println(playerID.getRPSties());
+			int totalGames = playerID.getRPSwins()+playerID.getRPSloss()+playerID.getRPSties();
+			System.out.println(totalGames);
+			double rankingScore = ((playerID.getRPSwins()+(.5 * playerID.getRPSties()))/(1 + playerID.getRPSloss()))*totalGames;
+			playerID.setPlayerRankingScore(rankingScore);
+			rankingScores.add(playerID);
+			allPlayerNames.add(playerID.getName());
+			//String rankingScoreString = Double.toString(rankingScore);
+			//rankingScores.add(Integer.toString(totalGames));
+			
+			
+			//System.out.println(playerRPS.getRPSwins());
+		}
+
+		for(int i = 0; i < rankingScores.size(); i++){
+			for(int j = rankingScores.size()-1; j > i; j--){
+				if(rankingScores.get(i).getPlayerRankingScore() < rankingScores.get(j).getPlayerRankingScore()){
+					Player tmp = rankingScores.get(i);
+					rankingScores.set(i, rankingScores.get(j));
+					rankingScores.set(j, tmp);
+				}
+			}
+		}
+		
+		//Giving players their titles
+		for(int i = 0; i < rankingScores.size(); i++){
+			if(i == 0){
+				rankingScores.get(i).setRankingTitle("The Grand Poobah");
+			}
+			else if(i == 1){
+				rankingScores.get(i).setRankingTitle("GrandMaster");
+			}
+			else if(i == 2){
+				rankingScores.get(i).setRankingTitle("Master");
+			}
+			else if(i == 3){
+				rankingScores.get(i).setRankingTitle("Darth");
+			}
+			else if(i == 4){
+				rankingScores.get(i).setRankingTitle("Elite");
+			}
+			else{
+				rankingScores.get(i).setRankingTitle("Casual");
+			}
+		}
+		
+		if(userOption.equals("top5")){
+			//then return top 5 rankings with their titles
+			//getRankingTitle()
+			String top5 = "THE TOP 5 RPS BATTLERS:\n";
+			for(int i = 0; i < 5; i++){
+				top5 += Integer.toString(i+1) + ". " + rankingScores.get(i).getRankingTitle() + " " + rankingScores.get(i).getName() + "\n";
+			}
+			return top5;
+		}
+		else if(allPlayerNames.contains(userOption)){
+			//then reutnr specific user ranking score with his/her title
+			String userTitleRank = "";
+			for(Player player: rankingScores){
+				if(player.getName().equals(userOption)){
+					userTitleRank = player.getRankingTitle() + " " + player.getName();
+					break;
+				}
+			}
+			return userTitleRank;
+		}
+		else{
+			return "This user doesn't exist or incorrect input";
+		}
+		
+			
+		
+	}
+
 
 }

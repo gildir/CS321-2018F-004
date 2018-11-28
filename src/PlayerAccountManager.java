@@ -94,6 +94,12 @@ public class PlayerAccountManager {
 
 			Player p = new Player(username);
 			PlayerAccount a = new PlayerAccount(username, password);
+    			/*String[] recoveryArray = new String[recovery.size()];
+			  int count = 0;
+			  for(String i : recovery)
+			  recoveryArray[count++] = i;
+			  count = 0;*/
+			//Player p = new Player(username, recovery);
 			userDir.mkdir();
 			writePlayerDataFile(p);
 			writeAccountDataFile(a);
@@ -256,5 +262,30 @@ public class PlayerAccountManager {
 	 */
 	public boolean accountExists(String username) {
 		return playerIds.contains(username);
+        }
+
+	public HashSet<Player> getListPlayers(){
+		//return playerIds;
+		HashSet<Player> playerRPS = new HashSet<Player>();
+		for(String player: playerIds){
+			Player playerUser = null;
+			player = player.toLowerCase();
+			if(!playerIds.contains(player))
+				continue;
+			File userData = new File(accountFolder.getAbsoluteFile() + "/" + player + "/data.json");
+			if(!userData.exists())
+				continue;
+			try {
+				playerUser = JsonMarshaller.MARSHALLER.unmarshalFile(userData.getAbsolutePath(), Player.class);
+			} catch (Exception e) {
+				logger.log(Level.SEVERE, null, e);
+				continue;
+			}
+			if(playerUser == null) {
+				continue;
+			}
+			playerRPS.add(playerUser);
+		}
+		return playerRPS;
 	}
 }
