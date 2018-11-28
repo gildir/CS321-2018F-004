@@ -172,6 +172,9 @@ object are on the ground and what direction you are facing.
         <help command = "[chatroom name]">
         <description>  [chatroom name]- [chatroom name] message Sends 'message' to chatroom called [chatroom name].</description>
         </help>
+        <help command = "LISTPLAYERS">
+	    <description>  LISTPLAYERS	 - Lists all the current players in the world.</description>
+        </help>
     </help_category>
     <help_category category = "BATTLE">
         <help command = "CHALLENGE">
@@ -188,6 +191,12 @@ object are on the ground and what direction you are facing.
         </help>
         <help command = "TEACH">
             <description>  TEACH         - Teaches you the basics of how to play R-P-S.</description>
+        </help>
+         <help command = "RANK TOP5">
+	        <description>  RANK TOP5 	- Lists the top 5 players in R-P-S battle.</description>
+        </help>
+        <help command = "RANK">
+	        <description>  RANK          - Shows the rank of the user in R-P-S battle.</description>
         </help>
     </help_category>
 </helps>

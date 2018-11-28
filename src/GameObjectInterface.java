@@ -573,15 +573,17 @@ public interface GameObjectInterface extends Remote, IAccount.Client {
     * Prompts a message that someone is challenging them to a R-P-S
     * @param challenger is the name of the player challenging someone in the area
     * @param challenge is the name of the player being challenge
+    * @param rounds is the number of rounds for battle
     * @return Message showing success
     * @throws RemoteException
     */
-    public String challenge(String challenger, String challengee) throws RemoteException;
+    public String challenge(String challenger, String challengee, String rounds) throws RemoteException;
 
     /**
     * Prompts a message that they are accepting a challnge from someone to a R-P-S
     * @param challenger is the name of the player challenging someone in the area
     * @param challenge is the name of the player accepting
+    * @param rounds is the number of rounds for battle
     * @return Message showing success
     * @throws RemoteException
     */
@@ -636,4 +638,22 @@ public interface GameObjectInterface extends Remote, IAccount.Client {
       * @throws RemoteException
       */
      public String toggleRPSChat(String player) throws RemoteException;
+
+
+     /**
+      * Lists all players in the world
+      * @param nothing
+      * @return a list of players in world
+      * @throws RemoteException
+      */
+     public String listAllPlayers() throws RemoteException;
+
+     /**
+      * Lists rankings of the top 10 or specific player
+      * @param "top10" or specific player
+      * @return String containing top 10 rankings or specific person ranking
+      * @throws RemoteException
+      */
+     public String rankings(String ranks, String userOption) throws RemoteException;
+
 }

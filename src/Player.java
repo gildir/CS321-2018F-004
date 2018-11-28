@@ -59,6 +59,15 @@ public class Player {
     //Used to count pokes in poke quests
     private int pokeCount;
 
+    private int RPSwins = 0;
+    private int RPSloss = 0;
+    private int RPSties = 0;
+    private double playerRankingScore = 0;
+    private String rankingTitle = "";
+
+    @JsonProperty("recovery")
+    private ArrayList<String> recovery;
+
 	public Player(@JsonProperty("name") String name) {
         this.currentRoom = 1;
         this.currentDirection = Direction.NORTH;
@@ -630,15 +639,12 @@ public class Player {
     public void setChallenger(String name){
         challenger = name;
     }
-
     public boolean getHasChallenge(){
         return hasChallenge;
     }
-
     public void setHasChallenge(boolean challenged){
         hasChallenge = challenged;
     }
-
 
     public void setRpsVictoryCount(int count){
 	rpsVictoryCount = count;
@@ -703,6 +709,36 @@ public class Player {
     	this.totalPay = l;
     }
 
+    public int getRPSwins(){
+	return this.RPSwins;
+    }
+    public void setRPSwins(int w){
+	this.RPSwins = w;
+    }
+    public int getRPSloss(){
+	return this.RPSloss;
+    }
+    public void setRPSloss(int l){
+	this.RPSloss = l;
+    }
+    public int getRPSties(){
+	return this.RPSties;
+    }
+    public void setRPSties(int t){
+	this.RPSties = t;
+    }
+    public double getPlayerRankingScore(){
+	return this.playerRankingScore;
+    }
+    public void setPlayerRankingScore(double r){
+	this.playerRankingScore = r;
+    }
+    public String getRankingTitle(){
+	return this.rankingTitle;
+    }
+    public void setRankingTitle(String title){
+	this.rankingTitle = title;
+    }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // INSERT CODE FOR GETTERS AND SETTERS ABOVE ///////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
