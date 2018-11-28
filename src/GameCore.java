@@ -275,7 +275,7 @@ public class GameCore implements GameCoreInterface {
                         while (true) {
                             try {
                                 // Ghoul move in each ? seconds.
-                                Thread.sleep(10000);//1200000 + rand.nextInt(500000));
+                                Thread.sleep(1000000);//1200000 + rand.nextInt(500000));
 
                                 // make Ghoul walk to other room;
                                 GameCore.this.ghoulWander(ghoul, room);
@@ -319,7 +319,7 @@ public class GameCore implements GameCoreInterface {
 									GameCore.this.broadcast(room, "You see a night Ghoul named " + ghoulName + " appear in this room.");
 								}
 								
-								Thread.sleep(10000);//6000 + rand.nextInt(4000)); //move faster than dayGhoul
+								Thread.sleep(1000000);//6000 + rand.nextInt(4000)); //move faster than dayGhoul
 								// make ghoul walk to other room
 								GameCore.this.ghoulWander(ghoul, room);
 								GameCore.this.broadcast(room, "You see a night Ghoul named " + ghoulName + " leave this room.");
