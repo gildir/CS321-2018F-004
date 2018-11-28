@@ -20,34 +20,28 @@ public class Map{
         public Map(String worldFile) {		//Name of the map passed on the command line as an argument.
                 map = new LinkedList<>();
                 try {
+                        File mapFile = new File(worldFile);	//Opens the file containing the map csv
+                        Scanner mapIn = new Scanner(mapFile).useDelimiter(",|\\n|\\r\\n");
 
-                        File mapFile = new File(worldFile);	//Set the mapfile to be the file defined by worldFile
-                        Scanner mapIn = new Scanner(mapFile).useDelimiter(",|\\n|\\r\\n");	//Set the tokens for parsing the map file
-
-
-                        int numRooms, numExits;	//Stores the number of rooms and the number of exits
-
+                        int numRooms, numExits;
 
                         String title, description, room_type;	//Strings store the title of the room, a brief description of the room, and the type of room ( inside/outside)
                         String message, npcName;	
                         int id, link;	
 
-
                         Direction exitId;
 
-                        Room newRoom;	//
+                        Room newRoom;
                         Exit newExit;
 
-                        numRooms = Integer.parseInt(mapIn.nextLine());	//Read the number of rooms form the first line of the file
-                        numExits = 4;	//set the number of potential exits as 4
-
+                        numRooms = Integer.parseInt(mapIn.nextLine());	//Reads the fle parsing the csv file to create the rooms.
+                        numExits = 4;	//Sets the number of exits at 4
 
                         mapIn.useDelimiter(",|\\n|\\r\\n");
 
+			for(int i = 0; i < numRooms; i++) {
 
-                                mapIn.useDelimiter(",|\\n|\\r\\n"); 	//While the number of rooms created is less than the number of rooms defined in the file 
-                                id = Integer.parseInt(mapIn.next());	//read the 5 lines in the file that define a room.
-
+                                id = Integer.parseInt(mapIn.next());	//Walks through the file parsing lines to create the map.
                                 room_type = mapIn.next();
                                 title = mapIn.next();
                                 mapIn.useDelimiter("\\S|\\s");
@@ -56,7 +50,6 @@ public class Map{
                                 description = mapIn.next();
 
                                 //                System.out.println("Adding Room " + id + " with Title " + title + ": " + description);
-
 
 
 
@@ -70,7 +63,6 @@ public class Map{
 
                                         newRoom = new Room(id, room_type, title, description, npcs);
 
-
                                 }
                                 else {
                                         newRoom = new Room(id, room_type, title, description);	//This room is not 1 and the quest NPC is not here
@@ -78,9 +70,7 @@ public class Map{
 
                                 for(int j = 0; j < numExits; j++) {
 
-
-                                        mapIn.useDelimiter(",|\\n|\\r\\n");	//For each direction check and add exits as neccisary
-
+                                        mapIn.useDelimiter(",|\\n|\\r\\n");	//using a comma delimited file to represent the data of the room.
                                         exitId = Direction.valueOf(mapIn.next());
                                         link = Integer.parseInt(mapIn.next());
                                         mapIn.useDelimiter("\\S|\\s");
