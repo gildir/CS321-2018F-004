@@ -887,7 +887,7 @@ public class GameCore implements GameCoreInterface {
 						String[] curSplit = playerCaptures[i].split(",");
 						if(curSplit.length > 0 && curSplit[0].equals(playerName)) {
 							playerFound = true;
-							for(int j=0; j<curSplit.length; j++) {
+							for(int j=1; j<curSplit.length; j++) {
 								if(curSplit[j].equals(curSpirit)) {
 									playerCaughtSpirit = true;
 								}
