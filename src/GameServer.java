@@ -9,6 +9,7 @@ import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.Date;
 
 /**
  *
@@ -26,13 +27,44 @@ public class GameServer {
 // ----- NON-RMI RELATED MEMBERS ------------    
     private Thread gameThread;
     
+    public static Date getDate() {
+        return new Date();
+    }
+    
     /**
      * Main game server class.  
      * @param rmi
      * @throws RemoteException 
      */
-    public GameServer(String host) throws RemoteException {           
-	   try {
+    public GameServer(String host, String worldFile) throws RemoteException {           
+        Runtime.getRuntime().addShutdownHook(new Thread(){ 
+            public void run(){ 
+                DailyLogger dailyLogger = new DailyLogger();
+                dailyLogger.write("SERVER FORCIBLY TERMINATED");
+                System.out.println("shutdown");
+                try {
+                	remoteObject.shutdown();
+                } catch(Exception e) {
+                	e.printStackTrace();
+                }
+                if (System.getProperty("os.name").toLowerCase().contains("windows")) {
+                	System.out.println("Killing rmi windows style...");
+                	try {
+	                	Runtime.getRuntime().exec("taskkill /F /pid rmiregistry.exe");
+	                } catch(Exception e) {
+	                	System.out.println("Failed to kill");
+	                } 
+                } else {
+                	System.out.println("Killing rmi linux style...");
+                	try {
+                		Runtime.getRuntime().exec("pkill rmiregistry");
+                	} catch(Exception e) {
+                		System.out.println("Failed to kill");
+                	}
+                }
+            }
+        });
+    	try {
 		   System.out.println("host:" + host);
 			// Step 1: Create the remote listener thread.  This thread is used
 			//          for asynchronous replies from the game for events the 
@@ -44,7 +76,7 @@ public class GameServer {
 			//  a) Create the security manager.
 			System.setSecurityManager(new SecurityManager());
 			//  b) Create the RMI remote object.
-			remoteObject = new GameObject();
+			remoteObject = new GameObject("players", worldFile);
 			//  c) Bind the remote object to the rmi service (rmiregistry must be running)
 			Naming.rebind("rmi://"+host+"/GameService", remoteObject);
 			System.err.println("[RUN] Game Server is now running and accepting connections.");
@@ -52,18 +84,27 @@ public class GameServer {
 			Logger.getLogger(GameServer.class.getName()).log(Level.SEVERE, null, re);
 		} catch (MalformedURLException ex) {
 			Logger.getLogger(GameServer.class.getName()).log(Level.SEVERE, null, ex);
+		} catch (Exception e) {
+			Logger.getLogger(GameServer.class.getName()).log(Level.SEVERE, null, e);
 		}
-	}
+    }
     
     public static void main(String[] args) {
 		if(args.length < 1) {
-			System.out.println("[SHUTDOWN] .. This program requires one argument. Run as java -Djava.security.policy=game.policy GameServer hostname");
+			System.out.println("[SHUTDOWN] .. This program requires at least one argument. Run as java -Djava.security.policy=game.policy GameServer hostname (worldFilePath)");
 			System.exit(-1);
 		}
 		
         try {
 			System.out.println("[STARTUP] Game GameServer Now Starting...");
-			new GameServer(args[0]);
+			if(args.length > 1){
+			    System.out.println("[STARTUP] Loading World " + args[1] + "...");
+			    new GameServer(args[0], args[1]);
+			}
+			else{
+			    System.out.println("[STARTUP] Loading Default World rooms.csv...");
+			    new GameServer(args[0], "rooms.csv");
+			}
         } catch (RemoteException ex) {
             Logger.getLogger(GameServer.class.getName()).log(Level.SEVERE, null, ex);
         }
