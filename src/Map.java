@@ -52,6 +52,12 @@ public class Map{
                                 //                System.out.println("Adding Room " + id + " with Title " + title + ": " + description);
 
 
+//<<<<<<< Program_Revisions
+//                                if(id == 1){
+//                                        LinkedList<String> quests = new LinkedList<>(Arrays.asList("quest1", "quest2", "quest3"));
+//                                        newRoom = new Room(id, room_type, title, description, new LinkedList<>(Arrays.asList(
+//                                                            new NPC("Slartibartfast", 1, quests))));
+//=======
 
                                 if(id == 1){ //If the room number is 1 then the quest NPC will be here 
                                         LinkedList<String> quests = new LinkedList<>(Arrays.asList("quest1", "quest2", "quest3"));//Lists the quests avalible at the NPC
@@ -63,6 +69,7 @@ public class Map{
 
                                         newRoom = new Room(id, room_type, title, description, npcs);
 
+//>>>>>>> dev
                                 }
                                 else {
                                         newRoom = new Room(id, room_type, title, description);	//This room is not 1 and the quest NPC is not here
