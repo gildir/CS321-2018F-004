@@ -720,6 +720,27 @@ public class GameClient {
                         System.out.println(remoteGameInterface.bribeGhoul(this.playerName, tokens.remove(0)));
             }
         break;
+		case "FIGHT":
+				if (tokens.isEmpty()) {
+					System.err.println("You need to provide either rock, paper or scissors");
+				} else {
+					String options = tokens.remove(0);
+					options = options.toUpperCase();
+					if (options.equals("ROCK") || options.equals("PAPER") || options.equals("SCISSORS"))
+						System.out.println(remoteGameInterface.ghoulRPS(this.playerName, options));
+					else
+						System.out.println("Invalid option.");
+				}
+				break;
+		case "CAPTURE":
+				System.out.println(remoteGameInterface.capture(this.playerName));
+				break;
+		case "SPIRIT_LIST_ALL":
+				System.out.println(remoteGameInterface.spiritListAll(this.playerName));
+				break;
+		case "SPIRIT_LIST_MISSING":
+				System.out.println(remoteGameInterface.spiritListMissing(this.playerName));
+				break;
         case "DROP":
                     if(tokens.isEmpty()) {
                         System.err.println("You need to provide an object to drop.");
