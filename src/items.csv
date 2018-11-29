@@ -1,5 +1,5 @@
 Name,Weight,Price,Description,Flavor
-Flower,0.5,5,Smells Good!,The Flower Child
+Flower,0.5,5,Smells Good!,Flower Child
 Phone,0.5,600,Not a iPhone,Old Fashioned
 Newspaper,0.5,2,Fake News,Well Read
 Gum,0.5,0.5,Already Chewed,Sticky
@@ -10,7 +10,7 @@ TV,10,100,Kinda big,Couch Potato
 Dog,100,1000,Woof!,Dog Whisperer
 Human,200,0.5,Why is this here,People Person
 Bike,10,100,Dont forget your lock,Moderately Fast
-Air,0,0,Cant live without it,Not 100% Oxygen
+Air,0,0,Cant live without it,Air Breather
 Gold,10,50,Valuable,Shiny
 Waterbottle,5,10,Hydration,Hydrated
 Watch,0.5,5,Not a iWatch,Time Conscious
@@ -23,3 +23,6 @@ Job,0,10000,Who needs it?,Well Adjusted
 Patriot-Swag,5,50,This exists?,Comfy
 Pencil,0.5,2,Sharp and ready,Pencil Pusher
 Scantron,0.5,1,Test Time!,Prepared
+Rathskeller_Bottle,1.0,1.0,You probably shouldn't drink this,!?!?
+Notecard,0.1,0.1,A regular sized notecard,Organized
+
