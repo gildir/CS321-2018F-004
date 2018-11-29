@@ -51,6 +51,8 @@ public class Player {
     private long rewardProgress; //task 229, keeps track of how much time must elapse before a reward.
     private long totalPay; //used to calculate missed allowance payments for task 228
     private boolean rathskellerStatus = false;
+	private boolean fightingGhoul = false;
+	private Ghoul challengedGhoul;
 
     //Tracks which quest the player is on
     private int questProgress;
@@ -106,6 +108,19 @@ public class Player {
 
     //Collection of words to be filtered from game chat
     private HashSet<String> filteredWords = new HashSet<String>();
+	
+	public Ghoul getChallengedGhoul() {
+		return challengedGhoul;
+	}
+ 	public void setChallengedGhoul(Ghoul challengedGhoul) {
+		this.challengedGhoul = challengedGhoul;
+	}
+ 	public boolean isFightingGhoul() {
+		return fightingGhoul;
+	}
+ 	public void setFightingGhoul(boolean fightingGhoul) {
+		this.fightingGhoul = fightingGhoul;
+	}
 
     /**
      * Sets the words filtered from this player's chat.
