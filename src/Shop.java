@@ -171,7 +171,8 @@ public class Shop {
         result += this.getObjects(0);
         
         // players names
-       String players = this.getPlayers();
+        String players = this.getPlayers();
+        
         if (players.isEmpty()) result += "\nYou are here by yourself.\n";
         else {
             result += "\nYou are here along with: ";
@@ -225,10 +226,10 @@ public class Shop {
         LinkedList<Item> list = new LinkedList<Item>();
 
         // Choose which list type
-        if (listType == 0){
+        if (listType == 0) {
             list = this.inventory;
         }
-        else if (listType == 1){
+        else if (listType == 1) {
             list = this.inDemand;
         }
 
