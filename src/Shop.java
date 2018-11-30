@@ -79,17 +79,17 @@ public class Shop {
         }
     }
     
-    //get method to get inventory linkedlist
+    // get method to get inventory linkedlist
     public LinkedList<Item> getInven() {
         return this.inventory;
     }
 
-    //get method to get inventory linkedlist
+    // get method to get inventory linkedlist
     public LinkedList<Item> getDemand() {
         return this.inDemand;
     }
 
-    //used to add methods to the linked list
+    // used to add methods to the linked list
     public void add(Item k) {
         if(this.inventory.size() >= 10) {
             this.inventory.pop();
@@ -97,28 +97,28 @@ public class Shop {
         this.inventory.add(k);
     }
 
-    //adds a random item to inDemand list
+    // adds a random item to inDemand list
     public void addDemandRand() {
         Random rand = new Random();
         this.inDemand.add(objects.get(rand.nextInt(objects.size())));
     }
     
-    //used to remove items form the linked list
+    // used to remove items form the linked list
     public void remove(Object k) {
         this.inventory.remove(k);
     }
 
-    //removes item from inDemand
+    // removes item from inDemand
     public void removeDemand(Item k) {
         this.inDemand.remove(k);
     }
     
-    //adds a player to the list of players at the shop
+    // adds a player to the list of players at the shop
     public void addPlayer(Player p) {
         playerlist.addPlayer(p);
     }   
     
-    //removes a player from the list of players at the shop
+    // removes a player from the list of players at the shop
     public void removePlayer(Player p) {
         // Why does add take a player object and remove take a name?? --IK
         playerlist.removePlayer(p.getName());  
@@ -172,7 +172,7 @@ public class Shop {
         
         // players names
         String players = this.getPlayers();
-        
+
         if (players.isEmpty()) result += "\nYou are here by yourself.\n";
         else {
             result += "\nYou are here along with: ";
