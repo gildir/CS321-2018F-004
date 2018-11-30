@@ -20,9 +20,11 @@ public class Room {
     private static final int MAX_WHITEBOARD_LEN = 120;
     private StringBuilder whiteboard;
     //list of NPCs in a room, list in case additional NPCs are added to the game
-    private final HashMap<String, NPC> npcs;
+    private HashMap<String, NPC> npcs;
     //add tem state check for ghoul
-    public boolean hasGhoul = false;
+    private boolean hasGhoul = false;
+	private LinkedList<Ghoul> ghouls;
+	private String spirit;
 
     
     public Room(int id, String room_type, String title, String description) {
@@ -35,6 +37,7 @@ public class Room {
         this.description = description;
         this.room_type = room_type;
         this.npcs = new HashMap<>();
+		this.ghouls = new LinkedList<>();
     }
 
     public Room(int id, String room_type, String title, String description, HashMap<String, NPC> npcs) {
@@ -46,6 +49,7 @@ public class Room {
 	    this.room_type = room_type;
         this.description = description;
         this.npcs = npcs;
+		this.ghouls = new LinkedList<>();
     }
     
     public String toString(PlayerList playerList, Player player) {
@@ -55,11 +59,11 @@ public class Room {
         result += this.getDescription() + "\n";
         result += "...................\n";
         result += "NPCs in the area: " + this.getNPCs().keySet() + "\n";
+		result += "Spirits in the area: " + this.getSpirit() + ((this.hasSpirit()) ? " spirit.\n" : "\n");
         result += "Objects in the area: " + this.getObjects() + "\n";
         result += "Players in the area: " + this.getPlayers(playerList) + "\n";
         result += "You see paths in these directions: " + this.getExits() + "\n";
         result += "...................\n";
-        result += "You are facing: " + player.getCurrentDirection() + "\n";
         return result;
     }
     
@@ -67,6 +71,72 @@ public class Room {
     public int getId() {
         return this.id;
     }
+	
+	// Adds a spirit to the room
+	public void addSpirit(String sp) {
+		this.spirit = sp;
+	}
+	// Removes a spirit from the room
+	public void removeSpirit() {
+		this.spirit = null;
+	}
+	// Returns the spirit currently in the room
+	public String getSpirit() {
+		return (this.spirit==null) ? ("None.") : (this.spirit);
+	}
+	// Returns whether there is a spirit currently in the room
+	public boolean hasSpirit() {
+		return this.spirit != null;
+	}
+	
+	/**
+	* add ghoul
+	* @param g ghoul will be added.
+	* @return if the ghoul were added successfully. 
+	*/
+	public boolean addGhoul(Ghoul g) {
+		boolean inf = this.ghouls.add(g);
+		this.hasGhoul = !(this.ghouls.isEmpty());
+		return inf;
+	}
+	
+	/**
+	* remove ghoul
+	* @param g ghoul will be removed.
+	* @return if the ghoul were removed successfully. 
+	*/
+	public boolean removeGhoul(Ghoul g) {
+		boolean inf = this.ghouls.remove(g);
+		this.hasGhoul = !(this.ghouls.isEmpty());
+		return inf;
+	}
+	
+	/**
+	* given all ghoul in the room
+	* @return ghoul's collection in this room. 
+	*/
+	public LinkedList<Ghoul> getGhouls() {
+		return this.ghouls;
+	}
+	
+	/**
+	* check if any ghoul in the room
+	* @return if the ghouls in the room. 
+	*/
+	public boolean hasGhoul(){
+		this.hasGhoul = !(this.ghouls.isEmpty());
+		return this.hasGhoul;
+	}
+	
+	public LinkedList<Room> getNearByRoom(Map map) {
+		LinkedList<Room> rooms = new LinkedList<Room>();
+		for(Exit exit : this.exits) {
+			if(map.findRoom(exit.getRoom()) != null) {
+				rooms.add(map.findRoom(exit.getRoom()));
+			}
+		}
+		return rooms;
+	}
     
     public String getExits() {
         String result = "";
@@ -135,6 +205,16 @@ public class Room {
 		}
 		return ret;
         }
+    }
+
+    /*
+     * Adds an NPC to the current room, uses team 6 implementation
+     *
+     * @param name String name for the npc, also refers to file to get NPC dialogue
+     * @param id The id of the NPC's room
+     */
+    public void addNPC(String name, int id) {
+        npcs.put(name, new NPC(name, id));
     }
 
     public HashMap<String, NPC> getNPCs() {

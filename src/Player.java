@@ -45,21 +45,46 @@ public class Player {
     private ArrayList<NPC> dialogueList = new ArrayList<NPC>();
     private int rounds = 0;
     private int wins = 0;
-    @JsonProperty("recovery")
-    private ArrayList<String> recovery; //stored question, answer, question,...
     private boolean hasTitle = false; //used for title and use item feature 
     private String playerItemTitle = "";
-    private final long accountAge;
+    private double rewardAmount; //task 229, keeps track of how much money players will be rewarded every reward interval while logged in
+    private long rewardProgress; //task 229, keeps track of how much time must elapse before a reward.
+    private long totalPay; //used to calculate missed allowance payments for task 228
+    private boolean rathskellerStatus = false;
+	private boolean fightingGhoul = false;
+	private Ghoul challengedGhoul;
 
-    public Player(@JsonProperty("name") String name, @JsonProperty("accountAge") long accountAge) {
+    //Tracks which quest the player is on
+    private int questProgress;
+    //Used to count victories in RPS quest
+    private int rpsVictoryCount;
+    //Used to count pokes in poke quests
+    private int pokeCount;
+
+    private int RPSwins = 0;
+    private int RPSloss = 0;
+    private int RPSties = 0;
+    private double playerRankingScore = 0;
+    private String rankingTitle = "";
+
+    @JsonProperty("recovery")
+    private ArrayList<String> recovery;
+
+	public Player(@JsonProperty("name") String name) {
         this.currentRoom = 1;
         this.currentDirection = Direction.NORTH;
         this.name = name;
-        this.accountAge = accountAge;
         this.currentInventory = new LinkedList<>();
         this.chestImage = new LinkedList<>();
         this.money = 0;
-        this.recovery = new ArrayList<String>();
+
+	this.questProgress = 0;
+	this.rpsVictoryCount = 0;
+
+        this.rewardAmount = 0.1; //Task 229, This is the default starting amount (also set when player leaves in GameCore)
+        this.rewardProgress = 0; //Task 229, value resets to 0 on leave (in GameCore leaveGame)
+        this.totalPay = 0; //for task 228        
+
     }
 
     public int getDormId() {return this.dormId;}
@@ -83,12 +108,27 @@ public class Player {
 
     //Collection of words to be filtered from game chat
     private HashSet<String> filteredWords = new HashSet<String>();
+	
+	public Ghoul getChallengedGhoul() {
+		return challengedGhoul;
+	}
+ 	public void setChallengedGhoul(Ghoul challengedGhoul) {
+		this.challengedGhoul = challengedGhoul;
+	}
+ 	public boolean isFightingGhoul() {
+		return fightingGhoul;
+	}
+ 	public void setFightingGhoul(boolean fightingGhoul) {
+		this.fightingGhoul = fightingGhoul;
+	}
 
     /**
      * Sets the words filtered from this player's chat.
      * @param newFilteredWords - collection of words to be filtered from this player's chat
      */
     public void setFilteredWords(HashSet<String> newFilteredWords) {
+        filteredWords = new HashSet<String>();
+
         for(String word : newFilteredWords) {
             filteredWords.add(word.toLowerCase());
         }
@@ -124,23 +164,45 @@ public class Player {
      * @return - new filtered message.
      */
     public String filterMessage(String message) {
+
+        if(filteredWords.size() == 0) { return message; }
+
         String newMessage = "";
         String bleep = "[BLEEEEP]";
+        String messageL = message.toLowerCase();
 
-        for(String word : message.split("\\s+")) {
+        for(int i = 0; i < message.length(); i ++) {
+            char current = message.charAt(i);
+            char currentL = messageL.charAt(i);
             boolean match = false;
+            int wordLen = 0;
 
-            if(filteredWords.contains(word.toLowerCase())) {
-                newMessage += bleep + " ";
+            for(String word : filteredWords) {
+                String wordL = word.toLowerCase();
+
+                if(i + word.length() <= message.length() && currentL == wordL.charAt(0)) {
+                    String fragmentL = messageL.substring(i, i + word.length());
+
+                    if(wordL.equals(fragmentL)) {
+                        match = true;
+                        wordLen = word.length();
+                        break;
+                    }
+                }
+            }
+
+            if(match) {
+                newMessage += bleep;
+                i += wordLen - 1;
             } else {
-                newMessage += word + " ";
+                newMessage += current;
             }
         }
 
-        newMessage = newMessage.substring(0, (newMessage.length()-1));
-
         return newMessage;
-    }/*
+    }
+
+    /*
 
     public void printMessage(Player speaker, String message, String action) {
         String newMessage = filterMessage(message);
@@ -277,6 +339,11 @@ public class Player {
                 break;                
         }
     }
+    
+    
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // INSERT CODE FOR GETTERS AND SETTERS BELOW ///////////////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public String getLastPlayer() {
         return lastPlayer;
@@ -285,7 +352,7 @@ public class Player {
     public void setLastPlayer(String lastPlayer) {
         this.lastPlayer = lastPlayer;
     }
-
+    
     public void setInBattle(boolean battle){
 	inBattle = battle;
     }
@@ -298,56 +365,10 @@ public class Player {
     public String getName() {
         return name;
     }
-    
-    @JsonProperty("recovery")
-    public void setRecovery(ArrayList<String> recovery) {
-    	this.recovery = recovery;
-    }
-
-    @JsonProperty("recovery")
-    public ArrayList<String> getRecovery() {
-    	return this.recovery;
-    }
 
     public void setName(String name) {
         this.name = name;
     }
-	
-	public String getQuestion(int num) {
-		String q = null;
-		try {
-			q = this.recovery.get(num * 2);
-		} catch (IndexOutOfBoundsException e) {
-			return null;
-		}
-		return q;
-	}
-	
-	public void addQuestion(String question, String answer) {
-		this.recovery.add(question);
-		this.recovery.add(answer);
-		this.setRecovery(this.recovery);
-	}
-	
-	public void removeQuestion(int num) {
-		this.recovery.remove(num * 2);
-		this.money = num * 2;
-		this.recovery.remove(num * 2); //second one removes the answer
-	}
-	
-	public String getAnswer(int num) {
-		String q = null;
-		try {
-			q = this.recovery.get((num * 2) + 1);
-		} catch (IndexOutOfBoundsException e) {
-			return null;
-		}
-		return q;
-	}
-	
-	public long getAccountAge() {
-		return accountAge;
-	}
 
     //Update dialogue status of this player with other npcs
     public void updateDialogueList(String npcName, String dialogueTag, int updateAmount)
@@ -411,7 +432,7 @@ public class Player {
             dialogueList.add(npc);
         }
     }
-
+  
     public LinkedList<Item> getCurrentInventory() {
         return currentInventory;
     }
@@ -463,6 +484,38 @@ public class Player {
 			break;
 		default:
 			System.out.println("Please enter in valid input or use the correct format (n/w/p) -> (i/d)");
+	}
+    }
+
+    /**
+     *  Initiates the action of drinking a rathskeller bottle
+     *  Makes the rathskeller status true for one minute after which it will be false
+     */
+    public void drinkRathskeller() {
+	rathskellerStatus = true;
+	Thread rTimer = new Thread(new RathskellerTimer());
+	rTimer.start();
+    }
+
+    /**
+     * Gets the status of a player and tells if they drank from a rathskeller bottle
+     * @return true if the player has drunken, false otherwise
+     */
+    public boolean getRathskellerStatus() {
+	return rathskellerStatus;
+    }
+
+    //runnable class for timing the rathskeller feature
+    private class RathskellerTimer implements Runnable {
+	@Override
+	public void run() {
+		try {
+			Thread.sleep(60000);
+			rathskellerStatus = false;
+		}
+		catch(InterruptedException e) {
+			rathskellerStatus = false;
+		}
 	}
     }
 
@@ -601,14 +654,109 @@ public class Player {
     public void setChallenger(String name){
         challenger = name;
     }
-
     public boolean getHasChallenge(){
         return hasChallenge;
     }
-
     public void setHasChallenge(boolean challenged){
         hasChallenge = challenged;
     }
+
+    public void setRpsVictoryCount(int count){
+	rpsVictoryCount = count;
+    }
+
+    public void addRpsVictory(){
+	rpsVictoryCount ++;
+    }
+
+    public int getRpsVictoryCount(){
+	return rpsVictoryCount;
+    }
+
+    public void setPokeCount(int num){
+        pokeCount = num;
+    }
+
+    public void addPoke(){
+	pokeCount ++;
+    }
+
+    public int getPokeCount(){
+	return pokeCount;
+    }
+
+
+    public int getProgress(){
+        return questProgress;
+    }
+
+    public void setProgress(int progress){
+        this.questProgress = progress;
+    }
+
+    public void advanceQuest(){
+	questProgress ++;
+    }
+    
+    @JsonIgnore
+    public double getRewardAmount() {
+    	return this.rewardAmount;
+    }
+    
+    public void setRewardAmount(double d) {
+    	this.rewardAmount = d;
+    }
+    
+    @JsonIgnore
+    public long getRewardProgress() {
+    	return this.rewardProgress;
+    }
+    
+    public void setRewardProgress(long l) {
+    	this.rewardProgress = l;
+    }
+    
+    public long getTotalPay() {
+    	return this.totalPay;
+    }
+    
+    public void setTotalPay(long l) {
+    	this.totalPay = l;
+    }
+
+    public int getRPSwins(){
+	return this.RPSwins;
+    }
+    public void setRPSwins(int w){
+	this.RPSwins = w;
+    }
+    public int getRPSloss(){
+	return this.RPSloss;
+    }
+    public void setRPSloss(int l){
+	this.RPSloss = l;
+    }
+    public int getRPSties(){
+	return this.RPSties;
+    }
+    public void setRPSties(int t){
+	this.RPSties = t;
+    }
+    public double getPlayerRankingScore(){
+	return this.playerRankingScore;
+    }
+    public void setPlayerRankingScore(double r){
+	this.playerRankingScore = r;
+    }
+    public String getRankingTitle(){
+	return this.rankingTitle;
+    }
+    public void setRankingTitle(String title){
+	this.rankingTitle = title;
+    }
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// INSERT CODE FOR GETTERS AND SETTERS ABOVE ///////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     
     /**
      * Allows the caller to add/take money in user's wallet.
@@ -703,7 +851,6 @@ public class Player {
 		toggleChat = false;
 		return "You have turned on RPS resolutions in your area";
 	}
-
 
     }
 

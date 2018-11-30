@@ -24,6 +24,9 @@ object are on the ground and what direction you are facing.
     <help command = "TALK">
         <description>  TALK [npc name] - Initiates dialogue with named NPC.</description>
     </help>
+    <help command = "JOURNAL">
+        <description>  JOURNAL         - Opens up a journal showing your current quest</description>
+    </help>
     <help command = "MOVE">
         <description>  MOVE direction- Tries to walk forward once toward &lt;direction&gt; times.</description>
     </help>
@@ -72,6 +75,15 @@ object are on the ground and what direction you are facing.
         <help command = "BRIBE_GHOUL">
         <description>  BRIBE_GHOUL item_name    - Gives selected item to ghoul.</description>
     </help>
+	<help command = "CAPTURE">
+        <description>  CAPTURE    - Captures the spirit in the current room.</description>
+    </help>
+	<help command = "SPIRIT_LIST_ALL">
+        <description>  SPIRIT_LIST_ALL    - Lists all spirits you have captured.</description>
+    </help>
+	<help command = "SPIRIT_LIST_MISSING">
+        <description>  SPIRIT_LIST_MISSING    - Lists all spirits you have not captured.</description>
+    </help>
         <help command = "SORT">
         <description>  SORT          - Sorts your inventory</description>
     </help>
@@ -99,12 +111,6 @@ object are on the ground and what direction you are facing.
 	<help command = "EXAMINE">
 	<description>  EXAMINE object - Tries to examine a object in your inventory</description>
     </help>
-        <help command = "POKE_GHOUL">
-        <description>  POKE_GHOUL    - Pokes the ghoul in the current room.</description>
-    </help>
-        <help command = "POKE_GHOUL">
-        <description>  POKE_GHOUL    - Pokes the ghoul in the current room.</description>
-    </help>
     <help command = "REDO">
         <description>  REDO          - Repeats the last command you entered.</description>
     </help>
@@ -113,6 +119,21 @@ object are on the ground and what direction you are facing.
     </help>
     <help command = "REPLY">
         <description>  REPLY message            - Reply 'message' to last whisper.</description>
+    </help>
+    <help command = "MAKECHAT">
+        <description>  MAKECHAT name            - Creates a chatroom called 'name'.</description>
+    </help>
+    <help command = "INVCHAT">
+        <description>  INVCHAT player chat      - Invites 'player' to join the chatroom called 'chat'.</description>
+    </help>
+    <help command = "JOINCHAT">
+        <description>  JOINCHAT chat            - Joins the chatroom called 'chat' if invited.</description>
+    </help>
+    <help command = "LEAVECHAT">
+        <description>  LEAVECHAT chat           - Leaves the chatroom called 'chat' if a member.</description>
+    </help>
+    <help command = "[chatroom name]">
+        <description>  [chatroom name] message  - Sends 'message' to chatroom called [chatroom name].</description>
     </help>
     <help command = "IGNORE">
         <description>  IGNORE player            - Ignore messages from 'player'.</description>
@@ -162,7 +183,16 @@ object are on the ground and what direction you are facing.
     <help command = "CHEST">
         <description>  CHEST                   - Invokes the Chest interaction subSystem Menu in the DormRoom</description>
     </help>
-     <help command = "TOGGLERPSCHAT">
+    <help command = "TOGGLERPSCHAT">
 	<description> TOGGLERPSCHAT		-Toggles the win resolutions of R-P-S battles in your area.</description>
+    </help>
+    <help command = "LISTPLAYERS">
+	<description> LISTPLAYERS		-Lists all the current players in the world.</description>
+    </help>
+    <help command = "RANK TOP5">
+	<description> RANK TOP5 	       -Lists the top 5 players in R-P-S battle.</description>
+    </help>
+    <help command = "RANK">
+	<description> RANK      		-Shows the rank of the user in R-P-S battle.</description>
     </help>
 </helps>

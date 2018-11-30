@@ -5,7 +5,38 @@ import java.util.ArrayList;
  *
  * @author Kevin
  */
-public interface GameCoreInterface {
+public interface GameCoreInterface extends IAccount.Server {
+	
+	/**
+	 * Lists all spirits the player has captured.
+	 * @param playerName Player name
+	 * @return String list of spirits the player has captured
+	 * @throws RemoteException
+	 */
+	public String spiritListAll(String playerName);
+	
+	/**
+	 * Lists all spirits the player has not captured.
+	 * @param playerName Player name
+	 * @return String list of spirits the player has not captured
+	 * @throws RemoteException
+	 */
+	public String spiritListMissing(String playerName);
+	
+	/**
+	 * Captures the spirit in the current room
+	 * @param playerName Player name
+	 * @return String message of spirit capture success or failure
+	 */
+	public String capture(String playerName);
+	
+	/**
+	 * The player plays RPS against ghoul to avoid being dragged
+	 * @param playerName the player playing RPS
+	 * @param option the RPS choice of the player
+	 */
+	public String ghoulRPS(String playerName, String option);
+	
 	
 	/**
 	 * Makes the ghoul walk to an adjacent room
@@ -31,7 +62,11 @@ public interface GameCoreInterface {
 	public String bribeGhoul(String playerName,String item);
 
 	
-	//public String giveToGhoul(String object, String playerName);
+	/**
+	* Broadcasts a message to all room. 
+	* @param message Message to broadcast.
+	*/
+	public void broadcast(String message);
 
     
     /**
@@ -129,6 +164,14 @@ public interface GameCoreInterface {
      * @return Message showing success
      */
     public String ignorePlayer(String srcName, String dstName);
+    
+    /**
+     * Checks if the player is online or not.
+     * @param name Player Name. 
+     * @return true if the player is logged into the game. Else it returns false.
+     * @throws RemoteException 
+     */
+    public boolean isPlayerOnline(String name);
 
     /**
      * Player unIgnores further messages from another Player
@@ -154,6 +197,59 @@ public interface GameCoreInterface {
      */
     public String quickReply(String srcName, String message);
     // End 404.
+    
+    /**
+     * Create a new chatroom
+     * @param playerName Name of the player creating the chatroom
+     * @param chatName Name of the chatroom
+     * @return Message showing success
+     * @throws RemoteException
+     */
+    public String makeChat(String playerName, String chatName);
+    
+    /**
+     * Invite a player to your current chatroom.
+     * @param srcPlayer Name of player sending the invite
+     * @param dstPlayer Name of player receiving the invite
+     * @return Message showing success
+     * @throws RemoteException
+     */
+    public String invChat(String srcPlayer, String dstPlayer, String chatName);
+    
+    /**
+     * Join a player's chatroom
+     * @param srcPlayer Name of player joining
+     * @param dstPlayer Name of player in the target chatroom
+     * @return Message showing success
+     * @throws RemoteException
+     */
+    public String joinChat(String srcPlayer, String chatName);
+    
+    /**
+     * Leave a chatroom
+     * @param srcPlayer Name of player leaving
+     * @param chatName Name of chatroom to leave
+     * @return Message showing success
+     * @throws RemoteException
+     */
+    public String leaveChat(String srcPlayer, String chatName);
+    
+    /**
+     * Check if chatroom exists
+     * @return boolean showing success
+     * @throws RemoteException
+     */
+    public boolean checkChat(String command);
+    
+    /**
+     * Message a chatroom
+     * @param srcPlayer Name of player sending the message
+     * @param message The message to be sent
+     * @param chatName The name of the chat to send the message to
+     * @return Message showing success
+     * @throws RemoteException
+     */
+    public String messageChat(String srcPlayer, String message, String chatName);
 
     // Feature 410: Joke
     /**
@@ -315,45 +411,21 @@ public interface GameCoreInterface {
      * @param name Name of client's player that is checking in.
      */
     public void heartbeatCheck(String name);
-	
-	/**
-	 * Gets recovery question
-	 * @param name User of recovery question 
-	 * @param num Marks which question will be grabbed
-	 * @return String of recovery question, null if user doesn't exist
-	 */
-	public String getQuestion(String name, int num);
-	
-	/**
-	 * Gets recovery answer
-	 * @param name User of recovery answer
-	 * @param num Marks which answer will be grabbed
-	 * @return String of recovery question, null if user doesn't exist
-	 */
-	public Boolean getAnswer(String name, int num, String answer);
-	
-	public Responses verifyPassword(String name, String password);
-
-	/**
-	 * Resets passwords.
-	 * 
-	 * @param name Name of player getting password reset
-	 * @param password New password to be saved
-	 */
-	public Responses resetPassword(String name, String pass);
 
      /**
       * Challenge someone to R-P-S
       * @param challenger is the name of the player challenging to R-P-S
       * @param challenge is the name of the player being challenge
+      * @param rounds is the number of rounds for battle
       * @return String message of the challenge
       */
-    public String challenge(String challenger, String challengee);
+    public String challenge(String challenger, String challengee, String rounds);
 
     /**
       * Accept someones challenge to R-P-S
       * @param challenger is the name of the player challenging to R-P-S
       * @param challenge is the name of the player accepting
+      * @param rounds is the number of rounds for battle
       * @return String message of the acceptence
       */
     public String accept(String challenger, String challengee, String rounds);
@@ -410,15 +482,27 @@ public interface GameCoreInterface {
 	 * @return Message showing online friends
 	 */
 	public String viewFriends(String name, boolean onlineOnly);
-	
-	public void addQuestion(String name, String question, String answer);
-	
-	public void removeQuestion(String name, int num);
-	
+		
 	/**
 	 * Returns a message saying the player has toggled the RPS resolutions in area
 	 * @param Player name
 	 * @return message saying the chat has been toggled on or off
 	 */
 	public String toggleRPSChat(String player);
+
+	/**
+	 * Returns a String of all players
+	 * @param nothing
+	 * @return list of players in world
+	 */
+	public String listAllPlayers();
+
+	/**
+	 * Returns a String of a players ranking.
+	 * @param Player requesting for their ranking
+	 * @param Player requsting a different ranking type
+	 * @return string of their ranking
+	 */
+	public String rankings(String ranks, String userOption);
+
 }
