@@ -10,8 +10,7 @@ import java.io.IOException;
 import java.io.File;
 import java.util.Random;
 
-public class Shop
-{
+public class Shop {
 	//Max of 10 items in this list
 	private LinkedList<Item> inventory;
 	
@@ -96,8 +95,7 @@ public class Shop
 
 	//used to add methods to the linked list
 	public void add(Item k) {
-		if(this.inventory.size() >= 10)
-		{
+		if(this.inventory.size() >= 10) {
 			this.inventory.pop();
 		}
 		this.inventory.add(k);
@@ -110,14 +108,12 @@ public class Shop
 	}
 	
 	//used to remove items form the linked list
-	public void remove(Object k)
-	{
+	public void remove(Object k) {
 		this.inventory.remove(k);
 	}
 
 	//removes item from inDemand
-	public void removeDemand(Item k)
-	{
+	public void removeDemand(Item k) {
 		this.inDemand.remove(k);
 	}
 
@@ -306,14 +302,21 @@ public class Shop
 			String item = obj.toString();
 			
 			// handles items with long names
-			if (item.length() > itemLen) {
-				menu += String.format(format, i++, item.substring(0,itemLen), price);
-				for (int j = 1; j <= item.length() % 15; j--) {
-					menu += String.format(format, "", item.substring((itemLen*j)+1 ,itemLen*(j+1)), "");
-				}
-			}
-			// names that aren't long
-			else menu += String.format(format, i++, item, price);
+			// currently crashes if name too long (lol)
+			/*
+			 *	if (item.length() > itemLen) {
+			 *		menu += String.format(format, i++, item.substring(0,itemLen), price);
+			 *
+			 *		for (int j = 1; j <= item.length() % 15; j--) {
+			 *			menu += String.format(format, "", item.substring((itemLen*j)+1 ,itemLen*(j+1)), "");
+			 *		}
+			 *	}
+			 *
+			 *	// names that aren't long
+			 *	else menu += String.format(format, i++, item, price);
+			 */
+
+			menu += String.format(format, i++, item, price);
 		}
 		
 		menu += separator + "\n";
