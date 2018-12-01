@@ -71,7 +71,7 @@ public class GameCore implements GameCoreInterface {
     public GameCore(String playerAccountsLocation, String worldFile) throws Exception {
 
         // Generate the game map.
-        map = new Map(worldFile);	//If  a map file is passed on the command lne use that otherwise the default
+        map = new Map(worldFile);
         this.dailyLogger = new DailyLogger();
         dailyLogger.write("SERVER STARTED");
         playerList = new PlayerList(); 
@@ -3560,5 +3560,4 @@ public class GameCore implements GameCoreInterface {
 	}
 
 
-//>>>>>>> dev
 }
