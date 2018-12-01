@@ -1,0 +1,16 @@
+3
+1,outdoors,hall,
+NORTH,0,wall
+SOUTH,2,fish
+EAST,1,chicken
+WEST,3,flower
+2,outdoors,flowerwindow,
+NORTH,2,cat
+SOUTH,3,mirror
+EAST,1,bathroom
+WEST,0,null
+3,outdoors,hill of desolation,
+NORTH,8,fire
+SOUTH,7,wind
+EAST,6,smoke
+WEST,5,water
