@@ -34,16 +34,9 @@ public class Map{
                         Room newRoom;
                         Exit newExit;
 
-//<<<<<<< HEAD
-//
-//                        numRooms = Integer.parseInt(mapIn.nextLine());	//Read the first line that indicates the number of rooms
-//                        numExits = 4;	//Stores the 4 directions than can be exits
-//
-//
-//=======
                         numRooms = Integer.parseInt(mapIn.nextLine());	//Reads the fle parsing the csv file to create the rooms.
                         numExits = 4;	//Sets the number of exits at 4
-//>>>>>>> 71d720cc9ad4715761af0a36fc00e459a849b0ba
+
 
                         mapIn.useDelimiter(",|\\n|\\r\\n");
 

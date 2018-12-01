@@ -71,11 +71,10 @@ public class GameCore implements GameCoreInterface {
     public GameCore(String playerAccountsLocation, String worldFile) throws Exception {
 
         // Generate the game map.
-//<<<<<<< HEAD
+
         map = new Map(worldFile);	//If  a map file is passed on the command line use that otherwise the default
-//=======
-//        map = new Map(worldFile);
-//>>>>>>> 71d720cc9ad4715761af0a36fc00e459a849b0ba
+
+
         this.dailyLogger = new DailyLogger();
         dailyLogger.write("SERVER STARTED");
         playerList = new PlayerList(); 
