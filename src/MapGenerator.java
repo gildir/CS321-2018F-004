@@ -59,7 +59,7 @@ public class MapGenerator{
 	 */
     private class Node
 	{
-		Node NextNode;
+		Node NextNode;	//Defines the data structor to hold the room data
 		
 	    private int roomID = 1;
 	    private String roomDescription;

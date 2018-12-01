@@ -33,7 +33,8 @@ public class Map{
                         Exit newExit;
 
                         numRooms = Integer.parseInt(mapIn.nextLine());	//Read the first line that indicates the number of rooms
-                        numExits = 4;
+                        numExits = 4;	//Stores the 4 directions than can be exits
+
 
                         for(int i = 0; i < numRooms; i++) {
 
