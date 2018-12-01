@@ -20,36 +20,31 @@ public class Map{
         public Map(String worldFile) {		//Name of the map passed on the command line as an argument.
                 map = new LinkedList<>();
                 try {
-
-                        File mapFile = new File(worldFile);	//Use the world file to create the game world
-                        Scanner mapIn = new Scanner(mapFile).useDelimiter(",|\\n|\\r\\n");	//defines the key elements to brak the information
+                        File mapFile = new File(worldFile);	//Opens the file containing the map csv
+                        Scanner mapIn = new Scanner(mapFile).useDelimiter(",|\\n|\\r\\n");
 
                         int numRooms, numExits;
 
-                        String title, description, room_type;	//Data types used to build the rooms
-                        String message;
-                        int id, link;
-
+                        String title, description, room_type;	//Strings store the title of the room, a brief description of the room, and the type of room ( inside/outside)
+                        String message, npcName;	
+                        int id, link;	
 
                         Direction exitId;
 
                         Room newRoom;
                         Exit newExit;
 
-
-                        numRooms = Integer.parseInt(mapIn.nextLine());	//Read the first line that indicates the number of rooms
-                        numExits = 4;
-
+                        numRooms = Integer.parseInt(mapIn.nextLine());	//Reads the fle parsing the csv file to create the rooms.
+                        numExits = 4;	//Sets the number of exits at 4
 
                         mapIn.useDelimiter(",|\\n|\\r\\n");
 
 			for(int i = 0; i < numRooms; i++) {
 
                                 id = Integer.parseInt(mapIn.next());	//Walks through the file parsing lines to create the map.
-                                room_type = mapIn.next();//Parse the Id of the next room
-                                title = mapIn.next();//Pare if the room s indoor or outdoor
+                                room_type = mapIn.next();
+                                title = mapIn.next();
                                 mapIn.useDelimiter("\\S|\\s");
-
                                 mapIn.next();
                                 mapIn.useDelimiter("\\n|\\r\\n");
                                 description = mapIn.next();
@@ -68,7 +63,6 @@ public class Map{
 
                                         newRoom = new Room(id, room_type, title, description, npcs);
 
-
                                 }
                                 else {
                                         newRoom = new Room(id, room_type, title, description);	//This room is not 1 and the quest NPC is not here
@@ -76,10 +70,8 @@ public class Map{
 
                                 for(int j = 0; j < numExits; j++) {
 
-
-                                        mapIn.useDelimiter(",|\\n|\\r\\n");
-                                        exitId = Direction.valueOf(mapIn.next());	//Parse the directions of travel from the file
-
+                                        mapIn.useDelimiter(",|\\n|\\r\\n");	//using a comma delimited file to represent the data of the room.
+                                        exitId = Direction.valueOf(mapIn.next());
                                         link = Integer.parseInt(mapIn.next());
                                         mapIn.useDelimiter("\\S|\\s");
                                         mapIn.next();
@@ -89,7 +81,6 @@ public class Map{
                                         //                    System.out.println("... Adding Exit " + exitId + " to " + link + ": " + message);
                                         newRoom.addExit(exitId, link, message);
                                 }                
-
 			        mapIn.useDelimiter(",|\\n|\\r\\n");	
                                 //Check if the next value is an integer, if not, then get the name of an npc to add from the next value and add it to the last room
                                 while(!mapIn.hasNextInt() && mapIn.hasNext())
@@ -102,7 +93,6 @@ public class Map{
 
                         mapIn.close();	//close the map file
                 } catch (IOException | IllegalArgumentException ex) {
-
                         Logger.getLogger(Map.class.getName()).log(Level.SEVERE, null, ex);
                         System.out.println("[SHUTDOWN] Invalid File " + worldFile);	//Handles the case that the file is not formatted as a map.
 	                      System.exit(-1);	//Report back to the OS of the improper exit of the game.
@@ -162,7 +152,7 @@ public class Map{
 	setExits(row,col,nodeArr,baseId);
 
 	//Blank display template for the display
-//Recursvely draw the map doing a breathfirst check of the surrounding rooms.
+
 	result += "   ______________________________________________\n";
 	result += "   |ASCII Map - Displaying rooms near you!      |\n";
 	result += "   | X = You  $ = Shop   # = Inside | = Outside |\n";
