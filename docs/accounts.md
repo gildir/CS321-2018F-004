@@ -3,8 +3,8 @@
 
 ## As a User
 
-The user only needs to know two things. When the server starts create an account by entering 'C' at the prompt. From here you can create a username and password. This will create your persistent account. You can then log into the server any subsequent times using that information. All of your account elements such as player position and inventory should be saved.
-The second is the DELETE command. Use this command when signed in to completely wipe away your profile forever.
+The user only needs to know three things. When the server starts create an account by entering 'C' at the prompt. From here you can create a username and password. This will create your persistent account. You can then log into the server any subsequent times using that information. All of your account elements such as player position and inventory should be saved.
+The second is the DELETE command. Use this command when signed in to completely wipe away your profile forever. The third is the ACCOUNT command. This will take you into an account edit wizard that currently allows you to change your password and add/remove security questions.
 
 ## As a Developer
 
@@ -16,12 +16,15 @@ Player accounts are stored in files on a per-account basis. This is done so that
 |-- players
 |   |-- ac1
 |   |   |-- data.json
-|   |   |-- pass.txt
+|   |   |-- account.json
 |   |
 |   |-- ac2
 |       |-- data.json
-|       |-- pass.txt	   
+|       |-- account.json   
 ```
+data.json contains all player  data; money, inventory, position, etc.
+account.json contains all account data; password, reset questions, etc.
+
 ###### Adding new fields to Player
 
 The marshaller simply needs getters and setters for any new variables. Example:
@@ -38,15 +41,30 @@ public void setVar(TYPE var) {
 ```
 ###### Primary file of interest: PlayerAccountManager.java
 
-	public synchronized AccountResponse createNewAccount(String username, String password)
+	public synchronized DataResponse<Player> createNewAccount(String username, String password)
 	private void writePlayerDataFile(Player p) throws Exception
-	public void forceUpdateData(Player p)
+	private void writeAccountDataFile(PlayerAccount a) throws Exception
+	public void forceUpdatePlayerFile(Player p)
+	public void forceUpdateAccountFile(PlayerAcount a)
 	public boolean deleteAccount(String username)
-	public AccountResponse getAccount(String username, String password)
+	public DataResponse<Player> getPlayer(String username, String password)
+	public DataResponse<PlayerAccount> getAccount(String username)
 	public boolean accountExists(String username)
 	
 These functions handle the management of all player account activities. Creating, Getting, Updating, and Deleting
 
+###### Secondary file of interest: PlayerAccount.java
+Public methods only:
+
+	public DataResponse<Long> getAccountAge(String name)
+	public Responses verifyPassword(String name, String pass)
+	public Responses addRecoveryQuestion(String name, String question, String answer)
+	public Responses verifyAnswers(String name, ArrayList<String> answers)
+	public Responses changePassword(String name, String password)
+	public DataResponse<ArrayList<String>> getQuestions(String name)
+	public Responses removeQuestion(String name, int num)
+	
+Notice how all sensitive data has no public accessors. All passwords remain hidden.
 ###### Using IDEs
 
 The json marshalling is handled by [Jackson](https://github.com/FasterXML) libraries. These files live in the `lib` folder. While classpath arguments have been added to the build and run command files, for an IDE to function correctly it will need to add these libraries.
@@ -62,12 +80,12 @@ It should look something like this:
 --Ryan
 
 ## Users
-The user can create a friends list by adding and removing users to their friends list with the "FRIENDS ADD [Name]" and "FRIENDS REMOVE [Name]" commands. They can also use the "FRIENDS ONLINE" command to see which of their friends are currently online. If the user needs to, they can use the "FRIENDS" command to view all currently implemented friend related subcommands.
+The user can create a friends list by adding and removing users to their friends list with the "FRIENDS ADD [Name]" and "FRIENDS REMOVE [Name]" commands. They can also use the "FRIENDS ONLINE" command to see which of their friends are currently online, or "FRIENDS ALL" to see a complete list of all their friends who are online or offline. If the user needs to, they can use the "FRIENDS" command to view all currently implemented friend related subcommands.
 
 ![Friends](../images/friends-004.png)
 
 ## Developers
-Friend information is stored in the format of two hashmaps, stored as friends you've added (which uses a key of your name, and a value of a hashtable containing the name of your friends), and friends who have added you (Which also has a key of your name and a value of a hashtable containing the name of people who have added your account as a friend). This is important as it allows the users friends list to automatically update to remove obsolete friends when they delete their account.
+Friend information is stored in the format of two hashmaps in the FriendsManager, stored as friends you've added (which uses a key of your name, and a value of a hashtable containing the name of your friends), and friends who have added you (Which also has a key of your name and a value of a hashtable containing the name of people who have added your account as a friend). This is important as it allows the users friends list to automatically update to remove obsolete friends when they delete their account.
 
 # Leave Game System (Logging out, remove from online, heartbeat)
 --Quinten Holmes
@@ -95,14 +113,14 @@ The time the last pulse was received is stored in the PlayerList, which in turn 
 --Dylan
 
 ## Users
-Once you have the game booted up, you will be given the option to log in or create an account. For logging in, you will need to have your username and password on hand and you’ll be able to join the game from wherever you were when you left. If you forgot your password, you would have created 3 recovery questions when first making your account. The game prompts a password reset if you get the username or password incorrect, if you accept and answer the questions correctly you’ll be able to reset your password. The answers are not case sensitive. 
+Once you have the game booted up, you will be given the option to log in or create an account. For logging in, you will need to have your username and password on hand and you’ll be able to join the game from wherever you were when you left. If you forgot your password, ~~you would have created 3 recovery questions when first making your account~~ then hopefully you set up security questions in the account edit wizard. The game prompts a password reset if you get the username or password incorrect 3 consecutive times, if you accept and answer the questions correctly you’ll be able to reset your password. The answers are not case sensitive. 
 	
 ## Devs
-When a player joins a game, their username and password are passed along through the joinGame method in GameObject. There the password is hashed and the same method is called in the GameCore. If the player isn’t already online, then the getAccount method is called on the PlayerAccountManagaer, passing in the username and hashed password. The manager tries to retrieve the players account if it exists and there are no errors. Assuming all else goes well, the method will return the player account or a Response based on what caused the player account to be found. From there, if an account was found and retrieved, GameCore adds them to the active player list and the player is let into the game server. If not account data was found, the player is told that the username and password combination was invalid, allowing them to try again or reset their password. 
+When a player joins a game, their username and password are passed along through the joinGame method in GameObject. The same method is called in the GameCore. If the player isn’t already online, then the getPlayer method is called on the PlayerAccountManager, passing in the username and password. The manager tries to retrieve the players account if it exists and there are no errors. Assuming all else goes well, the method will return the player data or a Response based on what caused the player not to be found. From there, if an account was found and retrieved, GameCore adds them to the active player list and the player is let into the game server.
 
 The GameCore keeps an iterable PlayerList of the currently online players at all times. As players join and leave, it gets updated. Within the class it uses a LinkedList to store the players, and supports adding, finding, and removing players from said list. 
 
-The file loading regarding accounts is done in the PlayerAccountManagar, mainly in the getAccount method. Besides the password, player data is stored in json format while the password is stored hashed in a txt file. PlayerAccountManager utilizes the JsonMarshaller class to actually retrieve the data. 
+The file loading regarding accounts is done in the PlayerAccountManagar, mainly in the getPlayer/getAccount methods. Player and Account data are stored in json format. PlayerAccountManager utilizes the JsonMarshaller class to actually retrieve the data. 
 	
 Here’s an example of what a players json file will look like. 
 
