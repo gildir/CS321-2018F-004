@@ -37,6 +37,7 @@ public class Map{
                         numRooms = Integer.parseInt(mapIn.nextLine());	//Reads the fle parsing the csv file to create the rooms.
                         numExits = 4;	//Sets the number of exits at 4
 
+
                         mapIn.useDelimiter(",|\\n|\\r\\n");
 
 			for(int i = 0; i < numRooms; i++) {
