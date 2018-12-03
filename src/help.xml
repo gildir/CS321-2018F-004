@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<!--
+Note to devs:
+    Please try to make help command description to be short as possible
+    and make them under 80 chars.
+-->
+
 <helps>
     <introduction>
         <description>
@@ -14,128 +20,191 @@ You will be able to see if any other players are in the same area as well as wha
 object are on the ground and what direction you are facing.
         </description>
     </introduction>
-
-    <help command = "LOOK">
-        <description>  LOOK          - Shows you the area around you</description>
-    </help>
-    <help command = "SAY">
-        <description>  SAY message   - Says 'message' to any other players in the same area.</description>
-    </help>
-    <help command = "MOVE">
-        <description>  MOVE direction- Tries to walk forward once toward &lt;direction&gt; times.</description>
-    </help>
-    <help command = "PICKUP">
-        <description>  PICKUP obect  - Tries to pick up an object in the same area.</description>
-    </help>
-    <help command = "PICKUPALL">
-        <description>  PICKUPALL     - Tries to pick up all objects in the same area.</description>
-    </help>
-    <help command = "WHITEBOARD">
-        <description>  WHITEBOARD    - WRITE to write a supplied argument on the whiteboard (max 120 chars), READ to read the whiteboard, or ERASE to clear the whiteboard.</description>
-    </help>
-    <help command = "INVENTORY">
-        <description>  INVENTORY     - Shows you what objects you have collected.</description>
-    </help>
-    <help command = "QUIT">
-        <description>  QUIT          - Quits the game.</description>
-    </help>
-    <help command = "HELP">
-        <description>  HELP          - Shows you all possible commands.</description>
-    </help>
-    <help command = "REDO">
-        <description>  REDO          - Repeats the last command you entered.</description>
-    </help>
-    <help command = "SHOP">
-        <description>  SHOP          - Tries to enter a shop if you are near one.</description>
-    </help>
-    <help command = "WALLET">
-        <description>  WALLET        - Shows you how much money you have.</description>
-    </help>
-    <help command = "VENMO">
-        <description>  VENMO         - Allows you to send money to people. Try: VENMO HELP</description>
-    </help>
-     <help command = "ADDCOMMAND">
-        <description>  ADDCOMMAND name- Add a custom command.</description>
-    </help>
-    <help command = "REMOVECOMMAND">
-        <description>  REMOVECOMMAND  - Remove a configured custom command.</description>
-    </help>
-    <help command = "CUSTOMHELP">
-        <description>  CUSTOMHELP     - Show every configured custom commands.</description>
-    </help>
-    <help command = "POKE_GHOUL">
-        <description>  POKE_GHOUL    - Pokes the ghoul in the current room.</description>
-    </help>
-        <help command = "BRIBE_GHOUL">
-        <description>  BRIBE_GHOUL item_name    - Gives selected item to ghoul.</description>
-    </help>
+    <help_category category = "INTERACTION">
+        <help command = "LOOK">
+            <description>  LOOK          - Shows you the area around you</description>
+        </help>
+        <help command = "MOVE">
+            <description>  MOVE direction - Tries to walk forward once toward &lt;direction&gt; times.</description>
+        </help>
+        <help command = "WHITEBOARD">
+            <description>  WHITEBOARD    - WRITE, READ, or ERASE what is written on the whiteboard.</description>
+        </help>
+        <help command = "MAP">
+            <description>  MAP           - Displays a map of nearby rooms.</description>
+        </help>
+    </help_category>
+    <help_category category = "SYSTEM">
+        <help command = "QUIT">
+            <description>  QUIT          - Quits the game.</description>
+        </help>
+        <help command = "HELP">
+            <description>  HELP          - Shows you all possible commands.</description>
+        </help>
+        <help command = "REDO">
+            <description>  REDO          - Repeats the last command you entered.</description>
+        </help>
+        <help command = "ADDCOMMAND">
+            <description>  ADDCOMMAND name - Add a custom command.</description>
+        </help>
+        <help command = "REMOVECOMMAND">
+            <description>  REMOVECOMMAND - Remove a configured custom command.</description>
+        </help>
+        <help command = "CUSTOMHELP">
+            <description>  CUSTOMHELP    - Show every configured custom commands.</description>
+        </help>
+    </help_category>
+    <help_category category = "ITEM">
+        <help command = "PICKUP">
+            <description>  PICKUP obect  - Tries to pick up an object in the same area.</description>
+        </help>
+        <help command = "PICKUPALL">
+            <description>  PICKUPALL     - Tries to pick up all objects in the same area.</description>
+        </help>
+        <help command = "INVENTORY">
+            <description>  INVENTORY     - Shows you what objects you have collected.</description>
+        </help>
+        <help command = "CHEST">
+            <description>  CHEST         - Invokes the Chest interaction subSystem Menu in the DormRoom</description>
+        </help>
+        <help command = "SHOP">
+            <description>  SHOP          - Tries to enter a shop if you are near one.</description>
+        </help>
+        <help command = "WALLET">
+            <description>  WALLET        - Shows you how much money you have.</description>
+        </help>
+        <help command = "VENMO">
+            <description>  VENMO         - Allows you to send money to people. Try: VENMO HELP</description>
+        </help>
         <help command = "SORT">
-        <description>  SORT          - Sorts your inventory</description>
-    </help>
+            <description>  SORT          - Sorts your inventory</description>
+        </help>
         <help command = "R_TRADE">
-        <description>  R_TRADE player  - Set up a trade with another player"</description>
-    </help>
+            <description>  R_TRADE player - Set up a trade with another player</description>
+        </help>
         <help command = "A_TRADE">
-        <description>  A_TRADE player  - Accept a trade with another player</description>
-    </help>
+            <description>  A_TRADE player - Accept a trade with another player</description>
+        </help>
         <help command = "OFFER">
-        <description>  O or OFFER player object - Offer player an item</description>
-    </help>
+            <description>  O or OFFER player object - Offer player an item</description>
+        </help>
+        <help command = "OFFER_REPLY">
+            <description>  O_REPLY or OFFER_REPLY 'accept'/'reject' - Accept or reject an offer that 
+                                             has been made</description>
+        </help>
+        <help command = "USE">
+            <description>  USE object    - Uses an object from your pockets and gives you a title.</description>
+        </help>
         <help command = "DROP">
-        <description>  DROP object   - Tries to drop an object from your pockets in the same area</description>
-    </help>
+            <description>  DROP object   - Tries to drop an object from your pockets in the same area</description>
+        </help>
+        <help command = "TITLE">
+            <description>  TITLE         - Shows you the title obtained from an object.</description>
+        </help>
+        <help command = "EXAMINE">
+            <description>  EXAMINE object - Tries to examine a object in your inventory</description>
+        </help>
+    </help_category>
+    <help_category category = "NPC">
         <help command = "POKE_GHOUL">
-        <description>  POKE_GHOUL    - Pokes the ghoul in the current room.</description>
-    </help>
-        <help command = "POKE_GHOUL">
-        <description>  POKE_GHOUL    - Pokes the ghoul in the current room.</description>
-    </help>
-    <help command = "REDO">
-        <description>  REDO          - Repeats the last command you entered.</description>
-    </help>
-    <help command = "WHISPER">
-        <description>  WHISPER player message   - Whispers 'message' to 'player'.</description>
-    </help>
-    <help command = "REPLY">
-        <description>  REPLY message            - Reply 'message' to last whisper.</description>
-    </help>
-    <help command = "IGNORE">
-        <description>  IGNORE player            - Ignore messages from 'player'.</description>
-    </help>
-    <help command = "UNIGNORE">
-        <description>  UNIGNORE player          - Remove 'player' from ignore list.</description>
-    </help>
-    <help command = "IGNORELIST">
-        <description>  IGNORELIST               - Display a list of players you are ignoring.</description>
-    </help>
-    <help command = "SHOUT">
-        <description>  SHOUT message            - Shout 'message' to all players currently online.</description>
-    </help>
-    <help command = "JOKE">
-        <description>  JOKE                     - Tells a joke to everyone in the room.</description>
-    </help>
-    <help command = "ONLINE">
-        <description>  ONLINE                   - Display a list of all online players.</description>
-    </help>
-    <help command = "FRIENDS">
-        <description>  FRIENDS                   - Displays friend subcommand list.</description>
-    </help>
-    <help command = "DELETE">
-        <description>  DELETE                   - Deletes your character permanently.</description>
-    </help>
-    <help command = "CHALLENGE">
-        <description>  CHALLENGE                   - Challenge a player to a R-P-S in the same area.</description>
-    </help>
-    <help command = "ACCEPT">
-        <description>  ACCEPT                   - Accept a challenge from a player to a R-P-S in the same area.</description>
-    </help>
-    <help command = "REJECT">
-        <description>  REJECT                   - Reject a challenge from a player to a R-P-S in the same area.</description>
-    </help>
-    <help command = "PICK">
-        <description>  PICK                   - Pick rock, paper or scissors.</description>
-    </help>
-    <help command = "TEACH">
-        <description>  TEACH                   - Teaches you the basics of how to play R-P-S.</description>
-    </help>
+            <description>  POKE_GHOUL   - Pokes the ghoul in the current room.</description>
+        </help>
+        <help command = "BRIBE_GHOUL">
+            <description>  BRIBE_GHOUL  - BRIBE_GHOUL [item_name] Gives selected item to ghoul.</description>
+        </help>
+        <help command = "TALK">
+            <description>  TALK         - TALK [npc name] Initiates dialogue with named NPC.</description>
+        </help>
+        <help command = "CAPTURE">
+            <description>  CAPTURE      - Captures the spirit in the current room.</description>
+        </help>
+        <help command = "SPIRIT_LIST_ALL">
+            <description>  SPIRIT_LIST_ALL- Lists all spirits you have captured.</description>
+        </help>
+        <help command = "SPIRIT_LIST_MISSING">
+            <description>  SPIRIT_LIST_MISSING- Lists all spirits you have not captured.</description>
+        </help>
+    </help_category>
+    <help_category category = "COMMUNITY">
+        <help command = "WHISPER">
+            <description>  WHISPER player message - Whispers 'message' to 'player'.</description>
+        </help>
+        <help command = "REPLY">
+            <description>  REPLY message - Reply 'message' to last whisper.</description>
+        </help>
+        <help command = "IGNORE">
+            <description>  IGNORE player - Ignore messages from 'player'.</description>
+        </help>
+        <help command = "UNIGNORE">
+            <description>  UNIGNORE player - Remove 'player' from ignore list.</description>
+        </help>
+        <help command = "IGNORELIST">
+            <description>  IGNORELIST    - Display a list of players you are ignoring.</description>
+        </help>
+        <help command = "SHOUT">
+            <description>  SHOUT message - Shout 'message' to all players currently online.</description>
+        </help>
+        <help command = "JOKE">
+            <description>  JOKE          - Tells a joke to everyone in the room.</description>
+        </help>
+        <help command = "ONLINE">
+            <description>  ONLINE        - Display a list of all online players.</description>
+        </help>
+        <help command = "FRIENDS">
+            <description>  FRIENDS       - Displays friend subcommand list.</description>
+        </help>
+        <help command = "DELETE">
+            <description>  DELETE        - Deletes your character permanently.</description>
+        </help>
+        <help command = "SAY">
+            <description>  SAY message   - Says 'message' to any other players in the same area.</description>
+        </help>
+        <help command = "ACCOUNT">
+            <description>  ACCOUNT       - Enters account edit wizard</description>
+        </help>
+        <help command = "MAKECHAT">
+            <description>  MAKECHAT      -  MAKECHAT [name] Creates a chatroom called 'name'.</description>
+        </help>
+        <help command = "JOINCHAT">
+            <description>  JOINCHAT      - JOINCHAT [chat] Joins the chatroom called 'chat' if invited.</description>
+        </help>
+        <help command = "LEAVECHAT">
+            <description>  LEAVECHAT     - LEAVECHAT [chat] Leaves the chatroom called 'chat' if a member.</description>
+        </help>
+        <help command = "INVCHAT">
+            <description>  INVCHAT       - INVCHAT [player][chat] Invites 'player' to join the chatroom called 'chat'.</description>
+        </help>
+        <help command = "TOGGLERPSCHAT">
+            <description>  TOGGLERPSCHAT - Toggles the win resolutions of R-P-S battles in your area.</description>
+        </help>
+        <help command = "[chatroom name]">
+            <description>  [chatroom name]- [chatroom name] message Sends 'message' to chatroom called [chatroom name].</description>
+        </help>
+        <help command = "LISTPLAYERS">
+            <description>  LISTPLAYERS	 - Lists all the current players in the world.</description>
+        </help>
+    </help_category>
+    <help_category category = "BATTLE">
+        <help command = "CHALLENGE">
+            <description>  CHALLENGE     - Challenge a player to a R-P-S in the same area.</description>
+        </help>
+        <help command = "ACCEPT">
+            <description>  ACCEPT        - Accept a challenge from a player to a R-P-S in the same area.</description>
+        </help>
+        <help command = "REJECT">
+            <description>  REJECT        - Reject a challenge from a player to a R-P-S in the same area.</description>
+        </help>
+        <help command = "PICK">
+            <description>  PICK          - Pick rock, paper or scissors.</description>
+        </help>
+        <help command = "TEACH">
+            <description>  TEACH         - Teaches you the basics of how to play R-P-S.</description>
+        </help>
+        <help command = "RANK TOP5">
+            <description>  RANK TOP5 	- Lists the top 5 players in R-P-S battle.</description>
+        </help>
+        <help command = "RANK">
+            <description>  RANK          - Shows the rank of the user in R-P-S battle.</description>
+        </help>
+    </help_category>
 </helps>

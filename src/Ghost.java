@@ -3,12 +3,17 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import java.io.*;
 
-
+/**
+ * Ghost class. Tell you what is Ghost
+ */
 public class Ghost extends Thread{
 		String speech = "sample speech";
 		Player p;
 		ArrayList<String> sayings;
 		
+		/** make a new ghost to Intimidate some player
+		 * @param p the player who is victim of ghost.
+		 */
 		public Ghost(Player p){
 			this.p = p;
 			this.sayings = new ArrayList<String>();
@@ -32,6 +37,9 @@ public class Ghost extends Thread{
 			}
 		}
 		
+		/** load the ghost's talking. store in file src/ghost_sayings.txt
+		 *
+		 */
 		private void loadSayings() {
 			File file = new File("ghost_sayings.txt");
 			try {

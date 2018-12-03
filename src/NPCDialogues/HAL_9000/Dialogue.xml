@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dialogues>
+        <dialogue id = "-1">
+                <intro>
+                You check your email, and find 1 new message
+
+		From aatanas2
+
+		That’s not cool… It wasn’t our fault but now we have to do
+	       	extra work, because if eagle bank arena…
+                </intro>
+        </dialogue>
+        <dialogue id = "3">
+                <intro>
+                You ask your HAL_9000 to submit a pull request for your
+		work.
+
+		"I'm sorry boss, I'm afraid I can't do that"
+
+		"What's the problem?" You ask.
+
+		"I think you know what the problem is just as well as I do."
+
+		Merge conflicts! There's only one option left! Go beat three of
+		your classmates in rock-paper-scissors to get them to close
+		their pull requests so yours can go through without conflicts.
+                </intro>
+                <cont>
+                "Have you beaten your classmates yet?" HAL asks. "I could
+		just delete their code to avoid the conflicts"
+
+		Tempting, but you decide to be the better man. Go find and beat
+		3 other players in Rock-Paper-Scissors.
+                </cont>
+		<done>
+		You got your pull request accepted, and merged succesfully!
+
+		A few hours later, HAL informs you of the bad news. Some fool
+		named Sarah has deleted all of your changes, just so her pull
+		request could get through! Go find her and give her a piece of
+		your mind!
+	        </done>
+		<condition>RPS</condition>
+		<status>3</status>
+        </dialogue>
+</dialogues>
